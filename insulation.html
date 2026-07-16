@@ -1,0 +1,1543 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>住宅設計シミュレータ — 打ち合わせ用14点セット</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@400;700;900&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F4F6F5; --ink:#16283C; --steel:#3E5C82; --line:#B9C6CE;
+  --cyan:#2E8FAD; --cyanpale:#D9EDF3; --warn:#B9401F; --ok:#2F7D4F; --warm:#C77A3A;
+  --mono:'IBM Plex Mono',monospace; --body:'Zen Kaku Gothic New',sans-serif; --disp:'Zen Old Mincho',serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);line-height:1.75;font-size:15px}
+.wrap{max-width:900px;margin:0 auto;padding:0 20px 80px}
+header{padding:50px 0 28px;border-bottom:3px double var(--ink)}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.22em;color:var(--steel);text-transform:uppercase}
+h1{font-family:var(--disp);font-weight:900;font-size:clamp(28px,5vw,42px);line-height:1.3;margin:10px 0 8px}
+h1 .accent{color:var(--cyan)}
+.lede{color:#41556B;max-width:640px}
+.lede b{color:var(--ink)}
+nav{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+nav a{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--steel);border:1px solid var(--steel);padding:4px 10px;text-decoration:none;border-radius:2px}
+nav a:hover{background:var(--steel);color:#fff}
+section{margin-top:60px}
+.sec-head{display:flex;align-items:baseline;gap:14px;border-bottom:1.5px solid var(--ink);padding-bottom:8px;margin-bottom:16px}
+.sec-num{font-family:var(--mono);font-size:12px;color:var(--cyan);letter-spacing:.15em;font-weight:600;white-space:nowrap}
+h2{font-family:var(--disp);font-weight:700;font-size:clamp(19px,3.2vw,25px)}
+p{margin:10px 0;color:#2B3D50}
+p b,li b{color:var(--ink)}
+.fig{background:#FBFCFC;border:1px solid var(--line);margin:18px 0;position:relative}
+.fig-label{position:absolute;top:0;left:0;background:var(--ink);color:#EDF2F4;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;padding:4px 12px;z-index:2}
+.fig-inner{padding:34px 14px 12px}
+svg{display:block;width:100%;height:auto}
+svg text{font-family:var(--body)}
+svg .mono{font-family:var(--mono)}
+.controls{display:flex;flex-wrap:wrap;gap:14px 24px;padding:14px 16px;border-top:1px dashed var(--line);background:#F1F4F3}
+.ctrl{flex:1 1 190px;min-width:170px}
+.ctrl label{display:flex;justify-content:space-between;font-size:12.5px;font-weight:700;margin-bottom:4px}
+.ctrl label .val{font-family:var(--mono);font-weight:600;color:var(--steel)}
+input[type=range]{width:100%;accent-color:var(--cyan);height:22px}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button{font-family:var(--body);font-size:12px;font-weight:700;padding:6px 10px;border:1.5px solid var(--steel);background:#fff;color:var(--steel);cursor:pointer;border-radius:2px}
+.seg button.on{background:var(--steel);color:#fff}
+.verdict{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center;padding:12px 16px;border-top:1px solid var(--line);font-family:var(--mono);font-size:13px}
+.verdict .kv{white-space:nowrap}
+.verdict .kv .k{color:#5B6E80;font-size:11px;display:block;letter-spacing:.06em}
+.verdict .kv .v{font-size:17px;font-weight:600}
+.badge{font-family:var(--body);font-weight:700;font-size:12.5px;padding:5px 14px;border-radius:2px;margin-left:auto}
+.badge.wet{background:var(--warn);color:#fff}
+.badge.dry{background:var(--ok);color:#fff}
+.badge.edge{background:var(--warm);color:#fff}
+.ask{border-left:4px solid var(--warm);background:#FBF1E6;padding:13px 18px;margin:16px 0}
+.ask .t{font-weight:700;font-family:var(--disp);color:#8A5220}
+.key{border-left:4px solid var(--cyan);background:var(--cyanpale);padding:13px 18px;margin:16px 0}
+.key .t{font-weight:700;font-family:var(--disp)}
+.small{font-size:12.5px;color:#5B6E80}
+ul{margin:8px 0 8px 20px}
+li{margin:5px 0;color:#2B3D50}
+.house-bar{display:flex;flex-wrap:wrap;gap:14px 24px;align-items:center;background:var(--ink);color:#DCE9EE;padding:14px 18px;margin-top:24px}
+.house-bar .t{font-family:var(--disp);font-weight:700}
+.house-bar .ctrl{min-width:200px}
+.house-bar label{color:#DCE9EE}
+.house-bar label .val{color:#7FD4EA}
+footer{margin-top:70px;border-top:3px double var(--ink);padding-top:14px;font-family:var(--mono);font-size:11px;color:#5B6E80;letter-spacing:.08em;line-height:1.9}
+@media(max-width:560px){.fig-inner{padding:34px 6px 10px}.verdict .kv .v{font-size:15px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Design Meeting Toolkit — 住宅設計シミュレータ</div>
+  <h1>形容詞を<span class="accent">数字</span>に変える<br>打ち合わせ用シミュレーション 14点</h1>
+  <p class="lede">「十分暖かいです」「快適です」を検証可能にするための道具です。各シミュレーションは簡易定常モデル(前提は末尾に明記)なので、<b>絶対値ではなく仕様間の「差」を見る</b>のが正しい使い方。各図の下に、そのまま設計者に投げる質問を付けています。</p>
+  <nav>
+    <a href="#s1">01 無暖房の朝</a><a href="#s2">02 庇と日射</a><a href="#s3">03 年間光熱費</a><a href="#s4">04 換気×気密</a><a href="#s5">05 体感温度</a><a href="#s6">06 結露·窓</a><a href="#s7">07 結露·壁内</a><a href="#s8">08 窓面積とUA</a><a href="#s9">09 太陽光·電気</a><a href="#s10">10 照明計画</a><a href="#s11">11 隣棟の影</a><a href="#s12">12 エアコン容量</a><a href="#s13">13 換気ECS</a><a href="#s14">14 動線</a>
+  </nav>
+  <div class="house-bar">
+    <span class="t">共通条件</span>
+    <div class="ctrl">
+      <label>延床面積 <span class="val" id="afV">120 m²</span></label>
+      <input type="range" id="af" min="90" max="180" value="120" step="5">
+    </div>
+    <span class="small" style="color:#9FB4C2">外皮面積=延床×2.5 / 気積=延床×2.4 / 東京(6地域)で自動計算</span>
+  </div>
+</header>
+
+<!-- ========== 01 ========== -->
+<section id="s1">
+  <div class="sec-head"><span class="sec-num">SIM 01</span><h2>無暖房の朝、室温は何度か(夜間温度降下)</h2></div>
+  <p>断熱性能の体感を一番正直に表すのがこれです。22時に暖房を切り、外気温一定のまま朝7時までの室温降下を指数関数モデルで計算します。時定数 τ =(家の熱容量)÷(熱の逃げやすさ)。<b>UA値の差は「朝の室温の差」として現れます</b>。グレーの参照線は等級4/5/7の同条件です。</p>
+  <div class="fig">
+    <div class="fig-label">SIM.01 — 夜間室温降下曲線(22:00 暖房OFF → 翌7:00)</div>
+    <div class="fig-inner"><svg id="svg1" viewBox="0 0 720 400"></svg></div>
+    <div class="controls">
+      <div class="ctrl"><label>UA値 <span class="val" id="ua1V">0.41</span></label><input type="range" id="ua1" min="0.20" max="0.90" value="0.41" step="0.01"></div>
+      <div class="ctrl"><label>外気温 <span class="val" id="te1V">0 ℃</span></label><input type="range" id="te1" min="-8" max="8" value="0" step="1"></div>
+      <div class="ctrl"><label>就寝時室温 <span class="val" id="ti1V">21 ℃</span></label><input type="range" id="ti1" min="18" max="24" value="21" step="0.5"></div>
+      <div class="ctrl" style="flex:1.4 1 240px"><label>熱容量(蓄熱)</label>
+        <div class="seg" id="capSeg">
+          <button data-c="15">軽い木造</button><button data-c="25" class="on">標準</button><button data-c="40">蓄熱仕様</button>
+        </div></div>
+      <div class="ctrl" style="flex:1.4 1 240px"><label>換気</label>
+        <div class="seg" id="vent1Seg">
+          <button data-r="0">第3種(回収なし)</button><button data-r="0.85" class="on">第1種熱交換85%</button><button data-r="0.80">スマートECS(全熱80%)</button>
+        </div></div>
+    </div>
+    <div class="verdict">
+      <div class="kv"><span class="k">時定数 τ</span><span class="v" id="tauV">—</span></div>
+      <div class="kv"><span class="k">朝7時の室温</span><span class="v" id="morningV" style="color:var(--cyan)">—</span></div>
+      <div class="kv"><span class="k">一晩の降下</span><span class="v" id="dropV">—</span></div>
+      <span class="badge dry" id="badge1">—</span>
+    </div>
+  </div>
+  <div class="ask"><span class="t">設計者への質問:</span>「外気0℃の晩に暖房を切って、朝の室温は何度と想定していますか。根拠のシミュレーション(または実測オーナー宅データ)を見せてください」</div>
+</section>
+
+<!-- ========== 02 ========== -->
+<section id="s2">
+  <div class="sec-head"><span class="sec-num">SIM 02</span><h2>庇の出はどこまで正解か(南面日射の季節制御)</h2></div>
+  <p>ηAC(冷房期日射取得)を左右する最大の設計変数が<b>南面の庇の出</b>です。東京の南中太陽高度は夏至78°・冬至31°。この差を使うと、<b>庇一つで「夏は遮り、冬は入れる」が両立</b>します。月と庇の出を動かして、窓のどこまで影がかかるか確認してください。</p>
+  <div class="fig">
+    <div class="fig-label">SIM.02 — 南面窓・庇の断面と太陽高度(東京 北緯35.7°/ 南中時)</div>
+    <div class="fig-inner"><svg id="svg2" viewBox="0 0 720 420"></svg></div>
+    <div class="controls">
+      <div class="ctrl"><label>月 <span class="val" id="mo2V">8 月</span></label><input type="range" id="mo2" min="1" max="12" value="8" step="1"></div>
+      <div class="ctrl"><label>庇の出 <span class="val" id="d2V">0.60 m</span></label><input type="range" id="d2" min="0" max="1.5" value="0.6" step="0.05"></div>
+      <div class="ctrl"><label>窓の高さ <span class="val" id="h2V">2.2 m</span></label><input type="range" id="h2" min="1.2" max="2.6" value="2.2" step="0.1"></div>
+      <div class="ctrl"><label>庇〜窓上端の距離 <span class="val" id="o2V">0.3 m</span></label><input type="range" id="o2" min="0" max="0.8" value="0.3" step="0.05"></div>
+    </div>
+    <div class="verdict">
+      <div class="kv"><span class="k">太陽高度(南中)</span><span class="v" id="altV">—</span></div>
+      <div class="kv"><span class="k">この月の遮蔽率</span><span class="v" id="shV" style="color:var(--cyan)">—</span></div>
+      <div class="kv"><span class="k">夏至 / 冬至</span><span class="v" id="ssV">—</span></div>
+      <span class="badge dry" id="badge2">—</span>
+    </div>
+  </div>
+  <p class="small">※南中時の直達日射のみの幾何計算。朝夕の低い日射(東西面)は庇では防げないため、東西窓は面積抑制か外付けシェードが必要——これがηAC設計のもう半分です。</p>
+  <div class="ask"><span class="t">設計者への質問:</span>「南面の庇の出は、夏至〜9月の遮蔽率と冬至の取得率を両立する寸法で決めていますか。窓ごとの日射遮蔽の考え方を図で説明してください。東西面の対策は?」</div>
+</section>
+
+<!-- ========== 03 ========== -->
+<section id="s3">
+  <div class="sec-head"><span class="sec-num">SIM 03</span><h2>断熱等級と年間冷暖房費(投資回収の実像)</h2></div>
+  <p>「等級5で十分」トークを検証する図です。UA別の年間冷暖房費を同一条件で並べます。ポイントは2つ:<b>①等級間の光熱費差は年数万円オーダーで、差額投資の回収は20〜30年かかることが多い</b>(=光熱費だけで正当化しない)、<b>②それでも電気代・ηAC・換気方式の影響が可視化される</b>ので、どこに金をかけるべきかの優先順位が見える、という点です。</p>
+  <div class="fig">
+    <div class="fig-label">SIM.03 — 年間冷暖房費の比較(東京・エアコンCOP4.0)</div>
+    <div class="fig-inner"><svg id="svg3" viewBox="0 0 720 400"></svg></div>
+    <div class="controls">
+      <div class="ctrl"><label>ηAC(日射遮蔽) <span class="val" id="eta3V">1.8</span></label><input type="range" id="eta3" min="1.0" max="3.5" value="1.8" step="0.1"></div>
+      <div class="ctrl"><label>電気単価 <span class="val" id="el3V">31 円/kWh</span></label><input type="range" id="el3" min="25" max="45" value="31" step="1"></div>
+      <div class="ctrl" style="flex:1.4 1 240px"><label>換気</label>
+        <div class="seg" id="vent3Seg">
+          <button data-r="0">第3種</button><button data-r="0.85" class="on">第1種熱交換85%</button><button data-r="0.80">スマートECS(全熱80%)</button>
+        </div></div>
+    </div>
+    <div class="verdict">
+      <div class="kv"><span class="k">等級5 → UA0.41 の年間差</span><span class="v" id="d56V" style="color:var(--cyan)">—</span></div>
+      <div class="kv"><span class="k">UA0.41 → 等級7 の年間差</span><span class="v" id="d67V">—</span></div>
+      <span class="badge edge" id="badge3">—</span>
+    </div>
+  </div>
+  <div class="key"><span class="t">使い方:</span> 営業に「元が取れない」と言われたら<b>同意した上で</b>「回収目的ではなく、SIM01の朝室温・SIM05の体感温度・ヒートショックリスクを買っています」と返す。逆に自分が過剰投資に傾いたときのブレーキにもなります(等級7の限界効用はこの図の通り小さい)。</div>
+  <div class="ask"><span class="t">設計者への質問:</span>「この仕様の年間冷暖房費シミュレーション(暖房負荷・冷房負荷の内訳付き)を出してください。等級5仕様との差額工事費もセットで」</div>
+</section>
+
+<!-- ========== 04 ========== -->
+<section id="s4">
+  <div class="sec-head"><span class="sec-num">SIM 04</span><h2>C値が換気を壊す仕組み(気密×換気方式)</h2></div>
+  <p>C値の実害はここに出ます。家の換気は「計画換気0.5回/h+隙間からの漏気」の合計。C値が大きいほど漏気が増え、<b>①第3種では給気口から空気が入らず計画換気が破綻、②第1種では熱交換器を素通りする空気が増えて高価な熱交換が無駄になる</b>。棒グラフは換気による熱損失の内訳です。3つ目のボタンは積水ハウスの<b>スマートECS(アメニティー換気システムplus)</b>:Panasonic製の全熱交換型第1種で、温度に加えて<b>湿度(潜熱)も回収</b>するため夏の除湿負荷にも効きます。今回の提案図面にはすでにサイクロンII給気フード(1F)とエアミー×2(2F LDK)が記載されており、スマートECS前提のプランです。だからこそ<b>前提となるC値をこの図面で確認する</b>のが要点。</p>
+  <div class="fig">
+    <div class="fig-label">SIM.04 — 換気熱損失の内訳:計画換気 vs 隙間漏気</div>
+    <div class="fig-inner"><svg id="svg4" viewBox="0 0 720 380"></svg></div>
+    <div class="controls">
+      <div class="ctrl"><label>C値 <span class="val" id="c4V">1.0 cm²/m²</span></label><input type="range" id="c4" min="0.2" max="5" value="1.0" step="0.1"></div>
+      <div class="ctrl" style="flex:1.4 1 240px"><label>換気方式</label>
+        <div class="seg" id="vent4Seg">
+          <button data-m="third">第3種</button><button data-m="first" class="on">第1種熱交換85%</button><button data-m="ecs">スマートECS(全熱80%)</button>
+        </div></div>
+    </div>
+    <div class="verdict">
+      <div class="kv"><span class="k">総隙間面積</span><span class="v" id="gapV">—</span></div>
+      <div class="kv"><span class="k">漏気の割合</span><span class="v" id="leakV" style="color:var(--cyan)">—</span></div>
+      <div class="kv"><span class="k">実効熱交換効率</span><span class="v" id="effV">—</span></div>
+      <span class="badge dry" id="badge4">—</span>
+    </div>
+  </div>
+  <div class="ask"><span class="t">設計者への質問:</span>「提案されている換気方式の前提C値はいくつですか。その値を下回ることを、中間+完成時の気密測定(有償で構いません)で確認させてください」——換気方式とC値をセットで問うのが要点です。</div>
+</section>
+
+<!-- ========== 05 ========== -->
+<section id="s5">
+  <div class="sec-head"><span class="sec-num">SIM 05</span><h2>体感温度:同じ22℃でも家によって寒さが違う理由</h2></div>
+  <p>人が感じる温度(作用温度)は<b>空気温度と周囲表面温度のほぼ平均</b>です。窓や壁の表面が冷たい家では、室温22℃でも体は20℃程度にしか感じません。つまり低断熱の家は<b>同じ体感を得るために室温を上げる=光熱費でも損をする</b>。断熱投資の本当のリターンはここにあります。</p>
+  <div class="fig">
+    <div class="fig-label">SIM.05 — 作用温度(体感)= (空気温度 + 平均放射温度) ÷ 2</div>
+    <div class="fig-inner"><svg id="svg5" viewBox="0 0 720 380"></svg></div>
+    <div class="controls">
+      <div class="ctrl" style="flex:1.6 1 280px"><label>窓の仕様</label>
+        <div class="seg" id="win5Seg">
+          <button data-u="3.5">アルミペア</button><button data-u="2.3" class="on">複合ペア</button><button data-u="0.9">樹脂トリプル</button>
+        </div></div>
+      <div class="ctrl"><label>壁のU値 <span class="val" id="uw5V">0.35</span></label><input type="range" id="uw5" min="0.15" max="0.80" value="0.35" step="0.01"></div>
+      <div class="ctrl"><label>外気温 <span class="val" id="te5V">0 ℃</span></label><input type="range" id="te5" min="-8" max="10" value="0" step="1"></div>
+      <div class="ctrl"><label>室温(空気) <span class="val" id="ta5V">22 ℃</span></label><input type="range" id="ta5" min="18" max="26" value="22" step="0.5"></div>
+    </div>
+    <div class="verdict">
+      <div class="kv"><span class="k">平均放射温度 MRT</span><span class="v" id="mrtV">—</span></div>
+      <div class="kv"><span class="k">体感温度</span><span class="v" id="otV" style="color:var(--cyan)">—</span></div>
+      <div class="kv"><span class="k">同体感に必要な室温(低断熱時)</span><span class="v" id="needV">—</span></div>
+      <span class="badge dry" id="badge5">—</span>
+    </div>
+  </div>
+  <div class="ask"><span class="t">設計者への質問:</span>「LDKの大開口窓の面前で、冬の体感温度は室温より何度低くなりますか。窓仕様別に比較してください」——大開口を推すシャーウッドだからこそ、窓性能とセットで詰める質問です。</div>
+</section>
+
+<!-- ========== 06 ========== -->
+<section id="s6">
+  <div class="sec-head"><span class="sec-num">SIM 06</span><h2>結露判定:窓の表面温度 vs 露点</h2></div>
+  <p>結露の判定式はただ一つ——<b>表面温度 &lt; 露点温度 なら結露</b>。露点は室内空気の温湿度だけで決まり(Magnus式)、窓表面温度は窓のU値で決まります。窓種を切り替えて、「結露しない窓」の条件を数値で確認してください。ガラス端部・サッシ枠は表示値よりさらに2〜5℃低い点に注意。</p>
+  <div class="fig">
+    <div class="fig-label">SIM.06 — 窓断面の温度勾配と結露判定</div>
+    <div class="fig-inner"><svg id="svg6" viewBox="0 0 720 360"></svg></div>
+    <div class="controls">
+      <div class="ctrl" style="flex:2 1 300px"><label>窓の種類</label>
+        <div class="seg" id="win6Seg">
+          <button data-u="3.5">アルミ+ペア</button><button data-u="2.3" class="on">アルミ樹脂複合+ペア</button><button data-u="1.4">樹脂+Low-Eペア</button><button data-u="0.9">樹脂+トリプル</button>
+        </div></div>
+      <div class="ctrl"><label>外気温 <span class="val" id="te6V">0 ℃</span></label><input type="range" id="te6" min="-10" max="10" value="0" step="1"></div>
+      <div class="ctrl"><label>室温 <span class="val" id="ti6V">22 ℃</span></label><input type="range" id="ti6" min="16" max="28" value="22" step="0.5"></div>
+      <div class="ctrl"><label>相対湿度 <span class="val" id="rh6V">50 %</span></label><input type="range" id="rh6" min="20" max="80" value="50" step="1"></div>
+    </div>
+    <div class="verdict">
+      <div class="kv"><span class="k">窓U値</span><span class="v" id="u6V">2.3</span></div>
+      <div class="kv"><span class="k">ガラス表面温度</span><span class="v" id="ts6V">—</span></div>
+      <div class="kv"><span class="k">露点温度</span><span class="v" id="dp6V" style="color:var(--cyan)">—</span></div>
+      <span class="badge dry" id="badge6">—</span>
+    </div>
+  </div>
+  <div class="ask"><span class="t">設計者への質問:</span>「外気0℃・室温22℃・湿度50〜60%の条件で、提案窓のガラス端部とサッシ枠の表面温度は何度ですか。結露しない根拠を数値で示してください。樹脂スペーサーへの変更可否も」</div>
+</section>
+
+<!-- ========== 07 ========== -->
+<section id="s7">
+  <div class="sec-head"><span class="sec-num">SIM 07</span><h2>結露判定:夏型逆転結露(壁の中)</h2></div>
+  <p>冬結露が「見える問題」なのに対し、こちらは<b>壁内で起きる見えない問題</b>で、実害は圧倒的に大きい。夏の湿った外気の水蒸気は<b>材料を分子拡散で透過</b>して壁内へ入り(気密では止まらない)、冷房で冷えた室内側の防湿シートが行き止まりになって結露します。季節とシート種別を切り替えて、可変透湿シートが両季節で矛盾なく働くことを確認してください。</p>
+  <div class="fig">
+    <div class="fig-label">SIM.07 — 壁断面:水蒸気の流れと防湿層(冬 / 夏 切替)</div>
+    <div class="fig-inner"><svg id="svg7" viewBox="0 0 720 430"></svg></div>
+    <div class="controls">
+      <div class="ctrl" style="flex:1 1 220px"><label>季節</label>
+        <div class="seg" id="season7Seg">
+          <button data-s="winter">冬(暖房)</button><button data-s="summer" class="on">夏(冷房)</button>
+        </div></div>
+      <div class="ctrl" style="flex:1 1 260px"><label>室内側シート</label>
+        <div class="seg" id="sheet7Seg">
+          <button data-m="fixed" class="on">固定防湿シート</button><button data-m="variable">可変透湿シート</button>
+        </div></div>
+    </div>
+    <div class="verdict">
+      <div class="kv"><span class="k">水蒸気の向き</span><span class="v" id="flow7V" style="font-size:14px">—</span></div>
+      <span class="badge dry" id="badge7">—</span>
+    </div>
+  </div>
+  <div class="ask"><span class="t">設計者への質問:</span>「室内側の防湿・気密層の材料名は何ですか。透湿抵抗は固定ですか可変ですか。東京の夏条件(冷房26℃・外気露点26℃)での逆転結露の検証はしていますか」——設計者の実力を測るリトマス試験紙になる質問です。</div>
+</section>
+
+<!-- ========== 08 ========== -->
+<section id="s8">
+  <div class="sec-head"><span class="sec-num">SIM 08</span><h2>窓面積とUAのトレードオフ(大開口の交渉用)</h2></div>
+  <p>「断熱を上げると窓が小さくなる」は<b>窓性能を固定した場合の話</b>です。UA値は近似的に「窓U×窓比率+不透明部U×残り」の加重平均。窓のU値を下げれば、同じUAのまま窓比率を増やせます。シャーウッドの大開口と等級6を両立させる窓仕様を、このゲージで逆算してください。</p>
+  <div class="fig">
+    <div class="fig-label">SIM.08 — 外皮平均熱貫流率 UA の構成ゲージ</div>
+    <div class="fig-inner"><svg id="svg8" viewBox="0 0 720 340"></svg></div>
+    <div class="controls">
+      <div class="ctrl"><label>窓比率(外皮に占める) <span class="val" id="w8V">12 %</span></label><input type="range" id="w8" min="5" max="25" value="12" step="1"></div>
+      <div class="ctrl" style="flex:1.8 1 300px"><label>窓の種類</label>
+        <div class="seg" id="win8Seg">
+          <button data-u="3.5">アルミペア</button><button data-u="2.3" class="on">複合ペア</button><button data-u="1.4">樹脂ペア</button><button data-u="0.9">樹脂トリプル</button>
+        </div></div>
+      <div class="ctrl"><label>不透明部(壁・屋根等)U <span class="val" id="uop8V">0.30</span></label><input type="range" id="uop8" min="0.15" max="0.55" value="0.30" step="0.01"></div>
+    </div>
+    <div class="verdict">
+      <div class="kv"><span class="k">計算UA</span><span class="v" id="ua8V" style="color:var(--cyan)">—</span></div>
+      <div class="kv"><span class="k">窓が占める熱損失</span><span class="v" id="wl8V">—</span></div>
+      <div class="kv"><span class="k">UA0.46維持の最大窓比率</span><span class="v" id="wm8V">—</span></div>
+      <span class="badge dry" id="badge8">—</span>
+    </div>
+  </div>
+  <div class="ask"><span class="t">設計者への質問:</span>「窓を縮めずにUA目標を達成する窓仕様の提案と、標準窓との差額をください。この間取りの窓比率と部位別熱損失内訳(窓/壁/天井/基礎)も」</div>
+</section>
+
+<!-- ========== 09 ========== -->
+<section id="s9">
+  <div class="sec-head"><span class="sec-num">SIM 09</span><h2>太陽光・蓄電池の電気収支(容量の決め方)</h2></div>
+  <p>東京は新築への太陽光設置が実質標準(都の設置義務化+手厚い補助)。問題は「載せるか」ではなく<b>「何kW載せ、蓄電池を付けるか」</b>です。収支の構造は単純で、発電のうち<b>自家消費分は買電単価(約31円+)で効き、売電分は約15円でしか効かない</b>。だから自家消費率を上げる工夫(蓄電池・エコキュート昼間湧き上げ・EV充電)が容量以上に重要になります。</p>
+  <div class="fig">
+    <div class="fig-label">SIM.09 — 年間電気収支と投資回収(東京・1kWあたり年間発電1,150kWh)</div>
+    <div class="fig-inner"><svg id="svg9" viewBox="0 0 720 380"></svg></div>
+    <div class="controls">
+      <div class="ctrl"><label>パネル容量 <span class="val" id="kw9V">6.0 kW</span></label><input type="range" id="kw9" min="2" max="12" value="6" step="0.5"></div>
+      <div class="ctrl"><label>自家消費率(蓄電池なし) <span class="val" id="sc9V">35 %</span></label><input type="range" id="sc9" min="20" max="60" value="35" step="1"></div>
+      <div class="ctrl"><label>買電単価 <span class="val" id="buy9V">31 円</span></label><input type="range" id="buy9" min="25" max="45" value="31" step="1"></div>
+      <div class="ctrl"><label>売電単価 <span class="val" id="sell9V">15 円</span></label><input type="range" id="sell9" min="8" max="20" value="15" step="1"></div>
+      <div class="ctrl"><label>補助金合計 <span class="val" id="sub9V">120 万円</span></label><input type="range" id="sub9" min="0" max="250" value="120" step="10"></div>
+      <div class="ctrl" style="flex:1 1 200px"><label>蓄電池(+100万円 / 自家消費+25pt)</label>
+        <div class="seg" id="batt9Seg">
+          <button data-b="0" class="on">なし</button><button data-b="1">あり(10kWh級)</button>
+        </div></div>
+    </div>
+    <div class="verdict">
+      <div class="kv"><span class="k">年間発電量</span><span class="v" id="gen9V">—</span></div>
+      <div class="kv"><span class="k">年間便益</span><span class="v" id="ben9V" style="color:var(--cyan)">—</span></div>
+      <div class="kv"><span class="k">実質投資額</span><span class="v" id="cost9V">—</span></div>
+      <div class="kv"><span class="k">単純回収</span><span class="v" id="pay9V">—</span></div>
+      <span class="badge dry" id="badge9">—</span>
+    </div>
+  </div>
+  <p class="small">※システム費用25万円/kW、パネル寿命25年超・パワコン15年で交換(約30万円)は回収年数に未算入。東京都+国+区の補助は年度で変動するため必ず最新額で再計算を。売電はFIT10年終了後さらに単価が下がるため、長期では自家消費率が全てを決めます。</p>
+  <div class="ask"><span class="t">設計者への質問:</span>「この屋根形状で最大何kW載りますか(方位・寸法図付きで)。現年度の補助金を織り込んだ実質負担額と、蓄電池あり/なし両案の収支比較をください。エコキュートの昼間沸き上げ設定は対応可能ですか」</div>
+</section>
+
+<!-- ========== 10 ========== -->
+<section id="s10">
+  <div class="sec-head"><span class="sec-num">SIM 10</span><h2>照明計画:部屋の広さ→必要な灯数と電気代</h2></div>
+  <p>必要な明るさは「<b>畳数 × 部屋用途ごとのルーメン密度</b>」で決まります(照明学会・JIS Z 9110の照度基準ベース)。部屋の広さと用途を設定すると、ダウンライトの灯数・配置イメージ・年間電気代を計算します。下の表は<b>ご自宅想定(延床100m²・LDK20畳+4部屋)の全館プリセット</b>です。</p>
+  <div class="fig">
+    <div class="fig-label">SIM.10 — 部屋別 必要光量とダウンライト配置</div>
+    <div class="fig-inner"><svg id="svg10" viewBox="0 0 720 400"></svg></div>
+    <div class="controls">
+      <div class="ctrl"><label>部屋の広さ <span class="val" id="tat10V">20 畳</span></label><input type="range" id="tat10" min="2" max="24" value="20" step="1"></div>
+      <div class="ctrl" style="flex:1.8 1 300px"><label>部屋の用途</label>
+        <div class="seg" id="room10Seg">
+          <button data-l="450" class="on">LDK</button><button data-l="200">寝室</button><button data-l="500">子供部屋・書斎</button><button data-l="150">廊下・玄関</button><button data-l="350">洗面・キッチン</button>
+        </div></div>
+      <div class="ctrl" style="flex:1.6 1 260px"><label>器具</label>
+        <div class="seg" id="fix10Seg">
+          <button data-f="810,7">DL 60形</button><button data-f="1520,12" class="on">DL 100形</button><button data-f="4000,35">シーリング</button>
+        </div></div>
+      <div class="ctrl" style="flex:1.6 1 260px"><label>間接照明</label>
+        <div class="seg" id="ind10Seg">
+          <button data-i="none" class="on">なし</button><button data-i="cove">コーブ(折り上げ天井)</button><button data-i="cornice">コーニス(壁面)</button>
+        </div></div>
+      <div class="ctrl"><label>間接が担う割合 <span class="val" id="ratio10V">40 %</span></label><input type="range" id="ratio10" min="20" max="70" value="40" step="5"></div>
+      <div class="ctrl"><label>1日の点灯時間 <span class="val" id="hr10V">5 h</span></label><input type="range" id="hr10" min="1" max="12" value="5" step="0.5"></div>
+    </div>
+    <div class="verdict">
+      <div class="kv"><span class="k">必要光量</span><span class="v" id="lm10V">—</span></div>
+      <div class="kv"><span class="k">必要灯数</span><span class="v" id="n10V" style="color:var(--cyan)">—</span></div>
+      <div class="kv"><span class="k">間接ライン長</span><span class="v" id="ind10V">—</span></div>
+      <div class="kv"><span class="k">消費電力</span><span class="v" id="w10V">—</span></div>
+      <div class="kv"><span class="k">年間電気代</span><span class="v" id="c10V">—</span></div>
+      <span class="badge dry" id="badge10">—</span>
+    </div>
+  </div>
+
+  <div class="fig">
+    <div class="fig-label">SIM.10b — 全館プリセット(延床100m² / LDK20畳+4部屋)・DL100形基準</div>
+    <div class="fig-inner" style="padding-top:40px" id="table10"></div>
+  </div>
+
+  <div class="key"><span class="t">高気密住宅ならではの注意:</span> 天井断熱・気密層を貫通するダウンライトは<b>気密型(SB・SGI・SG形)が必須</b>です。非気密型を使うと器具1個ごとに気密欠損ができ、SIM04で見た漏気がそこから発生します。灯数が多いLDKほど影響が大きい——照明計画は意匠だけでなく気密計画の一部です。また調光(特に夜のLDK・寝室)は快適性と電気代の両方に効きます。</div>
+  <div class="ask"><span class="t">設計者への質問:</span>「ダウンライトは全数気密型ですか(型番で確認)。LDKの間接照明は、折り上げ天井の造作費・立ち上がり寸法(光源が見えない高さ)・テープの調光対応と電源位置まで含めて図面化されていますか。LDKは調光調色+回路分け(全体/ダイニング/間接)、人感センサーは廊下・玄関・トイレに入っていますか」</div>
+</section>
+
+<!-- ========== 11 ========== -->
+<section id="s11">
+  <div class="sec-head"><span class="sec-num">SIM 11</span><h2>隣棟の影:南の隣家は冬の日射を奪うか</h2></div>
+  <p>30坪クラスの都市部宅地で<b>断熱仕様より効くことがある</b>のがこれです。冬至の太陽高度は31°しかないため、南側隣家の影は北へ長く伸びます。影の高さ=<b>隣家の高さ − 離隔距離 × tan(太陽高度)</b>。この式で、1階の窓に冬の直射が届くか、届かないなら何月に抜けるかが分かります。SIM02(庇)とSIM03(日射取得)の前提そのものを検証する図です。</p>
+  <div class="fig">
+    <div class="fig-label">SIM.11 — 南側隣家による日影(南中時・断面)</div>
+    <div class="fig-inner"><svg id="svg11" viewBox="0 0 720 430"></svg></div>
+    <div class="controls">
+      <div class="ctrl"><label>月 <span class="val" id="mo11V">12 月</span></label><input type="range" id="mo11" min="1" max="12" value="12" step="1"></div>
+      <div class="ctrl"><label>隣家の高さ <span class="val" id="hn11V">8.0 m</span></label><input type="range" id="hn11" min="3" max="12" value="8" step="0.5"></div>
+      <div class="ctrl"><label>離隔距離(窓〜隣家) <span class="val" id="d11V">6.0 m</span></label><input type="range" id="d11" min="2" max="14" value="6" step="0.5"></div>
+    </div>
+    <div class="verdict">
+      <div class="kv"><span class="k">太陽高度(南中)</span><span class="v" id="alt11V">—</span></div>
+      <div class="kv"><span class="k">自宅壁面の影の高さ</span><span class="v" id="hs11V" style="color:var(--cyan)">—</span></div>
+      <div class="kv"><span class="k">1F窓 / 2F窓の遮蔽</span><span class="v" id="fr11V">—</span></div>
+      <div class="kv"><span class="k">1Fに日が届く期間</span><span class="v" id="cl11V" style="font-size:13px">—</span></div>
+      <span class="badge dry" id="badge11">—</span>
+    </div>
+  </div>
+  <p class="small">※南中時の断面計算。実際は朝夕に太陽が南東・南西へ振れるため、隣家の幅が狭ければ斜めから日が入る時間帯があります(=悲観側の試算)。逆に東西にも建物が並ぶ密集地では終日この状態に近づきます。</p>
+  <div class="ask"><span class="t">設計者への質問:</span>「冬至8〜16時の日影図と、LDK窓面への日照時間シミュレーションを出してください。1階が陰る場合、吹き抜け+ハイサイドライト・窓の高所化・2階リビングの比較案を検討しましたか。ηAC・暖房負荷計算はこの日影を織り込んでいますか」</div>
+</section>
+
+<!-- ========== 12 ========== -->
+<section id="s12">
+  <div class="sec-head"><span class="sec-num">SIM 12</span><h2>エアコン容量:「畳数表記」ではなく熱負荷で選ぶ</h2></div>
+  <p>カタログの畳数表記(◯畳用)は<b>1960年代の無断熱住宅基準</b>のままです。高断熱住宅で畳数通りに選ぶと確実に過大になり、①本体価格の無駄、②低負荷運転域での効率悪化、③頻繁なON/OFF、の三重損。正しくは<b>必要能力 = 熱の逃げやすさQ × 温度差</b>で逆算します。UAを動かして、カタログ選定との差を確認してください。</p>
+  <div class="fig">
+    <div class="fig-label">SIM.12 — 必要暖房・冷房能力とカタログ選定の比較</div>
+    <div class="fig-inner"><svg id="svg12" viewBox="0 0 720 400"></svg></div>
+    <div class="controls">
+      <div class="ctrl"><label>UA値 <span class="val" id="ua12V">0.41</span></label><input type="range" id="ua12" min="0.20" max="0.90" value="0.41" step="0.01"></div>
+      <div class="ctrl"><label>ηAC <span class="val" id="eta12V">1.8</span></label><input type="range" id="eta12" min="1.0" max="3.5" value="1.8" step="0.1"></div>
+      <div class="ctrl"><label>暖房設計外気温 <span class="val" id="te12V">0 ℃</span></label><input type="range" id="te12" min="-6" max="4" value="0" step="1"></div>
+      <div class="ctrl" style="flex:1.4 1 240px"><label>対象範囲</label>
+        <div class="seg" id="zone12Seg">
+          <button data-z="1" class="on">家全体(全館連続)</button><button data-z="0.42">LDK 20畳のみ</button>
+        </div></div>
+    </div>
+    <div class="verdict">
+      <div class="kv"><span class="k">必要暖房能力</span><span class="v" id="ht12V" style="color:var(--cyan)">—</span></div>
+      <div class="kv"><span class="k">必要冷房能力</span><span class="v" id="cl12V">—</span></div>
+      <div class="kv"><span class="k">推奨機</span><span class="v" id="rec12V" style="font-size:14px">—</span></div>
+      <span class="badge dry" id="badge12">—</span>
+    </div>
+  </div>
+  <div class="key"><span class="t">選定の勘所:</span> エアコンは<b>定格の3〜7割で回っている時が最も高効率</b>(COPカーブの山)。必要能力ぴったりの機種を連続運転させるのが、初期費用と電気代の両方で最適です。逆に「6畳用最安機」は熱交換器が小さく効率が低いので、<b>能力は小さく・グレードは中位以上</b>(熱交換器の大きい機種)が高断熱住宅の定石。全館をエアコン1〜2台+サーキュレーション(または小屋裏・床下エアコン)で賄えるかは、この必要能力とSIM01の時定数で判断できます。</div>
+  <div class="ask"><span class="t">設計者への質問:</span>「エアコンは畳数表記でなく、部屋別の熱負荷計算書に基づいて選定してください。暖房・冷房それぞれの設計負荷と機器選定根拠、全館を何台で賄う計画か、隠蔽配管の有無(将来交換性)も教えてください」</div>
+</section>
+
+<!-- ========== 13 ========== -->
+<section id="s13">
+  <div class="sec-head"><span class="sec-num">SIM 13</span><h2>スマートECS(アメニティー換気システムplus):全熱交換の年間価値</h2></div>
+  <p>積水ハウスの<b>スマートECS</b>は、Panasonic製の<b>全熱交換型第1種換気(アメニティー換気システムplus)</b>+サイクロン給気フード+天井埋込空気清浄機エアミーの構成です。顕熱型との違いは<b>温度に加えて湿度(潜熱)も回収する</b>こと——東京の夏、換気で入る外気の湿気は冷房の除湿負荷そのものなので、全熱交換はここで効きます。3方式の「換気が生む年間冷暖房コスト」を比較してください。<b>今回の提案図面はエアミー×2(2F LDK)・サイクロンII(1F)が記載済み=スマートECS前提のプラン</b>です。</p>
+  <div class="fig">
+    <div class="fig-label">SIM.13 — 換気由来の年間冷暖房コスト:第3種 / 顕熱85% / 全熱(スマートECS)</div>
+    <div class="fig-inner"><svg id="svg13" viewBox="0 0 720 400"></svg></div>
+    <div class="controls">
+      <div class="ctrl"><label>C値 <span class="val" id="c13V">1.0 cm²/m²</span></label><input type="range" id="c13" min="0.2" max="3" value="1.0" step="0.1"></div>
+      <div class="ctrl"><label>電気単価 <span class="val" id="el13V">31 円/kWh</span></label><input type="range" id="el13" min="20" max="50" value="31" step="1"></div>
+      <div class="ctrl"><label>夏の外気湿度差 <span class="val" id="dx13V">4.5 g/kg</span></label><input type="range" id="dx13" min="2" max="7" value="4.5" step="0.5"></div>
+    </div>
+    <div class="verdict">
+      <div class="kv"><span class="k">第3種 → ECS の差額</span><span class="v" id="d13aV" style="color:var(--cyan)">—</span></div>
+      <div class="kv"><span class="k">顕熱85% → ECS の差額</span><span class="v" id="d13bV">—</span></div>
+      <div class="kv"><span class="k">うち潜熱(除湿)回収分</span><span class="v" id="d13cV">—</span></div>
+      <span class="badge dry" id="badge13">—</span>
+    </div>
+  </div>
+  <div class="key"><span class="t">数字に出ない価値:</span> ①<b>サイクロン給気フード</b>が粉塵・虫を遠心分離し、給気清浄フィルターの交換目安が約5年(通常の第1種は数ヶ月毎)。②<b>エアミー</b>は花粉・PM2.5対応の天井埋込清浄で、置き型清浄機が消える。③冬の全熱交換は<b>加湿した室内の湿気を逃がしにくい</b>=過乾燥対策にもなる。一方で第1種はファン2系統ぶん消費電力が増えるので、<b>差し引きはファン消費電力(W)まで含めて</b>比較すること。</div>
+  <div class="ask"><span class="t">設計者への質問:</span>「スマートECSの温度交換効率・湿度交換効率のカタログ値と、前提C値を教えてください。ダクト経路図と点検口の位置、エアミー本体/給気清浄フィルターの交換費用と周期、システム全体のファン消費電力(W)も数字でお願いします」</div>
+</section>
+
+<!-- ========== 14 ========== -->
+<section id="s14">
+  <div class="sec-head"><span class="sec-num">SIM 14</span><h2>動線シミュレーション:この間取りを1日歩いてみる</h2></div>
+  <p>提案図面の壁・部屋位置をベクターデータから座標で読み取って再現しました(<b>玄関=東面ピロティ / 階段=西端の直階段 / 主寝室=南西角 / 水回り=南面 / 2FはLDK南東角のコーナー大開口・バルコニー南西・キッチン北面</b>)。<b>2階リビングは日照と天井高で勝ち、階段で払う</b>プランです——帰宅・洗濯・朝の動線はすべて階段を跨ぎます。シナリオを選んで▶再生すると住人が実ルートを歩き、<b>季節と時刻を選ぶと真北(図面上方から西へ14°)から計算した太陽の方位・高度で、直射が差し込む範囲</b>が平面図に重なります。距離・階段回数・日当たりを数字と絵で確かめてください。さらに<b>オレンジ破線=施主変更案</b>を重ねています:①WICを洗面所隣接へ移設し<b>主寝室⇄WIC⇄洗面所の回遊動線</b>に(ドラム式洗濯乾燥機で完結、干し場廃止)、②トイレは階段下へ、③帰宅は<b>SCL(靴・上着)→洗面で手洗い→2F</b>の衛生動線。キッチンは<b>ペニンシュラで通り抜け不可</b>のため、冷蔵庫・パントリーへは西側から回り込んでキッチン内を通るルートで再現しています。実生活パターンとして<b>「朝・保育園送り」=起床→ダイニングで仕事→律希起床→朝食準備→食べさせる→送迎→帰宅→書斎</b>のフル動線を<b>2バージョン(主寝室で添い寝Ver. / 洋室4.7帖をこども部屋にしたVer.=平面図のオレンジ「こども部屋 想定」タグ)</b>で、さらに<b>深夜帰宅の2パターン(ご飯なし/あり)</b>も収録しています。</p>
+  <div class="fig">
+    <div class="fig-label">SIM.14 — 生活動線×日射トレース(提案図面 TWSX26060017 の壁座標から再構成)</div>
+    <div class="fig-inner"><svg id="svg14" viewBox="0 0 720 475"></svg></div>
+    <div class="controls">
+      <div class="ctrl" style="flex:2.2 1 320px"><label>シナリオ</label>
+        <div class="seg" id="sc14Seg">
+          <button data-sc="0" class="on">朝支度→出勤</button><button data-sc="1">帰宅+買い物</button><button data-sc="2">洗濯(乾燥→WIC)</button><button data-sc="3">入浴→就寝</button><button data-sc="4">在宅ワーク</button><button data-sc="5">保育園送り(添い寝Ver.)</button><button data-sc="8">保育園送り(こども部屋Ver.)</button><button data-sc="6">深夜帰宅・食なし</button><button data-sc="7">深夜帰宅・食あり</button>
+        </div></div>
+      <div class="ctrl" style="flex:1 1 170px"><label>再生</label>
+        <div class="seg"><button id="play14" style="min-width:90px">▶ 再生</button></div></div>
+      <div class="ctrl"><label>速度</label>
+        <div class="seg" id="sp14Seg">
+          <button data-sp="1" class="on">×1</button><button data-sp="2">×2</button><button data-sp="4">×4</button>
+        </div></div>
+      <div class="ctrl"><label>この動線の頻度 <span class="val" id="n14V">1 回/日</span></label><input type="range" id="n14" min="1" max="12" value="1" step="1"></div>
+      <div class="ctrl" style="flex:1.6 1 260px"><label>日射(季節)</label>
+        <div class="seg" id="se14Seg">
+          <button data-se="off">OFF</button><button data-se="355" class="on">冬至</button><button data-se="81">春秋分</button><button data-se="172">夏至</button>
+        </div></div>
+      <div class="ctrl"><label>時刻 <span class="val" id="hh14V">9:00</span></label><input type="range" id="hh14" min="6" max="18" value="9" step="0.5"></div>
+    </div>
+    <div class="verdict">
+      <div class="kv"><span class="k">移動距離/回</span><span class="v" id="dist14V" style="color:var(--cyan)">—</span></div>
+      <div class="kv"><span class="k">歩数/回</span><span class="v" id="step14V">—</span></div>
+      <div class="kv"><span class="k">階段昇降</span><span class="v" id="stair14V">—</span></div>
+      <div class="kv"><span class="k">歩行時間/回</span><span class="v" id="time14V">—</span></div>
+      <div class="kv"><span class="k">年間移動距離</span><span class="v" id="year14V">—</span></div>
+      <span class="badge dry" id="badge14">—</span>
+    </div>
+  </div>
+  <div class="key"><span class="t">読み方:</span> 距離そのものより<b>「重い物+階段」の組合せ</b>に注目。変更案の効果は洗濯シナリオが最も分かりやすく、<b>乾燥→収納→翌朝の着替えまで洗面所とWICの数歩で完結</b>し、階段運搬とバルコニー干しが動線から消えます(バルコニーは緑・趣味スペースに転用可)。帰宅動線はSCL→手洗い→2Fで、外の汚れを1Fで落としてから生活空間に上がる衛生動線=スマートECSの「汚染物質を持ち込まない」思想とも一貫。残る階段負担は買い物運搬(パントリーはキッチン奥)なので、<b>SCLに一時置き→まとめて上げる</b>運用か、階段幅・手すりで担保します。新シナリオの示唆:①<b>保育園送りの朝は階段5回・うち2回は抱っこ</b>——2階リビングの実コストが最も表れる動線なので、階段の幅・手すり・照明と「律希グッズのSCL定位置化」で軽くする。②寝かせ方の比較では<b>こども部屋Ver.(洋室4.7帖=ホール直結)が添い寝Ver.より毎朝短い</b>——主寝室ピックアップは回遊(洗面⇄WIC)を2度通る遠回りになるため。着替え・おむつをこども部屋内で完結させる収納計画(部屋内チェスト)が効く。③<b>深夜帰宅は「ご飯なし」なら玄関→SCL→シャワー→WIC→就寝が1F完結</b>で、寝ている家族の生活空間(2F)を一切通らない——逆に「ご飯あり」は深夜の2Fキッチン利用になるため、レンジ・食器の音と深夜調光を設計段階で仕込む価値がある。老後は寝室+水回り+東玄関で1F完結できるのも強み。日射は<b>冬の低い南日がLDKコーナー窓から奥まで届き、夏はほぼ入らない</b>のが正解の形です。</div>
+  <div class="ask"><span class="t">設計者への質問:</span>「変更案の可否を確認させてください:①WICを洗面所隣接に移設し、主寝室側・洗面所側の2枚建具で回遊化できますか(耐力壁・PSとの干渉は?)。②トイレを階段下に移した場合の天井高さ・勾配天井の納まりと排水経路の変更費は? ③ドラム式洗濯乾燥機の専用回路と給排水位置、リネン庫の造作。④ペニンシュラキッチンの通路有効幅(冷蔵庫搬入含む)も数字でお願いします」</div>
+</section>
+
+<!-- ========== summary ========== -->
+<section>
+  <div class="sec-head"><span class="sec-num">CHECKLIST</span><h2>打ち合わせ持参用・質問リスト</h2></div>
+  <ul>
+    <li><b>SIM01:</b> 外気0℃・無暖房の朝の想定室温は?(根拠データ付きで)</li>
+    <li><b>SIM02:</b> 南面庇の寸法根拠は? 夏至の遮蔽率と冬至の取得率、東西面の遮蔽対策は?</li>
+    <li><b>SIM03:</b> この仕様の年間冷暖房費シミュレーションと、等級5仕様との差額工事費は?</li>
+    <li><b>SIM04:</b> 換気方式の前提C値は? 中間+完成の気密測定を特記事項に入れられるか?</li>
+    <li><b>SIM05:</b> LDK大開口の面前の冬の体感温度は? 窓仕様別で?</li>
+    <li><b>SIM06:</b> 外気0℃・湿度60%で窓の端部・枠は結露しないか? 数値根拠と樹脂スペーサー可否は?</li>
+    <li><b>SIM07:</b> 室内側防湿層の材料名は? 透湿抵抗は固定か可変か? 夏型結露の検証条件は?</li>
+    <li><b>SIM08:</b> 窓を縮めずにUA目標を達成する窓仕様と差額は? 部位別熱損失内訳は?</li>
+    <li><b>SIM09:</b> この屋根に最大何kW載るか? 補助金込み実質負担と蓄電池あり/なし比較は?</li>
+    <li><b>SIM10:</b> ダウンライトは全数気密型か(型番)? LDKの調光・回路分けは? 間接照明の造作寸法は図面化済みか?</li>
+    <li><b>SIM11:</b> 冬至8〜16時の日影図とLDK窓面の日照時間は? 1F日照不足時の代替案(吹き抜け・高窓)は検討済みか?</li>
+    <li><b>SIM12:</b> エアコンは熱負荷計算で選定しているか? 部屋別負荷計算書と機器選定根拠、全館何台計画か?</li>
+    <li><b>SIM13:</b> スマートECSの温度/湿度交換効率と前提C値は? ダクト経路図・点検口・フィルター/エアミーの交換費と周期・ファン消費電力は?</li>
+    <li><b>SIM14:</b> 変更案(WIC洗面隣接・回遊2建具/階段下トイレ/ドラム洗乾)の可否は? 耐力壁・PS・排水経路の制約と差額、ペニンシュラの通路有効幅は?</li>
+  </ul>
+  <div class="key"><span class="t">原則:</span> どの質問も「できますか?」ではなく<b>「数字を見せてください」</b>の形にする。答えられる設計者なら信頼してよく、答えを渋るなら、その項目こそ標準仕様の弱点です。</div>
+</section>
+
+<footer>
+MODEL ASSUMPTIONS — 外皮面積=延床×2.5 / 気積=延床×2.4 / 東京 HDD18-18≒1800K·day / 暖房負荷利用率0.7(日射・内部発熱控除) / 冷房は日射主体の簡易式 / 漏気≒C値×0.1回/h(常時換気併用時の目安) / COP4.0 / Rsi=0.11 / MRTは外皮表面55%+内部表面45%加重 / 露点はMagnus式 / 太陽光=1,150kWh/kW·年(東京・南面) / システム費25万円/kW・蓄電池100万円 / スマートECS=全熱交換(温度80%・湿度65%目安、カタログ値要確認)・潜熱2.5kJ/g / 動線:歩行1.3m/s・歩幅0.65m・階段1フライト=距離換算3.5m / 日射:東京35.7°N・平均太陽時≒JST・真北=配置図矢印より図面上方から西へ14.1°・差込深さ≒1.9m÷tan(高度)(窓高さ由来の簡易値、庇は未考慮)。<br>
+すべて簡易定常モデル。絶対値の精度より仕様間の相対差を見ること。正式な判断は設計者の外皮計算書・負荷計算によること。
+</footer>
+</div>
+
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+const fmt=(x,d=1)=>x.toFixed(d);
+const yen=x=>'¥'+Math.round(x).toLocaleString();
+const dewPoint=(t,rh)=>{const a=Math.log(rh/100)+(17.27*t)/(237.7+t);return 237.7*a/(17.27-a);};
+
+/* ---- shared house geometry ---- */
+let Af=120;
+const Senv=()=>Af*2.5, Vol=()=>Af*2.4;
+
+/* ---- segmented control helper ---- */
+function seg(id, attr, cb){
+  $(id).addEventListener('click',e=>{
+    if(e.target.dataset[attr]!==undefined){
+      [...e.currentTarget.children].forEach(b=>b.classList.toggle('on',b===e.target));
+      cb(e.target.dataset[attr]);
+    }
+  });
+}
+
+/* ================= SIM 01 ================= */
+let cap=25, rec1=0.85;
+function sim1(){
+  const ua=+$('ua1').value, te=+$('te1').value, ti=+$('ti1').value;
+  const Q = ua*Senv() + 0.33*0.5*Vol()*(1-rec1);   // W/K
+  const Cth = cap*Af;                               // Wh/K
+  const tau = Cth/Q;                                // h
+  const T=t=>te+(ti-te)*Math.exp(-t/tau);
+  const morning=T(9);
+
+  // chart
+  const L=60,R=20,Tp=26,B=46,W=720,H=400;
+  const x=t=>L+t/9*(W-L-R);
+  const yMin=Math.min(te-1,6), yMax=24;
+  const y=v=>H-B-(v-yMin)/(yMax-yMin)*(H-Tp-B);
+  let grid='';
+  for(let g=Math.ceil(yMin/2)*2;g<=yMax;g+=2) grid+=`<line x1="${L}" y1="${y(g)}" x2="${W-R}" y2="${y(g)}" stroke="#E2E8E9"/><text x="${L-8}" y="${y(g)+4}" font-size="11" text-anchor="end" class="mono" fill="#5B6E80">${g}</text>`;
+  const hours=['22時','0時','2時','4時','5時','7時'];const hp=[0,2,4,6,7,9];
+  hp.forEach((h,i)=>grid+=`<line x1="${x(h)}" y1="${Tp}" x2="${x(h)}" y2="${H-B}" stroke="#E2E8E9"/><text x="${x(h)}" y="${H-B+18}" font-size="11" text-anchor="middle" class="mono" fill="#5B6E80">${hours[i]}</text>`);
+
+  const curve=(uaX,recX)=>{
+    const Qx=uaX*Senv()+0.33*0.5*Vol()*(1-recX);
+    const tx=Cth/Qx; let d='M';
+    for(let t=0;t<=9;t+=0.25) d+=` ${x(t)} ${y(te+(ti-te)*Math.exp(-t/tx))}`;
+    return d;
+  };
+  const refs=[[0.87,'等級4'],[0.60,'等級5'],[0.26,'等級7']];
+  let refSvg='';
+  refs.forEach(([u,n])=>{
+    refSvg+=`<path d="${curve(u,rec1)}" fill="none" stroke="#B9C6CE" stroke-width="1.5" stroke-dasharray="5 4"/>`;
+    const Qx=u*Senv()+0.33*0.5*Vol()*(1-rec1);
+    const yv=y(te+(ti-te)*Math.exp(-9*Qx/Cth));
+    refSvg+=`<text x="${W-R-4}" y="${yv+4}" font-size="10.5" text-anchor="end" fill="#8B99A5">${n}</text>`;
+  });
+
+  $('svg1').innerHTML=`${grid}
+    <line x1="${L}" y1="${y(18)}" x2="${W-R}" y2="${y(18)}" stroke="#2F7D4F" stroke-width="1" stroke-dasharray="2 4"/>
+    <text x="${L+6}" y="${y(18)-6}" font-size="11" fill="#2F7D4F">快適下限の目安 18℃</text>
+    ${refSvg}
+    <path d="${curve(ua,rec1)}" fill="none" stroke="#2E8FAD" stroke-width="3"/>
+    <circle cx="${x(9)}" cy="${y(morning)}" r="7" fill="#2E8FAD"/>
+    <text x="${x(9)-12}" y="${y(morning)-12}" font-size="14" font-weight="700" fill="#2E8FAD" text-anchor="end">朝7時 ${fmt(morning)}℃</text>
+    <text x="18" y="${(Tp+H-B)/2}" font-size="12" font-weight="700" fill="#41556B" text-anchor="middle" transform="rotate(-90 18 ${(Tp+H-B)/2})">室温 [℃]</text>`;
+
+  $('ua1V').textContent=fmt(ua,2); $('te1V').textContent=`${te} ℃`; $('ti1V').textContent=`${fmt(ti)} ℃`;
+  $('tauV').textContent=`${fmt(tau,0)} h`; $('morningV').textContent=`${fmt(morning)} ℃`;
+  $('dropV').textContent=`-${fmt(ti-morning)} ℃`;
+  const b=$('badge1');
+  if(morning>=17){b.className='badge dry';b.textContent='朝も暖房なしで生活可能な水準';}
+  else if(morning>=14){b.className='badge edge';b.textContent='起床前タイマー暖房で快適域';}
+  else{b.className='badge wet';b.textContent='朝が寒い家(廊下・脱衣所はさらに低温)';}
+}
+
+/* ================= SIM 02 ================= */
+function sim2(){
+  const m=+$('mo2').value, D=+$('d2').value, Hw=+$('h2').value, off=+$('o2').value;
+  const day=15+Math.round(30.4*(m-1));
+  const decl=23.44*Math.sin(2*Math.PI*(284+day)/365);
+  const alt=90-35.7+decl;
+  const shadow=D*Math.tan(alt*Math.PI/180);
+  const frac=Math.min(1,Math.max(0,(shadow-off)/Hw));
+  const altAt=d=>90-35.7+23.44*Math.sin(2*Math.PI*(284+d)/365);
+  const fr=(a)=>Math.min(1,Math.max(0,(D*Math.tan(a*Math.PI/180)-off)/Hw));
+  const fS=fr(altAt(172)), fW=fr(altAt(355));
+
+  // drawing: outside left, wall right. scale px per m
+  const s=95, wallX=470, eaveY=70;
+  const winTop=eaveY+off*s, winBot=winTop+Hw*s;
+  const eaveL=wallX-D*s;
+  const shadeBot=Math.min(winBot, eaveY+shadow*s);
+  const rad=alt*Math.PI/180;
+  // sun ray through eave tip
+  const rx=eaveL, ry=eaveY;
+  const rayX1=rx-260*Math.cos(rad), rayY1=ry-260*Math.sin(rad);
+  const hitY=eaveY+shadow*s;
+  const sunRays=[0.35,0.6,0.85].map(k=>{
+    const ex=rx+(wallX-rx)*0; // parallel rays hitting window below shadow point
+    const gy=winTop+(winBot-winTop)*k;
+    if(gy<=shadeBot) return '';
+    const gx1=wallX- (gy-eaveY)/Math.tan(rad)*0 ; return `<line x1="${wallX-200*Math.cos(rad)}" y1="${gy-200*Math.sin(rad)}" x2="${wallX}" y2="${gy}" stroke="#E8B93C" stroke-width="2" opacity="0.85" marker-end="url(#sarr)"/>`;
+  }).join('');
+
+  $('svg2').innerHTML=`
+    <defs><marker id="sarr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#E8B93C"/></marker></defs>
+    <rect x="0" y="0" width="${wallX}" height="420" fill="#EAF1F5"/>
+    <rect x="${wallX}" y="0" width="${720-wallX}" height="420" fill="#FBF4EC"/>
+    <text x="${wallX/2}" y="30" font-size="13" font-weight="700" fill="#3E5C82" text-anchor="middle">屋外(南)</text>
+    <text x="${(wallX+720)/2}" y="30" font-size="13" font-weight="700" fill="#C77A3A" text-anchor="middle">室内</text>
+    <circle cx="120" cy="70" r="22" fill="#E8B93C"/>
+    <text x="120" y="112" font-size="12" text-anchor="middle" fill="#8A6A10" font-weight="700">${m}月 高度${fmt(alt,0)}°</text>
+    <rect x="${wallX}" y="0" width="14" height="420" fill="#C9CFD4" stroke="#8B99A5"/>
+    <rect x="${eaveL}" y="${eaveY-10}" width="${wallX-eaveL+14}" height="10" fill="#16283C"/>
+    <text x="${eaveL-6}" y="${eaveY-16}" font-size="12" text-anchor="end" fill="#16283C" font-weight="700">庇 ${fmt(D,2)}m</text>
+    <rect x="${wallX}" y="${winTop}" width="14" height="${Hw*s}" fill="#BFE0EA" stroke="#3E5C82" stroke-width="1.5"/>
+    <text x="${wallX+24}" y="${(winTop+winBot)/2}" font-size="12" fill="#3E5C82" font-weight="700">窓 ${fmt(Hw,1)}m</text>
+    <line x1="${rayX1}" y1="${rayY1}" x2="${rx}" y2="${ry}" stroke="#E8B93C" stroke-width="3"/>
+    <line x1="${rx}" y1="${ry}" x2="${wallX}" y2="${hitY}" stroke="#E8B93C" stroke-width="2" stroke-dasharray="4 4"/>
+    ${sunRays}
+    ${frac>0?`<rect x="${wallX-3}" y="${winTop}" width="20" height="${Math.max(0,shadeBot-winTop)}" fill="#3E5C82" opacity="0.45"/>
+    <text x="${wallX-10}" y="${(winTop+Math.max(winTop,shadeBot))/2+4}" font-size="11.5" fill="#16283C" font-weight="700" text-anchor="end">影 ${fmt(frac*100,0)}%</text>`:''}
+    <text x="360" y="408" font-size="11.5" fill="#5B6E80" text-anchor="middle">影の深さ = 庇の出 × tan(太陽高度) — 高度が高い夏ほど影は深く窓を覆う</text>`;
+
+  $('mo2V').textContent=`${m} 月`; $('d2V').textContent=`${fmt(D,2)} m`; $('h2V').textContent=`${fmt(Hw,1)} m`; $('o2V').textContent=`${fmt(off,2)} m`;
+  $('altV').textContent=`${fmt(alt,0)}°`; $('shV').textContent=`${fmt(frac*100,0)} %`;
+  $('ssV').textContent=`${fmt(fS*100,0)}% / ${fmt(fW*100,0)}%`;
+  const b=$('badge2');
+  if(fS>=0.8&&fW<=0.15){b.className='badge dry';b.textContent='夏遮蔽・冬取得を両立(良い寸法)';}
+  else if(fS<0.6){b.className='badge wet';b.textContent='夏の遮蔽不足 → 庇を深く/シェード併用';}
+  else if(fW>0.3){b.className='badge edge';b.textContent='冬の日射まで遮っている → 庇が深すぎ';}
+  else{b.className='badge edge';b.textContent='もう一歩:夏至80%遮蔽/冬至15%以下が目安';}
+}
+
+/* ================= SIM 03 ================= */
+let rec3=0.85;
+function loads(ua, eta, rec, elec){
+  const Q=ua*Senv()+0.33*0.5*Vol()*(1-rec);
+  const heat=0.7*Q*24*1800/1000;                       // kWh_th
+  const cool=(eta/100)*Senv()*300 + 0.33*0.5*Vol()*4*700/1000 + 400; // kWh_th (solar + vent + internal)
+  return {h:heat/4*elec, c:cool/4*elec};
+}
+function sim3(){
+  const eta=+$('eta3').value, elec=+$('el3').value;
+  const cases=[['等級4',0.87],['等級5',0.60],['UA 0.41',0.41],['等級7',0.26]];
+  const data=cases.map(([n,u])=>({n,u,...loads(u,eta,rec3,elec)}));
+  const maxV=Math.max(...data.map(d=>d.h+d.c))*1.15;
+  const L=70,B=60,Tp=30,W=720,H=400,bw=90;
+  let bars='';
+  data.forEach((d,i)=>{
+    const cx=L+70+i*150;
+    const hH=(d.h/maxV)*(H-Tp-B), cH=(d.c/maxV)*(H-Tp-B);
+    const y0=H-B;
+    const hl=d.n==='UA 0.41';
+    bars+=`
+      <rect x="${cx-bw/2}" y="${y0-hH}" width="${bw}" height="${hH}" fill="${hl?'#C77A3A':'#D9B08C'}"/>
+      <rect x="${cx-bw/2}" y="${y0-hH-cH}" width="${bw}" height="${cH}" fill="${hl?'#2E8FAD':'#9CC8D6'}"/>
+      ${hl?`<rect x="${cx-bw/2-4}" y="${y0-hH-cH-4}" width="${bw+8}" height="${hH+cH+8}" fill="none" stroke="#16283C" stroke-width="2" stroke-dasharray="5 3"/>`:''}
+      <text x="${cx}" y="${y0-hH-cH-12}" font-size="14" font-weight="700" text-anchor="middle" fill="#16283C" class="mono">${yen(d.h+d.c)}</text>
+      <text x="${cx}" y="${y0+20}" font-size="12.5" font-weight="700" text-anchor="middle" fill="${hl?'#16283C':'#5B6E80'}">${d.n}</text>
+      <text x="${cx}" y="${y0+36}" font-size="10.5" text-anchor="middle" class="mono" fill="#8B99A5">UA ${d.u.toFixed(2)}</text>`;
+  });
+  $('svg3').innerHTML=`${bars}
+    <rect x="${L}" y="${Tp}" width="12" height="12" fill="#C77A3A"/><text x="${L+18}" y="${Tp+11}" font-size="11.5" fill="#41556B">暖房</text>
+    <rect x="${L+70}" y="${Tp}" width="12" height="12" fill="#2E8FAD"/><text x="${L+88}" y="${Tp+11}" font-size="11.5" fill="#41556B">冷房</text>
+    <line x1="${L-10}" y1="${H-B}" x2="${W-20}" y2="${H-B}" stroke="#16283C" stroke-width="1.5"/>`;
+  $('eta3V').textContent=fmt(eta,1); $('el3V').textContent=`${elec} 円/kWh`;
+  const d56=(data[1].h+data[1].c)-(data[2].h+data[2].c);
+  const d67=(data[2].h+data[2].c)-(data[3].h+data[3].c);
+  $('d56V').textContent=`${yen(d56)}/年`; $('d67V').textContent=`${yen(d67)}/年`;
+  const b=$('badge3'); b.className='badge edge';
+  b.textContent=`ηACを${fmt(eta,1)}→2.8にすると冷房費+${yen(loads(0.41,2.8,rec3,elec).c-loads(0.41,eta,rec3,elec).c)}/年(日射遮蔽の価値)`;
+}
+
+/* ================= SIM 04 ================= */
+let mode4='first';
+function sim4(){
+  const c=+$('c4').value;
+  const leak=0.1*c;                 // ach
+  const plan=0.5;
+  const hx = mode4!=='third';
+  const eff = mode4==='ecs' ? 0.80 : 0.85;   // ECS=全熱(温度交換80%目安)
+  const vL= hx ? 0.33*Vol()*(plan*(1-eff)+leak) : 0.33*Vol()*(plan+leak);
+  const vLbest= hx ? 0.33*Vol()*(plan*(1-eff)+0.02) : 0.33*Vol()*(plan+0.02);
+  const planL= hx ? 0.33*Vol()*plan*(1-eff) : 0.33*Vol()*plan;
+  const leakL=0.33*Vol()*leak;
+  const effReal= hx ? eff*plan/(plan+leak) : 0;
+  const costYr=0.7*vL*24*1800/1000/4*31;
+
+  const L=90,B=60,Tp=40,W=720,H=380;
+  const maxW=0.33*Vol()*(plan+0.5)*1.1;
+  const bx=v=>v/maxW*(W-L-120);
+  $('svg4').innerHTML=`
+    <text x="${L}" y="${Tp}" font-size="13" font-weight="700" fill="#16283C">換気による熱損失 [W/K](左:計画換気分 / 右:漏気分)</text>
+    <rect x="${L}" y="90" width="${bx(planL)}" height="56" fill="#3E5C82"/>
+    <rect x="${L+bx(planL)}" y="90" width="${bx(leakL)}" height="56" fill="#B9401F"/>
+    <text x="${L+bx(planL)/2}" y="123" font-size="12.5" fill="#fff" font-weight="700" text-anchor="middle">計画 ${fmt(planL,0)}</text>
+    ${bx(leakL)>50?`<text x="${L+bx(planL)+bx(leakL)/2}" y="123" font-size="12.5" fill="#fff" font-weight="700" text-anchor="middle">漏気 ${fmt(leakL,0)}</text>`:`<text x="${L+bx(planL)+bx(leakL)+8}" y="123" font-size="12.5" fill="#B9401F" font-weight="700">漏気 ${fmt(leakL,0)}</text>`}
+    <text x="${L}" y="80" font-size="12" fill="#5B6E80">現在の設定(C=${fmt(c,1)})</text>
+    <rect x="${L}" y="200" width="${bx(vLbest)}" height="56" fill="#2F7D4F"/>
+    <text x="${L}" y="190" font-size="12" fill="#5B6E80">参考:C=0.2 の場合</text>
+    <text x="${L+bx(vLbest)+10}" y="233" font-size="12.5" fill="#2F7D4F" font-weight="700">${fmt(vLbest,0)} W/K</text>
+    <text x="${L}" y="320" font-size="13" fill="#41556B">この漏気の年間コスト換算:<tspan font-weight="700" fill="#B9401F">${yen(0.7*leakL*24*1800/1000/4*31)}/年</tspan>(暖房期のみ・簡易)</text>
+    <text x="${L}" y="348" font-size="12" fill="#5B6E80">${mode4==='third'?'※第3種はC値1.0超で給気口から空気が入らず、換気経路が設計と別物になる':mode4==='ecs'?'※全熱交換=温度+湿度を回収。夏は外気の湿気の給気持込みを約6割カット(除湿負荷減)。ただし漏気は素通り':'※漏気は熱交換器を素通りするため、C値が悪いほど第1種の投資が無駄になる'}</text>
+    ${mode4==='ecs'?`<text x="${L}" y="368" font-size="11.5" fill="#2F7D4F">スマートECS構成:全熱交換ユニット+サイクロン給気フード(粉塵・虫を遠心分離、給気清浄フィルター交換≒5年)+天井埋込清浄機エアミー — 本図面ではエアミー×2/サイクロンII 記載済み</text>`:''}`;
+
+  $('c4V').textContent=`${fmt(c,1)} cm²/m²`;
+  $('gapV').textContent=`${fmt(c*Af,0)} cm²`;
+  $('leakV').textContent=`${fmt(leak/(plan+leak)*100,0)} %`;
+  $('effV').textContent= hx ? `${fmt(effReal*100,0)} %(名目${fmt(eff*100,0)}%)` : '—(第3種)';
+  const b=$('badge4');
+  if(mode4==='third'&&c>1.0){b.className='badge wet';b.textContent='計画換気が破綻する領域(C≦1.0必須)';}
+  else if(c<=0.7){b.className='badge dry';b.textContent='換気計画が設計通り機能する水準';}
+  else if(c<=1.5){b.className='badge edge';b.textContent='許容圏。ただし熱交換の実効効率は低下';}
+  else{b.className='badge wet';b.textContent='漏気支配。断熱投資が気密で漏れている状態';}
+}
+
+/* ================= SIM 05 ================= */
+let uWin5=2.3;
+function sim5(){
+  const uw=+$('uw5').value, te=+$('te5').value, ta=+$('ta5').value;
+  const winShare=0.12, Rsi=0.11;
+  const tsWin=ta-uWin5*Rsi*(ta-te);
+  const tsWall=ta-uw*Rsi*(ta-te);
+  const tsEnv=winShare*tsWin+(1-winShare)*tsWall;
+  const mrt=0.55*tsEnv+0.45*ta;
+  const ot=(ta+mrt)/2;
+  // low-spec comparison: alumi pair + wall 0.6
+  const tsW2=ta-3.5*Rsi*(ta-te), tsWl2=ta-0.6*Rsi*(ta-te);
+  const mrt2=0.55*(winShare*tsW2+(1-winShare)*tsWl2)+0.45*ta;
+  const ot2=(ta+mrt2)/2;
+  const need=ta+(ot-ot2)*2; // air temp needed in low-spec to match OT
+
+  const y=t=>320-(t-10)/16*250;
+  const col=t=>t>=ta-1?'#2F7D4F':(t>=ta-2.5?'#C77A3A':'#B9401F');
+  $('svg5').innerHTML=`
+    <line x1="90" y1="${y(ta)}" x2="660" y2="${y(ta)}" stroke="#8B99A5" stroke-dasharray="3 5"/>
+    <text x="655" y="${y(ta)-8}" font-size="11.5" fill="#5B6E80" text-anchor="end">室温(空気)${fmt(ta)}℃</text>
+    ${[['窓表面',tsWin,150],['壁表面',tsWall,300],['MRT(放射平均)',mrt,450],['体感温度',ot,600]].map(([n,v,x],i)=>`
+      <rect x="${x-42}" y="${y(v)}" width="84" height="${320-y(v)}" fill="${i===3?'#2E8FAD':col(v)}" opacity="${i===3?1:0.85}"/>
+      <text x="${x}" y="${y(v)-10}" font-size="15" font-weight="700" text-anchor="middle" class="mono" fill="#16283C">${fmt(v)}℃</text>
+      <text x="${x}" y="345" font-size="12" font-weight="700" text-anchor="middle" fill="#41556B">${n}</text>`).join('')}
+    <line x1="60" y1="320" x2="680" y2="320" stroke="#16283C" stroke-width="1.5"/>
+    <text x="360" y="372" font-size="11.5" fill="#5B6E80" text-anchor="middle">冷たい表面はそこに向かって体の熱が放射で奪われる=「室温は高いのに寒い」の正体</text>`;
+
+  $('uw5V').textContent=fmt(uw,2); $('te5V').textContent=`${te} ℃`; $('ta5V').textContent=`${fmt(ta)} ℃`;
+  $('mrtV').textContent=`${fmt(mrt)} ℃`; $('otV').textContent=`${fmt(ot)} ℃`;
+  $('needV').textContent=`${fmt(need)} ℃`;
+  const b=$('badge5'); const gap=ta-ot;
+  if(gap<=0.7){b.className='badge dry';b.textContent=`体感と室温の差 ${fmt(gap)}℃ — 表面まで暖かい家`;}
+  else if(gap<=1.5){b.className='badge edge';b.textContent=`体感は室温より ${fmt(gap)}℃ 低い`;}
+  else{b.className='badge wet';b.textContent=`体感は室温より ${fmt(gap)}℃ 低い — 窓際が寒い家`;}
+}
+
+/* ================= SIM 06 ================= */
+let uWin6=2.3;
+function sim6(){
+  const te=+$('te6').value, ti=+$('ti6').value, rh=+$('rh6').value;
+  const dp=dewPoint(ti,rh);
+  const ts=ti-uWin6*0.11*(ti-te);
+  const tsOut=te+uWin6*0.04*(ti-te);
+  const wet=ts<dp, edge=!wet&&(ts-dp)<2.5;
+  const gx=330, gw=60, top=36, bot=300;
+  const ty=t=>bot-(t-(-12))/(30-(-12))*(bot-top);
+  const drops=wet?`<g fill="#2E8FAD">
+      <path d="M ${gx-4} 150 q -5 9 0 14 q 5 -5 0 -14"/>
+      <path d="M ${gx-4} 200 q -5 9 0 14 q 5 -5 0 -14"/>
+      <path d="M ${gx-4} 250 q -6 10 0 16 q 6 -6 0 -16"/>
+    </g>
+    <text x="${gx-14}" y="278" font-size="12" fill="#B9401F" font-weight="700" text-anchor="end">結露(下端・四隅から)</text>`:'';
+  $('svg6').innerHTML=`
+    <rect x="0" y="0" width="${gx}" height="330" fill="#FBF4EC"/>
+    <rect x="${gx+gw}" y="0" width="${720-gx-gw}" height="330" fill="#EAF1F5"/>
+    <rect x="${gx}" y="0" width="${gw}" height="330" fill="#D3E4EA" stroke="#3E5C82" stroke-width="1.5"/>
+    <text x="150" y="28" font-size="14" font-weight="700" fill="#C77A3A">室内 ${fmt(ti)}℃ / ${rh}%</text>
+    <text x="${gx+gw+150}" y="28" font-size="14" font-weight="700" fill="#3E5C82">外気 ${fmt(te)}℃</text>
+    <polyline points="70,${ty(ti)} ${gx},${ty(ts)} ${gx+gw},${ty(tsOut)} 660,${ty(te)}" fill="none" stroke="#16283C" stroke-width="2.5"/>
+    <circle cx="${gx}" cy="${ty(ts)}" r="7" fill="${wet?'#B9401F':'#2F7D4F'}"/>
+    <text x="${gx-12}" y="${ty(ts)-12}" font-size="13" font-weight="700" fill="${wet?'#B9401F':'#2F7D4F'}" text-anchor="end">表面 ${fmt(ts)}℃</text>
+    <line x1="60" y1="${ty(dp)}" x2="660" y2="${ty(dp)}" stroke="#2E8FAD" stroke-width="1.8" stroke-dasharray="7 5"/>
+    <text x="652" y="${ty(dp)-8}" font-size="12.5" font-weight="700" fill="#2E8FAD" text-anchor="end">露点 ${fmt(dp)}℃ — この線より下の面は結露</text>
+    ${drops}
+    <text x="360" y="352" font-size="11.5" fill="#5B6E80" text-anchor="middle">窓内部の温度落差の大きさ = U値。端部・枠は表示値より2〜5℃低い(熱橋)</text>`;
+  $('te6V').textContent=`${te} ℃`; $('ti6V').textContent=`${fmt(ti)} ℃`; $('rh6V').textContent=`${rh} %`;
+  $('u6V').textContent=uWin6.toFixed(1); $('ts6V').textContent=`${fmt(ts)} ℃`; $('dp6V').textContent=`${fmt(dp)} ℃`;
+  const b=$('badge6');
+  if(wet){b.className='badge wet';b.textContent=`結露する(表面が露点より ${fmt(dp-ts)}℃ 低い)`;}
+  else if(edge){b.className='badge edge';b.textContent=`中央セーフ・端部と枠は結露リスク(余裕 ${fmt(ts-dp)}℃)`;}
+  else{b.className='badge dry';b.textContent=`結露しない(余裕 ${fmt(ts-dp)}℃)`;}
+}
+
+/* ================= SIM 07 ================= */
+let season7='summer', sheet7='fixed';
+function sim7(){
+  const summer=season7==='summer', variable=sheet7==='variable';
+  const L=[
+    {x:150,w:26,fill:'#EDE7DC',name:'石膏ボード'},
+    {x:176,w:8, fill: variable?'#8FCB6B':'#E0B23A',name: variable?'可変透湿シート':'防湿シート'},
+    {x:184,w:170,fill:'#F5EFC9',name:'断熱材',hatch:true},
+    {x:354,w:20,fill:'#D9C6A5',name:'面材'},
+    {x:374,w:26,fill:'#FFFFFF',name:'通気層'},
+    {x:400,w:30,fill:'#C9CFD4',name:'外壁材'}
+  ];
+  let layers='',labels='';
+  L.forEach((l,i)=>{
+    layers+=`<rect x="${l.x}" y="60" width="${l.w}" height="280" fill="${l.fill}" stroke="#8B99A5" stroke-width="1"/>`;
+    if(l.hatch){for(let hy=70;hy<340;hy+=22)layers+=`<path d="M ${l.x+8} ${hy} q ${l.w/2-8} 12 ${l.w-16} 0" stroke="#D8C77A" fill="none" stroke-width="2"/>`;}
+    labels+=`<text x="${l.x+l.w/2}" y="${356+(i%2)*16}" font-size="10.5" text-anchor="middle" fill="#41556B">${l.name}</text>
+    <line x1="${l.x+l.w/2}" y1="342" x2="${l.x+l.w/2}" y2="${348+(i%2)*16-10}" stroke="#B9C6CE" stroke-width="1"/>`;
+  });
+  const inLbl=summer?'室内 26℃(冷房)':'室内 22℃(暖房)';
+  const outLbl=summer?'外気 34℃ / 露点26℃':'外気 0℃ / 乾燥';
+  const inCol=summer?'#3E5C82':'#C77A3A', outCol=summer?'#B9401F':'#3E5C82';
+  const mk=(x1p,x2p,y)=>`<line x1="${x1p}" y1="${y}" x2="${x2p}" y2="${y}" stroke="#2E8FAD" stroke-width="3" marker-end="url(#varr7)" opacity="0.85"/>`;
+  let arrows='';
+  if(!summer){
+    for(const y of[120,200,280])arrows+=mk(60,168,y);
+    arrows+=`<text x="100" y="100" font-size="12" fill="#2E8FAD" font-weight="700">水蒸気(室内の湿気)</text>`;
+  }else{
+    const stopX=variable?100:192;
+    for(const y of[120,200,280])arrows+=mk(640,stopX,y);
+    arrows+=`<text x="560" y="100" font-size="12" fill="#2E8FAD" font-weight="700" text-anchor="middle">水蒸気(外気の湿気が材料を透過)</text>`;
+  }
+  let cond='';
+  const sx=176;
+  if(summer&&!variable){
+    cond=`<g fill="#B9401F">
+      <path d="M ${sx+14} 140 q -5 9 0 14 q 5 -5 0 -14"/>
+      <path d="M ${sx+14} 205 q -5 9 0 14 q 5 -5 0 -14"/>
+      <path d="M ${sx+14} 270 q -6 10 0 15 q 6 -6 0 -15"/>
+    </g>
+    <rect x="${sx-2}" y="60" width="12" height="280" fill="none" stroke="#B9401F" stroke-width="2.5"/>
+    <text x="${sx+30}" y="215" font-size="12.5" fill="#B9401F" font-weight="700">シート壁内側の面で結露<tspan x="${sx+30}" dy="16">(冷房で冷えた行き止まり)</tspan></text>`;
+  }else if(summer&&variable){
+    cond=`<text x="${sx+30}" y="215" font-size="12.5" fill="#2F7D4F" font-weight="700">シートが開き、湿気は<tspan x="${sx+30}" dy="16">室内側へ抜けて排出される</tspan></text>`;
+  }else{
+    cond=`<text x="${sx+30}" y="215" font-size="12.5" fill="#2F7D4F" font-weight="700">シートが室内の湿気を遮断<tspan x="${sx+30}" dy="16">→ 壁内は乾燥を保つ</tspan></text>`;
+  }
+  $('svg7').innerHTML=`
+    <defs><marker id="varr7" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#2E8FAD"/></marker></defs>
+    <rect x="0" y="40" width="150" height="320" fill="${summer?'#EAF1F5':'#FBF4EC'}"/>
+    <rect x="430" y="40" width="290" height="320" fill="${summer?'#FBECE6':'#EAF1F5'}"/>
+    ${layers}
+    <text x="75" y="80" font-size="14" font-weight="700" fill="${inCol}" text-anchor="middle">${inLbl}</text>
+    <text x="575" y="80" font-size="14" font-weight="700" fill="${outCol}" text-anchor="middle">${outLbl}</text>
+    ${arrows}${cond}${labels}
+    <text x="360" y="415" font-size="11.5" fill="#5B6E80" text-anchor="middle">通気層:壁内に入った湿気を上昇気流で屋外へ排出する逃げ道(Shawood標準装備)。気密が完璧でも拡散は起きる=透湿設計の問題</text>`;
+  $('flow7V').textContent=summer?'外 → 内(材料を拡散透過)':'内 → 外(シートで遮断)';
+  const b=$('badge7');
+  if(summer&&!variable){b.className='badge wet';b.textContent='壁内結露のリスク(見えない・気づけない)';}
+  else if(summer){b.className='badge dry';b.textContent='可変シートが夏モードで機能 → 安全';}
+  else{b.className='badge dry';b.textContent='防湿層が正しく機能 → 壁内は乾燥';}
+}
+
+/* ================= SIM 08 ================= */
+let uWin8=2.3;
+function sim8(){
+  const w=+$('w8').value/100, uop=+$('uop8').value;
+  const ua=w*uWin8+(1-w)*uop;
+  const wShare=w*uWin8/ua*100;
+  const wMax=uWin8>uop?Math.min(0.4,Math.max(0,(0.46-uop)/(uWin8-uop))):0.4;
+  const gmin=0.15,gmax=0.95,L=60,R=40,W=720;
+  const gx=v=>L+(v-gmin)/(gmax-gmin)*(W-L-R);
+  const grades=[[0.26,'等級7','#2F7D4F'],[0.46,'等級6','#2E8FAD'],[0.60,'等級5','#C77A3A'],[0.87,'等級4','#B9401F']];
+  let marks='';
+  grades.forEach(([v,n,c])=>{marks+=`<line x1="${gx(v)}" y1="120" x2="${gx(v)}" y2="185" stroke="${c}" stroke-width="2"/>
+  <text x="${gx(v)}" y="112" font-size="11.5" font-weight="700" fill="${c}" text-anchor="middle">${n}</text>
+  <text x="${gx(v)}" y="205" font-size="10.5" class="mono" fill="#5B6E80" text-anchor="middle">${v.toFixed(2)}</text>`;});
+  $('svg8').innerHTML=`
+    <rect x="${L}" y="140" width="${W-L-R}" height="26" fill="#E8EEEC" stroke="#B9C6CE"/>
+    <rect x="${L}" y="140" width="${gx(ua)-L}" height="26" fill="#3E5C82" opacity="0.25"/>
+    ${marks}
+    <polygon points="${gx(ua)},134 ${gx(ua)-9},118 ${gx(ua)+9},118" fill="#16283C"/>
+    <text x="${gx(ua)}" y="92" font-size="17" font-weight="700" class="mono" fill="#16283C" text-anchor="middle">UA ${fmt(ua,2)}</text>
+    <rect x="${L}" y="250" width="${(W-L-R)*(w*uWin8/ua)}" height="30" fill="#2E8FAD"/>
+    <rect x="${L+(W-L-R)*(w*uWin8/ua)}" y="250" width="${(W-L-R)*(1-w*uWin8/ua)}" height="30" fill="#D9C6A5"/>
+    <text x="${L+4}" y="243" font-size="12" fill="#41556B">熱損失の内訳:</text>
+    <text x="${L+(W-L-R)*(w*uWin8/ua)/2}" y="270" font-size="12.5" font-weight="700" fill="#fff" text-anchor="middle">窓 ${fmt(wShare,0)}%</text>
+    <text x="${L+(W-L-R)*(w*uWin8/ua)+(W-L-R)*(1-w*uWin8/ua)/2}" y="270" font-size="12.5" font-weight="700" fill="#6B5637" text-anchor="middle">壁・屋根・基礎 ${fmt(100-wShare,0)}%</text>
+    <text x="360" y="318" font-size="11.5" fill="#5B6E80" text-anchor="middle">窓は外皮の${fmt(w*100,0)}%の面積で熱損失の${fmt(wShare,0)}%を占める — 投資対効果が最も高い部位</text>`;
+  $('w8V').textContent=`${fmt(w*100,0)} %`; $('uop8V').textContent=fmt(uop,2);
+  $('ua8V').textContent=fmt(ua,2); $('wl8V').textContent=`${fmt(wShare,0)} %`;
+  $('wm8V').textContent=uWin8>uop?`${fmt(wMax*100,0)} %`:'制約なし';
+  const b=$('badge8');
+  if(ua<=0.26){b.className='badge dry';b.textContent='等級7水準';}
+  else if(ua<=0.46){b.className='badge dry';b.textContent='等級6水準 — 大開口と両立できている';}
+  else if(ua<=0.60){b.className='badge edge';b.textContent='等級5止まり — 窓U値を1段上げると等級6に届く';}
+  else{b.className='badge wet';b.textContent='窓が弱点。窓仕様の見直しが最優先';}
+}
+
+/* ================= SIM 09 ================= */
+let batt9=false;
+function sim9(){
+  const kw=+$('kw9').value, sc=+$('sc9').value/100, buy=+$('buy9').value, sell=+$('sell9').value, sub=+$('sub9').value;
+  const gen=kw*1150;
+  const scEff=Math.min(0.9, sc+(batt9?0.25:0));
+  const save=gen*scEff*buy, sellY=gen*(1-scEff)*sell;
+  const ben=save+sellY;
+  const cost=Math.max(0, kw*250000+(batt9?1000000:0)-sub*10000);
+  const pay=cost/ben;
+  const maxB=Math.max(ben,1)*1.25;
+  const L=90,W=720;
+  const bx=v=>v/maxB*(W-L-80);
+  $('svg9').innerHTML=`
+    <text x="${L}" y="46" font-size="13" font-weight="700" fill="#16283C">年間便益の内訳 [円/年]</text>
+    <rect x="${L}" y="70" width="${bx(save)}" height="52" fill="#2F7D4F"/>
+    <text x="${L+bx(save)+10}" y="102" font-size="13" font-weight="700" fill="#2F7D4F" class="mono">自家消費節約 ${yen(save)}(×${buy}円)</text>
+    <rect x="${L}" y="140" width="${bx(sellY)}" height="52" fill="#E8B93C"/>
+    <text x="${L+bx(sellY)+10}" y="172" font-size="13" font-weight="700" fill="#8A6A10" class="mono">売電収入 ${yen(sellY)}(×${sell}円)</text>
+    <line x1="${L}" y1="215" x2="${W-40}" y2="215" stroke="#B9C6CE"/>
+    <text x="${L}" y="252" font-size="14" fill="#41556B">実質投資 <tspan font-weight="700" class="mono" fill="#16283C">${yen(cost)}</tspan> ÷ 年間便益 <tspan font-weight="700" class="mono" fill="#16283C">${yen(ben)}</tspan></text>
+    <text x="${L}" y="292" font-size="20" font-weight="700" fill="${pay<=10?'#2F7D4F':(pay<=15?'#C77A3A':'#B9401F')}" class="mono">単純回収 ${fmt(pay)} 年</text>
+    <text x="${L}" y="330" font-size="12" fill="#5B6E80">同じ1kWhでも自家消費は${buy}円、売電は${sell}円 — 差${buy-sell}円。自家消費率を上げる設計(蓄電池・エコキュート昼間沸き上げ・EV)が容量より効く</text>
+    <text x="${L}" y="356" font-size="12" fill="#5B6E80">パネル寿命25年超なので回収後は純益。回収${fmt(pay,0)}年なら残り${fmt(Math.max(0,25-pay),0)}年で約${yen(ben*Math.max(0,25-pay))}の便益</text>`;
+  $('kw9V').textContent=`${fmt(kw)} kW`; $('sc9V').textContent=`${Math.round(sc*100)} %`;
+  $('buy9V').textContent=`${buy} 円`; $('sell9V').textContent=`${sell} 円`; $('sub9V').textContent=`${sub} 万円`;
+  $('gen9V').textContent=`${Math.round(gen).toLocaleString()} kWh`;
+  $('ben9V').textContent=`${yen(ben)}/年`; $('cost9V').textContent=yen(cost); $('pay9V').textContent=`${fmt(pay)} 年`;
+  const b=$('badge9');
+  if(pay<=8){b.className='badge dry';b.textContent='優良投資(補助込みで回収が早い)';}
+  else if(pay<=13){b.className='badge edge';b.textContent='標準的。自家消費率を上げる余地を検討';}
+  else{b.className='badge wet';b.textContent='回収が長い — 補助金の取りこぼしか容量過大を疑う';}
+}
+
+/* ================= SIM 10 ================= */
+let lmPerTat10=450, fix10=[1520,12], roomName10='LDK', ind10='none';
+const ROOM_NAMES={450:'LDK',200:'寝室',500:'子供部屋・書斎',150:'廊下・玄関',350:'洗面・キッチン'};
+const TAPE_LM=650, TAPE_W=12;   // 実効lm/m(テープ1200lm/m×コーブ効率〜55%), W/m
+function sim10(){
+  const tat=+$('tat10').value, hr=+$('hr10').value;
+  const [lmF,wF]=fix10;
+  const useInd=ind10!=='none';
+  const ratio=useInd? +$('ratio10').value/100 : 0;
+  const needLm=tat*lmPerTat10;
+  const indLm=needLm*ratio, dirLm=needLm-indLm;
+  const len=useInd? indLm/TAPE_LM : 0;
+  const n=Math.max(useInd&&dirLm<lmF*0.5?0:1,Math.ceil(dirLm/lmF));
+  const wTot=n*wF+Math.ceil(len)*0+len*TAPE_W;
+  const cost=wTot*hr*365/1000*31;
+
+  const maxTat=24, maxW=560, maxH=300;
+  const scale=Math.sqrt(tat/maxTat);
+  const rw=maxW*scale, rh=maxH*scale;
+  const rx=(720-rw)/2, ry=40+(maxH-rh)/2;
+  const cols=Math.ceil(Math.sqrt(Math.max(n,1)*rw/rh));
+  const rows=Math.ceil(Math.max(n,1)/cols);
+  let lights='';let k=0;
+  for(let r=0;r<rows&&k<n;r++){
+    const inRow=Math.min(cols,n-r*cols);
+    for(let c=0;c<inRow;c++,k++){
+      const lx=rx+rw*(c+1)/(inRow+1), ly=ry+rh*(r+1)/(rows+1);
+      lights+=`<circle cx="${lx}" cy="${ly}" r="26" fill="#F5E6B8" opacity="0.55"/><circle cx="${lx}" cy="${ly}" r="7" fill="#E8B93C" stroke="#8A6A10" stroke-width="1.5"/>`;
+    }
+  }
+  // indirect glow: cove = band along top+bottom inner walls (天井周囲), cornice = band along left wall
+  let glow='';
+  if(ind10==='cove'){
+    glow=`<rect x="${rx+8}" y="${ry+8}" width="${rw-16}" height="16" fill="url(#g10)"/>
+          <rect x="${rx+8}" y="${ry+rh-24}" width="${rw-16}" height="16" fill="url(#g10)"/>
+          <text x="${rx+rw/2}" y="${ry+38}" font-size="11" fill="#8A6A10" font-weight="700" text-anchor="middle">コーブ照明(折り上げ天井内・上方向) 約${fmt(len)}m</text>`;
+  }else if(ind10==='cornice'){
+    glow=`<rect x="${rx+8}" y="${ry+8}" width="16" height="${rh-16}" fill="url(#g10)"/>
+          <text x="${rx+34}" y="${ry+rh/2}" font-size="11" fill="#8A6A10" font-weight="700" writing-mode="tb">コーニス照明(壁面ウォッシュ) 約${fmt(len)}m</text>`;
+  }
+  $('svg10').innerHTML=`
+    <defs><linearGradient id="g10" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F7DF9C"/><stop offset="1" stop-color="#F7DF9C" stop-opacity="0"/>
+    </linearGradient></defs>
+    <rect x="${rx}" y="${ry}" width="${rw}" height="${rh}" fill="#FBF7EE" stroke="#16283C" stroke-width="2"/>
+    ${glow}${lights}
+    <text x="${rx+rw/2}" y="${ry-12}" font-size="13.5" font-weight="700" fill="#16283C" text-anchor="middle">${roomName10} ${tat}畳 — ${n>0?`DL ${n}灯`:'DLなし'}${useInd?` + 間接${fmt(len)}m(光量の${Math.round(ratio*100)}%)`:''}</text>
+    <text x="${rx+rw/2}" y="${ry+rh+26}" font-size="11.5" fill="#5B6E80" text-anchor="middle">目安密度:${lmPerTat10} lm/畳。間接はテープ1,200lm/m×造作内効率55%=実効${TAPE_LM}lm/mで計算</text>
+    <text x="360" y="392" font-size="11.5" fill="#5B6E80" text-anchor="middle">${useInd?'間接は天井・気密層を貫通しない=気密欠損ゼロ。DLを減らせるのは高気密住宅と相性が良い':'配置は等間隔グリッドの概念図。実施設計では家具位置・タスク灯でメリハリをつける'}</text>`;
+
+  $('tat10V').textContent=`${tat} 畳`; $('hr10V').textContent=`${fmt(hr)} h`;
+  $('ratio10V').textContent=`${Math.round(ratio*100)||40} %`;
+  $('lm10V').textContent=`${Math.round(needLm).toLocaleString()} lm`;
+  $('n10V').textContent=n>0?`${n} ${fix10[0]===4000?'台':'灯'}`:'0灯';
+  $('ind10V').textContent=useInd?`${fmt(len)} m`:'—';
+  $('w10V').textContent=`${Math.round(wTot)} W`;
+  $('c10V').textContent=`${yen(cost)}/年`;
+  const b=$('badge10');
+  if(useInd&&ratio>0.6){b.className='badge edge';b.textContent='間接主体:明るさの体感は下がるので調光必須・作業面はタスク灯で補う';}
+  else if(useInd){b.className='badge dry';b.textContent=`DLを${Math.max(0,Math.ceil(needLm/lmF)-n)}灯削減=天井の気密欠損と器具穴を削減`;}
+  else{b.className='badge dry';b.textContent=`LED化済み前提。白熱灯なら同光量で約${Math.round(wTot*7.5)}W`;}
+
+  // whole-house preset table
+  const dlOnly=t=>Math.max(1,Math.ceil(t*450/1520));
+  const ldkN=dlOnly(20);
+  const ldkIndLen=20*450*0.4/TAPE_LM, ldkIndN=Math.ceil(20*450*0.6/1520);
+  const wA=ldkN*12, wB=ldkIndN*12+ldkIndLen*TAPE_W;
+  const plan=[
+    ['LDK 案A:全DL',20,`${ldkN}灯`,wA,6],
+    ['LDK 案B:間接併用(コーブ'+fmt(ldkIndLen)+'m+DL'+ldkIndN+'灯)',20,`${ldkIndN}灯+${fmt(ldkIndLen)}m`,wB,6],
+    ['主寝室(コーニス2m+DL1灯推奨)',8,'1灯+2.0m',12+2*TAPE_W,2],
+    ['洋室A',6,'3灯',36,3],['洋室B',6,'3灯',36,3],['洋室C(書斎等)',6,'2灯+タスク灯',30,4],
+    ['廊下・玄関・階段',6,'4灯(人感)',24,1.5],['洗面・トイレ×2・浴室',6,'4灯',40,2]
+  ];
+  let rows2='',totCost=0;
+  plan.forEach(([nm,t,fx,ww,h],i)=>{
+    const cc=ww*h*365/1000*31;
+    if(i!==0) totCost+=cc;   // 合計は案B採用で集計
+    rows2+=`<tr${i===0?' style="color:#8B99A5"':''}><td>${nm}</td><td class="mono">${t}畳</td><td class="mono">${fx}</td><td class="mono">${Math.round(ww)}W</td><td class="mono">${h}h/日</td><td class="mono">${yen(cc)}</td></tr>`;
+  });
+  $('table10').innerHTML=`<table>
+    <tr><th>部屋</th><th>広さ</th><th>器具</th><th>電力</th><th>点灯</th><th>年間電気代</th></tr>
+    ${rows2}
+    <tr style="background:#E8EEEC"><td><b>合計(LDKは案B採用)</b></td><td class="mono">58畳</td><td>—</td><td>—</td><td>—</td><td class="mono"><b>${yen(totCost)}/年</b></td></tr>
+  </table>
+  <p class="small">※31円/kWh・全灯LED。間接併用(案B)は全DL(案A)より消費電力は微増するが、天井の気密欠損が減り、調光時の質感は段違い。寝室のコーニスは「寝る前は間接のみ」の運用に最適。照明は電気代最適化ではなく調光・シーン・気密型に投資する領域。</p>`;
+}
+
+/* ================= SIM 11 ================= */
+const noonAlt=m=>{const day=15+Math.round(30.4*(m-1));return 90-35.7+23.44*Math.sin(2*Math.PI*(284+day)/365);};
+function sim11(){
+  const m=+$('mo11').value, Hn=+$('hn11').value, D=+$('d11').value;
+  const alt=noonAlt(m);
+  const hs=Math.max(0,Hn-D*Math.tan(alt*Math.PI/180));
+  const shade=(lo,hi)=>Math.min(1,Math.max(0,(hs-lo)/(hi-lo)));
+  const f1=shade(0.5,2.5), f2=shade(3.3,5.3);
+  let clear=[];
+  for(let mm=1;mm<=12;mm++){
+    const h=Math.max(0,Hn-D*Math.tan(noonAlt(mm)*Math.PI/180));
+    if(h<=0.5)clear.push(mm);
+  }
+  const clearTxt=clear.length===12?'通年':clear.length===0?'なし(南中時)':`${clear[0]}月〜${clear[clear.length-1]}月`;
+
+  const s=24, gY=350;
+  const nbW=90, nbX=60;
+  const wallX=nbX+nbW+D*s;
+  const rayY=gY-hs*s;
+  const win=(lo,hi)=>{
+    const y1=gY-hi*s, h=(hi-lo)*s;
+    const shTop=Math.max(y1,gY-Math.min(hs,hi)*s);
+    const shH=Math.max(0,Math.min(hs,hi)-lo)*s;
+    return `<rect x="${wallX}" y="${y1}" width="14" height="${h}" fill="#BFE0EA" stroke="#3E5C82" stroke-width="1.5"/>
+    ${shH>0?`<rect x="${wallX}" y="${shTop}" width="14" height="${shH}" fill="#3E5C82" opacity="0.5"/>`:''}`;
+  };
+  $('svg11').innerHTML=`
+    <rect x="0" y="${gY}" width="720" height="80" fill="#D9D2C4"/>
+    <circle cx="640" cy="60" r="20" fill="#E8B93C"/>
+    <text x="640" y="100" font-size="12" text-anchor="middle" fill="#8A6A10" font-weight="700">${m}月 高度${fmt(alt,0)}°</text>
+    <rect x="${nbX}" y="${gY-Hn*s}" width="${nbW}" height="${Hn*s}" fill="#B8BEC4" stroke="#5B6E80" stroke-width="1.5"/>
+    <text x="${nbX+nbW/2}" y="${gY-Hn*s-10}" font-size="12.5" font-weight="700" fill="#41556B" text-anchor="middle">南側隣家 ${fmt(Hn)}m</text>
+    <rect x="${wallX}" y="${gY-6.6*s}" width="150" height="${6.6*s}" fill="#FBF4EC" stroke="#16283C" stroke-width="2"/>
+    <text x="${wallX+75}" y="${gY-6.6*s-10}" font-size="12.5" font-weight="700" fill="#16283C" text-anchor="middle">自宅(南面)</text>
+    ${win(0.5,2.5)}${win(3.3,5.3)}
+    <text x="${wallX+24}" y="${gY-1.4*s}" font-size="11.5" fill="#3E5C82" font-weight="700">1F窓 ${fmt(f1*100,0)}%影</text>
+    <text x="${wallX+24}" y="${gY-4.2*s}" font-size="11.5" fill="#3E5C82" font-weight="700">2F窓 ${fmt(f2*100,0)}%影</text>
+    <line x1="${nbX+nbW}" y1="${gY-Hn*s}" x2="${wallX}" y2="${rayY}" stroke="#E8B93C" stroke-width="2.5"/>
+    <line x1="${nbX+nbW-160*Math.cos(alt*Math.PI/180)}" y1="${gY-Hn*s-160*Math.sin(alt*Math.PI/180)}" x2="${nbX+nbW}" y2="${gY-Hn*s}" stroke="#E8B93C" stroke-width="3"/>
+    ${hs>0.05?`<rect x="${wallX-3}" y="${rayY}" width="6" height="${gY-rayY}" fill="#3E5C82" opacity="0.6"/>
+    <text x="${wallX-12}" y="${rayY+14}" font-size="12" fill="#16283C" font-weight="700" text-anchor="end">影 ${fmt(hs)}m</text>`:''}
+    <line x1="${nbX+nbW}" y1="${gY+22}" x2="${wallX}" y2="${gY+22}" stroke="#41556B" stroke-width="1.5"/>
+    <text x="${(nbX+nbW+wallX)/2}" y="${gY+40}" font-size="12" font-weight="700" fill="#41556B" text-anchor="middle">離隔 ${fmt(D)}m</text>
+    <text x="360" y="420" font-size="11.5" fill="#5B6E80" text-anchor="middle">影の高さ = 隣家高さ − 離隔 × tan(太陽高度)。冬至31°では tan≒0.6 — 離隔1mで影は0.6mしか下がらない</text>`;
+
+  $('mo11V').textContent=`${m} 月`; $('hn11V').textContent=`${fmt(Hn)} m`; $('d11V').textContent=`${fmt(D)} m`;
+  $('alt11V').textContent=`${fmt(alt,0)}°`; $('hs11V').textContent=`${fmt(hs)} m`;
+  $('fr11V').textContent=`${fmt(f1*100,0)}% / ${fmt(f2*100,0)}%`;
+  $('cl11V').textContent=clearTxt;
+  const b=$('badge11');
+  const decF1=Math.min(1,Math.max(0,(Math.max(0,Hn-D*Math.tan(noonAlt(12)*Math.PI/180))-0.5)/2));
+  if(decF1>=0.9){b.className='badge wet';b.textContent='冬の1F直射はほぼゼロ → 高窓・吹き抜け・2Fリビングを検討すべき敷地';}
+  else if(decF1>=0.4){b.className='badge edge';b.textContent='冬の1F日射は部分的 → 窓の高所化で改善余地あり';}
+  else{b.className='badge dry';b.textContent='冬も1Fに直射が届く → SIM02の庇設計がそのまま有効';}
+}
+
+/* ================= SIM 12 ================= */
+let zone12=1;
+const AC=[[2.2,'6畳用'],[2.5,'8畳用'],[2.8,'10畳用'],[3.6,'12畳用'],[4.0,'14畳用'],[5.6,'18畳用'],[6.3,'20畳用'],[7.1,'23畳用']];
+function sim12(){
+  const ua=+$('ua12').value, eta=+$('eta12').value, te=+$('te12').value;
+  const ti=22;
+  const Q=ua*Senv()+0.33*0.5*Vol()*0.15;            // 換気は熱交換85%前提
+  const heatW=Q*(ti-te)*1.2*zone12;                  // 立ち上がり係数1.2
+  const coolW=((eta/100)*Senv()*350 + 800 + 0.33*Vol()*0.5*8)*zone12;
+  const need=Math.max(heatW,coolW)/1000;
+  const rec=AC.find(a=>a[0]>=need)||AC[AC.length-1];
+  const catKw=zone12===1?Math.ceil((Af/1.62)/20)*6.3:6.3;
+
+  const L=110,W=720,bh=52;
+  const maxKw=Math.max(catKw,rec[0])*1.25;
+  const bx=v=>v/maxKw*(W-L-150);
+  $('svg12').innerHTML=`
+    <text x="${L}" y="50" font-size="13" font-weight="700" fill="#16283C">必要能力 vs 選定 [kW]${zone12===1?'(家全体・全館連続運転)':'(LDK 20畳)'}</text>
+    <text x="${L-8}" y="112" font-size="12" fill="#41556B" text-anchor="end">暖房負荷</text>
+    <rect x="${L}" y="86" width="${bx(heatW/1000)}" height="${bh}" fill="#C77A3A"/>
+    <text x="${L+bx(heatW/1000)+10}" y="118" font-size="14" font-weight="700" fill="#C77A3A" class="mono">${fmt(heatW/1000)} kW</text>
+    <text x="${L-8}" y="192" font-size="12" fill="#41556B" text-anchor="end">冷房負荷</text>
+    <rect x="${L}" y="166" width="${bx(coolW/1000)}" height="${bh}" fill="#2E8FAD"/>
+    <text x="${L+bx(coolW/1000)+10}" y="198" font-size="14" font-weight="700" fill="#2E8FAD" class="mono">${fmt(coolW/1000)} kW</text>
+    <text x="${L-8}" y="272" font-size="12" fill="#41556B" text-anchor="end">カタログ流</text>
+    <rect x="${L}" y="246" width="${bx(catKw)}" height="${bh}" fill="#B9C6CE"/>
+    <text x="${L+bx(catKw)+10}" y="278" font-size="14" font-weight="700" fill="#5B6E80" class="mono">${fmt(catKw)} kW ${zone12===1?'(畳数合算)':'(20畳用)'}</text>
+    <line x1="${L+bx(rec[0])}" y1="72" x2="${L+bx(rec[0])}" y2="312" stroke="#2F7D4F" stroke-width="2" stroke-dasharray="6 4"/>
+    <text x="${L+bx(rec[0])}" y="336" font-size="13" font-weight="700" fill="#2F7D4F" text-anchor="middle">計算推奨:${rec[1]} ${fmt(rec[0])}kW${zone12===1?' ×1〜2台':''}</text>
+    <text x="360" y="372" font-size="11.5" fill="#5B6E80" text-anchor="middle">畳数表記は無断熱時代の基準。高断熱住宅では2〜3クラス小さい機種が正解になり、本体価格と効率の両方で得</text>`;
+
+  $('ua12V').textContent=fmt(ua,2); $('eta12V').textContent=fmt(eta,1); $('te12V').textContent=`${te} ℃`;
+  $('ht12V').textContent=`${fmt(heatW/1000)} kW`; $('cl12V').textContent=`${fmt(coolW/1000)} kW`;
+  $('rec12V').textContent=`${rec[1]}(${fmt(rec[0])}kW)${zone12===1?'×1〜2台':''}`;
+  const b=$('badge12');
+  const over=catKw/Math.max(need,0.1);
+  if(over>=1.8){b.className='badge wet';b.textContent=`カタログ選定は計算値の${fmt(over)}倍 — 過大。価格も効率も損`;}
+  else if(over>=1.3){b.className='badge edge';b.textContent=`カタログ選定は計算値の${fmt(over)}倍 — 1クラス下げる余地`;}
+  else{b.className='badge dry';b.textContent='選定と負荷が整合';}
+}
+
+
+/* ================= SIM 13 (SMART-ECS) ================= */
+function sim13(){
+  const c=+$('c13').value, el=+$('el13').value, dx=+$('dx13').value;
+  const plan=0.5, leak=0.1*c;
+  const WK=a=>0.33*Vol()*a;                       // W/K
+  const Qm3=a=>a*Vol();                           // m³/h
+  const sys=[
+    {n:'第3種',      sub:'ダクトレス・排気のみ機械', eT:0,    eH:0,    col:'#8B99A5'},
+    {n:'第1種 顕熱85%',sub:'温度のみ回収',            eT:0.85, eH:0,    col:'#3E5C82'},
+    {n:'スマートECS', sub:'全熱=温度+湿度を回収',     eT:0.80, eH:0.65, col:'#2E8FAD'}
+  ];
+  const data=sys.map(s=>{
+    const heat = 0.7*(WK(plan)*(1-s.eT)+WK(leak))*24*1800/1000/4*el;          // 暖房(顕熱)
+    const coolS= (WK(plan)*(1-s.eT)+WK(leak))*4*700/1000/4*el;                 // 冷房(顕熱)
+    const coolL= 0.83*(Qm3(plan)*(1-s.eH)+Qm3(leak))*dx*700/1000/4*el;         // 冷房(潜熱=除湿)
+    return {...s, heat, coolS, coolL, tot:heat+coolS+coolL};
+  });
+  const maxV=Math.max(...data.map(d=>d.tot))*1.18;
+  const L=70,B=64,Tp=34,W=720,H=400,bw=110;
+  let bars='';
+  data.forEach((d,i)=>{
+    const cx=L+110+i*200, y0=H-B, k=(H-Tp-B-30)/maxV;
+    const hH=d.heat*k, sH=d.coolS*k, lH=d.coolL*k;
+    const hl=i===2;
+    bars+=`
+      <rect x="${cx-bw/2}" y="${y0-hH}" width="${bw}" height="${hH}" fill="#C77A3A" opacity="${hl?1:.55}"/>
+      <rect x="${cx-bw/2}" y="${y0-hH-sH}" width="${bw}" height="${sH}" fill="#2E8FAD" opacity="${hl?1:.55}"/>
+      <rect x="${cx-bw/2}" y="${y0-hH-sH-lH}" width="${bw}" height="${lH}" fill="#6E5AA0" opacity="${hl?1:.55}"/>
+      ${hl?`<rect x="${cx-bw/2-4}" y="${y0-hH-sH-lH-4}" width="${bw+8}" height="${hH+sH+lH+8}" fill="none" stroke="#16283C" stroke-width="2" stroke-dasharray="5 3"/>`:''}
+      <text x="${cx}" y="${y0-hH-sH-lH-12}" font-size="14.5" font-weight="700" text-anchor="middle" class="mono" fill="#16283C">${yen(d.tot)}</text>
+      <text x="${cx}" y="${y0+20}" font-size="12.5" font-weight="700" text-anchor="middle" fill="${hl?'#16283C':'#5B6E80'}">${d.n}</text>
+      <text x="${cx}" y="${y0+36}" font-size="10" text-anchor="middle" fill="#8B99A5">${d.sub}</text>`;
+  });
+  $('svg13').innerHTML=`${bars}
+    <rect x="${L}" y="${Tp}" width="12" height="12" fill="#C77A3A"/><text x="${L+18}" y="${Tp+11}" font-size="11.5" fill="#41556B">暖房(顕熱)</text>
+    <rect x="${L+100}" y="${Tp}" width="12" height="12" fill="#2E8FAD"/><text x="${L+118}" y="${Tp+11}" font-size="11.5" fill="#41556B">冷房(顕熱)</text>
+    <rect x="${L+200}" y="${Tp}" width="12" height="12" fill="#6E5AA0"/><text x="${L+218}" y="${Tp+11}" font-size="11.5" fill="#41556B">冷房(潜熱=除湿)</text>
+    <text x="${W-24}" y="${Tp+11}" font-size="11" fill="#8B99A5" text-anchor="end" class="mono">C=${fmt(c,1)} / 換気0.5回/h+漏気</text>
+    <line x1="${L-10}" y1="${H-B}" x2="${W-20}" y2="${H-B}" stroke="#16283C" stroke-width="1.5"/>`;
+  $('c13V').textContent=`${fmt(c,1)} cm²/m²`; $('el13V').textContent=`${el} 円/kWh`; $('dx13V').textContent=`${fmt(dx,1)} g/kg`;
+  $('d13aV').textContent=`${yen(data[0].tot-data[2].tot)}/年`;
+  $('d13bV').textContent=`${yen(data[1].tot-data[2].tot)}/年`;
+  $('d13cV').textContent=`${yen(data[1].coolL-data[2].coolL)}/年`;
+  const b=$('badge13');
+  if(c<=0.7){b.className='badge dry';b.textContent='気密が良く、全熱交換の投資が素直に回収される条件';}
+  else if(c<=1.5){b.className='badge edge';b.textContent=`C=${fmt(c,1)}:漏気が交換器を素通り。ECS前提ならC≦1.0を特記事項に`;}
+  else{b.className='badge wet';b.textContent='この気密では方式差より漏気が支配的。先に気密を直すこと';}
+}
+
+/* ================= SIM 14 (動線×日射) ================= */
+/* 図面ベクター解析による実座標(グリッドm, Y上向き=図面上方) */
+const P14={s:34, ox:[26,392], oy:64, ymax:9.4, ymin:-0.8};
+const px14=(f,x,y)=>[P14.ox[f-1]+x*P14.s, P14.oy+(P14.ymax-y)*P14.s];
+const TH_N=14.1*Math.PI/180;                       // 真北=図面上方から西へ14.1°
+const N14=[-Math.sin(TH_N),Math.cos(TH_N)], E14=[Math.cos(TH_N),Math.sin(TH_N)];
+
+const OUTLINE14={
+ 1:[[0,0],[3.5,0],[3.5,2.4],[8.1,2.4],[8.1,4.6],[7.9,4.6],[7.9,6.04],[7.1,6.04],[7.1,7.1],[5.6,7.1],[5.6,8.1],[3.1,8.1],[3.1,9.1],[0,9.1]],
+ 2:[[0,1.9],[8.45,1.9],[8.45,6.1],[7.1,6.1],[7.1,7.1],[5.6,7.1],[5.6,8.1],[3.1,8.1],[3.1,9.1],[0,9.1]]
+};
+const ROOMS14={
+ 1:[ // [x1,y1,x2,y2,label,type] w=水回り s=収納 r=居室 h=ホール t=階段
+  [0,0,3.4,2.93,'主寝室 6.4帖','r'],
+  [4.57,2.4,6.13,4.43,'洗面所','w'],[6.3,2.4,7.9,4.43,'浴室','w'],
+  [2.07,3.07,4.43,4.43,'WIC','s',1],[3.57,2.4,4.43,3.07,'リネン','s',1],
+  [1.07,3.07,1.93,4.43,'','h'],[0,3.07,1.07,4.43,'トイレ(階段下)','w',1],
+  [0,4.43,1.9,5.93,'階段','t'],[1.9,5.43,2.47,6.07,'物入','s'],
+  [1.9,4.43,5.9,5.43,'ホール','h'],
+  [2.47,5.57,5.5,8.1,'洋室 4.7帖','r'],[5.4,6.04,6.04,6.9,'物入','s'],
+  [0,6.07,2.41,9.1,'洋室 4.4帖','r'],[2.41,8.04,3.1,9.1,'物入','s'],
+  [5.9,4.43,7.9,6.04,'玄関','h'],[6.04,6.04,7.1,7.1,'SCL','s']
+ ],
+ 2:[
+  [0,2.1,0.93,2.9,'ホール','h'],[0,2.9,1.07,5.93,'階段','t'],[0,6.07,1.07,7.4,'ホール','h'],
+  [0,7.57,0.93,8.9,'トイレ','w'],[1.07,8.07,2.9,8.9,'納戸','s'],
+  [0.93,1.9,8.4,5.43,'','r'],[1.07,5.43,4.57,5.93,'','r'],
+  [1.07,5.93,4.43,8.07,'キッチン','w'],[4.43,7.23,5.4,7.9,'パントリー','s'],
+  [4.57,5.57,5.4,6.32,'','s'],
+  [5.57,5.57,6.9,6.9,'書斎 1.3帖','r'],[7.04,5.43,8.4,5.9,'物入','s']
+ ]
+};
+const FILL14={w:'#E4EEF2',s:'#EDEEE7',r:'#FFFFFF',h:'#F7F4EC',t:'#F3E7D3'};
+
+/* 窓: [floor, x1,y1, x2,y2, 外向き法線nx,ny, 最大差込深さm, 室名] */
+const WIN14=[
+ [1, 0.5,0,   2.9,0,    0,-1, 2.7,'主寝室'],
+ [1, 4.8,2.4, 6.0,2.4,  0,-1, 1.8,'洗面所'],
+ [1, 6.5,2.4, 7.6,2.4,  0,-1, 1.8,'浴室'],
+ [1, 7.9,4.8, 7.9,5.7,  1,0,  1.7,'玄関'],
+ [1, 4.6,8.1, 5.4,8.1,  0,1,  2.3,'洋室4.7'],
+ [1, 0.4,9.1, 1.5,9.1,  0,1,  2.7,'洋室4.4'],
+ [2, 3.6,1.9, 8.3,1.9,  0,-1, 3.4,'LDK南'],
+ [2, 8.45,2.0,8.45,3.4, 1,0,  3.8,'LDK東'],
+ [2, 0.5,1.9, 3.2,1.9,  0,-1, 3.2,'LDK(バルコニー)'],
+ [2, 3.2,8.07,4.2,8.07, 0,1,  1.9,'キッチン'],
+ [2, 0,7.41,  0,7.58,  -1,0,  0.9,'トイレ2F'],
+ [2, 1.4,9.1, 2.5,9.1,  0,1,  0.8,'納戸']
+];
+
+/* 動線シナリオ(実座標) */
+const SC14=[
+ {name:'朝支度→出勤', legs:[
+   {f:1,pts:[[1.6,1.5,'起床'],[2.7,2.6],[3.2,3.6,'WICで着替え'],[4.5,3.72],[5.3,3.4,'洗顔・身支度'],[5.3,4.9],[2.1,4.93],[1.0,5.15]]},
+   {f:2,pts:[[0.5,4.6],[0.5,2.5],[1.7,2.7],[3.2,5.0,'朝食'],[2.1,5.5],[1.7,6.3],[1.9,7.0],[3.3,7.0,'食器を下げる'],[1.9,7.0],[1.7,6.2],[1.5,2.7],[0.6,2.6],[0.5,4.2]]},
+   {f:1,pts:[[1.0,5.15],[2.1,4.93],[5.5,4.93],[6.3,5.5],[6.6,6.4,'上着・カバン'],[6.7,5.6],[7.3,5.2,'靴を履く'],[8.7,5.2,'いってきます']]}]},
+ {name:'帰宅+買い物', legs:[
+   {f:1,pts:[[8.7,5.2,'ただいま'],[7.3,5.2],[6.7,5.7],[6.6,6.4,'靴と上着をSCLへ'],[6.3,5.5],[5.5,4.93],[5.3,4.9],[5.3,3.4,'手を洗う'],[5.3,4.9],[2.1,4.93],[1.0,5.15]]},
+   {f:2,pts:[[0.5,4.6],[0.5,2.5],[1.7,2.7],[1.7,5.6],[1.8,6.4],[2.0,7.0],[4.4,7.0],[4.9,7.55,'買い物を収納'],[4.6,6.9,'冷蔵庫へ'],[2.0,7.0],[1.8,6.2],[1.9,5.5],[2.1,4.2],[6.6,2.9,'ソファでひと息']]}]},
+ {name:'洗濯(乾燥→WIC)', legs:[
+   {f:1,pts:[[5.1,3.3,'ドラム乾燥まで完了'],[5.0,3.7],[4.5,3.72],[3.3,3.7,'たたんでWICへ収納'],[2.7,3.3],[2.4,2.5,'翌朝はここで着替え']]}]},
+ {name:'入浴→就寝', legs:[
+   {f:2,pts:[[6.6,2.9,'リビングを消灯'],[1.7,2.6],[0.5,2.5],[0.5,4.2]]},
+   {f:1,pts:[[1.0,5.15],[2.1,4.93],[5.3,4.9],[5.3,3.5,'脱衣'],[7.0,3.4,'入浴'],[5.3,3.5,'ドライヤー'],[4.5,3.72],[3.3,3.7,'パジャマはWICから'],[2.7,3.3],[1.6,1.5,'おやすみ']]}]},
+ {name:'在宅ワーク(書斎ループ)', legs:[
+   {f:2,pts:[[6.25,6.3,'書斎で仕事'],[6.1,5.1],[2.2,5.5],[1.15,6.0],[1.15,6.9],[0.55,6.9],[0.45,8.2,'トイレ'],[0.55,6.9],[1.15,6.9],[2.0,7.0],[3.3,7.0,'コーヒーを淹れる'],[2.0,7.0],[1.8,6.2],[2.1,4.2],[4.3,4.2],[6.1,5.0],[6.25,6.3,'書斎に戻る']]}]},
+ {name:'朝・保育園送り(主寝室添い寝Ver.)', legs:[
+   {f:1,pts:[[1.6,1.5,'起床(律希はまだ夢の中)'],[2.7,2.6],[3.2,3.6,'WICで着替え'],[4.5,3.72],[5.3,3.4,'洗顔'],[5.3,4.9],[2.1,4.93],[1.0,5.15]]},
+   {f:2,pts:[[0.5,4.6],[0.5,2.5],[1.7,2.7],[3.2,5.0,'ダイニングで仕事'],[2.6,4.0,'律希の泣き声→1Fへ'],[1.7,2.7],[0.5,2.5],[0.5,4.2]]},
+   {f:1,pts:[[1.0,5.15],[2.1,4.93],[5.3,4.9],[5.3,3.5],[4.5,3.72],[3.3,3.7],[2.7,3.3],[1.9,1.6,'おはよう。律希を抱っこ'],[2.7,3.3],[3.2,3.6,'おむつ・お着替え'],[4.5,3.72],[5.3,3.5],[5.3,4.9],[2.1,4.93],[1.0,5.15]]},
+   {f:2,pts:[[0.5,4.6],[0.5,2.5],[1.7,2.7],[1.7,5.6],[1.8,6.4],[2.0,7.0],[3.3,7.0,'朝ごはんを準備'],[2.0,7.0],[1.8,6.2],[1.9,5.5],[3.2,5.0,'いっしょに朝ごはん'],[1.9,5.5],[1.8,6.4],[2.0,7.0],[3.3,7.0,'食器を下げる'],[1.9,7.0],[1.7,6.2],[1.5,2.7],[0.6,2.6],[0.5,4.2]]},
+   {f:1,pts:[[1.0,5.15],[2.1,4.93],[5.5,4.93],[6.3,5.5],[6.6,6.4,'上着とリュック(SCL)'],[6.7,5.6],[7.3,5.2,'靴を履かせる'],[8.7,5.2,'保育園へ→送って帰宅'],[7.3,5.2],[6.7,5.7],[6.6,6.4,'上着をSCLへ'],[6.3,5.5],[5.5,4.93],[5.3,4.9],[5.3,3.4,'手を洗う'],[5.3,4.9],[2.1,4.93],[1.0,5.15]]},
+   {f:2,pts:[[0.5,4.6],[0.5,2.5],[1.7,2.7],[2.1,4.2],[4.3,4.2],[6.1,5.0],[6.25,6.3,'書斎で仕事に集中']]}]},
+ {name:'深夜帰宅(ご飯なし)', legs:[
+   {f:1,pts:[[8.7,5.2,'ただいま(みんな就寝中)'],[7.3,5.2],[6.7,5.7],[6.6,6.4,'上着をSCLへ'],[6.3,5.5],[5.5,4.93],[5.3,4.9],[5.3,3.5,'手洗い・脱衣'],[7.0,3.4,'シャワー'],[5.2,3.65,'歯みがき・ドライヤー'],[4.5,3.72],[3.3,3.7,'パジャマはWICから'],[2.7,3.3],[1.6,1.5,'そっと就寝(律希を起こさない)']]}]},
+ {name:'深夜帰宅(ご飯あり)', legs:[
+   {f:1,pts:[[8.7,5.2,'ただいま(深夜)'],[7.3,5.2],[6.7,5.7],[6.6,6.4,'上着をSCLへ'],[6.3,5.5],[5.5,4.93],[5.3,4.9],[5.3,3.4,'手を洗う'],[5.3,4.9],[2.1,4.93],[1.0,5.15]]},
+   {f:2,pts:[[0.5,4.6],[0.5,2.5],[1.7,2.7],[1.7,5.6],[1.8,6.4],[2.0,7.0],[3.3,7.0,'夜ごはんを温める'],[2.0,7.0],[1.8,6.2],[1.9,5.5],[3.2,5.0,'ひとりで晩ごはん'],[1.9,5.5],[1.8,6.4],[2.0,7.0],[3.3,7.0,'食器を片付け'],[1.9,7.0],[1.7,6.2],[1.5,2.7],[0.6,2.6],[0.5,4.2]]},
+   {f:1,pts:[[1.0,5.15],[2.1,4.93],[5.3,4.9],[5.3,3.5,'脱衣'],[7.0,3.4,'シャワー'],[5.3,3.5],[4.5,3.72],[3.3,3.7,'パジャマはWICから'],[2.7,3.3],[1.6,1.5,'そっと就寝']]}]},
+ {name:'朝・保育園送り(こども部屋Ver.)', legs:[
+   {f:1,pts:[[1.6,1.5,'起床(律希はこども部屋)'],[2.7,2.6],[3.2,3.6,'WICで着替え'],[4.5,3.72],[5.3,3.4,'洗顔'],[5.3,4.9],[2.1,4.93],[1.0,5.15]]},
+   {f:2,pts:[[0.5,4.6],[0.5,2.5],[1.7,2.7],[3.2,5.0,'ダイニングで仕事'],[2.6,4.0,'律希の泣き声→1Fへ'],[1.7,2.7],[0.5,2.5],[0.5,4.2]]},
+   {f:1,pts:[[1.0,5.15],[2.1,4.93],[3.6,5.3],[3.7,5.7],[4.6,7.2,'おはよう。律希を抱っこ'],[3.2,6.4,'おむつ・お着替えは部屋で完結'],[3.7,5.7],[3.6,5.3],[2.1,4.93],[1.0,5.15]]},
+   {f:2,pts:[[0.5,4.6],[0.5,2.5],[1.7,2.7],[1.7,5.6],[1.8,6.4],[2.0,7.0],[3.3,7.0,'朝ごはんを準備'],[2.0,7.0],[1.8,6.2],[1.9,5.5],[3.2,5.0,'いっしょに朝ごはん'],[1.9,5.5],[1.8,6.4],[2.0,7.0],[3.3,7.0,'食器を下げる'],[1.9,7.0],[1.7,6.2],[1.5,2.7],[0.6,2.6],[0.5,4.2]]},
+   {f:1,pts:[[1.0,5.15],[2.1,4.93],[5.5,4.93],[6.3,5.5],[6.6,6.4,'上着とリュック(SCL)'],[6.7,5.6],[7.3,5.2,'靴を履かせる'],[8.7,5.2,'保育園へ→送って帰宅'],[7.3,5.2],[6.7,5.7],[6.6,6.4,'上着をSCLへ'],[6.3,5.5],[5.5,4.93],[5.3,4.9],[5.3,3.4,'手を洗う'],[5.3,4.9],[2.1,4.93],[1.0,5.15]]},
+   {f:2,pts:[[0.5,4.6],[0.5,2.5],[1.7,2.7],[2.1,4.2],[4.3,4.2],[6.1,5.0],[6.25,6.3,'書斎で仕事に集中']]}]}
+];
+const STAIR_EQ=3.5, PAUSE_T=1.6, STAIR_T=2.2, WALK_V=1.3;
+let sc14=0, sp14=1, tl14=null, anim14=null, playing14=false, se14='355';
+
+function buildTimeline14(sc){
+  const segs=[]; let t=0, dist=0, stairs=0;
+  const legs=SC14[sc].legs;
+  legs.forEach((leg,li)=>{
+    for(let i=0;i<leg.pts.length;i++){
+      const p=leg.pts[i];
+      if(p[2]!==undefined){ segs.push({kind:'pause',f:leg.f,x:p[0],y:p[1],note:p[2],t0:t,t1:t+PAUSE_T}); t+=PAUSE_T; }
+      if(i<leg.pts.length-1){
+        const q=leg.pts[i+1];
+        const d=Math.hypot(q[0]-p[0],q[1]-p[1]);
+        segs.push({kind:'walk',f:leg.f,x1:p[0],y1:p[1],x2:q[0],y2:q[1],t0:t,t1:t+d/WALK_V});
+        t+=d/WALK_V; dist+=d;
+      }
+    }
+    if(li<legs.length-1){
+      const up=legs[li+1].f>leg.f;
+      const a=leg.pts[leg.pts.length-1], b=legs[li+1].pts[0];
+      segs.push({kind:'stair',f1:leg.f,f2:legs[li+1].f,x1:a[0],y1:a[1],x2:b[0],y2:b[1],up,t0:t,t1:t+STAIR_T});
+      t+=STAIR_T; dist+=STAIR_EQ; stairs++;
+    }
+  });
+  return {segs,T:t,dist,stairs};
+}
+
+function poly14(f,pts){ return pts.map(p=>px14(f,p[0],p[1]).join(',')).join(' '); }
+
+function drawPlan14(){
+  let g='';
+  const titles=['1F — 寝室・水回り・玄関(東)','2F — LDK・キッチン・バルコニー(南)'];
+  [1,2].forEach(f=>{
+    const ox=P14.ox[f-1], s=P14.s;
+    g+=`<text x="${ox}" y="${P14.oy-16}" font-size="13" font-weight="700" fill="#16283C" font-family="'Zen Old Mincho',serif">${titles[f-1]}</text>`;
+    g+=`<polygon points="${poly14(f,OUTLINE14[f])}" fill="#FDFDFC" stroke="#16283C" stroke-width="2.5"/>`;
+    ROOMS14[f].forEach(r=>{
+      const[x1,y1,x2,y2,lab,ty,mod]=r;
+      const[px,py]=px14(f,x1,y2);
+      g+=`<rect x="${px}" y="${py}" width="${(x2-x1)*s}" height="${(y2-y1)*s}" fill="${mod?'#FBEEDD':FILL14[ty]}" stroke="${mod?'#C77A3A':'#7E93A8'}" stroke-width="${mod?1.6:0.9}" ${mod?'stroke-dasharray="5 3"':''}/>`;
+      if(ty==='t'){ for(let i=1;i<8;i++){ const xx=px+ (x2-x1)*s*i/8; g+=`<line x1="${xx}" y1="${py}" x2="${xx}" y2="${py+(y2-y1)*s}" stroke="#C9B08A" stroke-width="1"/>`;} }
+      if(lab) g+=`<text x="${px+(x2-x1)*s/2}" y="${py+(y2-y1)*s/2+3.5}" font-size="9" text-anchor="middle" fill="${mod?'#B9401F':'#41556B'}" font-weight="700">${lab}</text>`;
+    });
+    // 窓(青の太線)
+    WIN14.filter(w=>w[0]===f).forEach(w=>{
+      const[a,b]=px14(f,w[1],w[2]), [c,d]=px14(f,w[3],w[4]);
+      g+=`<line x1="${a}" y1="${b}" x2="${c}" y2="${d}" stroke="#2E8FAD" stroke-width="3.5" stroke-linecap="butt"/>`;
+    });
+    if(f===1){
+      // ベッド・洗濯機・浴槽・玄関ポーチ・エネファーム・サイクロン
+      const bd=px14(1,0.6,2.5); g+=`<rect x="${bd[0]}" y="${bd[1]}" width="${1.9*s}" height="${1.3*s}" fill="none" stroke="#8B99A5"/><text x="${bd[0]+0.95*s}" y="${bd[1]+0.72*s}" font-size="8.5" text-anchor="middle" fill="#8B99A5">bed</text>`;
+      const wm=px14(1,5.09,3.22); g+=`<circle cx="${wm[0]}" cy="${wm[1]}" r="7" fill="none" stroke="#41556B" stroke-width="1.2"/><circle cx="${wm[0]}" cy="${wm[1]}" r="3.5" fill="none" stroke="#41556B"/><text x="${wm[0]}" y="${wm[1]+16}" font-size="7" text-anchor="middle" fill="#41556B" font-weight="700">ドラム洗乾</text>`;
+      // 変更案の動線接続(主寝室⇄WIC⇄洗面所 / 廊下⇄階段下トイレ)
+      const d1a=px14(1,2.75,2.68),d1b=px14(1,2.75,3.4);
+      const d2a=px14(1,4.18,3.7),d2b=px14(1,4.82,3.7);
+      const d3a=px14(1,0.88,3.7),d3b=px14(1,1.4,3.7);
+      [[d1a,d1b],[d2a,d2b],[d3a,d3b]].forEach(([p,q])=>{
+        g+=`<line x1="${p[0]}" y1="${p[1]}" x2="${q[0]}" y2="${q[1]}" stroke="#C77A3A" stroke-width="2" marker-start="url(#oarr14)" marker-end="url(#oarr14)"/>`;
+      });
+      const tag=px14(1,3.25,4.43); g+=`<rect x="${tag[0]-26}" y="${tag[1]-22}" width="52" height="13" rx="2" fill="#C77A3A"/><text x="${tag[0]}" y="${tag[1]-12}" font-size="8.5" fill="#fff" text-anchor="middle" font-weight="700">変更案</text>`;
+      const tb=px14(1,6.5,4.2); g+=`<rect x="${tb[0]}" y="${tb[1]}" width="${1.2*s}" height="${0.75*s}" rx="6" fill="none" stroke="#8B99A5"/>`;
+      const po=px14(1,7.9,6.0); g+=`<rect x="${po[0]}" y="${po[1]}" width="${0.9*s}" height="${1.4*s}" fill="none" stroke="#7E93A8" stroke-dasharray="4 3"/><text x="${po[0]+0.45*s}" y="${po[1]+0.8*s}" font-size="8" text-anchor="middle" fill="#7E93A8">ポーチ</text>`;
+      const pil=px14(1,8.0,5.95); g+=`<rect x="${pil[0]-3}" y="${pil[1]-3}" width="6" height="6" fill="#16283C"/><text x="${pil[0]+6}" y="${pil[1]}" font-size="7.5" fill="#5B6E80">ピロティ柱</text>`;
+      const ef=px14(1,0.7,0); g+=`<rect x="${ef[0]}" y="${ef[1]+4}" width="${1.4*s}" height="${0.45*s}" fill="none" stroke="#8B99A5" stroke-dasharray="3 2"/><text x="${ef[0]+0.7*s}" y="${ef[1]+0.35*s+4}" font-size="7.5" text-anchor="middle" fill="#8B99A5">エネファーム</text>`;
+      const cy=px14(1,0,1.55); g+=`<text x="${cy[0]-4}" y="${cy[1]}" font-size="7.5" text-anchor="end" fill="#2F7D4F">◀サイクロンII給気</text>`;
+      const dr=px14(1,7.9,5.25); g+=`<text x="${dr[0]+8}" y="${dr[1]-14}" font-size="8" fill="#B9401F" font-weight="700">玄関(東)→</text>`;
+      // こども部屋想定(洋室4.7帖): ベビーベッド+タグ
+      const cb=px14(1,4.15,7.65); g+=`<rect x="${cb[0]}" y="${cb[1]}" width="${1.0*s}" height="${0.75*s}" rx="3" fill="none" stroke="#C77A3A" stroke-width="1.2"/>`;
+      for(let i=1;i<5;i++){const yy=cb[1]+0.75*s*i/5; g+=`<line x1="${cb[0]}" y1="${yy}" x2="${cb[0]+1.0*s}" y2="${yy}" stroke="#C77A3A" stroke-width="0.6" opacity="0.6"/>`;}
+      g+=`<text x="${cb[0]+0.5*s}" y="${cb[1]-4}" font-size="7" text-anchor="middle" fill="#C77A3A" font-weight="700">ベビーベッド</text>`;
+      const kt=px14(1,3.98,6.12); g+=`<rect x="${kt[0]-40}" y="${kt[1]+4}" width="80" height="13" rx="2" fill="#C77A3A"/><text x="${kt[0]}" y="${kt[1]+14}" font-size="8.5" fill="#fff" text-anchor="middle" font-weight="700">こども部屋 想定</text>`;
+    }else{
+      g+=`<text x="${px14(2,4.6,3.6)[0]}" y="${px14(2,4.6,3.6)[1]}" font-size="11.5" text-anchor="middle" fill="#41556B" font-weight="700">LDK 22.7帖</text>`;
+      // バルコニー・吹抜・床暖・カウンター・食洗機・REF・エアミー・ソファ・ダイニング・デスク
+      const ba=px14(2,0.4,1.9); g+=`<rect x="${ba[0]}" y="${ba[1]}" width="${2.9*s}" height="${1.0*s}" fill="none" stroke="#7E93A8" stroke-dasharray="4 3"/><text x="${ba[0]+1.45*s}" y="${ba[1]+0.6*s}" font-size="8.5" text-anchor="middle" fill="#7E93A8">バルコニー(南)</text>`;
+      const fk=px14(2,5.5,4.9); g+=`<rect x="${fk[0]}" y="${fk[1]}" width="${2.7*s}" height="${2.7*s}" fill="none" stroke="#9CC8D6" stroke-dasharray="2 3"/><text x="${fk[0]+1.35*s}" y="${fk[1]+0.5*s}" font-size="8" fill="#6BA3B5" text-anchor="middle">上部吹抜・勾配天井</text>`;
+      const yk=px14(2,1.6,5.2); g+=`<rect x="${yk[0]}" y="${yk[1]}" width="${4.6*s}" height="${2.7*s}" fill="none" stroke="#C77A3A" stroke-width="0.8" stroke-dasharray="1.5 3" opacity="0.7"/><text x="${yk[0]+4}" y="${yk[1]+11}" font-size="7.5" fill="#C77A3A" opacity="0.85">床暖房範囲</text>`;
+      const c1=px14(2,1.9,7.9); g+=`<rect x="${c1[0]}" y="${c1[1]}" width="${2.5*s}" height="${0.62*s}" fill="#D7DEE3" stroke="#7E93A8" stroke-width=".8"/>`;
+      const c2=px14(2,2.2,6.75); g+=`<rect x="${c2[0]}" y="${c2[1]}" width="${2.23*s}" height="${0.65*s}" fill="#D7DEE3" stroke="#7E93A8" stroke-width=".8"/><text x="${c2[0]+1.11*s}" y="${c2[1]+0.42*s}" font-size="7.5" text-anchor="middle" fill="#5B6E80">食洗機/シンク</text><text x="${c2[0]+1.11*s}" y="${c2[1]+0.65*s+10}" font-size="7.5" text-anchor="middle" fill="#B9401F">ペニンシュラ(通り抜け不可・西から回り込み)</text>`;
+      const rf=px14(2,4.62,6.27); g+=`<rect x="${rf[0]}" y="${rf[1]}" width="${0.72*s}" height="${0.65*s}" fill="none" stroke="#8B99A5"/><text x="${rf[0]+0.36*s}" y="${rf[1]+0.42*s}" font-size="7" text-anchor="middle" fill="#8B99A5">REF</text>`;
+      const dt=px14(2,2.5,5.3); g+=`<rect x="${dt[0]}" y="${dt[1]}" width="${1.5*s}" height="${0.85*s}" fill="none" stroke="#8B99A5"/>`;
+      const sf=px14(2,6.0,3.3); g+=`<rect x="${sf[0]}" y="${sf[1]}" width="${1.7*s}" height="${0.6*s}" fill="none" stroke="#8B99A5"/>`;
+      const dk=px14(2,5.65,6.85); g+=`<rect x="${dk[0]}" y="${dk[1]}" width="${1.2*s}" height="${0.4*s}" fill="#D7DEE3" stroke="#7E93A8" stroke-width=".8"/>`;
+      [[1.1,5.5],[5.42,4.27]].forEach(p=>{const a=px14(2,p[0],p[1]);g+=`<circle cx="${a[0]}" cy="${a[1]}" r="5" fill="none" stroke="#2F7D4F" stroke-width="1.2"/><circle cx="${a[0]}" cy="${a[1]}" r="1.6" fill="#2F7D4F"/>`;});
+      g+=`<text x="${px14(2,5.42,4.27)[0]+8}" y="${px14(2,5.42,4.27)[1]+3}" font-size="7.5" fill="#2F7D4F">エアミー</text>`;
+    }
+  });
+  // 方位コンパス(真北=図面上方から西へ14.1°)
+  const cx=360, cy0=P14.oy+18;
+  const nx=cx+22*N14[0], ny=cy0-22*N14[1];
+  g+=`<g><circle cx="${cx}" cy="${cy0}" r="24" fill="#fff" stroke="#3E5C82" stroke-width="1.2"/>
+    <line x1="${cx-22*N14[0]}" y1="${cy0+22*N14[1]}" x2="${nx}" y2="${ny}" stroke="#B9401F" stroke-width="2" marker-end="url(#narr14)"/>
+    <text x="${nx+ (N14[0]<0?-4:4)}" y="${ny-4}" font-size="10" font-weight="700" fill="#B9401F" text-anchor="middle">N</text>
+    <text x="${cx}" y="${cy0+38}" font-size="8.5" fill="#5B6E80" text-anchor="middle">真北(上方から西へ14°)</text></g>`;
+
+  $('svg14').innerHTML=`<defs>
+      <marker id="arr14" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#B9401F"/></marker>
+      <marker id="narr14" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#B9401F"/></marker>
+      <marker id="oarr14" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4.5" markerHeight="4.5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#C77A3A"/></marker>
+    </defs>
+    <g id="plan14">${g}</g>
+    <g id="sun14"></g>
+    <g id="route14"></g>
+    <polyline id="trailA14" fill="none" stroke="#2E8FAD" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" opacity="0.9"/>
+    <polyline id="trailB14" fill="none" stroke="#2E8FAD" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" opacity="0.9"/>
+    <g id="walker14" style="display:none"><circle id="pulse14" r="10" fill="#2E8FAD" opacity="0.25"/><circle r="6.5" fill="#2E8FAD" stroke="#fff" stroke-width="2"/></g>
+    <g id="note14" style="display:none"><rect rx="3" fill="#16283C" opacity="0.92"/><text font-size="10.5" fill="#fff" font-weight="700" text-anchor="middle"></text></g>
+    <text id="suncap14" x="360" y="452" font-size="11" fill="#8A6A10" text-anchor="middle"></text>
+    <text x="360" y="466" font-size="10.5" fill="#5B6E80" text-anchor="middle">水色太線=窓 / オレンジ破線=施主変更案(WIC移設・階段下トイレ) / 点線=ルート / 実線=歩行済み / ●=住人 / 黄=直射日光</text>`;
+}
+
+/* ---- 太陽位置(東京 35.7°N, 平均太陽時≒JST) ---- */
+function sunPos14(n,t){
+  const r=Math.PI/180, lat=35.71*r;
+  const dec=23.44*r*Math.sin(2*Math.PI*(284+n)/365);
+  const h=(t-12)*15*r;
+  const alt=Math.asin(Math.sin(lat)*Math.sin(dec)+Math.cos(lat)*Math.cos(dec)*Math.cos(h));
+  const azS=Math.atan2(Math.sin(h)*Math.cos(dec), Math.cos(h)*Math.cos(dec)*Math.sin(lat)-Math.sin(dec)*Math.cos(lat)); // 南基準+西
+  return {alt, bearing:Math.PI+azS}; // 北基準時計回り
+}
+function updateSun14(){
+  const t=+$('hh14').value;
+  $('hh14V').textContent=`${Math.floor(t)}:${t%1?'30':'00'}`;
+  const G=$('sun14'), CAP=$('suncap14');
+  if(se14==='off'){G.innerHTML='';CAP.textContent='';return;}
+  const {alt,bearing}=sunPos14(+se14,t);
+  if(alt<=0.01){G.innerHTML='';CAP.textContent='☾ この時刻、太陽は地平線の下です';return;}
+  // 太陽へ向かう水平単位ベクトル(グリッド座標)
+  const S=[N14[0]*Math.cos(bearing)+E14[0]*Math.sin(bearing), N14[1]*Math.cos(bearing)+E14[1]*Math.sin(bearing)];
+  const L=[-S[0],-S[1]];                                   // 光の進行方向
+  const depth=Math.min(4.2, Math.max(0.35, 1.9/Math.tan(alt)));
+  let out=''; const lit=new Set();
+  WIN14.forEach(w=>{
+    const[f,x1,y1,x2,y2,nx,ny,maxD,room]=w;
+    const inc=S[0]*nx+S[1]*ny;                             // 面への日射角係数
+    if(inc<=0.05) return;
+    const d=Math.min(depth,maxD);
+    const A=px14(f,x1,y1), B=px14(f,x2,y2);
+    const C=px14(f,x2+L[0]*d,y2+L[1]*d), D=px14(f,x1+L[0]*d,y1+L[1]*d);
+    out+=`<polygon points="${A} ${B} ${C} ${D}" fill="#E8B93C" opacity="${(0.13+0.24*inc).toFixed(2)}"/>`;
+    lit.add(room);
+  });
+  // 太陽アイコン(各プラン中心から方位方向へ)
+  [1,2].forEach(f=>{
+    const c=[4.2,4.2];
+    let sx=c[0]+S[0]*6.6, sy=c[1]+S[1]*6.6;
+    sx=Math.min(9.6,Math.max(-1.2,sx)); sy=Math.min(10.4,Math.max(-1.6,sy));
+    const[px,py]=px14(f,sx,sy), [qx,qy]=px14(f,c[0]+S[0]*3.4,c[1]+S[1]*3.4);
+    out+=`<line x1="${px}" y1="${py}" x2="${qx}" y2="${qy}" stroke="#E8B93C" stroke-width="1.5" stroke-dasharray="5 4" opacity="0.8"/>
+      <circle cx="${px}" cy="${py}" r="9" fill="#E8B93C"/>`;
+    for(let k=0;k<8;k++){const a=k*Math.PI/4; out+=`<line x1="${px+12*Math.cos(a)}" y1="${py+12*Math.sin(a)}" x2="${px+16*Math.cos(a)}" y2="${py+16*Math.sin(a)}" stroke="#E8B93C" stroke-width="1.6"/>`;}
+  });
+  G.innerHTML=out;
+  const seas={355:'冬至',81:'春秋分',172:'夏至'}[se14];
+  const bd=(bearing*180/Math.PI)%360;
+  const dir=['北','北東','東','南東','南','南西','西','北西','北'][Math.round(bd/45)];
+  CAP.textContent=`☀ ${seas} ${$('hh14V').textContent} — 方位 ${dir}(${bd.toFixed(0)}°) / 高度 ${(alt*180/Math.PI).toFixed(0)}° / 直射: ${lit.size?[...lit].join('・'):'なし'} / 差込深さ ≈ ${Math.min(4.2,1.9/Math.tan(alt)).toFixed(1)} m`;
+}
+
+function drawRoute14(){
+  const {segs}=tl14;
+  let d='';
+  segs.filter(s=>s.kind==='walk').forEach(s=>{
+    const[a,b]=px14(s.f,s.x1,s.y1), [c2,e]=px14(s.f,s.x2,s.y2);
+    d+=`<line x1="${a}" y1="${b}" x2="${c2}" y2="${e}" stroke="#C77A3A" stroke-width="1.5" stroke-dasharray="3 4" opacity="0.6"/>`;
+  });
+  let n=1;
+  segs.filter(s=>s.kind==='pause').forEach(s=>{
+    const[x,y]=px14(s.f,s.x,s.y);
+    d+=`<circle cx="${x}" cy="${y}" r="8" fill="#fff" stroke="#C77A3A" stroke-width="1.5"/><text x="${x}" y="${y+3.5}" font-size="9.5" font-weight="700" text-anchor="middle" fill="#C77A3A" class="mono">${n++}</text>`;
+  });
+  segs.filter(s=>s.kind==='stair').forEach(s=>{
+    const[x,y]=px14(s.f1,s.x1,s.y1);
+    d+=`<text x="${x+9}" y="${y-8}" font-size="10" font-weight="700" fill="#6E5AA0">${s.up?'▲2Fへ':'▼1Fへ'}</text>`;
+  });
+  $('route14').innerHTML=d;
+}
+
+function stats14(){
+  const n=+$('n14').value;
+  const {dist,stairs}=tl14;
+  $('dist14V').textContent=`${fmt(dist,0)} m`;
+  $('step14V').textContent=`${fmt(dist/0.65,0)} 歩`;
+  $('stair14V').textContent=stairs?`${stairs} 回`:'なし(同一階)';
+  $('time14V').textContent=`約${fmt(dist/WALK_V+stairs*8,0)} 秒`;
+  $('n14V').textContent=`${n} 回/日`;
+  $('year14V').textContent=`${fmt(dist*n*365/1000,1)} km/年`;
+  const b=$('badge14');
+  const load=stairs*n;
+  if(sc14===2){b.className='badge dry';b.textContent='ドラム乾燥+洗面隣接WICで洗濯が1F完結 — 干す・運ぶ・階段が消えた動線';}
+  else if(sc14===5){b.className='badge edge';b.textContent=`【添い寝Ver.】階段${stairs}回/朝(うち抱っこ2回)+主寝室ピックアップはWIC⇄洗面経由の遠回り — こども部屋Ver.と比べてみてください`;}
+  else if(sc14===8){const d5=buildTimeline14(5).dist-tl14.dist;b.className='badge dry';b.textContent=`【こども部屋Ver.】洋室4.7帖(ホール直結)起点で添い寝Ver.より約${fmt(d5,0)}m/朝 短縮 — 着替え・おむつが部屋で完結し、WIC経由の往復が消える。階段${stairs}回は同じ`;}
+  else if(sc14===6){b.className='badge dry';b.textContent='深夜帰宅(ご飯なし)は1F完結 — 2Fの寝静まった生活空間を通らずシャワー→就寝できる';}
+  else if(sc14===7){b.className='badge edge';b.textContent=`階段${stairs}回+深夜の2Fキッチン — レンジ・食器の音と照明(深夜調光)の対策を設計時に仕込む価値あり`;}
+  else if(load===0){b.className='badge dry';b.textContent='階段を跨がない動線 — この間取りの快適ゾーン';}
+  else if(load<=2){b.className='badge dry';b.textContent=`階段${load}回/日 — 2階リビングの標準的な負担`;}
+  else if(load<=6){b.className='badge edge';b.textContent=`階段${load}回/日 — 荷物の有無で体感が変わる領域`;}
+  else{b.className='badge wet';b.textContent=`階段${load}回/日 — 動線側の設計(収納位置・干し場)で減らす価値あり`;}
+}
+
+function setScenario14(i){
+  sc14=i; stop14();
+  tl14=buildTimeline14(i);
+  $('trailA14').setAttribute('points',''); $('trailB14').setAttribute('points','');
+  $('walker14').style.display='none'; $('note14').style.display='none';
+  drawRoute14(); stats14();
+}
+function stop14(){ playing14=false; if(anim14)cancelAnimationFrame(anim14); $('play14').textContent='▶ 再生'; }
+
+function play14(){
+  if(playing14){ stop14(); return; }
+  playing14=true; $('play14').textContent='❚❚ 停止';
+  $('trailA14').setAttribute('points',''); $('trailB14').setAttribute('points','');
+  const trails={1:[],2:[]};
+  const W=$('walker14'), NT=$('note14'), pulse=$('pulse14');
+  W.style.display='';
+  let start=null;
+  const step=ts=>{
+    if(!playing14)return;
+    if(start===null)start=ts;
+    const t=(ts-start)/1000*sp14;
+    const {segs,T}=tl14;
+    if(t>=T+0.8){ stop14(); return; }
+    const tc=Math.min(t,T-0.001);
+    const s=segs.find(sg=>tc>=sg.t0&&tc<sg.t1)||segs[segs.length-1];
+    let f,x,y,note=null;
+    if(s.kind==='walk'){ const k=(tc-s.t0)/(s.t1-s.t0); f=s.f; x=s.x1+(s.x2-s.x1)*k; y=s.y1+(s.y2-s.y1)*k; }
+    else if(s.kind==='pause'){ f=s.f; x=s.x; y=s.y; note=s.note; }
+    else { const k=(tc-s.t0)/(s.t1-s.t0); if(k<0.5){f=s.f1;x=s.x1;y=s.y1;}else{f=s.f2;x=s.x2;y=s.y2;} note=s.up?'階段を上る…':'階段を下りる…'; }
+    const[cx,cy]=px14(f,x,y);
+    W.setAttribute('transform',`translate(${cx},${cy})`);
+    pulse.setAttribute('r',9+3*Math.sin(ts/180));
+    if(s.kind==='walk'){
+      const arr=trails[f];
+      if(!arr.length||Math.hypot(arr[arr.length-1][0]-cx,arr[arr.length-1][1]-cy)>2)arr.push([cx,cy]);
+      $(f===1?'trailA14':'trailB14').setAttribute('points',arr.map(p=>p.join(',')).join(' '));
+    }
+    if(note){
+      NT.style.display='';
+      const tx=NT.querySelector('text'), rc=NT.querySelector('rect');
+      tx.textContent=note;
+      const w=note.length*10.5+16;
+      const nx=Math.min(Math.max(cx,60+w/2-60),720-w/2-4);
+      tx.setAttribute('x',nx); tx.setAttribute('y',cy-20);
+      rc.setAttribute('x',nx-w/2); rc.setAttribute('y',cy-33); rc.setAttribute('width',w); rc.setAttribute('height',18);
+    } else NT.style.display='none';
+    anim14=requestAnimationFrame(step);
+  };
+  anim14=requestAnimationFrame(step);
+}
+
+$('af').addEventListener('input',()=>{Af=+$('af').value;$('afV').textContent=`${Af} m²`;sim1();sim3();sim4();sim12();sim13();});
+['ua1','te1','ti1'].forEach(i=>$(i).addEventListener('input',sim1));
+seg('capSeg','c',v=>{cap=+v;sim1();});
+seg('vent1Seg','r',v=>{rec1=+v;sim1();});
+['mo2','d2','h2','o2'].forEach(i=>$(i).addEventListener('input',sim2));
+['eta3','el3'].forEach(i=>$(i).addEventListener('input',sim3));
+seg('vent3Seg','r',v=>{rec3=+v;sim3();});
+$('c4').addEventListener('input',sim4);
+seg('vent4Seg','m',v=>{mode4=v;sim4();});
+['uw5','te5','ta5'].forEach(i=>$(i).addEventListener('input',sim5));
+seg('win5Seg','u',v=>{uWin5=+v;sim5();});
+['te6','ti6','rh6'].forEach(i=>$(i).addEventListener('input',sim6));
+seg('win6Seg','u',v=>{uWin6=+v;sim6();});
+seg('season7Seg','s',v=>{season7=v;sim7();});
+seg('sheet7Seg','m',v=>{sheet7=v;sim7();});
+['w8','uop8'].forEach(i=>$(i).addEventListener('input',sim8));
+seg('win8Seg','u',v=>{uWin8=+v;sim8();});
+['kw9','sc9','buy9','sell9','sub9'].forEach(i=>$(i).addEventListener('input',sim9));
+seg('batt9Seg','b',v=>{batt9=v==='1';sim9();});
+['tat10','hr10','ratio10'].forEach(i=>$(i).addEventListener('input',sim10));
+seg('room10Seg','l',v=>{lmPerTat10=+v;roomName10=ROOM_NAMES[v];sim10();});
+seg('fix10Seg','f',v=>{fix10=v.split(',').map(Number);sim10();});
+seg('ind10Seg','i',v=>{ind10=v;sim10();});
+['mo11','hn11','d11'].forEach(i=>$(i).addEventListener('input',sim11));
+['ua12','eta12','te12'].forEach(i=>$(i).addEventListener('input',sim12));
+seg('zone12Seg','z',v=>{zone12=+v;sim12();});
+['c13','el13','dx13'].forEach(i=>$(i).addEventListener('input',sim13));
+seg('sc14Seg','sc',v=>setScenario14(+v));
+seg('sp14Seg','sp',v=>{sp14=+v;});
+$('play14').addEventListener('click',play14);
+$('n14').addEventListener('input',stats14);
+seg('se14Seg','se',v=>{se14=v;updateSun14();});
+$('hh14').addEventListener('input',updateSun14);
+
+sim1();sim2();sim3();sim4();sim5();sim6();sim7();sim8();sim9();sim10();sim11();sim12();sim13();drawPlan14();setScenario14(0);updateSun14();
+</script>
+</body>
+</html>

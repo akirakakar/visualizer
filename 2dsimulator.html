@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>動線シミュレータ — この間取りを1日歩いてみる</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@400;700;900&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F4F6F5; --ink:#16283C; --steel:#3E5C82; --line:#B9C6CE;
+  --cyan:#2E8FAD; --cyanpale:#D9EDF3; --warn:#B9401F; --ok:#2F7D4F; --warm:#C77A3A;
+  --mono:'IBM Plex Mono',monospace; --body:'Zen Kaku Gothic New',sans-serif; --disp:'Zen Old Mincho',serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);line-height:1.75;font-size:15px}
+.wrap{max-width:900px;margin:0 auto;padding:0 20px 80px}
+header{padding:50px 0 28px;border-bottom:3px double var(--ink)}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.22em;color:var(--steel);text-transform:uppercase}
+h1{font-family:var(--disp);font-weight:900;font-size:clamp(28px,5vw,42px);line-height:1.3;margin:10px 0 8px}
+h1 .accent{color:var(--cyan)}
+.lede{color:#41556B;max-width:640px}
+.lede b{color:var(--ink)}
+nav{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+nav a{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--steel);border:1px solid var(--steel);padding:4px 10px;text-decoration:none;border-radius:2px}
+nav a:hover{background:var(--steel);color:#fff}
+section{margin-top:60px}
+.sec-head{display:flex;align-items:baseline;gap:14px;border-bottom:1.5px solid var(--ink);padding-bottom:8px;margin-bottom:16px}
+.sec-num{font-family:var(--mono);font-size:12px;color:var(--cyan);letter-spacing:.15em;font-weight:600;white-space:nowrap}
+h2{font-family:var(--disp);font-weight:700;font-size:clamp(19px,3.2vw,25px)}
+p{margin:10px 0;color:#2B3D50}
+p b,li b{color:var(--ink)}
+.fig{background:#FBFCFC;border:1px solid var(--line);margin:18px 0;position:relative}
+.fig-label{position:absolute;top:0;left:0;background:var(--ink);color:#EDF2F4;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;padding:4px 12px;z-index:2}
+.fig-inner{padding:34px 14px 12px}
+svg{display:block;width:100%;height:auto}
+svg text{font-family:var(--body)}
+svg .mono{font-family:var(--mono)}
+.controls{display:flex;flex-wrap:wrap;gap:14px 24px;padding:14px 16px;border-top:1px dashed var(--line);background:#F1F4F3}
+.ctrl{flex:1 1 190px;min-width:170px}
+.ctrl label{display:flex;justify-content:space-between;font-size:12.5px;font-weight:700;margin-bottom:4px}
+.ctrl label .val{font-family:var(--mono);font-weight:600;color:var(--steel)}
+input[type=range]{width:100%;accent-color:var(--cyan);height:22px}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button{font-family:var(--body);font-size:12px;font-weight:700;padding:6px 10px;border:1.5px solid var(--steel);background:#fff;color:var(--steel);cursor:pointer;border-radius:2px}
+.seg button.on{background:var(--steel);color:#fff}
+.verdict{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center;padding:12px 16px;border-top:1px solid var(--line);font-family:var(--mono);font-size:13px}
+.verdict .kv{white-space:nowrap}
+.verdict .kv .k{color:#5B6E80;font-size:11px;display:block;letter-spacing:.06em}
+.verdict .kv .v{font-size:17px;font-weight:600}
+.badge{font-family:var(--body);font-weight:700;font-size:12.5px;padding:5px 14px;border-radius:2px;margin-left:auto}
+.badge.wet{background:var(--warn);color:#fff}
+.badge.dry{background:var(--ok);color:#fff}
+.badge.edge{background:var(--warm);color:#fff}
+.ask{border-left:4px solid var(--warm);background:#FBF1E6;padding:13px 18px;margin:16px 0}
+.ask .t{font-weight:700;font-family:var(--disp);color:#8A5220}
+.key{border-left:4px solid var(--cyan);background:var(--cyanpale);padding:13px 18px;margin:16px 0}
+.key .t{font-weight:700;font-family:var(--disp)}
+.small{font-size:12.5px;color:#5B6E80}
+ul{margin:8px 0 8px 20px}
+li{margin:5px 0;color:#2B3D50}
+.house-bar{display:flex;flex-wrap:wrap;gap:14px 24px;align-items:center;background:var(--ink);color:#DCE9EE;padding:14px 18px;margin-top:24px}
+.house-bar .t{font-family:var(--disp);font-weight:700}
+.house-bar .ctrl{min-width:200px}
+.house-bar label{color:#DCE9EE}
+.house-bar label .val{color:#7FD4EA}
+footer{margin-top:70px;border-top:3px double var(--ink);padding-top:14px;font-family:var(--mono);font-size:11px;color:#5B6E80;letter-spacing:.08em;line-height:1.9}
+@media(max-width:560px){.fig-inner{padding:34px 6px 10px}.verdict .kv .v{font-size:15px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="eyebrow">FLOOR PLAN · CIRCULATION STUDY — TWSX26060017</div>
+  <h1>動線<span class="accent">シミュレータ</span></h1>
+</header>
+
+<section>
+  <div class="sec-head"><span class="sec-num">SIM 14</span><h2>動線シミュレーション:この間取りを1日歩いてみる</h2></div>
+  <div class="fig">
+    <div class="fig-label">SIM.14 — 生活動線×日射トレース(提案図面 TWSX26060017 の壁座標から再構成)</div>
+    <div class="fig-inner"><svg id="svg14" viewBox="0 0 720 475"></svg></div>
+    <div class="controls">
+      <div class="ctrl" style="flex:2.2 1 320px"><label>シナリオ</label>
+        <div class="seg" id="sc14Seg">
+          <button data-sc="0" class="on">朝支度→出勤</button><button data-sc="1">帰宅+買い物</button><button data-sc="2">洗濯(乾燥→WIC)</button><button data-sc="3">入浴→就寝</button><button data-sc="4">在宅ワーク</button><button data-sc="5">保育園送り(添い寝Ver.)</button><button data-sc="8">保育園送り(こども部屋Ver.)</button><button data-sc="6">深夜帰宅・食なし</button><button data-sc="7">深夜帰宅・食あり</button>
+        </div></div>
+      <div class="ctrl" style="flex:1 1 170px"><label>再生</label>
+        <div class="seg"><button id="play14" style="min-width:90px">▶ 再生</button></div></div>
+      <div class="ctrl"><label>速度</label>
+        <div class="seg" id="sp14Seg">
+          <button data-sp="1" class="on">×1</button><button data-sp="2">×2</button><button data-sp="4">×4</button>
+        </div></div>
+      <div class="ctrl"><label>この動線の頻度 <span class="val" id="n14V">1 回/日</span></label><input type="range" id="n14" min="1" max="12" value="1" step="1"></div>
+      <div class="ctrl" style="flex:1.6 1 260px"><label>日射(季節)</label>
+        <div class="seg" id="se14Seg">
+          <button data-se="off">OFF</button><button data-se="355" class="on">冬至</button><button data-se="81">春秋分</button><button data-se="172">夏至</button>
+        </div></div>
+      <div class="ctrl"><label>時刻 <span class="val" id="hh14V">9:00</span></label><input type="range" id="hh14" min="6" max="18" value="9" step="0.5"></div>
+    </div>
+    <div class="verdict">
+      <div class="kv"><span class="k">移動距離/回</span><span class="v" id="dist14V" style="color:var(--cyan)">—</span></div>
+      <div class="kv"><span class="k">歩数/回</span><span class="v" id="step14V">—</span></div>
+      <div class="kv"><span class="k">階段昇降</span><span class="v" id="stair14V">—</span></div>
+      <div class="kv"><span class="k">歩行時間/回</span><span class="v" id="time14V">—</span></div>
+      <div class="kv"><span class="k">年間移動距離</span><span class="v" id="year14V">—</span></div>
+      <span class="badge dry" id="badge14">—</span>
+    </div>
+  </div>
+</section>
+</div>
+
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+const fmt=(x,d=1)=>x.toFixed(d);
+function seg(id, attr, cb){
+  $(id).addEventListener('click',e=>{
+    if(e.target.dataset[attr]!==undefined){
+      [...e.currentTarget.children].forEach(b=>b.classList.toggle('on',b===e.target));
+      cb(e.target.dataset[attr]);
+    }
+  });
+}
+
+/* ================= SIM 14 (動線×日射) ================= */
+/* 図面ベクター解析による実座標(グリッドm, Y上向き=図面上方) */
+const P14={s:34, ox:[26,392], oy:64, ymax:9.4, ymin:-0.8};
+const px14=(f,x,y)=>[P14.ox[f-1]+x*P14.s, P14.oy+(P14.ymax-y)*P14.s];
+const TH_N=14.1*Math.PI/180;                       // 真北=図面上方から西へ14.1°
+const N14=[-Math.sin(TH_N),Math.cos(TH_N)], E14=[Math.cos(TH_N),Math.sin(TH_N)];
+
+const OUTLINE14={
+ 1:[[0,0],[3.5,0],[3.5,2.4],[8.1,2.4],[8.1,4.6],[7.9,4.6],[7.9,6.04],[7.1,6.04],[7.1,7.1],[5.6,7.1],[5.6,8.1],[3.1,8.1],[3.1,9.1],[0,9.1]],
+ 2:[[0,1.9],[8.45,1.9],[8.45,6.1],[7.1,6.1],[7.1,7.1],[5.6,7.1],[5.6,8.1],[3.1,8.1],[3.1,9.1],[0,9.1]]
+};
+const ROOMS14={
+ 1:[ // [x1,y1,x2,y2,label,type] w=水回り s=収納 r=居室 h=ホール t=階段
+  [0,0,3.4,2.93,'主寝室 6.4帖','r'],
+  [4.57,2.4,6.13,4.43,'洗面所','w'],[6.3,2.4,7.9,4.43,'浴室','w'],
+  [2.07,3.07,4.43,4.43,'WIC','s',1],[3.57,2.4,4.43,3.07,'リネン','s',1],
+  [1.07,3.07,1.93,4.43,'','h'],[0,3.07,1.07,4.43,'トイレ(階段下)','w',1],
+  [0,4.43,1.9,5.93,'階段','t'],[1.9,5.43,2.47,6.07,'物入','s'],
+  [1.9,4.43,5.9,5.43,'ホール','h'],
+  [2.47,5.57,5.5,8.1,'洋室 4.7帖','r'],[5.4,6.04,6.04,6.9,'物入','s'],
+  [0,6.07,2.41,9.1,'洋室 4.4帖','r'],[2.41,8.04,3.1,9.1,'物入','s'],
+  [5.9,4.43,7.9,6.04,'玄関','h'],[6.04,6.04,7.1,7.1,'SCL','s']
+ ],
+ 2:[
+  [0,2.1,0.93,2.9,'ホール','h'],[0,2.9,1.07,5.93,'階段','t'],[0,6.07,1.07,7.4,'ホール','h'],
+  [0,7.57,0.93,8.9,'トイレ','w'],[1.07,8.07,2.9,8.9,'納戸','s'],
+  [0.93,1.9,8.4,5.43,'','r'],[1.07,5.43,4.57,5.93,'','r'],
+  [1.07,5.93,4.43,8.07,'キッチン','w'],[4.43,7.23,5.4,7.9,'パントリー','s'],
+  [4.57,5.57,5.4,6.32,'','s'],
+  [5.57,5.57,6.9,6.9,'書斎 1.3帖','r'],[7.04,5.43,8.4,5.9,'物入','s']
+ ]
+};
+const FILL14={w:'#E4EEF2',s:'#EDEEE7',r:'#FFFFFF',h:'#F7F4EC',t:'#F3E7D3'};
+
+/* 窓: [floor, x1,y1, x2,y2, 外向き法線nx,ny, 最大差込深さm, 室名] */
+const WIN14=[
+ [1, 0.5,0,   2.9,0,    0,-1, 2.7,'主寝室'],
+ [1, 4.8,2.4, 6.0,2.4,  0,-1, 1.8,'洗面所'],
+ [1, 6.5,2.4, 7.6,2.4,  0,-1, 1.8,'浴室'],
+ [1, 7.9,4.8, 7.9,5.7,  1,0,  1.7,'玄関'],
+ [1, 4.6,8.1, 5.4,8.1,  0,1,  2.3,'洋室4.7'],
+ [1, 0.4,9.1, 1.5,9.1,  0,1,  2.7,'洋室4.4'],
+ [2, 3.6,1.9, 8.3,1.9,  0,-1, 3.4,'LDK南'],
+ [2, 8.45,2.0,8.45,3.4, 1,0,  3.8,'LDK東'],
+ [2, 0.5,1.9, 3.2,1.9,  0,-1, 3.2,'LDK(バルコニー)'],
+ [2, 3.2,8.07,4.2,8.07, 0,1,  1.9,'キッチン'],
+ [2, 0,7.41,  0,7.58,  -1,0,  0.9,'トイレ2F'],
+ [2, 1.4,9.1, 2.5,9.1,  0,1,  0.8,'納戸']
+];
+
+/* 動線シナリオ(実座標) */
+const SC14=[
+ {name:'朝支度→出勤', legs:[
+   {f:1,pts:[[1.6,1.5,'起床'],[2.7,2.6],[3.2,3.6,'WICで着替え'],[4.5,3.72],[5.3,3.4,'洗顔・身支度'],[5.3,4.9],[2.1,4.93],[1.0,5.15]]},
+   {f:2,pts:[[0.5,4.6],[0.5,2.5],[1.7,2.7],[3.2,5.0,'朝食'],[2.1,5.5],[1.7,6.3],[1.9,7.0],[3.3,7.0,'食器を下げる'],[1.9,7.0],[1.7,6.2],[1.5,2.7],[0.6,2.6],[0.5,4.2]]},
+   {f:1,pts:[[1.0,5.15],[2.1,4.93],[5.5,4.93],[6.3,5.5],[6.6,6.4,'上着・カバン'],[6.7,5.6],[7.3,5.2,'靴を履く'],[8.7,5.2,'いってきます']]}]},
+ {name:'帰宅+買い物', legs:[
+   {f:1,pts:[[8.7,5.2,'ただいま'],[7.3,5.2],[6.7,5.7],[6.6,6.4,'靴と上着をSCLへ'],[6.3,5.5],[5.5,4.93],[5.3,4.9],[5.3,3.4,'手を洗う'],[5.3,4.9],[2.1,4.93],[1.0,5.15]]},
+   {f:2,pts:[[0.5,4.6],[0.5,2.5],[1.7,2.7],[1.7,5.6],[1.8,6.4],[2.0,7.0],[4.4,7.0],[4.9,7.55,'買い物を収納'],[4.6,6.9,'冷蔵庫へ'],[2.0,7.0],[1.8,6.2],[1.9,5.5],[2.1,4.2],[6.6,2.9,'ソファでひと息']]}]},
+ {name:'洗濯(乾燥→WIC)', legs:[
+   {f:1,pts:[[5.1,3.3,'ドラム乾燥まで完了'],[5.0,3.7],[4.5,3.72],[3.3,3.7,'たたんでWICへ収納'],[2.7,3.3],[2.4,2.5,'翌朝はここで着替え']]}]},
+ {name:'入浴→就寝', legs:[
+   {f:2,pts:[[6.6,2.9,'リビングを消灯'],[1.7,2.6],[0.5,2.5],[0.5,4.2]]},
+   {f:1,pts:[[1.0,5.15],[2.1,4.93],[5.3,4.9],[5.3,3.5,'脱衣'],[7.0,3.4,'入浴'],[5.3,3.5,'ドライヤー'],[4.5,3.72],[3.3,3.7,'パジャマはWICから'],[2.7,3.3],[1.6,1.5,'おやすみ']]}]},
+ {name:'在宅ワーク(書斎ループ)', legs:[
+   {f:2,pts:[[6.25,6.3,'書斎で仕事'],[6.1,5.1],[2.2,5.5],[1.15,6.0],[1.15,6.9],[0.55,6.9],[0.45,8.2,'トイレ'],[0.55,6.9],[1.15,6.9],[2.0,7.0],[3.3,7.0,'コーヒーを淹れる'],[2.0,7.0],[1.8,6.2],[2.1,4.2],[4.3,4.2],[6.1,5.0],[6.25,6.3,'書斎に戻る']]}]},
+ {name:'朝・保育園送り(主寝室添い寝Ver.)', legs:[
+   {f:1,pts:[[1.6,1.5,'起床(律希はまだ夢の中)'],[2.7,2.6],[3.2,3.6,'WICで着替え'],[4.5,3.72],[5.3,3.4,'洗顔'],[5.3,4.9],[2.1,4.93],[1.0,5.15]]},
+   {f:2,pts:[[0.5,4.6],[0.5,2.5],[1.7,2.7],[3.2,5.0,'ダイニングで仕事'],[2.6,4.0,'律希の泣き声→1Fへ'],[1.7,2.7],[0.5,2.5],[0.5,4.2]]},
+   {f:1,pts:[[1.0,5.15],[2.1,4.93],[5.3,4.9],[5.3,3.5],[4.5,3.72],[3.3,3.7],[2.7,3.3],[1.9,1.6,'おはよう。律希を抱っこ'],[2.7,3.3],[3.2,3.6,'おむつ・お着替え'],[4.5,3.72],[5.3,3.5],[5.3,4.9],[2.1,4.93],[1.0,5.15]]},
+   {f:2,pts:[[0.5,4.6],[0.5,2.5],[1.7,2.7],[1.7,5.6],[1.8,6.4],[2.0,7.0],[3.3,7.0,'朝ごはんを準備'],[2.0,7.0],[1.8,6.2],[1.9,5.5],[3.2,5.0,'いっしょに朝ごはん'],[1.9,5.5],[1.8,6.4],[2.0,7.0],[3.3,7.0,'食器を下げる'],[1.9,7.0],[1.7,6.2],[1.5,2.7],[0.6,2.6],[0.5,4.2]]},
+   {f:1,pts:[[1.0,5.15],[2.1,4.93],[5.5,4.93],[6.3,5.5],[6.6,6.4,'上着とリュック(SCL)'],[6.7,5.6],[7.3,5.2,'靴を履かせる'],[8.7,5.2,'保育園へ→送って帰宅'],[7.3,5.2],[6.7,5.7],[6.6,6.4,'上着をSCLへ'],[6.3,5.5],[5.5,4.93],[5.3,4.9],[5.3,3.4,'手を洗う'],[5.3,4.9],[2.1,4.93],[1.0,5.15]]},
+   {f:2,pts:[[0.5,4.6],[0.5,2.5],[1.7,2.7],[2.1,4.2],[4.3,4.2],[6.1,5.0],[6.25,6.3,'書斎で仕事に集中']]}]},
+ {name:'深夜帰宅(ご飯なし)', legs:[
+   {f:1,pts:[[8.7,5.2,'ただいま(みんな就寝中)'],[7.3,5.2],[6.7,5.7],[6.6,6.4,'上着をSCLへ'],[6.3,5.5],[5.5,4.93],[5.3,4.9],[5.3,3.5,'手洗い・脱衣'],[7.0,3.4,'シャワー'],[5.2,3.65,'歯みがき・ドライヤー'],[4.5,3.72],[3.3,3.7,'パジャマはWICから'],[2.7,3.3],[1.6,1.5,'そっと就寝(律希を起こさない)']]}]},
+ {name:'深夜帰宅(ご飯あり)', legs:[
+   {f:1,pts:[[8.7,5.2,'ただいま(深夜)'],[7.3,5.2],[6.7,5.7],[6.6,6.4,'上着をSCLへ'],[6.3,5.5],[5.5,4.93],[5.3,4.9],[5.3,3.4,'手を洗う'],[5.3,4.9],[2.1,4.93],[1.0,5.15]]},
+   {f:2,pts:[[0.5,4.6],[0.5,2.5],[1.7,2.7],[1.7,5.6],[1.8,6.4],[2.0,7.0],[3.3,7.0,'夜ごはんを温める'],[2.0,7.0],[1.8,6.2],[1.9,5.5],[3.2,5.0,'ひとりで晩ごはん'],[1.9,5.5],[1.8,6.4],[2.0,7.0],[3.3,7.0,'食器を片付け'],[1.9,7.0],[1.7,6.2],[1.5,2.7],[0.6,2.6],[0.5,4.2]]},
+   {f:1,pts:[[1.0,5.15],[2.1,4.93],[5.3,4.9],[5.3,3.5,'脱衣'],[7.0,3.4,'シャワー'],[5.3,3.5],[4.5,3.72],[3.3,3.7,'パジャマはWICから'],[2.7,3.3],[1.6,1.5,'そっと就寝']]}]},
+ {name:'朝・保育園送り(こども部屋Ver.)', legs:[
+   {f:1,pts:[[1.6,1.5,'起床(律希はこども部屋)'],[2.7,2.6],[3.2,3.6,'WICで着替え'],[4.5,3.72],[5.3,3.4,'洗顔'],[5.3,4.9],[2.1,4.93],[1.0,5.15]]},
+   {f:2,pts:[[0.5,4.6],[0.5,2.5],[1.7,2.7],[3.2,5.0,'ダイニングで仕事'],[2.6,4.0,'律希の泣き声→1Fへ'],[1.7,2.7],[0.5,2.5],[0.5,4.2]]},
+   {f:1,pts:[[1.0,5.15],[2.1,4.93],[3.6,5.3],[3.7,5.7],[4.6,7.2,'おはよう。律希を抱っこ'],[3.2,6.4,'おむつ・お着替えは部屋で完結'],[3.7,5.7],[3.6,5.3],[2.1,4.93],[1.0,5.15]]},
+   {f:2,pts:[[0.5,4.6],[0.5,2.5],[1.7,2.7],[1.7,5.6],[1.8,6.4],[2.0,7.0],[3.3,7.0,'朝ごはんを準備'],[2.0,7.0],[1.8,6.2],[1.9,5.5],[3.2,5.0,'いっしょに朝ごはん'],[1.9,5.5],[1.8,6.4],[2.0,7.0],[3.3,7.0,'食器を下げる'],[1.9,7.0],[1.7,6.2],[1.5,2.7],[0.6,2.6],[0.5,4.2]]},
+   {f:1,pts:[[1.0,5.15],[2.1,4.93],[5.5,4.93],[6.3,5.5],[6.6,6.4,'上着とリュック(SCL)'],[6.7,5.6],[7.3,5.2,'靴を履かせる'],[8.7,5.2,'保育園へ→送って帰宅'],[7.3,5.2],[6.7,5.7],[6.6,6.4,'上着をSCLへ'],[6.3,5.5],[5.5,4.93],[5.3,4.9],[5.3,3.4,'手を洗う'],[5.3,4.9],[2.1,4.93],[1.0,5.15]]},
+   {f:2,pts:[[0.5,4.6],[0.5,2.5],[1.7,2.7],[2.1,4.2],[4.3,4.2],[6.1,5.0],[6.25,6.3,'書斎で仕事に集中']]}]}
+];
+const STAIR_EQ=3.5, PAUSE_T=1.6, STAIR_T=2.2, WALK_V=1.3;
+let sc14=0, sp14=1, tl14=null, anim14=null, playing14=false, se14='355';
+
+function buildTimeline14(sc){
+  const segs=[]; let t=0, dist=0, stairs=0;
+  const legs=SC14[sc].legs;
+  legs.forEach((leg,li)=>{
+    for(let i=0;i<leg.pts.length;i++){
+      const p=leg.pts[i];
+      if(p[2]!==undefined){ segs.push({kind:'pause',f:leg.f,x:p[0],y:p[1],note:p[2],t0:t,t1:t+PAUSE_T}); t+=PAUSE_T; }
+      if(i<leg.pts.length-1){
+        const q=leg.pts[i+1];
+        const d=Math.hypot(q[0]-p[0],q[1]-p[1]);
+        segs.push({kind:'walk',f:leg.f,x1:p[0],y1:p[1],x2:q[0],y2:q[1],t0:t,t1:t+d/WALK_V});
+        t+=d/WALK_V; dist+=d;
+      }
+    }
+    if(li<legs.length-1){
+      const up=legs[li+1].f>leg.f;
+      const a=leg.pts[leg.pts.length-1], b=legs[li+1].pts[0];
+      segs.push({kind:'stair',f1:leg.f,f2:legs[li+1].f,x1:a[0],y1:a[1],x2:b[0],y2:b[1],up,t0:t,t1:t+STAIR_T});
+      t+=STAIR_T; dist+=STAIR_EQ; stairs++;
+    }
+  });
+  return {segs,T:t,dist,stairs};
+}
+
+function poly14(f,pts){ return pts.map(p=>px14(f,p[0],p[1]).join(',')).join(' '); }
+
+function drawPlan14(){
+  let g='';
+  const titles=['1F — 寝室・水回り・玄関(東)','2F — LDK・キッチン・バルコニー(南)'];
+  [1,2].forEach(f=>{
+    const ox=P14.ox[f-1], s=P14.s;
+    g+=`<text x="${ox}" y="${P14.oy-16}" font-size="13" font-weight="700" fill="#16283C" font-family="'Zen Old Mincho',serif">${titles[f-1]}</text>`;
+    g+=`<polygon points="${poly14(f,OUTLINE14[f])}" fill="#FDFDFC" stroke="#16283C" stroke-width="2.5"/>`;
+    ROOMS14[f].forEach(r=>{
+      const[x1,y1,x2,y2,lab,ty,mod]=r;
+      const[px,py]=px14(f,x1,y2);
+      g+=`<rect x="${px}" y="${py}" width="${(x2-x1)*s}" height="${(y2-y1)*s}" fill="${mod?'#FBEEDD':FILL14[ty]}" stroke="${mod?'#C77A3A':'#7E93A8'}" stroke-width="${mod?1.6:0.9}" ${mod?'stroke-dasharray="5 3"':''}/>`;
+      if(ty==='t'){ for(let i=1;i<8;i++){ const xx=px+ (x2-x1)*s*i/8; g+=`<line x1="${xx}" y1="${py}" x2="${xx}" y2="${py+(y2-y1)*s}" stroke="#C9B08A" stroke-width="1"/>`;} }
+      if(lab) g+=`<text x="${px+(x2-x1)*s/2}" y="${py+(y2-y1)*s/2+3.5}" font-size="9" text-anchor="middle" fill="${mod?'#B9401F':'#41556B'}" font-weight="700">${lab}</text>`;
+    });
+    // 窓(青の太線)
+    WIN14.filter(w=>w[0]===f).forEach(w=>{
+      const[a,b]=px14(f,w[1],w[2]), [c,d]=px14(f,w[3],w[4]);
+      g+=`<line x1="${a}" y1="${b}" x2="${c}" y2="${d}" stroke="#2E8FAD" stroke-width="3.5" stroke-linecap="butt"/>`;
+    });
+    if(f===1){
+      // ベッド・洗濯機・浴槽・玄関ポーチ・エネファーム・サイクロン
+      const bd=px14(1,0.6,2.5); g+=`<rect x="${bd[0]}" y="${bd[1]}" width="${1.9*s}" height="${1.3*s}" fill="none" stroke="#8B99A5"/><text x="${bd[0]+0.95*s}" y="${bd[1]+0.72*s}" font-size="8.5" text-anchor="middle" fill="#8B99A5">bed</text>`;
+      const wm=px14(1,5.09,3.22); g+=`<circle cx="${wm[0]}" cy="${wm[1]}" r="7" fill="none" stroke="#41556B" stroke-width="1.2"/><circle cx="${wm[0]}" cy="${wm[1]}" r="3.5" fill="none" stroke="#41556B"/><text x="${wm[0]}" y="${wm[1]+16}" font-size="7" text-anchor="middle" fill="#41556B" font-weight="700">ドラム洗乾</text>`;
+      // 変更案の動線接続(主寝室⇄WIC⇄洗面所 / 廊下⇄階段下トイレ)
+      const d1a=px14(1,2.75,2.68),d1b=px14(1,2.75,3.4);
+      const d2a=px14(1,4.18,3.7),d2b=px14(1,4.82,3.7);
+      const d3a=px14(1,0.88,3.7),d3b=px14(1,1.4,3.7);
+      [[d1a,d1b],[d2a,d2b],[d3a,d3b]].forEach(([p,q])=>{
+        g+=`<line x1="${p[0]}" y1="${p[1]}" x2="${q[0]}" y2="${q[1]}" stroke="#C77A3A" stroke-width="2" marker-start="url(#oarr14)" marker-end="url(#oarr14)"/>`;
+      });
+      const tag=px14(1,3.25,4.43); g+=`<rect x="${tag[0]-26}" y="${tag[1]-22}" width="52" height="13" rx="2" fill="#C77A3A"/><text x="${tag[0]}" y="${tag[1]-12}" font-size="8.5" fill="#fff" text-anchor="middle" font-weight="700">変更案</text>`;
+      const tb=px14(1,6.5,4.2); g+=`<rect x="${tb[0]}" y="${tb[1]}" width="${1.2*s}" height="${0.75*s}" rx="6" fill="none" stroke="#8B99A5"/>`;
+      const po=px14(1,7.9,6.0); g+=`<rect x="${po[0]}" y="${po[1]}" width="${0.9*s}" height="${1.4*s}" fill="none" stroke="#7E93A8" stroke-dasharray="4 3"/><text x="${po[0]+0.45*s}" y="${po[1]+0.8*s}" font-size="8" text-anchor="middle" fill="#7E93A8">ポーチ</text>`;
+      const pil=px14(1,8.0,5.95); g+=`<rect x="${pil[0]-3}" y="${pil[1]-3}" width="6" height="6" fill="#16283C"/><text x="${pil[0]+6}" y="${pil[1]}" font-size="7.5" fill="#5B6E80">ピロティ柱</text>`;
+      const ef=px14(1,0.7,0); g+=`<rect x="${ef[0]}" y="${ef[1]+4}" width="${1.4*s}" height="${0.45*s}" fill="none" stroke="#8B99A5" stroke-dasharray="3 2"/><text x="${ef[0]+0.7*s}" y="${ef[1]+0.35*s+4}" font-size="7.5" text-anchor="middle" fill="#8B99A5">エネファーム</text>`;
+      const cy=px14(1,0,1.55); g+=`<text x="${cy[0]-4}" y="${cy[1]}" font-size="7.5" text-anchor="end" fill="#2F7D4F">◀サイクロンII給気</text>`;
+      const dr=px14(1,7.9,5.25); g+=`<text x="${dr[0]+8}" y="${dr[1]-14}" font-size="8" fill="#B9401F" font-weight="700">玄関(東)→</text>`;
+      // こども部屋想定(洋室4.7帖): ベビーベッド+タグ
+      const cb=px14(1,4.15,7.65); g+=`<rect x="${cb[0]}" y="${cb[1]}" width="${1.0*s}" height="${0.75*s}" rx="3" fill="none" stroke="#C77A3A" stroke-width="1.2"/>`;
+      for(let i=1;i<5;i++){const yy=cb[1]+0.75*s*i/5; g+=`<line x1="${cb[0]}" y1="${yy}" x2="${cb[0]+1.0*s}" y2="${yy}" stroke="#C77A3A" stroke-width="0.6" opacity="0.6"/>`;}
+      g+=`<text x="${cb[0]+0.5*s}" y="${cb[1]-4}" font-size="7" text-anchor="middle" fill="#C77A3A" font-weight="700">ベビーベッド</text>`;
+      const kt=px14(1,3.98,6.12); g+=`<rect x="${kt[0]-40}" y="${kt[1]+4}" width="80" height="13" rx="2" fill="#C77A3A"/><text x="${kt[0]}" y="${kt[1]+14}" font-size="8.5" fill="#fff" text-anchor="middle" font-weight="700">こども部屋 想定</text>`;
+    }else{
+      g+=`<text x="${px14(2,4.6,3.6)[0]}" y="${px14(2,4.6,3.6)[1]}" font-size="11.5" text-anchor="middle" fill="#41556B" font-weight="700">LDK 22.7帖</text>`;
+      // バルコニー・吹抜・床暖・カウンター・食洗機・REF・エアミー・ソファ・ダイニング・デスク
+      const ba=px14(2,0.4,1.9); g+=`<rect x="${ba[0]}" y="${ba[1]}" width="${2.9*s}" height="${1.0*s}" fill="none" stroke="#7E93A8" stroke-dasharray="4 3"/><text x="${ba[0]+1.45*s}" y="${ba[1]+0.6*s}" font-size="8.5" text-anchor="middle" fill="#7E93A8">バルコニー(南)</text>`;
+      const fk=px14(2,5.5,4.9); g+=`<rect x="${fk[0]}" y="${fk[1]}" width="${2.7*s}" height="${2.7*s}" fill="none" stroke="#9CC8D6" stroke-dasharray="2 3"/><text x="${fk[0]+1.35*s}" y="${fk[1]+0.5*s}" font-size="8" fill="#6BA3B5" text-anchor="middle">上部吹抜・勾配天井</text>`;
+      const yk=px14(2,1.6,5.2); g+=`<rect x="${yk[0]}" y="${yk[1]}" width="${4.6*s}" height="${2.7*s}" fill="none" stroke="#C77A3A" stroke-width="0.8" stroke-dasharray="1.5 3" opacity="0.7"/><text x="${yk[0]+4}" y="${yk[1]+11}" font-size="7.5" fill="#C77A3A" opacity="0.85">床暖房範囲</text>`;
+      const c1=px14(2,1.9,7.9); g+=`<rect x="${c1[0]}" y="${c1[1]}" width="${2.5*s}" height="${0.62*s}" fill="#D7DEE3" stroke="#7E93A8" stroke-width=".8"/>`;
+      const c2=px14(2,2.2,6.75); g+=`<rect x="${c2[0]}" y="${c2[1]}" width="${2.23*s}" height="${0.65*s}" fill="#D7DEE3" stroke="#7E93A8" stroke-width=".8"/><text x="${c2[0]+1.11*s}" y="${c2[1]+0.42*s}" font-size="7.5" text-anchor="middle" fill="#5B6E80">食洗機/シンク</text><text x="${c2[0]+1.11*s}" y="${c2[1]+0.65*s+10}" font-size="7.5" text-anchor="middle" fill="#B9401F">ペニンシュラ(通り抜け不可・西から回り込み)</text>`;
+      const rf=px14(2,4.62,6.27); g+=`<rect x="${rf[0]}" y="${rf[1]}" width="${0.72*s}" height="${0.65*s}" fill="none" stroke="#8B99A5"/><text x="${rf[0]+0.36*s}" y="${rf[1]+0.42*s}" font-size="7" text-anchor="middle" fill="#8B99A5">REF</text>`;
+      const dt=px14(2,2.5,5.3); g+=`<rect x="${dt[0]}" y="${dt[1]}" width="${1.5*s}" height="${0.85*s}" fill="none" stroke="#8B99A5"/>`;
+      const sf=px14(2,6.0,3.3); g+=`<rect x="${sf[0]}" y="${sf[1]}" width="${1.7*s}" height="${0.6*s}" fill="none" stroke="#8B99A5"/>`;
+      const dk=px14(2,5.65,6.85); g+=`<rect x="${dk[0]}" y="${dk[1]}" width="${1.2*s}" height="${0.4*s}" fill="#D7DEE3" stroke="#7E93A8" stroke-width=".8"/>`;
+      [[1.1,5.5],[5.42,4.27]].forEach(p=>{const a=px14(2,p[0],p[1]);g+=`<circle cx="${a[0]}" cy="${a[1]}" r="5" fill="none" stroke="#2F7D4F" stroke-width="1.2"/><circle cx="${a[0]}" cy="${a[1]}" r="1.6" fill="#2F7D4F"/>`;});
+      g+=`<text x="${px14(2,5.42,4.27)[0]+8}" y="${px14(2,5.42,4.27)[1]+3}" font-size="7.5" fill="#2F7D4F">エアミー</text>`;
+    }
+  });
+  // 方位コンパス(真北=図面上方から西へ14.1°)
+  const cx=360, cy0=P14.oy+18;
+  const nx=cx+22*N14[0], ny=cy0-22*N14[1];
+  g+=`<g><circle cx="${cx}" cy="${cy0}" r="24" fill="#fff" stroke="#3E5C82" stroke-width="1.2"/>
+    <line x1="${cx-22*N14[0]}" y1="${cy0+22*N14[1]}" x2="${nx}" y2="${ny}" stroke="#B9401F" stroke-width="2" marker-end="url(#narr14)"/>
+    <text x="${nx+ (N14[0]<0?-4:4)}" y="${ny-4}" font-size="10" font-weight="700" fill="#B9401F" text-anchor="middle">N</text>
+    <text x="${cx}" y="${cy0+38}" font-size="8.5" fill="#5B6E80" text-anchor="middle">真北(上方から西へ14°)</text></g>`;
+
+  $('svg14').innerHTML=`<defs>
+      <marker id="arr14" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#B9401F"/></marker>
+      <marker id="narr14" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#B9401F"/></marker>
+      <marker id="oarr14" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4.5" markerHeight="4.5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#C77A3A"/></marker>
+    </defs>
+    <g id="plan14">${g}</g>
+    <g id="sun14"></g>
+    <g id="route14"></g>
+    <polyline id="trailA14" fill="none" stroke="#2E8FAD" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" opacity="0.9"/>
+    <polyline id="trailB14" fill="none" stroke="#2E8FAD" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" opacity="0.9"/>
+    <g id="walker14" style="display:none"><circle id="pulse14" r="10" fill="#2E8FAD" opacity="0.25"/><circle r="6.5" fill="#2E8FAD" stroke="#fff" stroke-width="2"/></g>
+    <g id="note14" style="display:none"><rect rx="3" fill="#16283C" opacity="0.92"/><text font-size="10.5" fill="#fff" font-weight="700" text-anchor="middle"></text></g>
+    <text id="suncap14" x="360" y="452" font-size="11" fill="#8A6A10" text-anchor="middle"></text>
+    <text x="360" y="466" font-size="10.5" fill="#5B6E80" text-anchor="middle">水色太線=窓 / オレンジ破線=施主変更案(WIC移設・階段下トイレ) / 点線=ルート / 実線=歩行済み / ●=住人 / 黄=直射日光</text>`;
+}
+
+/* ---- 太陽位置(東京 35.7°N, 平均太陽時≒JST) ---- */
+function sunPos14(n,t){
+  const r=Math.PI/180, lat=35.71*r;
+  const dec=23.44*r*Math.sin(2*Math.PI*(284+n)/365);
+  const h=(t-12)*15*r;
+  const alt=Math.asin(Math.sin(lat)*Math.sin(dec)+Math.cos(lat)*Math.cos(dec)*Math.cos(h));
+  const azS=Math.atan2(Math.sin(h)*Math.cos(dec), Math.cos(h)*Math.cos(dec)*Math.sin(lat)-Math.sin(dec)*Math.cos(lat)); // 南基準+西
+  return {alt, bearing:Math.PI+azS}; // 北基準時計回り
+}
+function updateSun14(){
+  const t=+$('hh14').value;
+  $('hh14V').textContent=`${Math.floor(t)}:${t%1?'30':'00'}`;
+  const G=$('sun14'), CAP=$('suncap14');
+  if(se14==='off'){G.innerHTML='';CAP.textContent='';return;}
+  const {alt,bearing}=sunPos14(+se14,t);
+  if(alt<=0.01){G.innerHTML='';CAP.textContent='☾ この時刻、太陽は地平線の下です';return;}
+  // 太陽へ向かう水平単位ベクトル(グリッド座標)
+  const S=[N14[0]*Math.cos(bearing)+E14[0]*Math.sin(bearing), N14[1]*Math.cos(bearing)+E14[1]*Math.sin(bearing)];
+  const L=[-S[0],-S[1]];                                   // 光の進行方向
+  const depth=Math.min(4.2, Math.max(0.35, 1.9/Math.tan(alt)));
+  let out=''; const lit=new Set();
+  WIN14.forEach(w=>{
+    const[f,x1,y1,x2,y2,nx,ny,maxD,room]=w;
+    const inc=S[0]*nx+S[1]*ny;                             // 面への日射角係数
+    if(inc<=0.05) return;
+    const d=Math.min(depth,maxD);
+    const A=px14(f,x1,y1), B=px14(f,x2,y2);
+    const C=px14(f,x2+L[0]*d,y2+L[1]*d), D=px14(f,x1+L[0]*d,y1+L[1]*d);
+    out+=`<polygon points="${A} ${B} ${C} ${D}" fill="#E8B93C" opacity="${(0.13+0.24*inc).toFixed(2)}"/>`;
+    lit.add(room);
+  });
+  // 太陽アイコン(各プラン中心から方位方向へ)
+  [1,2].forEach(f=>{
+    const c=[4.2,4.2];
+    let sx=c[0]+S[0]*6.6, sy=c[1]+S[1]*6.6;
+    sx=Math.min(9.6,Math.max(-1.2,sx)); sy=Math.min(10.4,Math.max(-1.6,sy));
+    const[px,py]=px14(f,sx,sy), [qx,qy]=px14(f,c[0]+S[0]*3.4,c[1]+S[1]*3.4);
+    out+=`<line x1="${px}" y1="${py}" x2="${qx}" y2="${qy}" stroke="#E8B93C" stroke-width="1.5" stroke-dasharray="5 4" opacity="0.8"/>
+      <circle cx="${px}" cy="${py}" r="9" fill="#E8B93C"/>`;
+    for(let k=0;k<8;k++){const a=k*Math.PI/4; out+=`<line x1="${px+12*Math.cos(a)}" y1="${py+12*Math.sin(a)}" x2="${px+16*Math.cos(a)}" y2="${py+16*Math.sin(a)}" stroke="#E8B93C" stroke-width="1.6"/>`;}
+  });
+  G.innerHTML=out;
+  const seas={355:'冬至',81:'春秋分',172:'夏至'}[se14];
+  const bd=(bearing*180/Math.PI)%360;
+  const dir=['北','北東','東','南東','南','南西','西','北西','北'][Math.round(bd/45)];
+  CAP.textContent=`☀ ${seas} ${$('hh14V').textContent} — 方位 ${dir}(${bd.toFixed(0)}°) / 高度 ${(alt*180/Math.PI).toFixed(0)}° / 直射: ${lit.size?[...lit].join('・'):'なし'} / 差込深さ ≈ ${Math.min(4.2,1.9/Math.tan(alt)).toFixed(1)} m`;
+}
+
+function drawRoute14(){
+  const {segs}=tl14;
+  let d='';
+  segs.filter(s=>s.kind==='walk').forEach(s=>{
+    const[a,b]=px14(s.f,s.x1,s.y1), [c2,e]=px14(s.f,s.x2,s.y2);
+    d+=`<line x1="${a}" y1="${b}" x2="${c2}" y2="${e}" stroke="#C77A3A" stroke-width="1.5" stroke-dasharray="3 4" opacity="0.6"/>`;
+  });
+  let n=1;
+  segs.filter(s=>s.kind==='pause').forEach(s=>{
+    const[x,y]=px14(s.f,s.x,s.y);
+    d+=`<circle cx="${x}" cy="${y}" r="8" fill="#fff" stroke="#C77A3A" stroke-width="1.5"/><text x="${x}" y="${y+3.5}" font-size="9.5" font-weight="700" text-anchor="middle" fill="#C77A3A" class="mono">${n++}</text>`;
+  });
+  segs.filter(s=>s.kind==='stair').forEach(s=>{
+    const[x,y]=px14(s.f1,s.x1,s.y1);
+    d+=`<text x="${x+9}" y="${y-8}" font-size="10" font-weight="700" fill="#6E5AA0">${s.up?'▲2Fへ':'▼1Fへ'}</text>`;
+  });
+  $('route14').innerHTML=d;
+}
+
+function stats14(){
+  const n=+$('n14').value;
+  const {dist,stairs}=tl14;
+  $('dist14V').textContent=`${fmt(dist,0)} m`;
+  $('step14V').textContent=`${fmt(dist/0.65,0)} 歩`;
+  $('stair14V').textContent=stairs?`${stairs} 回`:'なし(同一階)';
+  $('time14V').textContent=`約${fmt(dist/WALK_V+stairs*8,0)} 秒`;
+  $('n14V').textContent=`${n} 回/日`;
+  $('year14V').textContent=`${fmt(dist*n*365/1000,1)} km/年`;
+  const b=$('badge14');
+  const load=stairs*n;
+  if(sc14===2){b.className='badge dry';b.textContent='ドラム乾燥+洗面隣接WICで洗濯が1F完結 — 干す・運ぶ・階段が消えた動線';}
+  else if(sc14===5){b.className='badge edge';b.textContent=`【添い寝Ver.】階段${stairs}回/朝(うち抱っこ2回)+主寝室ピックアップはWIC⇄洗面経由の遠回り — こども部屋Ver.と比べてみてください`;}
+  else if(sc14===8){const d5=buildTimeline14(5).dist-tl14.dist;b.className='badge dry';b.textContent=`【こども部屋Ver.】洋室4.7帖(ホール直結)起点で添い寝Ver.より約${fmt(d5,0)}m/朝 短縮 — 着替え・おむつが部屋で完結し、WIC経由の往復が消える。階段${stairs}回は同じ`;}
+  else if(sc14===6){b.className='badge dry';b.textContent='深夜帰宅(ご飯なし)は1F完結 — 2Fの寝静まった生活空間を通らずシャワー→就寝できる';}
+  else if(sc14===7){b.className='badge edge';b.textContent=`階段${stairs}回+深夜の2Fキッチン — レンジ・食器の音と照明(深夜調光)の対策を設計時に仕込む価値あり`;}
+  else if(load===0){b.className='badge dry';b.textContent='階段を跨がない動線 — この間取りの快適ゾーン';}
+  else if(load<=2){b.className='badge dry';b.textContent=`階段${load}回/日 — 2階リビングの標準的な負担`;}
+  else if(load<=6){b.className='badge edge';b.textContent=`階段${load}回/日 — 荷物の有無で体感が変わる領域`;}
+  else{b.className='badge wet';b.textContent=`階段${load}回/日 — 動線側の設計(収納位置・干し場)で減らす価値あり`;}
+}
+
+function setScenario14(i){
+  sc14=i; stop14();
+  tl14=buildTimeline14(i);
+  $('trailA14').setAttribute('points',''); $('trailB14').setAttribute('points','');
+  $('walker14').style.display='none'; $('note14').style.display='none';
+  drawRoute14(); stats14();
+}
+function stop14(){ playing14=false; if(anim14)cancelAnimationFrame(anim14); $('play14').textContent='▶ 再生'; }
+
+function play14(){
+  if(playing14){ stop14(); return; }
+  playing14=true; $('play14').textContent='❚❚ 停止';
+  $('trailA14').setAttribute('points',''); $('trailB14').setAttribute('points','');
+  const trails={1:[],2:[]};
+  const W=$('walker14'), NT=$('note14'), pulse=$('pulse14');
+  W.style.display='';
+  let start=null;
+  const step=ts=>{
+    if(!playing14)return;
+    if(start===null)start=ts;
+    const t=(ts-start)/1000*sp14;
+    const {segs,T}=tl14;
+    if(t>=T+0.8){ stop14(); return; }
+    const tc=Math.min(t,T-0.001);
+    const s=segs.find(sg=>tc>=sg.t0&&tc<sg.t1)||segs[segs.length-1];
+    let f,x,y,note=null;
+    if(s.kind==='walk'){ const k=(tc-s.t0)/(s.t1-s.t0); f=s.f; x=s.x1+(s.x2-s.x1)*k; y=s.y1+(s.y2-s.y1)*k; }
+    else if(s.kind==='pause'){ f=s.f; x=s.x; y=s.y; note=s.note; }
+    else { const k=(tc-s.t0)/(s.t1-s.t0); if(k<0.5){f=s.f1;x=s.x1;y=s.y1;}else{f=s.f2;x=s.x2;y=s.y2;} note=s.up?'階段を上る…':'階段を下りる…'; }
+    const[cx,cy]=px14(f,x,y);
+    W.setAttribute('transform',`translate(${cx},${cy})`);
+    pulse.setAttribute('r',9+3*Math.sin(ts/180));
+    if(s.kind==='walk'){
+      const arr=trails[f];
+      if(!arr.length||Math.hypot(arr[arr.length-1][0]-cx,arr[arr.length-1][1]-cy)>2)arr.push([cx,cy]);
+      $(f===1?'trailA14':'trailB14').setAttribute('points',arr.map(p=>p.join(',')).join(' '));
+    }
+    if(note){
+      NT.style.display='';
+      const tx=NT.querySelector('text'), rc=NT.querySelector('rect');
+      tx.textContent=note;
+      const w=note.length*10.5+16;
+      const nx=Math.min(Math.max(cx,60+w/2-60),720-w/2-4);
+      tx.setAttribute('x',nx); tx.setAttribute('y',cy-20);
+      rc.setAttribute('x',nx-w/2); rc.setAttribute('y',cy-33); rc.setAttribute('width',w); rc.setAttribute('height',18);
+    } else NT.style.display='none';
+    anim14=requestAnimationFrame(step);
+  };
+  anim14=requestAnimationFrame(step);
+}
+
+
+
+seg('sc14Seg','sc',v=>setScenario14(+v));
+seg('sp14Seg','sp',v=>{sp14=+v;});
+$('play14').addEventListener('click',play14);
+$('n14').addEventListener('input',stats14);
+seg('se14Seg','se',v=>{se14=v;updateSun14();});
+$('hh14').addEventListener('input',updateSun14);
+
+drawPlan14();setScenario14(0);updateSun14();
+
+</script>
+</body>
+</html>

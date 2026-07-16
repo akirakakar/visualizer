@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>情報配線 図面集｜南荻窪の家</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@600;800&family=Noto+Sans+JP:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper:#fafaf7; --ink:#1f2a33; --line:#c9d2d8; --blue:#1565c0;
+    --shu:#c43e2f; --mute:#7d8c96; --panel:#ffffff;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--paper); color:var(--ink);
+    font-family:'Noto Sans JP',sans-serif; font-size:15px; line-height:1.75; }
+
+  /* ---- cover ---- */
+  .cover { max-width:1080px; margin:0 auto; padding:72px 32px 48px; }
+  .cover .eyebrow { font-family:'IBM Plex Mono',monospace; font-size:12px;
+    letter-spacing:.22em; color:var(--mute); }
+  .cover h1 { font-family:'Shippori Mincho',serif; font-weight:800;
+    font-size:clamp(30px,5vw,46px); letter-spacing:.06em; margin:10px 0 6px;
+    border-bottom:3px solid var(--ink); padding-bottom:18px; }
+  .cover .sub { color:var(--mute); margin-top:12px; }
+  .stamp { float:right; width:74px; height:74px; border:2.5px solid var(--shu);
+    border-radius:50%; color:var(--shu); display:flex; align-items:center;
+    justify-content:center; font-family:'Shippori Mincho',serif; font-weight:800;
+    font-size:15px; letter-spacing:.1em; transform:rotate(-6deg); margin-top:6px;
+    writing-mode:vertical-rl; }
+  .toc { margin-top:34px; border:1px solid var(--line); background:var(--panel); }
+  .toc a { display:grid; grid-template-columns:110px 1fr auto; gap:16px;
+    padding:15px 22px; text-decoration:none; color:var(--ink);
+    border-bottom:1px solid var(--line); align-items:baseline; }
+  .toc a:last-child { border-bottom:none; }
+  .toc a:hover { background:#f1f4f6; }
+  .toc .no { font-family:'IBM Plex Mono',monospace; color:var(--blue); font-weight:500; }
+  .toc .en { font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--mute); }
+  .spec { margin-top:26px; border:1px solid var(--line); background:var(--panel); padding:22px 26px; }
+  .spec h3 { font-family:'Shippori Mincho',serif; font-size:17px; letter-spacing:.08em; margin-bottom:10px; }
+  .spec ol { padding-left:1.4em; }
+  .spec li { margin:3px 0; }
+  .spec li::marker { font-family:'IBM Plex Mono',monospace; color:var(--mute); }
+
+  /* ---- sheets ---- */
+  .sheet { max-width:1080px; margin:44px auto; padding:0 32px; }
+  .sheet-frame { border:2px solid var(--ink); background:var(--panel); padding:22px 26px 18px; }
+  .sheet-head { display:flex; align-items:baseline; gap:16px;
+    border-bottom:1px solid var(--line); padding-bottom:12px; margin-bottom:14px; }
+  .sheet-no { font-family:'IBM Plex Mono',monospace; color:#fff; background:var(--ink);
+    padding:2px 10px; font-size:13px; letter-spacing:.08em; }
+  .sheet-head h2 { font-family:'Shippori Mincho',serif; font-size:21px; letter-spacing:.06em; font-weight:800; }
+  .sheet-en { font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--mute); margin-left:auto; }
+  .drawing { border:1px solid var(--line); }
+  .sheet-notes { font-size:13.5px; color:#3c4a54; background:#f4f6f8;
+    border-left:3px solid var(--blue); padding:12px 16px; margin-top:14px; }
+  .sheet-notes .warn { color:var(--shu); font-weight:700; }
+  .titleblock { width:100%; border-collapse:collapse; margin-top:14px; font-size:12.5px; }
+  .titleblock th, .titleblock td { border:1px solid var(--line); padding:5px 12px; text-align:left; }
+  .titleblock th { background:#f1f4f6; font-weight:500; color:var(--mute); width:90px; white-space:nowrap; }
+  .frozen { color:var(--shu); border:1.5px solid var(--shu); padding:1px 8px; font-weight:700; font-size:12px; }
+
+  footer { max-width:1080px; margin:40px auto 60px; padding:0 32px;
+    color:var(--mute); font-size:12.5px; border-top:1px solid var(--line); padding-top:16px; }
+
+  @media print {
+    .sheet { page-break-before:always; margin:0 auto; }
+    .toc a:hover { background:none; }
+    body { background:#fff; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="stamp">確認用</div>
+  <p class="eyebrow">JOHO-HAISEN DRAWING SET / SEKISUI HOUSE SHAWOOD</p>
+  <h1>情報配線 図面集</h1>
+  <p class="sub">南荻窪の家　—　集約点：2階書斎クローゼット／2階LDK・1階寝室プラン　—　設計打ち合わせ提出用</p>
+
+  <nav class="toc">
+    <a href="#情報-01"><span class="no">情報-01</span><span>機器・成端レイアウト図（書斎クローゼット）</span><span class="en">LAYOUT</span></a>
+    <a href="#情報-02"><span class="no">情報-02</span><span>建物断面 AP接続経路図</span><span class="en">SECTION</span></a>
+    <a href="#情報-03"><span class="no">情報-03</span><span>完成イメージ（内観パース・正面）</span><span class="en">CONCEPT</span></a>
+  </nav>
+
+  <div class="spec">
+    <h3>情報配線仕様（凍結・全8項）</h3>
+    <ol>
+      <li>情報分電盤（マルチメディアボックス）は不採用</li>
+      <li>情報配線の集約点は2階書斎クローゼット内とする</li>
+      <li>外壁光キャビネットから集約点までPF管φ28を1本配管し、クローゼット内に光コンセントを設置（床上約60cm）</li>
+      <li>各居室・天井AP位置から集約点へCat6A×6本（C01〜C06）をスター配線し、クローゼット内壁面にキーストーン式6口プレートで成端（送り配線不可）。C02/C03の終端は天井埋込LANプレートとし天井裏に余長300mm。加えてクローゼット⇔書斎デスク脇の間仕切り壁内にCat6A×1本（C07）を配線し、両側を各1口プレートで成端（デスク側は床上70〜90cm）</li>
+      <li>同軸は集約点→2階LDK TV裏の1本のみ（S-5C-FB、4K8K対応端子）</li>
+      <li>クローゼット内に専用回路20A・アース付きコンセント2口。LAN・光・同軸・電源の全プレートは可動棚背面の壁・床上約60cmに横一列で集約（配線を棚裏で完結させるため）</li>
+      <li>棚は造作せず市販19インチ12Uラック（天板作業台付き）を施主設置。クローゼット有効内寸として幅700mm・奥行き700mm以上、高さはラック約700mm＋天板上余白500mm以上を確保（ラックは壁から50mm離して設置し背面を配線ゾーンとする）。扉はガラリ付きルーバー、内装クロスは書斎と同仕上げ（扉への配線孔・壁下地補強は不要）</li>
+      <li>全配線の両端に系統ラベル（C01〜C06）を表示</li>
+    </ol>
+  </div>
+</div>
+
+
+<section class="sheet" id="情報-01">
+  <div class="sheet-frame">
+    <header class="sheet-head">
+      <span class="sheet-no">情報-01</span>
+      <h2>機器・成端レイアウト図（書斎クローゼット）</h2>
+      <span class="sheet-en">Equipment & Termination Layout</span>
+    </header>
+    <div class="drawing"><svg style="width:100%;height:auto;display:block" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 1240 1010" font-family="'Hiragino Kaku Gothic ProN','Noto Sans JP',sans-serif">
+  <defs>
+    <marker id="arrow2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#37474f"/>
+    </marker>
+    <pattern id="hatch2" width="8" height="8" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+      <rect width="8" height="8" fill="#eceff1"/>
+      <line x1="0" y1="0" x2="0" y2="8" stroke="#b0bec5" stroke-width="1.5"/>
+    </pattern>
+  </defs>
+
+  <rect width="1240" height="1000" fill="#fafbfc"/>
+  <text x="40" y="46" font-size="24" font-weight="700" fill="#263238">①ラック図（最終）：2階書斎クローゼット 機器・成端レイアウト</text>
+  <text x="40" y="70" font-size="13" fill="#607d8b">全プレートを棚の背面壁に集約 ＝ 全ケーブルが棚の後ろで完結し正面から不可視 ／ 縮尺は模式</text>
+
+  <!-- ================= PLAN VIEW (top-down) ================= -->
+  <text x="40" y="112" font-size="15" font-weight="700" fill="#263238">平面図（上から）：配線は全て棚の背面で完結</text>
+
+  <!-- rear wall (top) -->
+  <rect x="120" y="130" width="700" height="20" fill="url(#hatch2)" stroke="#90a4ae" stroke-width="1.5"/>
+  <text x="128" y="126" font-size="11" fill="#78909c">クローゼット背面壁（全プレートをここに集約・床上60cm）</text>
+
+  <!-- plates on rear wall -->
+  <rect x="180" y="150" width="90" height="14" fill="#fff" stroke="#1565c0" stroke-width="2.5"/>
+  <text x="225" y="182" font-size="11" font-weight="700" fill="#1565c0" text-anchor="middle">① LAN6口</text>
+  <rect x="310" y="150" width="40" height="14" fill="#fff" stroke="#f57f17" stroke-width="2.5"/>
+  <text x="330" y="182" font-size="11" font-weight="700" fill="#f57f17" text-anchor="middle">② 光</text>
+  <rect x="390" y="150" width="40" height="14" fill="#fff" stroke="#424242" stroke-width="2.5"/>
+  <text x="410" y="182" font-size="11" font-weight="700" fill="#424242" text-anchor="middle">③ 同軸</text>
+  <rect x="470" y="150" width="50" height="14" fill="#fff" stroke="#c62828" stroke-width="2.5"/>
+  <text x="495" y="182" font-size="11" font-weight="700" fill="#c62828" text-anchor="middle">④ 電源20A</text>
+  <rect x="560" y="150" width="46" height="14" fill="#fff" stroke="#1565c0" stroke-width="2.5"/>
+  <text x="583" y="182" font-size="11" font-weight="700" fill="#1565c0" text-anchor="middle">⑤a C07</text>
+
+  <!-- 50mm gap zone -->
+  <rect x="120" y="196" width="700" height="34" fill="#e0f2f1" opacity="0.5"/>
+  <text x="830" y="218" font-size="11" fill="#00897b">← 棚と壁の隙間50mm＝配線ゾーン</text>
+
+  <!-- shelf footprint with devices, ports facing rear -->
+  <rect x="150" y="230" width="640" height="120" rx="6" fill="#ffffff" stroke="#263238" stroke-width="2.5"/>
+  <text x="470" y="376" font-size="12" fill="#546e7a" text-anchor="middle">市販19インチラック 12U の平面投影：W約600×D約600mm（壁から50mm離して設置・ポート面を背面へ）</text>
+  <text x="470" y="398" font-size="12" font-weight="700" fill="#37474f" text-anchor="middle">線の方向：光・電源＝壁→ラック（入力）／LAN×7・同軸＝ラック→壁（出力）</text>
+
+  <g>
+    <rect x="180" y="250" width="120" height="60" rx="4" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.5"/>
+    <text x="240" y="285" font-size="11" fill="#1b5e20" text-anchor="middle">PoEスイッチ</text>
+    <rect x="330" y="250" width="80" height="60" rx="4" fill="#fff8e1" stroke="#f57f17" stroke-width="1.5"/>
+    <text x="370" y="285" font-size="11" fill="#e65100" text-anchor="middle">ONU/GW</text>
+    <rect x="440" y="250" width="90" height="60" rx="4" fill="#eceff1" stroke="#546e7a" stroke-width="1.5"/>
+    <text x="485" y="285" font-size="11" fill="#37474f" text-anchor="middle">映像ONU</text>
+    <rect x="560" y="250" width="100" height="60" rx="4" fill="#ede7f6" stroke="#5e35b1" stroke-width="1.5"/>
+    <text x="610" y="285" font-size="11" fill="#4527a0" text-anchor="middle">ミニPC/Mac mini</text>
+    <rect x="690" y="250" width="80" height="60" rx="4" fill="#fce4ec" stroke="#ad1457" stroke-width="1.5"/>
+    <text x="730" y="285" font-size="11" fill="#880e4f" text-anchor="middle">UPS/タップ</text>
+  </g>
+
+  <!-- short rear connections -->
+  <path d="M225,250 L225,166" fill="none" stroke="#1565c0" stroke-width="2.5" marker-end="url(#arrow2)"/>
+  <path d="M330,164 L330,196 L255,196 L255,248" fill="none" stroke="#f9a825" stroke-width="2.5" marker-end="url(#arrow2)"/>
+  <path d="M345,166 L345,196 L370,196 L370,248" fill="none" stroke="#f9a825" stroke-width="2" marker-end="url(#arrow2)"/>
+  <path d="M485,250 L485,196 L410,196 L410,166" fill="none" stroke="#424242" stroke-width="2" marker-end="url(#arrow2)"/>
+  <path d="M495,166 L495,196 L730,196 L730,248" fill="none" stroke="#c62828" stroke-width="2.5" marker-end="url(#arrow2)"/>
+  <path d="M285,250 L285,220 L583,220 L583,166" fill="none" stroke="#1565c0" stroke-width="2" marker-end="url(#arrow2)"/>
+  <text x="640" y="214" font-size="10" fill="#1565c0">スイッチ→⑤a（C07デスク行き）</text>
+
+  <!-- partition wall to desk (plan) -->
+  <rect x="820" y="130" width="18" height="240" fill="url(#hatch2)" stroke="#90a4ae" stroke-width="1.5"/>
+  <text x="829" y="122" font-size="11" fill="#78909c" text-anchor="middle">間仕切り壁</text>
+  <path d="M606,157 L820,157" fill="none" stroke="#1565c0" stroke-width="3" stroke-dasharray="7 5"/>
+  <text x="640" y="150" font-size="10" fill="#546e7a">壁内Cat6A C07</text>
+  <rect x="838" y="150" width="24" height="14" fill="#fff" stroke="#1565c0" stroke-width="2.5"/>
+  <text x="876" y="162" font-size="11" font-weight="700" fill="#1565c0">⑤b デスク脇プレート</text>
+  <rect x="880" y="230" width="280" height="90" rx="6" fill="#f5f5f5" stroke="#90a4ae" stroke-width="1.5"/>
+  <text x="1020" y="270" font-size="12" fill="#37474f" text-anchor="middle">書斎デスク（持ち込み・電動昇降想定）</text>
+  <text x="1020" y="292" font-size="11" fill="#546e7a" text-anchor="middle">U2723QE ← 細径パッチ ← ⑤b</text>
+  <path d="M850,164 C 850,210 900,240 940,248" fill="none" stroke="#1565c0" stroke-width="2" marker-end="url(#arrow2)"/>
+
+  <!-- ================= ELEVATION (front) ================= -->
+  <text x="40" y="446" font-size="15" font-weight="700" fill="#263238">立面図（正面から）：19インチ 12Uラック（天板＝作業台）── 正面にケーブルゼロ</text>
+
+  <g>
+    <rect x="112" y="456" width="576" height="16" rx="3" fill="#8d6748"/>
+    <text x="400" y="450" font-size="11" fill="#795548" text-anchor="middle">天板＝作業台（ラベルプリンタ・一時置き）／上部に余白500mm以上を確保</text>
+    <rect x="120" y="470" width="560" height="440" rx="8" fill="#ffffff" stroke="#263238" stroke-width="3"/>
+    <line x1="700" y1="456" x2="700" y2="910" stroke="#37474f" stroke-width="1.5" marker-start="url(#arrow2)" marker-end="url(#arrow2)"/>
+    <text x="710" y="690" font-size="11" fill="#37474f">H 約700mm（12U）</text>
+    <line x1="120" y1="924" x2="680" y2="924" stroke="#37474f" stroke-width="1.5" marker-start="url(#arrow2)" marker-end="url(#arrow2)"/>
+    <text x="400" y="944" font-size="11" fill="#37474f" text-anchor="middle">W 約600mm</text>
+    <line x1="120" y1="580" x2="680" y2="580" stroke="#263238" stroke-width="4"/>
+    <rect x="145" y="492" width="230" height="30" rx="4" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.5"/>
+    <text x="157" y="512" font-size="12" fill="#1b5e20">PoEスイッチ（前面無地・ポートは背面向き）</text>
+    <rect x="400" y="492" width="120" height="66" rx="4" fill="#fff8e1" stroke="#f57f17" stroke-width="1.5"/>
+    <text x="412" y="516" font-size="12" fill="#e65100">回線ONU</text>
+    <rect x="540" y="492" width="120" height="66" rx="4" fill="#fff8e1" stroke="#f57f17" stroke-width="1.5"/>
+    <text x="552" y="516" font-size="12" fill="#e65100">UCG-Fiber</text>
+
+    <line x1="120" y1="700" x2="680" y2="700" stroke="#263238" stroke-width="4"/>
+    <rect x="145" y="606" width="150" height="76" rx="4" fill="#ede7f6" stroke="#5e35b1" stroke-width="1.5"/>
+    <text x="157" y="634" font-size="12" fill="#4527a0">Mac mini M4 Pro</text>
+    <text x="157" y="652" font-size="11" fill="#5e35b1">ローカルLLM/開発</text>
+    <rect x="330" y="606" width="130" height="76" rx="4" fill="#ede7f6" stroke="#5e35b1" stroke-width="1.5"/>
+    <text x="342" y="634" font-size="12" fill="#4527a0">ミニPC</text>
+    <text x="342" y="652" font-size="11" fill="#5e35b1">Home Assistant</text>
+    <rect x="500" y="606" width="110" height="56" rx="4" fill="#eceff1" stroke="#546e7a" stroke-width="1.5"/>
+    <text x="512" y="630" font-size="12" fill="#37474f">映像ONU</text>
+
+    <line x1="120" y1="810" x2="680" y2="810" stroke="#263238" stroke-width="4"/>
+    <rect x="145" y="716" width="200" height="52" rx="4" fill="#f5f5f5" stroke="#9e9e9e" stroke-width="1" stroke-dasharray="5 4"/>
+    <text x="157" y="746" font-size="12" fill="#757575">将来スペース（NAS等）</text>
+
+    <rect x="145" y="826" width="240" height="70" rx="4" fill="#fce4ec" stroke="#ad1457" stroke-width="1.5"/>
+    <text x="157" y="852" font-size="12" fill="#880e4f">UPS（正弦波550VA）最下段</text>
+    <text x="157" y="870" font-size="11" fill="#ad1457">タップ・ACアダプタは背面へ</text>
+  </g>
+  <text x="132" y="964" font-size="11" fill="#9e9e9e">寸法は12Uオープンフレームの目安（製品により±）。壁から50mm離して設置＝背面配線ゾーン／床に機器を置かない</text>
+
+  <!-- side note column -->
+  <g font-size="12">
+    <rect x="720" y="470" width="480" height="200" rx="8" fill="#ffffff" stroke="#cfd8dc"/>
+    <text x="740" y="500" font-weight="700" fill="#263238">C01〜C07 割当（確定）</text>
+    <text x="740" y="526" fill="#37474f">C01　2階LDK TV裏（同軸も同位置）</text>
+    <text x="740" y="548" fill="#1b5e20">C02　2階天井 LDK ＝ U7 Pro①(PoE)</text>
+    <text x="740" y="570" fill="#1b5e20">C03　1階天井 廊下 ＝ U7 Pro②(PoE)</text>
+    <text x="740" y="592" fill="#37474f">C04　1階主寝室　／　C05　子供部屋A</text>
+    <text x="740" y="614" fill="#37474f">C06　子供部屋B（予備）</text>
+    <text x="740" y="636" fill="#37474f">C07　書斎デスク脇（間仕切り壁内・短距離）</text>
+    <text x="740" y="658" fill="#78909c" font-size="11">①プレートはC01〜C06、⑤a/⑤bはC07専用</text>
+  </g>
+
+  <g font-size="12">
+    <rect x="720" y="690" width="480" height="220" rx="8" fill="#e8f5e9" stroke="#43a047" stroke-width="1.5"/>
+    <text x="740" y="720" font-weight="700" fill="#2e7d32">背面完結の施工条件（要望書記載）</text>
+    <text x="740" y="748" fill="#1b5e20">・全プレート①〜⑤aを棚背面の壁・床上60cmに横一列で集約</text>
+    <text x="740" y="772" fill="#1b5e20">・設置スペース：有効幅700・奥行700mm以上、高さはラック約700＋天板上余白500mm</text>
+    <text x="740" y="796" fill="#1b5e20">・④電源も同じ背面壁（タップを棚裏に隠せる）</text>
+    <text x="740" y="820" fill="#1b5e20">・C07はクローゼット⇔デスク脇の壁内配線・両面プレート</text>
+    <text x="740" y="844" fill="#388e3c">→ 正面から見えるのは白い機器のみ。パッチは全て</text>
+    <text x="740" y="866" fill="#388e3c">　 機器背面→50mmゾーン→真後ろのプレートで完結</text>
+  </g>
+
+  <!-- legend -->
+  <g font-size="12">
+    <rect x="40" y="936" width="1160" height="52" rx="6" fill="#ffffff" stroke="#cfd8dc"/>
+    <text x="58" y="958" font-weight="700" fill="#263238">凡例：</text>
+    <line x1="110" y1="953" x2="146" y2="953" stroke="#f9a825" stroke-width="3"/>
+    <text x="152" y="958" fill="#37474f">光</text>
+    <line x1="184" y1="953" x2="220" y2="953" stroke="#1565c0" stroke-width="3"/>
+    <text x="226" y="958" fill="#37474f">Cat6A</text>
+    <line x1="284" y1="953" x2="320" y2="953" stroke="#424242" stroke-width="3"/>
+    <text x="326" y="958" fill="#37474f">同軸</text>
+    <line x1="372" y1="953" x2="408" y2="953" stroke="#c62828" stroke-width="3"/>
+    <text x="414" y="958" fill="#37474f">電源</text>
+    <line x1="464" y1="953" x2="500" y2="953" stroke="#1565c0" stroke-width="3" stroke-dasharray="7 5"/>
+    <text x="506" y="958" fill="#37474f">壁内配線</text>
+    <text x="58" y="980" fill="#78909c">仕様凍結：集約点＝2階書斎クローゼット／市販12Uラック（天板作業台）施主設置／全プレート背面壁集約／Cat6A×7スター＋プレート成端／同軸は2階LDK 1本のみ／情報分電盤・予備管・パッチパネル・扉配線孔なし</text>
+  </g>
+</svg>
+</div>
+    <div class="sheet-notes"><strong>要点：</strong>集約点＝2階書斎クローゼット。壁側固定は5点（①LAN6口プレート ②光コンセント ③同軸F型1口 ④専用回路20A×2 ⑤間仕切り壁内C07＝クローゼット側／デスク脇の両面プレート）。全プレートは棚背面の壁に横一列集約し、配線は機器背面→50mmゾーン→真後ろのプレートで完結（正面から不可視）。機器は全て可動棚置きの可搬構成。デスクは持ち込み（造作なし・電動昇降想定）でU2723QE経由MacBook ProにUSB-C 1本。壁側は⑤bプレート＋コンセント4口を床上70〜90cmに用意。線の方向は光・電源＝壁→ラック、LAN×7・同軸＝ラック→壁。賃貸転用時は棚上機器の撤去のみで「全室LAN配線済み」物件として引き渡し可。</div>
+    <table class="titleblock">
+      <tr><th>物件</th><td>南荻窪の家（シャーウッド）</td><th>図面名</th><td>機器・成端レイアウト図（書斎クローゼット）</td></tr>
+      <tr><th>図面番号</th><td>情報-01</td><th>縮尺</th><td>模式（NTS）</td></tr>
+      <tr><th>作成</th><td>施主（Akira）＋ Claude</td><th>日付</th><td>2026-07-16</td></tr>
+      <tr><th>状態</th><td colspan="3"><span class="frozen">仕様凍結</span>　位置決定は間取り確定後の電気図面レビューにて</td></tr>
+    </table>
+  </div>
+</section>
+<section class="sheet" id="情報-02">
+  <div class="sheet-frame">
+    <header class="sheet-head">
+      <span class="sheet-no">情報-02</span>
+      <h2>建物断面 AP接続経路図</h2>
+      <span class="sheet-en">Building Section — AP Cabling & PoE</span>
+    </header>
+    <div class="drawing"><svg style="width:100%;height:auto;display:block" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 1240 880" font-family="'Hiragino Kaku Gothic ProN','Noto Sans JP',sans-serif">
+  <defs>
+    <marker id="arrow3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#37474f"/>
+    </marker>
+    <pattern id="hatch3" width="8" height="8" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+      <rect width="8" height="8" fill="#eceff1"/>
+      <line x1="0" y1="0" x2="0" y2="8" stroke="#b0bec5" stroke-width="1.5"/>
+    </pattern>
+  </defs>
+
+  <rect width="1240" height="880" fill="#fafbfc"/>
+  <text x="40" y="46" font-size="24" font-weight="700" fill="#263238">②ネットワーク図（最終）：建物断面・AP接続経路（2階LDKプラン）</text>
+  <text x="40" y="70" font-size="13" fill="#607d8b">2階＝LDK＋書斎（集約点）／1階＝寝室フロア ／ PoE給電でAP位置に電源不要 ／ 縮尺は模式</text>
+
+  <!-- HOUSE SECTION -->
+  <path d="M100,150 L620,90 L1140,150" fill="none" stroke="#546e7a" stroke-width="4"/>
+  <rect x="100" y="150" width="18" height="600" fill="url(#hatch3)" stroke="#90a4ae" stroke-width="1.5"/>
+  <rect x="1122" y="150" width="18" height="600" fill="url(#hatch3)" stroke="#90a4ae" stroke-width="1.5"/>
+  <line x1="60" y1="750" x2="1180" y2="750" stroke="#8d6e63" stroke-width="5"/>
+  <rect x="118" y="440" width="1004" height="26" fill="#efebe9" stroke="#a1887f" stroke-width="1.5"/>
+  <text x="128" y="458" font-size="11" fill="#795548">1階天井懐＝横引きスペース（C03縦下ろし後にここを走る）</text>
+  <rect x="118" y="150" width="1004" height="22" fill="#efebe9" stroke="#a1887f" stroke-width="1.5"/>
+  <text x="128" y="166" font-size="11" fill="#795548">2階天井裏（小屋裏）＝横引きスペース・点検口からアクセス可</text>
+
+  <text x="150" y="200" font-size="14" font-weight="700" fill="#78909c">2F　LDK ＋ 書斎</text>
+  <text x="150" y="500" font-size="14" font-weight="700" fill="#78909c">1F　寝室・子供部屋</text>
+
+  <!-- CLOSET on 2F right -->
+  <rect x="850" y="172" width="230" height="268" fill="#ffffff" stroke="#263238" stroke-width="2.5"/>
+  <text x="965" y="196" font-size="13" font-weight="700" fill="#263238" text-anchor="middle">書斎クローゼット（集約点）</text>
+  <rect x="878" y="220" width="174" height="40" rx="4" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="965" y="245" font-size="12" fill="#1b5e20" text-anchor="middle">PoEスイッチ（可動棚）</text>
+  <rect x="856" y="290" width="22" height="56" rx="3" fill="#fff" stroke="#1565c0" stroke-width="2.5"/>
+  <text x="886" y="308" font-size="12" fill="#1565c0">LANプレート6口</text>
+  <path d="M890,260 C 880,272 872,280 868,288" fill="none" stroke="#1565c0" stroke-width="3" marker-end="url(#arrow3)"/>
+
+  <!-- C02: 2F LDK ceiling AP (same floor) -->
+  <path d="M856,318 L820,318 L820,172 M820,172 L820,161 L400,161 L400,172" fill="none" stroke="#1565c0" stroke-width="3.5"/>
+  <rect x="375" y="172" width="50" height="12" rx="3" fill="#fff" stroke="#1565c0" stroke-width="2"/>
+  <ellipse cx="400" cy="200" rx="34" ry="12" fill="#eceff1" stroke="#37474f" stroke-width="2.5"/>
+  <text x="400" y="234" font-size="12" font-weight="700" fill="#263238" text-anchor="middle">U7 Pro ①（2階LDK天井）</text>
+  <text x="400" y="252" font-size="11" fill="#546e7a" text-anchor="middle">帯域重心：TV・スマホ・在宅ワーク</text>
+  <path d="M400,184 L400,190" stroke="#1565c0" stroke-width="3"/>
+  <text x="500" y="184" font-size="12" fill="#1565c0">C02（同一階＝最短経路）</text>
+
+  <!-- C01: 2F LDK TV (wall outlet on 2F) -->
+  <path d="M856,332 L800,332 L800,161 M800,161 L240,161 L240,300" fill="none" stroke="#1565c0" stroke-width="2.5" opacity="0.65"/>
+  <path d="M856,338 L806,338 L806,167 M806,167 L246,167 L246,300" fill="none" stroke="#424242" stroke-width="2" opacity="0.65"/>
+  <rect x="228" y="300" width="30" height="56" rx="3" fill="#fff" stroke="#37474f" stroke-width="2"/>
+  <text x="268" y="318" font-size="12" font-weight="700" fill="#37474f">2階LDK TV裏</text>
+  <text x="268" y="336" font-size="11" fill="#546e7a">C01（LAN）＋ 同軸F型</text>
+  <text x="268" y="352" font-size="11" fill="#78909c">TV・ゲーム機・レコーダー</text>
+
+  <!-- C03: down to 1F ceiling AP -->
+  <path d="M856,326 L780,326 L780,440 M780,440 L780,452 L430,452 L430,466" fill="none" stroke="#1565c0" stroke-width="3.5"/>
+  <rect x="405" y="466" width="50" height="12" rx="3" fill="#fff" stroke="#1565c0" stroke-width="2"/>
+  <ellipse cx="430" cy="494" rx="34" ry="12" fill="#eceff1" stroke="#37474f" stroke-width="2.5"/>
+  <text x="430" y="528" font-size="12" font-weight="700" fill="#263238" text-anchor="middle">U7 Pro ②（1階廊下天井）</text>
+  <text x="430" y="546" font-size="11" fill="#546e7a" text-anchor="middle">寝室直上を避けカバレッジ重視</text>
+  <path d="M430,478 L430,484" stroke="#1565c0" stroke-width="3"/>
+  <text x="560" y="430" font-size="12" font-weight="700" fill="#e65100">⚠ C03縦ルート要確認</text>
+  <text x="560" y="448" font-size="11" fill="#bf360c">2階→1階天井懐へ下ろせる壁/PSの位置を電気図面で指定</text>
+
+  <!-- bedroom outlets 1F -->
+  <rect x="228" y="560" width="30" height="44" rx="3" fill="#fff" stroke="#1565c0" stroke-width="2"/>
+  <text x="268" y="578" font-size="12" font-weight="700" fill="#37474f">主寝室 C04</text>
+  <rect x="228" y="640" width="30" height="44" rx="3" fill="#fff" stroke="#1565c0" stroke-width="2"/>
+  <text x="268" y="658" font-size="12" font-weight="700" fill="#37474f">子供部屋A C05 ／ B C06</text>
+  <path d="M780,440 L780,580 L260,580" fill="none" stroke="#1565c0" stroke-width="2.5" opacity="0.5"/>
+  <path d="M780,580 L780,660 L260,660" fill="none" stroke="#1565c0" stroke-width="2.5" opacity="0.5"/>
+
+  <!-- wifi waves -->
+  <g stroke="#80cbc4" stroke-width="2" fill="none" opacity="0.8">
+    <path d="M400,222 q 30,26 0,52 M400,222 q -30,26 0,52"/>
+    <path d="M430,516 q 30,26 0,52 M430,516 q -30,26 0,52"/>
+  </g>
+
+  <!-- PoE callout -->
+  <rect x="620" y="600" width="420" height="118" rx="8" fill="#e8f5e9" stroke="#43a047" stroke-width="2"/>
+  <text x="640" y="630" font-size="14" font-weight="700" fill="#2e7d32">PoE給電</text>
+  <text x="640" y="656" font-size="12" fill="#1b5e20">スイッチPoE+ポート → C02/C03 → 天井埋込プレート → AP</text>
+  <text x="640" y="678" font-size="12" fill="#1b5e20">Cat6A 1本で2.5Gbps通信＋電力（〜25W）。AP位置に電源不要</text>
+  <text x="640" y="700" font-size="12" fill="#388e3c">スイッチはUPS配下 → 停電時もWiFi継続</text>
+
+  <!-- construction notes -->
+  <g font-size="12">
+    <rect x="100" y="778" width="1100" height="88" rx="6" fill="#ffffff" stroke="#cfd8dc"/>
+    <text x="118" y="804" font-weight="700" fill="#263238">施工指示まとめ</text>
+    <text x="118" y="828" fill="#37474f">・C02/C03終端＝天井埋込LANプレート、天井裏に余長300mm　・C01は2階LDK TV裏にLAN＋同軸F型を並設　・C03の1階への縦下ろしルートを電気図面で明示</text>
+    <text x="118" y="850" fill="#78909c">・賃貸時：AP撤去でプレートのみ残置、天井無傷　・3台目APは入居後ヒートマップ実測で判断（1階の電波が弱ければC04〜C06の壁プレートから壁付けAP追加も可）</text>
+  </g>
+</svg>
+</div>
+    <div class="sheet-notes"><strong>要点：</strong>2階=LDK＋書斎、1階=寝室フロア。U7 Pro①は2階LDK天井（帯域重心・同一階最短）、②は1階廊下天井（寝室直上回避）。給電はPoE+のためAP位置に電源不要、UPS配下のため停電時もWiFi継続。<span class="warn">要確認：C03の2階→1階天井懐への縦下ろしルート（壁内/PS位置）を電気図面で明示のこと。</span></div>
+    <table class="titleblock">
+      <tr><th>物件</th><td>南荻窪の家（シャーウッド）</td><th>図面名</th><td>建物断面 AP接続経路図</td></tr>
+      <tr><th>図面番号</th><td>情報-02</td><th>縮尺</th><td>模式（NTS）</td></tr>
+      <tr><th>作成</th><td>施主（Akira）＋ Claude</td><th>日付</th><td>2026-07-16</td></tr>
+      <tr><th>状態</th><td colspan="3"><span class="frozen">仕様凍結</span>　位置決定は間取り確定後の電気図面レビューにて</td></tr>
+    </table>
+  </div>
+</section>
+<section class="sheet" id="情報-03">
+  <div class="sheet-frame">
+    <header class="sheet-head">
+      <span class="sheet-no">情報-03</span>
+      <h2>完成イメージ（内観パース・正面）</h2>
+      <span class="sheet-en">Interior Concept — Front Elevation</span>
+    </header>
+    <div class="drawing"><svg style="width:100%;height:auto;display:block" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 1240 880" font-family="'Hiragino Kaku Gothic ProN','Noto Sans JP',sans-serif">
+  <defs>
+    <linearGradient id="wood" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#a1785c"/>
+      <stop offset="0.5" stop-color="#8d6748"/>
+      <stop offset="1" stop-color="#7a5a40"/>
+    </linearGradient>
+    <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f7f5f2"/>
+      <stop offset="1" stop-color="#edeae5"/>
+    </linearGradient>
+    <linearGradient id="devwhite" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#eceff1"/>
+    </linearGradient>
+    <marker id="arrow4" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#37474f"/>
+    </marker>
+  </defs>
+
+  <rect width="1240" height="880" fill="#fafbfc"/>
+  <text x="40" y="46" font-size="24" font-weight="700" fill="#263238">完成イメージ：書斎クローゼット 正面ビュー（扉オープン時）</text>
+  <text x="40" y="70" font-size="13" fill="#607d8b">白で統一した機器＋造作化粧棚。配線は全て棚裏へ ── 正面からケーブルが見えない状態</text>
+
+  <!-- ============ CLOSET FRONT VIEW ============ -->
+  <!-- closet opening frame -->
+  <rect x="120" y="110" width="620" height="660" rx="4" fill="url(#wall)" stroke="#bcaaa4" stroke-width="3"/>
+  <text x="430" y="100" font-size="12" fill="#8d6e63" text-anchor="middle">内装クロス＝書斎と同仕上げ（「部屋の続き」に見せる）</text>
+
+  <!-- shelf boards (walnut) -->
+  <g>
+    <rect x="140" y="270" width="580" height="18" rx="2" fill="url(#wood)"/>
+    <rect x="140" y="430" width="580" height="18" rx="2" fill="url(#wood)"/>
+    <rect x="140" y="590" width="580" height="18" rx="2" fill="url(#wood)"/>
+    <rect x="140" y="730" width="580" height="18" rx="2" fill="url(#wood)"/>
+  </g>
+  <text x="732" y="282" font-size="11" fill="#795548">造作化粧棚板</text>
+  <text x="732" y="298" font-size="11" fill="#795548">（奥行き−50mm）</text>
+
+  <!-- TOP SHELF: network -->
+  <!-- UCG-Fiber white tower -->
+  <rect x="180" y="180" width="70" height="88" rx="8" fill="url(#devwhite)" stroke="#cfd8dc" stroke-width="1.5"/>
+  <circle cx="215" cy="204" r="7" fill="#e0f2f1"/>
+  <text x="215" y="160" font-size="11" fill="#546e7a" text-anchor="middle">UCG-Fiber</text>
+  <!-- ONU slim -->
+  <rect x="280" y="196" width="46" height="72" rx="6" fill="url(#devwhite)" stroke="#cfd8dc" stroke-width="1.5"/>
+  <text x="303" y="160" font-size="11" fill="#546e7a" text-anchor="middle">ONU</text>
+  <!-- switch flat, ports facing back -->
+  <rect x="370" y="230" width="300" height="38" rx="6" fill="url(#devwhite)" stroke="#cfd8dc" stroke-width="1.5"/>
+  <rect x="384" y="244" width="10" height="10" rx="2" fill="#e3f2fd"/>
+  <text x="520" y="222" font-size="11" fill="#546e7a" text-anchor="middle">PoEスイッチ（ポート面を壁側へ＝正面は無地）</text>
+
+  <!-- SHELF 2: compute -->
+  <rect x="180" y="356" width="150" height="72" rx="10" fill="#e8eaed" stroke="#b0bec5" stroke-width="1.5"/>
+  <text x="255" y="346" font-size="11" fill="#546e7a" text-anchor="middle">Mac mini M4 Pro</text>
+  <rect x="380" y="364" width="120" height="64" rx="8" fill="url(#devwhite)" stroke="#cfd8dc" stroke-width="1.5"/>
+  <text x="440" y="346" font-size="11" fill="#546e7a" text-anchor="middle">ミニPC（白筐体）</text>
+
+  <!-- SHELF 3: video + future -->
+  <rect x="180" y="524" width="90" height="64" rx="6" fill="url(#devwhite)" stroke="#cfd8dc" stroke-width="1.5"/>
+  <text x="225" y="514" font-size="11" fill="#546e7a" text-anchor="middle">映像ONU</text>
+  <rect x="330" y="524" width="180" height="64" rx="6" fill="none" stroke="#b0bec5" stroke-width="1.5" stroke-dasharray="6 5"/>
+  <text x="420" y="560" font-size="11" fill="#90a4ae" text-anchor="middle">将来スペース（NAS等）</text>
+
+  <!-- SHELF 4 (bottom): UPS white -->
+  <rect x="180" y="640" width="200" height="88" rx="8" fill="url(#devwhite)" stroke="#cfd8dc" stroke-width="1.5"/>
+  <text x="280" y="630" font-size="11" fill="#546e7a" text-anchor="middle">UPS（白・正弦波）</text>
+  <text x="480" y="690" font-size="11" fill="#90a4ae">タップ・ACアダプタは全てこの段の棚裏へ</text>
+
+  <!-- hidden cable zone indicator -->
+  <rect x="140" y="128" width="580" height="14" rx="3" fill="#eceff1" stroke="#cfd8dc" stroke-dasharray="4 4"/>
+  <text x="430" y="139" font-size="10" fill="#90a4ae" text-anchor="middle">棚と壁の隙間50mm＝縦の配線ゾーン（正面から不可視）</text>
+
+  <!-- ============ SIDE SECTION (how cables hide) ============ -->
+  <text x="820" y="130" font-size="15" font-weight="700" fill="#263238">断面：配線が見えない理由</text>
+
+  <!-- wall -->
+  <rect x="1120" y="150" width="20" height="560" fill="#e0d7cf" stroke="#bcaaa4" stroke-width="1.5"/>
+  <text x="1130" y="142" font-size="11" fill="#8d6e63" text-anchor="middle">壁</text>
+
+  <!-- shelf side view -->
+  <rect x="860" y="300" width="210" height="14" fill="url(#wood)"/>
+  <rect x="860" y="470" width="210" height="14" fill="url(#wood)"/>
+  <text x="850" y="280" font-size="11" fill="#795548">棚板（奥行き−50mm）</text>
+
+  <!-- gap -->
+  <path d="M1085,180 L1085,690" stroke="#00897b" stroke-width="2" stroke-dasharray="5 4"/>
+  <text x="1078" y="740" font-size="11" fill="#00897b" text-anchor="end">50mm隙間＝配線ゾーン</text>
+
+  <!-- device on shelf, ports to wall -->
+  <rect x="900" y="250" width="150" height="48" rx="6" fill="url(#devwhite)" stroke="#cfd8dc" stroke-width="1.5"/>
+  <text x="975" y="240" font-size="11" fill="#546e7a" text-anchor="middle">スイッチ（ポート面→壁側）</text>
+  <!-- cable from back of device down gap to plate -->
+  <path d="M1050,274 C 1075,274 1085,290 1085,320 L1085,420 C 1085,440 1100,442 1116,442" fill="none" stroke="#1565c0" stroke-width="3" marker-end="url(#arrow4)"/>
+  <rect x="1108" y="424" width="14" height="40" rx="3" fill="#fff" stroke="#1565c0" stroke-width="2"/>
+  <text x="1010" y="416" font-size="11" fill="#1565c0">白スリムパッチが</text>
+  <text x="1010" y="432" font-size="11" fill="#1565c0">隙間を降りてプレートへ</text>
+  <text x="1010" y="470" font-size="11" fill="#546e7a">→壁内Cat6A→天井AP</text>
+
+  <!-- viewer eye -->
+  <circle cx="800" cy="330" r="10" fill="none" stroke="#37474f" stroke-width="2"/>
+  <circle cx="800" cy="330" r="3" fill="#37474f"/>
+  <path d="M812,326 L896,296" stroke="#90a4ae" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <path d="M812,334 L896,308" stroke="#90a4ae" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text x="800" y="360" font-size="11" fill="#546e7a" text-anchor="middle">視線＝機器の無地面のみ</text>
+
+  <!-- style checklist -->
+  <g font-size="12">
+    <rect x="790" y="520" width="410 " height="240" rx="8" fill="#ffffff" stroke="#cfd8dc"/>
+    <text x="810" y="550" font-size="13" font-weight="700" fill="#263238">オシャレ化チェックリスト</text>
+    <text x="810" y="580" fill="#37474f">□ 機器は白で統一（UniFi/白筐体ミニPC/白UPS）</text>
+    <text x="810" y="606" fill="#37474f">□ ポート面を壁側に向けて配置</text>
+    <text x="810" y="632" fill="#37474f">□ 棚板は造作化粧板・奥行き−50mm</text>
+    <text x="810" y="658" fill="#37474f">□ パッチは白スリム・同長で統一</text>
+    <text x="810" y="684" fill="#37474f">□ LED輝度をUniFi設定で夜間減光</text>
+    <text x="810" y="710" fill="#37474f">□ タップ/アダプタは最下段の棚裏に集約</text>
+    <text x="810" y="736" fill="#37474f">□ 収納内クロス＝書斎と同仕上げ・ルーバー扉</text>
+  </g>
+
+  <!-- caption -->
+  <text x="120" y="810" font-size="12" fill="#78909c">正面ビューのポイント：目線の高さの棚には「白い箱」しか載っていない。ケーブル・タップ・アダプタは全て棚裏の50mm配線ゾーンと最下段裏に退避。</text>
+  <text x="120" y="832" font-size="12" fill="#78909c">扉はガラリ付き木製ルーバー（通気＋目隠し）。閉めればリネン庫、開ければApple売り場、が目標イメージ。</text>
+</svg>
+</div>
+    <div class="sheet-notes"><strong>要点：</strong>機器は白で統一しポート面を壁側へ。ラックは市販品を施主設置とし、壁から50mm離して背面を配線ゾーンに。タップ/ACアダプタは最下段裏へ集約。積水への依頼は2点＝収納内クロス書斎同仕上げ／ガラリ付きルーバー扉（＋内寸確保）。</div>
+    <table class="titleblock">
+      <tr><th>物件</th><td>南荻窪の家（シャーウッド）</td><th>図面名</th><td>完成イメージ（内観パース・正面）</td></tr>
+      <tr><th>図面番号</th><td>情報-03</td><th>縮尺</th><td>模式（NTS）</td></tr>
+      <tr><th>作成</th><td>施主（Akira）＋ Claude</td><th>日付</th><td>2026-07-16</td></tr>
+      <tr><th>状態</th><td colspan="3"><span class="frozen">仕様凍結</span>　位置決定は間取り確定後の電気図面レビューにて</td></tr>
+    </table>
+  </div>
+</section>
+
+<footer>
+  本図面集は設計打ち合わせ用の模式図であり、寸法・位置は間取り確定後の電気図面レビューで最終決定する。C01〜C07割当：C01=2階LDK TV裏／C02=2階LDK天井AP／C03=1階廊下天井AP／C04=1階主寝室／C05=子供部屋A／C06=子供部屋B（予備）／C07=書斎デスク脇（壁内・短距離）。
+</footer>
+
+</body>
+</html>

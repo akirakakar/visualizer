@@ -84,43 +84,9 @@ footer{margin-top:70px;border-top:3px double var(--ink);padding-top:14px;font-fa
   <h1>動線<span class="accent">シミュレータ</span></h1>
 </header>
 
-<section>
-  <div class="sec-head"><span class="sec-num">SIM 2D</span><h2>2D動線シミュレーション:この間取りを1日歩いてみる</h2></div>
-  <div class="fig">
-    <div class="fig-label">SIM.14 — 生活動線×日射トレース(提案図面 TWSX26060017 の壁座標から再構成)</div>
-    <div class="fig-inner"><svg id="svg14" viewBox="0 0 720 475"></svg></div>
-    <div class="controls">
-      <div class="ctrl" style="flex:2.2 1 320px"><label>シナリオ</label>
-        <div class="seg" id="sc14Seg">
-          <button data-sc="0" class="on">朝支度→出勤</button><button data-sc="1">帰宅+買い物</button><button data-sc="2">洗濯(乾燥→WIC)</button><button data-sc="3">入浴→就寝</button><button data-sc="4">在宅ワーク</button><button data-sc="5">保育園送り(添い寝Ver.)</button><button data-sc="8">保育園送り(こども部屋Ver.)</button><button data-sc="6">深夜帰宅・食なし</button><button data-sc="7">深夜帰宅・食あり</button>
-        </div></div>
-      <div class="ctrl" style="flex:1 1 170px"><label>再生</label>
-        <div class="seg"><button id="play14" style="min-width:90px">▶ 再生</button></div></div>
-      <div class="ctrl"><label>速度</label>
-        <div class="seg" id="sp14Seg">
-          <button data-sp="1" class="on">×1</button><button data-sp="2">×2</button><button data-sp="4">×4</button>
-        </div></div>
-      <div class="ctrl"><label>この動線の頻度 <span class="val" id="n14V">1 回/日</span></label><input type="range" id="n14" min="1" max="12" value="1" step="1"></div>
-      <div class="ctrl" style="flex:1.6 1 260px"><label>日射(季節)</label>
-        <div class="seg" id="se14Seg">
-          <button data-se="off">OFF</button><button data-se="355" class="on">冬至</button><button data-se="81">春秋分</button><button data-se="172">夏至</button>
-        </div></div>
-      <div class="ctrl"><label>時刻 <span class="val" id="hh14V">9:00</span></label><input type="range" id="hh14" min="6" max="18" value="9" step="0.5"></div>
-    </div>
-    <div class="verdict">
-      <div class="kv"><span class="k">移動距離/回</span><span class="v" id="dist14V" style="color:var(--cyan)">—</span></div>
-      <div class="kv"><span class="k">歩数/回</span><span class="v" id="step14V">—</span></div>
-      <div class="kv"><span class="k">階段昇降</span><span class="v" id="stair14V">—</span></div>
-      <div class="kv"><span class="k">歩行時間/回</span><span class="v" id="time14V">—</span></div>
-      <div class="kv"><span class="k">年間移動距離</span><span class="v" id="year14V">—</span></div>
-      <span class="badge dry" id="badge14">—</span>
-    </div>
-  </div>
-</section>
 
 <section>
   <div class="sec-head"><span class="sec-num">SIM 3D</span><h2>3Dウォークスルー:同じ1日を立体で歩く</h2></div>
-  <p>2Dと同じ壁座標から家を立ち上げ、<b>同じ9シナリオを同じ経路</b>で人が歩きます。2Dでは省略される所作——<b>框に腰かけて靴を履く/脱いで揃える、SCLに鞄と上着を置く、律希を抱っこして階段を昇る、ハイチェアに座らせる、ドラム式から取り出す</b>——までアクションとして再現しているので、「その場所で本当にその動作ができるか(框の座り幅、SCLの棚位置、抱っこでの階段)」を立体で確認できます。階段はL字(東から西へ→踊り場→北へ)として実際に昇降します。<b>床にはシナリオの動線ルート(青=歩行/オレンジ=階段/赤点=所作)が最初から描かれる</b>ので、再生前にルート全体を俯瞰できます。カメラは3モード:<b>全体</b>(ドラッグ回転・ズーム)/<b>追従</b>(住人を追跡)/<b>本人目線</b>——本人目線では<b>部屋名ラベル類を消し、壁と天井を不透明化、窓は実際の窓位置にガラスとして表示</b>。人物は実寸プロポーション(1.62m)で、<b>方向転換は必ずその場で回ってから歩く</b>(後ろ歩きしない)ため、目線も自然に回ります。WICにはハンガーパイプと服、SCLには靴・鞄・上着、主寝室にはベッド一式、リビングにはテレビ+ソファを配置済みです。<b>扉</b>も再現しています:動線が実際に通る開口部に室内引き戸(開けた状態)を自動配置し、開口上部には垂れ壁で高さ約2mのドア開口を表現、<b>玄関の開き戸は「ドアを開ける」の所作に合わせて実際に開閉</b>します。<b>玄関から入ってSCLに鞄を置き、階段を昇る視界そのもの</b>を体験できます(ドラッグで見回し)。</p>
   <div class="fig">
     <div class="fig-label">SIM.3D — 立体動線ウォークスルー(同一座標系・同一シナリオ)</div>
     <div class="v3d-wrap" id="v3dWrap">
@@ -157,7 +123,6 @@ footer{margin-top:70px;border-top:3px double var(--ink);padding-top:14px;font-fa
       <div class="badge" id="badge3d">2Dで距離と回数を、3Dで「その場所でその動作ができるか」を確認する使い分けです</div>
     </div>
   </div>
-  <div class="key"><span class="t">読み方:</span> 3Dは寸法検証というより<b>所作の成立チェック</b>用です。①<b>框(玄関の段差)に腰かけて靴を履く/律希に履かせる</b>——上がり框の奥行と手すりの要否がイメージできます。②<b>SCLの棚(鞄・上着・律希のリュック)</b>——「帰宅動線の途中に置き場がある」ことの意味が立体だと分かります。③<b>抱っこでのL字階段昇降</b>——添い寝Ver./こども部屋Ver.とも朝2回発生。踊り場付きL字は直階段より抱っこ時の安心感がありますが、手すり位置(昇り右手)と足元灯はこの動画のイメージで打ち合わせに出せます。④深夜帰宅(食なし)は<b>2Fに一切上がらない</b>ことが立体だと一目瞭然です。</div>
 </section>
 </div>
 

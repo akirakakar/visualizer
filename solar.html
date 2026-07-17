@@ -316,7 +316,7 @@
 
 <div class="footnote">
   ※ 発電量は NEDO 日射量データベース（東京）を元にした簡易推計です。実際の発電量は屋根方位・周辺影・気象により変動します。※ 屋根キャパシティは小屋裏レベル平面図のグリッド寸法（5000/3500）からの推定で、垂木ピッチ・雪止め・換気ガラリ等の制約は未考慮です。正式な搭載可能量はSekisui構造検討でご確認ください。
-  ※ プリセットの回収年は本シミュレーターの前提（買電31円・FIT2026年度・劣化0.5%/年・20年維持費込み）での試算値。国DR補助は約3.7万円/kWh（上限60万円・先着）＋都DR実証10万円の現実的な取得額で計上しています。都補助は2026年10月以降、海外メーカー製パネルが対象外となる方向のため、着工2027年1月の本件では国産（シャープ等）選定が補助上安全です。※ パワーコンディショナは寿命10〜15年が目安（メーカー保証15年が主流）。パネル本体は出力保証25年前後・機器保証15年前後が一般的で、保証期間内の故障は原則無償のため、予備費は配線・架台等の軽微修理を想定した値です。※ 補助金は令和8年度基準（都 太陽光: 新築12万円/kW・3.6kW超10万円/kW、オール電化13/11万円／都 蓄電池: 10万円/kWh 上限120万円／国DR: 上限60万円・先着／給湯省エネ: おひさまエコキュート最大13万円）。事前申込が契約前に必要・先着順のため、Sekisui契約スケジュールとの整合に注意。
+  ※ プリセットの回収年は本シミュレーターの前提（買電31円・FIT2026年度・劣化0.5%/年・20年維持費込み）での試算値。国DR補助は約3.7万円/kWh（上限60万円・先着）＋都DR実証10万円の現実的な取得額で計上しています。都補助は2026年10月以降、海外メーカー製パネルが対象外となる方向のため、着工2027年1月の本件では国産（シャープ等）選定が補助上安全です。※ パワーコンディショナは寿命10〜15年が目安（メーカー保証15年が主流）。パネル本体は出力保証25年前後・機器保証15年前後が一般的で、保証期間内の故障は原則無償のため、予備費は配線・架台等の軽微修理を想定した値です。※ 補助金は令和8年度基準（都 太陽光: 新築12万円/kW・3.6kW超10万円/kW、オール電化13/11万円／都 蓄電池: 10万円/kWh 上限120万円／国DR: 約3.7万円/kWh 上限60万円・先着／国 給湯省エネ2026: エコキュート7〜10万円／都 熱と電気の有効利用: 太陽光連携日中沸き上げ型14万円+再エネ電力5万+DR8万）。都の給湯高額メニューは太陽光併設が前提。同一機器への都制度重複は不可（ゼロエミポイントとの併用不可）。事前申込が契約前に必要・先着順のため、Sekisui契約スケジュールとの整合に注意。
   ※ 本邸の図面はエネファーム搭載計画です。おひさまエコキュートを選ぶ場合は「ガス発電給湯→電気給湯」への設計変更となり、ガス配管・EneFarm置場の見直しが必要です。エネファームのガス代・おひさまエコキュート向け料金プラン（東電の昼間割安プラン等）は本試算に含みません。
 </div>
 
@@ -421,20 +421,20 @@ const FITS = [
 /* ---------- 構成プリセット（グリッドサーチで検証済み） ---------- */
 const PRESETS = [
   {id:"reco", name:"★おすすめ（回収重視）",
-   note:"南面最大3.8kW＋蓄電池なし＋おひさまエコキュート。回収 約12年・20年累積 +47万円・自給率51%。蓄電池は補助込みでも回収を2年遅らせるため外し、余剰は昼の湯沸かしに使う構成。",
+   note:"南面最大3.8kW＋蓄電池なし＋おひさまエコキュート。補助合計 約73万円・回収 約11年・20年累積 +58万円・自給率51%。蓄電池は補助込みでも回収を遅らせるため外し、余剰は昼の湯沸かしに使う構成。",
    apply(){ setZones([["A",2.3,"sharp","s30",true],["B",1.5,"sharp","s30",true],["N",0,"sharp","n",false],["C",1.0,"canad","low",false]]);
      S.batt=BATTS[0]; S.hw=HWSYS.find(h=>h.id==="ohisama"); S.sub.dr=0; }},
   {id:"plan", name:"図面標準",
-   note:"図面どおり 3.0kW＋エネファーム＋蓄電池なし。回収 約13年・20年累積 +2万円。エネファームが宅内負荷を先に賄うため太陽光の経済メリットは薄め。",
+   note:"図面どおり 3.0kW＋エネファーム＋蓄電池なし。補助 約36万円・回収 約13年・20年累積 +2万円。エネファームが宅内負荷を先に賄うため太陽光の経済メリットは薄め。",
    apply(){ setZones([["A",1.7,"sharp","s30",true],["B",1.3,"sharp","s30",true],["N",0,"sharp","n",false],["C",1.0,"canad","low",false]]);
      S.batt=BATTS[0]; S.hw=HWSYS.find(h=>h.id==="enefarm"); S.sub.dr=0; }},
   {id:"resil", name:"防災・自給重視",
-   note:"3.8kW＋オムロン6.5kWh＋エネファーム＋DR補助（現実値34万円）。回収 約14年だが自給率96%・停電時も電気とお湯を維持。",
+   note:"3.8kW＋オムロン6.5kWh＋エネファーム＋DR補助（現実値34万円）。補助合計 約144万円・回収 約14年だが自給率96%・停電時も電気とお湯を維持。",
    apply(){ setZones([["A",2.3,"sharp","s30",true],["B",1.5,"sharp","s30",true],["N",0,"sharp","n",false],["C",1.0,"canad","low",false]]);
      S.batt=BATTS.find(b=>b.id==="omron"); S.hw=HWSYS.find(h=>h.id==="enefarm");
      S.sub.dr=340000; }},
   {id:"full", name:"フル搭載",
-   note:"南3.8kW＋カーポート1.3kW＋シャープ9.5kWh＋おひさまEQ＋DR補助45万円。20年累積は最大級だが初期負担も最大。カーポート本体の建設費(50〜100万)は別途。",
+   note:"南3.8kW＋カーポート1.3kW＋シャープ9.5kWh＋おひさまEQ＋DR補助45万円。補助合計 約227万円・回収 約12年・20年累積 +83万円。カーポート本体の建設費(50〜100万)は別途。",
    apply(){ setZones([["A",2.3,"sharp","s30",true],["B",1.5,"sharp","s30",true],["N",0,"sharp","n",false],["C",1.3,"sharp","low",true]]);
      S.batt=BATTS.find(b=>b.id==="sharp9"); S.hw=HWSYS.find(h=>h.id==="ohisama");
      S.sub.dr=450000; }},
@@ -448,7 +448,7 @@ function setZones(list){
 function applyPreset(id){
   const p = PRESETS.find(p=>p.id===id);
   S.preset = id;
-  S.auto = { subPv:true, subBatt:true, subHw:true, pcs:true, repair:true };
+  S.auto = { subPv:true, subBatt:true, subHw:true, subHwT:true, pcs:true, repair:true };
   const dr = (()=>{ p.apply(); return S.sub.dr; })();
   computeAutos(); S.sub.dr = dr;   // DRだけプリセット値を保持
   refreshAll();
@@ -465,7 +465,7 @@ const S = {
   // 費用オーバーライド（円）: b_<brandId>=円/kW, install, batt_<id>, hw_<id>
   priceOv: { install: 150000 },
   // 補助金（円・編集可）
-  sub: { pv: 0, batt: 0, dr: 0, hw: 0 },
+  sub: { pv: 0, batt: 0, dr: 0, hw: 0, hwTokyo: 0 },
   // 維持・交換費（円・編集可）
   maint: {
     pcs: 220000, pcsYear: 15,          // パワーコンディショナ交換
@@ -474,7 +474,7 @@ const S = {
     repair: 3000,                       // パネル故障・修理予備費 /年
   },
   // 自動連携フラグ（false=手動固定）
-  auto: { subPv:true, subBatt:true, subHw:true, pcs:true, repair:true },
+  auto: { subPv:true, subBatt:true, subHw:true, subHwT:true, pcs:true, repair:true },
 };
 
 const $ = id => document.getElementById(id);
@@ -487,7 +487,7 @@ const priceKw  = bid => S.priceOv["b_"+bid] ?? brand(bid).yenPerKw;
 const priceIns = ()  => S.priceOv.install ?? 150000;
 const priceBat = ()  => S.priceOv["batt_"+S.batt.id] ?? S.batt.cost;
 const priceHw  = ()  => S.priceOv["hw_"+S.hw.id] ?? S.hw.cost;
-const subTotal = ()  => S.sub.pv + S.sub.batt + S.sub.dr + S.sub.hw;
+const subTotal = ()  => S.sub.pv + S.sub.batt + S.sub.dr + S.sub.hw + S.sub.hwTokyo;
 
 /* ---------- 発電モデル ---------- */
 function activeKw(){ return ZONES.filter(z=>z.on).reduce((s,z)=>s+z.kw,0); }
@@ -553,8 +553,13 @@ function calcSubPv(){
 function calcSubBatt(){
   return S.batt.cap>0 ? Math.round(Math.min(S.batt.cap*100000, 1200000, priceBat())) : 0;
 }
-function calcSubHw(){
-  return S.hw.id==="ohisama" ? 130000 : (S.hw.id==="ecocute" ? 60000 : 0);
+function calcSubHw(){ // 国 給湯省エネ2026
+  return S.hw.id==="ohisama" ? 100000 : (S.hw.id==="ecocute" ? 70000 : 0);
+}
+function calcSubHwTokyo(){ // 都 熱と電気の有効利用促進事業
+  if(S.hw.id==="ohisama" && activeKw()>0) return 140000; // 太陽光連携・日中沸き上げ型 14万/台
+  if(S.hw.id==="ecocute") return 12000;                   // 東京ゼロエミポイント相当
+  return 0;
 }
 function pcsAuto(){ // パワコン: 容量連動＋蓄電池ありならハイブリッド想定
   const kw = activeKw();
@@ -566,11 +571,12 @@ function computeAutos(){
   if(S.auto.subPv)   S.sub.pv   = calcSubPv();
   if(S.auto.subBatt) S.sub.batt = calcSubBatt();
   if(S.auto.subHw)   S.sub.hw   = calcSubHw();
+  if(S.auto.subHwT)  S.sub.hwTokyo = calcSubHwTokyo();
   if(S.auto.pcs)     S.maint.pcs = pcsAuto();
   if(S.auto.repair)  S.maint.repair = repairAuto();
 }
 function subsidyAuto(){ // 「すべて自動に戻す」
-  S.auto = { subPv:true, subBatt:true, subHw:true, pcs:true, repair:true };
+  S.auto = { subPv:true, subBatt:true, subHw:true, subHwT:true, pcs:true, repair:true };
   computeAutos();
 }
 function fitPrice(year){
@@ -1147,7 +1153,8 @@ function buildSubsidyEditor(){
     {key:"pv",   auto:"subPv",   label:"太陽光（東京都）",   hint:"搭載kWに連動: 新築 12万円/kW≤3.6kW・超過10万円/kW（オール電化13/11万円）"},
     {key:"batt", auto:"subBatt", label:"蓄電池（東京都）",   hint:"蓄電池容量に連動: 10万円/kWh・上限120万円"},
     {key:"dr",   auto:null,      label:"DR上乗せ・国DR併用", hint:"都DR実証+10万円、国DR補助 最大60万円（先着・別申請）— 手動入力"},
-    {key:"hw",   auto:"subHw",   label:"給湯省エネ（国）",   hint:"給湯システムに連動: おひさまエコキュート最大13万円"},
+    {key:"hw",   auto:"subHw",   label:"給湯省エネ（国）",   hint:"給湯システムに連動: エコキュート7〜10万円（給湯省エネ2026）"},
+    {key:"hwTokyo", auto:"subHwT", label:"給湯（東京都・熱と電気）", hint:"太陽光連携の日中沸き上げ型エコキュートに14万円/台。再エネ100%電力契約+5万・DR実証+8万は手動で加算。夜間型はゼロエミポイント1.2万円"},
   ];
   for(const r of rows){
     const div = document.createElement("div");

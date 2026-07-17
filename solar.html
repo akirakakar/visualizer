@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>南荻窪の家｜太陽光×蓄電池シミュレーター</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+  :root{
+    --bp-deep:#0d2137;        /* blueprint deep */
+    --bp-line:#2e5a7d;        /* blueprint hairline */
+    --bp-grid:rgba(120,180,220,.08);
+    --ink:#dceaf5;
+    --ink-dim:#8fb0c7;
+    --amber:#ffb935;          /* solar */
+    --amber-deep:#e08e00;
+    --cell:#173a6b;           /* PV cell */
+    --green:#3ed598;          /* savings */
+    --red:#ff7a6b;            /* buy */
+    --violet:#9b8cff;         /* battery */
+    --card:#102a44;
+    --card-edge:#1d4667;
+    --mono:'IBM Plex Mono',ui-monospace,monospace;
+    --jp:'Zen Kaku Gothic New','Hiragino Kaku Gothic ProN',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:var(--jp);
+    background:
+      linear-gradient(rgba(13,33,55,.97),rgba(13,33,55,.97)),
+      repeating-linear-gradient(0deg,transparent 0 39px,var(--bp-grid) 39px 40px),
+      repeating-linear-gradient(90deg,transparent 0 39px,var(--bp-grid) 39px 40px);
+    background-color:var(--bp-deep);
+    color:var(--ink);
+    line-height:1.6;
+  }
+  .wrap{max-width:1180px;margin:0 auto;padding:0 20px 80px}
+
+  /* ---------- header ---------- */
+  header{padding:34px 0 10px;border-bottom:1px solid var(--bp-line);margin-bottom:22px;
+    display:flex;flex-wrap:wrap;align-items:flex-end;gap:14px;justify-content:space-between}
+  .titleblock .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.22em;color:var(--amber);text-transform:uppercase}
+  .titleblock h1{font-size:clamp(22px,3.4vw,34px);font-weight:900;letter-spacing:.02em;margin-top:4px}
+  .titleblock h1 em{font-style:normal;color:var(--amber)}
+  .stamp{font-family:var(--mono);font-size:10.5px;color:var(--ink-dim);border:1px solid var(--bp-line);
+    padding:8px 12px;line-height:1.7;background:rgba(16,42,68,.6)}
+  .stamp b{color:var(--ink)}
+
+  /* ---------- panels/cards ---------- */
+  .grid{display:grid;gap:18px}
+  .grid.two{grid-template-columns:minmax(0,1.55fr) minmax(0,1fr)}
+  @media(max-width:960px){.grid.two{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--card-edge);position:relative}
+  .card::before{content:attr(data-num);position:absolute;top:-1px;left:-1px;font-family:var(--mono);
+    font-size:10px;letter-spacing:.15em;color:var(--bp-deep);background:var(--amber);padding:3px 9px;font-weight:600}
+  .card h2{font-size:13px;font-weight:700;letter-spacing:.14em;color:var(--ink);
+    padding:10px 16px 8px 64px;border-bottom:1px dashed var(--bp-line)}
+  .card .body{padding:16px}
+
+  /* ---------- hero scene ---------- */
+  #scene{width:100%;display:block;background:linear-gradient(180deg,#0a1626 0%,#0d2137 100%)}
+  .scene-card{overflow:hidden}
+  .scene-toolbar{display:flex;align-items:center;gap:14px;padding:12px 16px;border-top:1px dashed var(--bp-line);flex-wrap:wrap}
+  .monthlabel{font-family:var(--mono);font-size:26px;font-weight:600;color:var(--amber);min-width:82px;text-align:center}
+  .monthlabel small{display:block;font-size:10px;color:var(--ink-dim);letter-spacing:.2em;font-weight:400}
+  input[type=range]{-webkit-appearance:none;appearance:none;height:4px;background:var(--bp-line);flex:1;min-width:120px;outline:none}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;
+    background:var(--amber);border:3px solid var(--bp-deep);box-shadow:0 0 0 1px var(--amber);cursor:pointer}
+  input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:var(--amber);border:3px solid var(--bp-deep);cursor:pointer}
+  .btn{font-family:var(--jp);font-weight:700;font-size:13px;letter-spacing:.08em;color:var(--bp-deep);
+    background:var(--amber);border:none;padding:9px 18px;cursor:pointer;transition:filter .15s}
+  .btn:hover{filter:brightness(1.1)}
+  .btn.ghost{background:transparent;color:var(--amber);border:1px solid var(--amber)}
+  .livebar{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px dashed var(--bp-line)}
+  .livebar div{padding:10px 8px;text-align:center;border-right:1px dashed var(--bp-line)}
+  .livebar div:last-child{border-right:none}
+  .livebar .k{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--ink-dim)}
+  .livebar .v{font-family:var(--mono);font-size:20px;font-weight:600}
+  .v.amber{color:var(--amber)} .v.green{color:var(--green)} .v.red{color:var(--red)} .v.violet{color:var(--violet)}
+  .livebar .u{font-size:11px;color:var(--ink-dim);font-weight:400}
+
+  /* ---------- controls ---------- */
+  .field{margin-bottom:16px}
+  .field label{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;font-weight:700;
+    letter-spacing:.06em;color:var(--ink);margin-bottom:6px}
+  .field label .val{font-family:var(--mono);color:var(--amber);font-size:13px}
+  select,input[type=number]{width:100%;background:#0b1e33;color:var(--ink);border:1px solid var(--card-edge);
+    padding:9px 10px;font-family:var(--jp);font-size:13.5px;outline:none}
+  select:focus,input[type=number]:focus{border-color:var(--amber)}
+  .hint{font-size:11px;color:var(--ink-dim);margin-top:4px;line-height:1.5}
+  .zone-chips{display:flex;gap:8px;flex-wrap:wrap}
+  .chip{flex:1;min-width:100px;border:1px solid var(--card-edge);background:#0b1e33;padding:10px;cursor:pointer;
+    text-align:center;transition:all .15s;user-select:none}
+  .chip .zn{font-family:var(--mono);font-size:10px;letter-spacing:.15em;color:var(--ink-dim)}
+  .chip .zk{font-family:var(--mono);font-size:17px;font-weight:600;color:var(--ink-dim)}
+  .chip.on{border-color:var(--amber);background:rgba(255,185,53,.1)}
+  .chip.on .zk{color:var(--amber)}
+  .chip .zd{font-size:10px;color:var(--ink-dim)}
+  .duo{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .zrow{display:grid;grid-template-columns:64px 70px 1fr 1.3fr;gap:8px;align-items:end;
+    padding:8px;border:1px solid var(--card-edge);background:#0b1e33;margin-bottom:8px;opacity:.55}
+  .zrow.on{opacity:1;border-color:rgba(255,185,53,.45)}
+  .ztoggle{font-family:var(--mono);font-size:15px;font-weight:600;color:var(--ink-dim);
+    background:transparent;border:1px solid var(--card-edge);cursor:pointer;padding:6px 4px;line-height:1.2}
+  .ztoggle span{display:block;font-size:9px;letter-spacing:.12em}
+  .ztoggle.on{color:var(--amber);border-color:var(--amber);background:rgba(255,185,53,.08)}
+  .zcell label{display:block;font-size:9.5px;color:var(--ink-dim);font-weight:400;margin-bottom:3px;letter-spacing:.05em}
+  .zcell select,.zcell input{padding:6px 6px;font-size:12.5px}
+  .ctable .crow{display:grid;grid-template-columns:1fr 84px 62px;gap:8px;align-items:center;margin-bottom:6px}
+  .ctable .cl{font-size:12px;color:var(--ink)}
+  .ctable .cu{font-size:11px;color:var(--ink-dim)}
+  .ctable input{padding:6px 8px;font-family:var(--mono);font-size:13px;text-align:right}
+  .cdivider{font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:var(--amber);
+    border-top:1px dashed var(--bp-line);margin:12px 0 8px;padding-top:8px}
+  .presetbar{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px}
+  .preset{font-family:var(--jp);font-size:12px;font-weight:700;letter-spacing:.03em;padding:9px 6px;
+    background:#0b1e33;color:var(--ink-dim);border:1px solid var(--card-edge);cursor:pointer;transition:all .15s}
+  .preset:hover{border-color:var(--amber)}
+  .preset.on{background:rgba(255,185,53,.12);color:var(--amber);border-color:var(--amber)}
+  .abadge{font-family:var(--mono);font-size:9px;letter-spacing:.08em;padding:2px 6px;cursor:pointer;
+    border:1px solid;background:transparent;vertical-align:1px;margin-left:4px}
+  .abadge.a{color:var(--green);border-color:var(--green)}
+  .abadge.m{color:var(--amber);border-color:var(--amber)}
+  .clsub{display:block;font-size:9.5px;color:var(--ink-dim);font-weight:400}
+  .crow.brepl .cl label input{margin:0}
+  .roofctl{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12px;color:var(--ink);margin-bottom:10px}
+  .roofctl input{font-family:var(--mono);text-align:right;padding:5px 6px}
+  .rrow{display:grid;grid-template-columns:30px 78px 96px 110px 1fr 96px;gap:8px;align-items:end;
+    padding:7px 8px;border:1px solid var(--card-edge);background:#0b1e33;margin-top:8px;opacity:.6}
+  .rrow.on{opacity:1;border-color:rgba(255,185,53,.4)}
+  .rrow .rid{font-family:var(--mono);font-size:16px;font-weight:600;color:var(--amber);align-self:center}
+  .rrow .rcell label{display:block;font-size:9px;color:var(--ink-dim);margin-bottom:2px}
+  .rrow input,.rrow select{width:100%;padding:5px 6px;font-size:12px}
+  .rrow .rres{font-size:11.5px;color:var(--ink-dim);align-self:center;line-height:1.45}
+  .rrow .rres b{color:var(--amber);font-family:var(--mono);font-size:13px}
+  .rrow .rres small{display:block;font-size:10px}
+  .btn.mini{padding:7px 8px;font-size:11px;align-self:center}
+  .rooftotal{margin-top:12px;padding-top:10px;border-top:1px dashed var(--bp-line);font-size:12.5px;color:var(--ink-dim)}
+  .rooftotal b{font-family:var(--mono);color:var(--ink)} .rooftotal b.am{color:var(--amber)}
+
+  /* ---------- results ---------- */
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:18px}
+  .kpi{background:var(--card);border:1px solid var(--card-edge);padding:14px 16px}
+  .kpi .k{font-size:11px;letter-spacing:.1em;color:var(--ink-dim);font-weight:700}
+  .kpi .v{font-family:var(--mono);font-size:24px;font-weight:600;margin-top:2px}
+  .kpi .s{font-size:11px;color:var(--ink-dim)}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:11.5px;color:var(--ink-dim);padding:8px 16px 0}
+  .legend i{display:inline-block;width:10px;height:10px;margin-right:5px;vertical-align:-1px}
+  svg text{font-family:var(--mono)}
+  .footnote{font-size:11px;color:var(--ink-dim);line-height:1.7;border-top:1px dashed var(--bp-line);
+    margin-top:24px;padding-top:14px}
+  .summary{border-top:1px dashed var(--bp-line);padding:12px 16px;font-size:13px;line-height:1.9;background:rgba(11,30,51,.5)}
+  .summary .sumline{display:block}
+  .summary .sumline2{display:block;color:var(--ink-dim);font-size:12px;margin-top:2px}
+  .summary b.am{color:var(--amber)} .summary b.gr{color:var(--green)}
+  .summary b.vi{color:var(--violet)} .summary b.rd{color:var(--red)}
+  .sun-glow{filter:drop-shadow(0 0 18px rgba(255,185,53,.9))}
+  .flowdot{fill:var(--amber)}
+  @media(prefers-reduced-motion:reduce){.anim{animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="titleblock">
+    <div class="eyebrow">PV × Battery Simulator — Minami-Ogikubo</div>
+    <h1>南荻窪の家 <em>太陽光・蓄電池</em> シミュレーター</h1>
+  </div>
+  <div class="stamp">
+    図面参照: <b>TWSX26060017</b>（配置図・小屋裏レベル平面図）<br>
+    屋根搭載計画: <b>南面 1.7kW + 1.3kW（提案標準 3.0kW）</b>／切妻・非歩行屋根<br>
+    地点: 東京都杉並区（NEDO 東京 南面30°傾斜 日射量ベース）
+  </div>
+</header>
+
+<!-- ============ SCENE ============ -->
+<div class="card scene-card" data-num="01 SCENE" style="margin-bottom:18px">
+  <h2>月別発電ビュー — 太陽高度・パネル発光・エネルギーフロー</h2>
+  <svg id="scene" viewBox="0 0 980 430" role="img" aria-label="住宅の太陽光発電アニメーション"></svg>
+  <div class="scene-toolbar">
+    <button class="btn" id="playBtn">▶ 1年再生</button>
+    <div class="monthlabel"><span id="mLabel">6月</span><small id="mSub">JUN</small></div>
+    <input type="range" id="monthSlider" min="0" max="11" value="5" step="1" aria-label="月">
+    <button class="btn ghost" id="nightBtn">🌙 夜間モード</button>
+  </div>
+  <div class="livebar">
+    <div><div class="k">月間発電量</div><div class="v amber" id="lvGen">–</div><div class="u">kWh</div></div>
+    <div><div class="k">自家消費+蓄電</div><div class="v green" id="lvSelf">–</div><div class="u">kWh</div></div>
+    <div><div class="k">売電</div><div class="v violet" id="lvSell">–</div><div class="u">kWh</div></div>
+    <div><div class="k">買電</div><div class="v red" id="lvBuy">–</div><div class="u">kWh</div></div>
+  </div>
+  <div id="summaryBox" class="summary"></div>
+</div>
+
+<div class="grid two">
+  <!-- ============ RESULTS ============ -->
+  <div>
+    <div class="card" data-num="03 ROOF" style="margin-bottom:18px">
+      <h2>屋根搭載キャパシティ — 図面寸法からの最大搭載量</h2>
+      <div class="body">
+        <div class="roofctl">
+          <span>離隔マージン（軒・けらば・棟）</span>
+          <input type="number" id="marginIn" value="0.25" step="0.05" min="0" style="width:80px"> m
+          <span class="hint" style="margin:0">面の寸法は小屋裏レベル平面図の 5000×3500 グリッドからの推定値。実測・構造検討で要確認。</span>
+        </div>
+        <svg id="roofSvg" viewBox="0 0 640 236" width="100%"></svg>
+        <div id="roofRows"></div>
+        <div id="roofTotal" class="rooftotal"></div>
+      </div>
+    </div>
+
+    <div class="kpis" id="kpis"></div>
+
+    <div class="card" data-num="04 MONTHLY" style="margin-bottom:18px">
+      <h2>月別エネルギー収支</h2>
+      <div class="legend">
+        <span><i style="background:var(--green)"></i>自家消費（昼）</span>
+        <span><i style="background:var(--violet)"></i>蓄電池→夜間利用</span>
+        <span><i style="background:var(--amber)"></i>売電</span>
+        <span><i style="background:var(--red)"></i>買電（不足分）</span>
+      </div>
+      <div class="body"><svg id="chartMonthly" viewBox="0 0 640 300" width="100%"></svg></div>
+    </div>
+
+    <div class="card" data-num="05 TIMELINE" style="margin-bottom:18px">
+      <h2>年間推移（20年）— 発電量とメリットの時系列</h2>
+      <div class="legend">
+        <span><i style="background:#ffd88a"></i>年間発電量（線・左軸 kWh）</span>
+        <span><i style="background:var(--green)"></i>電気代節約（棒）</span>
+        <span><i style="background:var(--amber)"></i>売電収入（棒・右軸 円）</span>
+        <span><i style="background:var(--red)"></i>維持・交換費（細棒／▼=パワコン・蓄電池交換年）</span>
+      </div>
+      <div class="body"><svg id="chartTimeline" viewBox="0 0 640 280" width="100%"></svg></div>
+    </div>
+
+    <div class="card" data-num="06 CASHFLOW" style="margin-bottom:18px">
+      <h2>20年 累積キャッシュフロー（投資回収）</h2>
+      <div class="body"><svg id="chartPayback" viewBox="0 0 640 280" width="100%"></svg></div>
+    </div>
+  </div>
+
+  <!-- ============ CONTROLS ============ -->
+  <div>
+    <div class="card" data-num="02 CONFIG" style="position:sticky;top:14px">
+      <h2>システム構成</h2>
+      <div class="body">
+
+        <div class="field">
+          <label>構成プリセット（回収シミュレーション検証済み）</label>
+          <div id="presetBar" class="presetbar"></div>
+          <div class="hint" id="presetHint"></div>
+        </div>
+
+        <div class="field">
+          <label>屋根面ごとの設定<span class="val" id="kwTotal">3.0 kW</span></label>
+          <div id="zoneEditor"></div>
+          <div class="hint">A・B面は図面の太陽電池設置面。面ごとにパネルの見た目・反射・発電係数が変わります。搭載可能量は下の「屋根搭載キャパシティ」で寸法から計算できます。</div>
+        </div>
+
+        <div class="field">
+          <label>蓄電池</label>
+          <select id="battSel"></select>
+          <div class="hint" id="battHint"></div>
+        </div>
+
+        <div class="field">
+          <label>給湯・発電システム</label>
+          <select id="hwSel"></select>
+          <div class="hint" id="hwHint"></div>
+        </div>
+
+        <div class="field">
+          <label>1日の消費電力量<span class="val" id="dailyVal">12.0 kWh/日</span></label>
+          <input type="range" id="dailyUse" min="6" max="30" step="0.5" value="12">
+          <div class="hint">給湯を除いた生活分。4人家族の平均は 10〜14kWh/日。給湯の電力は上の「給湯・発電システム」で自動加算されます。</div>
+        </div>
+
+        <div class="field">
+          <label>昼間（発電時間帯）の消費割合<span class="val" id="dayVal">35%</span></label>
+          <input type="range" id="dayRatio" min="15" max="70" step="5" value="35">
+          <div class="hint">共働き・日中不在なら 25〜35%、在宅ワーク中心なら 45〜60%。</div>
+        </div>
+
+        <div class="duo">
+          <div class="field">
+            <label>買電単価</label>
+            <input type="number" id="buyPrice" value="31" step="1"> 
+            <div class="hint">円/kWh（東電 従量電灯B 平均目安）</div>
+          </div>
+          <div class="field">
+            <label>FIT制度</label>
+            <select id="fitSel"></select>
+          </div>
+        </div>
+        <div class="hint" id="fitHint" style="margin:-8px 0 14px"></div>
+
+        <div class="field">
+          <label>費用設定（すべて編集可）<span class="val" id="costTotal"></span></label>
+          <div id="costFields" class="ctable"></div>
+          <div class="hint">パネル単価は屋根面で選んだブランドごとに表示（性能係数と屋根キャパシティにも同じブランド情報が連動）。パワコン交換費と修理予備費は「自動」なら搭載kW・蓄電池有無に連動します。見積りが出たら実額に書き換えてください（手動固定になります）。</div>
+        </div>
+
+        <div class="field">
+          <label>補助金（令和8年度 東京都・国）<span class="val" id="subTotal"></span></label>
+          <div id="subFields" class="ctable"></div>
+          <div class="hint"><span style="color:var(--green)">自動</span>の行は搭載kW・蓄電池・給湯の選択に常時連動して再計算されます。金額を直接編集すると<span style="color:var(--amber)">手動</span>に固定（バッジで切替）。<a href="#" id="subAuto" style="color:var(--amber)">▶ すべて自動に戻す</a>　DR行は都DR実証(+10万)・国DR(最大60万・先着)を使う場合に手動入力。東京ゼロエミ住宅の本体補助(20〜240万)は住宅性能側のため含めていません。</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footnote">
+  ※ 発電量は NEDO 日射量データベース（東京）を元にした簡易推計です。実際の発電量は屋根方位・周辺影・気象により変動します。※ 屋根キャパシティは小屋裏レベル平面図のグリッド寸法（5000/3500）からの推定で、垂木ピッチ・雪止め・換気ガラリ等の制約は未考慮です。正式な搭載可能量はSekisui構造検討でご確認ください。
+  ※ プリセットの回収年は本シミュレーターの前提（買電31円・FIT2026年度・劣化0.5%/年・20年維持費込み）での試算値。国DR補助は約3.7万円/kWh（上限60万円・先着）＋都DR実証10万円の現実的な取得額で計上しています。都補助は2026年10月以降、海外メーカー製パネルが対象外となる方向のため、着工2027年1月の本件では国産（シャープ等）選定が補助上安全です。※ パワーコンディショナは寿命10〜15年が目安（メーカー保証15年が主流）。パネル本体は出力保証25年前後・機器保証15年前後が一般的で、保証期間内の故障は原則無償のため、予備費は配線・架台等の軽微修理を想定した値です。※ 補助金は令和8年度基準（都 太陽光: 新築12万円/kW・3.6kW超10万円/kW、オール電化13/11万円／都 蓄電池: 10万円/kWh 上限120万円／国DR: 上限60万円・先着／給湯省エネ: おひさまエコキュート最大13万円）。事前申込が契約前に必要・先着順のため、Sekisui契約スケジュールとの整合に注意。
+  ※ 本邸の図面はエネファーム搭載計画です。おひさまエコキュートを選ぶ場合は「ガス発電給湯→電気給湯」への設計変更となり、ガス配管・EneFarm置場の見直しが必要です。エネファームのガス代・おひさまエコキュート向け料金プラン（東電の昼間割安プラン等）は本試算に含みません。
+</div>
+
+</div>
+<script>
+/* ============================================================
+   南荻窪の家 太陽光×蓄電池×給湯シミュレーター v3
+   - 屋根面ごとにブランド・方位を設定（見た目/発電係数/光の反射が変化）
+   - 全機器の想定金額を編集可能
+   - 東京都・国の補助金を項目別に自動計算（各項目編集可）
+   ============================================================ */
+"use strict";
+
+/* ---------- 気象・カレンダー ---------- */
+const INSOL = [3.05, 3.45, 3.80, 4.10, 4.20, 3.60, 3.90, 4.15, 3.40, 3.15, 2.95, 2.85];
+const DAYS  = [31,28,31,30,31,30,31,31,30,31,30,31];
+const MNAME = ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"];
+const MSUB  = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
+const TEMPF = [1.04,1.04,1.02,1.00,0.98,0.96,0.94,0.93,0.96,1.00,1.02,1.04];
+const HWF   = [1.30,1.25,1.10,0.95,0.85,0.75,0.70,0.70,0.80,0.95,1.10,1.25];
+
+/* ---------- 方位・勾配 ---------- */
+const ORIENTS = [
+  {id:"s30", name:"南 30°",        f:1.00},
+  {id:"se",  name:"南東/南西 30°", f:0.96},
+  {id:"low", name:"南 緩勾配 10°", f:0.93},
+  {id:"ew",  name:"東/西 30°",     f:0.85},
+  {id:"n",   name:"北 30°",        f:0.62},
+];
+const orient = id => ORIENTS.find(o=>o.id===id);
+
+/* ---------- ブランド（単価は費用設定で編集可） ---------- */
+const BRANDS = [
+  {id:"sharp",  short:"SHARP",  name:"シャープ BLACKSOLAR ZERO（積水標準）", yenPerKw:260000, perf:1.00,
+   look:{c1:"#10151f",c2:"#050a12",grid:"rgba(255,255,255,.10)",frame:"#0a0f18",gloss:.28},
+   mod:{w:1.318,h:1.004,kw:0.256,note:"小型モジュール・狭小屋根で敷き詰めやすい"}},
+  {id:"pana",   short:"Pana",   name:"パナソニック（長州産業OEM）", yenPerKw:285000, perf:1.02,
+   look:{c1:"#152747",c2:"#0c1830",grid:"rgba(255,255,255,.22)",frame:"#28425f",gloss:.32},
+   mod:{w:1.717,h:1.045,kw:0.425,note:"大判425W"}},
+  {id:"canad",  short:"CS",     name:"カナディアン・ソーラー", yenPerKw:225000, perf:0.98,
+   look:{c1:"#2456a8",c2:"#153a78",grid:"rgba(255,255,255,.35)",frame:"#8fa8bd",gloss:.45},
+   mod:{w:1.722,h:1.134,kw:0.420,note:"大判420W"}},
+  {id:"qcells", short:"Qcells", name:"Qセルズ Q.TRON", yenPerKw:250000, perf:1.01,
+   look:{c1:"#131c33",c2:"#0a1122",grid:"rgba(255,255,255,.15)",frame:"#1e2c44",gloss:.30},
+   mod:{w:1.722,h:1.134,kw:0.430,note:"大判430W"}},
+  {id:"maxeon", short:"MAX",    name:"マキシオン（旧SunPower）", yenPerKw:330000, perf:1.06,
+   look:{c1:"#0b0e14",c2:"#04060a",grid:null,frame:"#0a0d13",gloss:.20},
+   mod:{w:1.835,h:1.017,kw:0.440,note:"大判440W・高効率"}},
+];
+const brand = id => BRANDS.find(b=>b.id===id);
+
+/* ---------- 屋根面（面ごとにブランド・方位・容量） ---------- */
+const ZONES = [
+  {id:"A", name:"南面 A", kw:1.7, on:true,  brand:"sharp", orient:"s30", desc:"図面 太陽光1.7kW面",
+   geom:{w:5.0, d:3.5, pitch:26.6}},
+  {id:"B", name:"南面 B", kw:1.3, on:true,  brand:"sharp", orient:"s30", desc:"図面 太陽光1.3kW面",
+   geom:{w:3.5, d:3.5, pitch:26.6}},
+  {id:"N", name:"北面",   kw:0,   on:false, brand:"sharp", orient:"n",   desc:"非歩行屋根（北流れ）",
+   geom:{w:8.5, d:3.5, pitch:26.6}},
+  {id:"C", name:"増設 C", kw:1.0, on:false, brand:"canad", orient:"low", desc:"カーポート等 増設案",
+   geom:{w:5.0, d:2.5, pitch:10}},
+];
+const PITCHES = [
+  {v:0,   name:"陸屋根 0°"},
+  {v:10,  name:"緩勾配 10°"},
+  {v:16.7,name:"3寸 16.7°"},
+  {v:21.8,name:"4寸 21.8°"},
+  {v:26.6,name:"5寸 26.6°"},
+  {v:31.0,name:"6寸 31.0°"},
+];
+
+/* ---------- 蓄電池 ---------- */
+const BATTS = [
+  {id:"none",  name:"蓄電池なし", cap:0,   usable:0,    eff:1.00, cost:0,
+   hint:"余剰は全量売電。FIT高単価の初期4年間だけならこの選択も合理的。"},
+  {id:"nichi", name:"ニチコン 4.9kWh", cap:4.9, usable:4.4, eff:0.90, cost:1150000,
+   hint:"コンパクト。実効容量 約4.4kWh。"},
+  {id:"omron", name:"オムロン 6.5kWh", cap:6.5, usable:5.9, eff:0.90, cost:1400000,
+   hint:"ハイブリッド型。実効容量 約5.9kWh。"},
+  {id:"sharp9",name:"シャープ 9.5kWh", cap:9.5, usable:8.6, eff:0.90, cost:1850000,
+   hint:"積水標準連携。実効容量 約8.6kWh。"},
+];
+
+/* ---------- 給湯・発電システム ---------- */
+const HWSYS = [
+  {id:"enefarm", name:"エネファーム（図面標準・ガス発電）", eneD:2.4, eneN:2.4, hwD:0, hwN:0, cost:0,
+   hint:"ガスで発電しながらお湯を作る燃料電池。昼夜あわせて約4〜5kWh/日の電気を自給。図面計画に含まれるため追加費用0で計算（ガス代は別途）。"},
+  {id:"ohisama", name:"おひさまエコキュート（昼間沸き上げ）", eneD:0, eneN:0, hwD:4.0, hwN:0, cost:600000,
+   hint:"太陽光の余剰で昼にお湯を沸かす給湯機。自家消費率が大幅UP。給湯省エネ補助対象。※エネファームからの変更はガス→電気給湯の設計変更になります。"},
+  {id:"ecocute", name:"エコキュート（夜間沸き上げ）", eneD:0, eneN:0, hwD:0, hwN:4.5, cost:550000,
+   hint:"深夜電力でお湯を沸かす従来型。夜の買電が増えるため蓄電池との相性で判断。"},
+  {id:"gas", name:"ガス給湯（エコジョーズ）のみ", eneD:0, eneN:0, hwD:0, hwN:0, cost:0,
+   hint:"給湯は全てガス。電気の収支には影響しないベースライン。"},
+];
+
+const FITS = [
+  {id:"fy2026", name:"2026年度 FIT（24円×4年 → 8.3円×6年）", steps:[{y:4,p:24},{y:6,p:8.3}],
+   hint:"2025年10月以降の新スキーム。11年目以降は卒FIT 8.5円で計算。"},
+  {id:"flat15", name:"参考: 旧制度型（15円×10年）", steps:[{y:10,p:15}],
+   hint:"参考比較用。11年目以降は卒FIT 8.5円。"},
+];
+/* ---------- 構成プリセット（グリッドサーチで検証済み） ---------- */
+const PRESETS = [
+  {id:"reco", name:"★おすすめ（回収重視）",
+   note:"南面最大3.8kW＋蓄電池なし＋おひさまエコキュート。回収 約12年・20年累積 +47万円・自給率51%。蓄電池は補助込みでも回収を2年遅らせるため外し、余剰は昼の湯沸かしに使う構成。",
+   apply(){ setZones([["A",2.3,"sharp","s30",true],["B",1.5,"sharp","s30",true],["N",0,"sharp","n",false],["C",1.0,"canad","low",false]]);
+     S.batt=BATTS[0]; S.hw=HWSYS.find(h=>h.id==="ohisama"); S.sub.dr=0; }},
+  {id:"plan", name:"図面標準",
+   note:"図面どおり 3.0kW＋エネファーム＋蓄電池なし。回収 約13年・20年累積 +2万円。エネファームが宅内負荷を先に賄うため太陽光の経済メリットは薄め。",
+   apply(){ setZones([["A",1.7,"sharp","s30",true],["B",1.3,"sharp","s30",true],["N",0,"sharp","n",false],["C",1.0,"canad","low",false]]);
+     S.batt=BATTS[0]; S.hw=HWSYS.find(h=>h.id==="enefarm"); S.sub.dr=0; }},
+  {id:"resil", name:"防災・自給重視",
+   note:"3.8kW＋オムロン6.5kWh＋エネファーム＋DR補助（現実値34万円）。回収 約14年だが自給率96%・停電時も電気とお湯を維持。",
+   apply(){ setZones([["A",2.3,"sharp","s30",true],["B",1.5,"sharp","s30",true],["N",0,"sharp","n",false],["C",1.0,"canad","low",false]]);
+     S.batt=BATTS.find(b=>b.id==="omron"); S.hw=HWSYS.find(h=>h.id==="enefarm");
+     S.sub.dr=340000; }},
+  {id:"full", name:"フル搭載",
+   note:"南3.8kW＋カーポート1.3kW＋シャープ9.5kWh＋おひさまEQ＋DR補助45万円。20年累積は最大級だが初期負担も最大。カーポート本体の建設費(50〜100万)は別途。",
+   apply(){ setZones([["A",2.3,"sharp","s30",true],["B",1.5,"sharp","s30",true],["N",0,"sharp","n",false],["C",1.3,"sharp","low",true]]);
+     S.batt=BATTS.find(b=>b.id==="sharp9"); S.hw=HWSYS.find(h=>h.id==="ohisama");
+     S.sub.dr=450000; }},
+];
+function setZones(list){
+  for(const [id,kw,br,or,on] of list){
+    const z = ZONES.find(z=>z.id===id);
+    z.kw=kw; z.brand=br; z.orient=or; z.on=on;
+  }
+}
+function applyPreset(id){
+  const p = PRESETS.find(p=>p.id===id);
+  S.preset = id;
+  S.auto = { subPv:true, subBatt:true, subHw:true, pcs:true, repair:true };
+  const dr = (()=>{ p.apply(); return S.sub.dr; })();
+  computeAutos(); S.sub.dr = dr;   // DRだけプリセット値を保持
+  refreshAll();
+}
+const POST_FIT = 8.5;
+const SYS_LOSS = 0.85;
+const DEGRADE  = 0.005;
+
+/* ---------- 状態 ---------- */
+const S = {
+  month: 5, night: false,
+  batt: BATTS[2], hw: HWSYS[0], fit: FITS[0],
+  daily: 12, dayRatio: 0.35, buy: 31, margin: 0.25,
+  // 費用オーバーライド（円）: b_<brandId>=円/kW, install, batt_<id>, hw_<id>
+  priceOv: { install: 150000 },
+  // 補助金（円・編集可）
+  sub: { pv: 0, batt: 0, dr: 0, hw: 0 },
+  // 維持・交換費（円・編集可）
+  maint: {
+    pcs: 220000, pcsYear: 15,          // パワーコンディショナ交換
+    battOn: false, battCost: null, battYear: 16, // 蓄電池交換（任意）
+    annual: 6000,                       // 定期点検・保守 /年
+    repair: 3000,                       // パネル故障・修理予備費 /年
+  },
+  // 自動連携フラグ（false=手動固定）
+  auto: { subPv:true, subBatt:true, subHw:true, pcs:true, repair:true },
+};
+
+const $ = id => document.getElementById(id);
+const fmt = (n,d=0) => n.toLocaleString("ja-JP",{maximumFractionDigits:d,minimumFractionDigits:d});
+const yen = n => "¥" + fmt(Math.round(n));
+const man = n => fmt(n/10000, Math.abs(n)<100000?1:0) + "万円";
+
+/* ---------- 価格ヘルパ ---------- */
+const priceKw  = bid => S.priceOv["b_"+bid] ?? brand(bid).yenPerKw;
+const priceIns = ()  => S.priceOv.install ?? 150000;
+const priceBat = ()  => S.priceOv["batt_"+S.batt.id] ?? S.batt.cost;
+const priceHw  = ()  => S.priceOv["hw_"+S.hw.id] ?? S.hw.cost;
+const subTotal = ()  => S.sub.pv + S.sub.batt + S.sub.dr + S.sub.hw;
+
+/* ---------- 発電モデル ---------- */
+function activeKw(){ return ZONES.filter(z=>z.on).reduce((s,z)=>s+z.kw,0); }
+function effKw(){
+  return ZONES.filter(z=>z.on)
+    .reduce((s,z)=>s + z.kw * orient(z.orient).f * brand(z.brand).perf, 0);
+}
+function dayModel(m){
+  const f = HWF[m];
+  const gen = effKw() * INSOL[m] * TEMPF[m] * SYS_LOSS;
+  const loadD = Math.max(0, S.daily*S.dayRatio     + S.hw.hwD*f - S.hw.eneD*f);
+  const loadN = Math.max(0, S.daily*(1-S.dayRatio) + S.hw.hwN*f - S.hw.eneN*f);
+  const selfD = Math.min(gen, loadD);
+  let surplus = gen - selfD;
+  const chg = Math.min(surplus, S.batt.usable);
+  surplus -= chg;
+  const dis = Math.min(chg * S.batt.eff, loadN);
+  const sold = surplus;
+  const buy  = (loadD - selfD) + (loadN - dis);
+  const hwSelf = Math.min(S.hw.hwD*f, Math.max(0, selfD));
+  return {gen, selfD, dis, sold, buy, loadD, loadN, hwSelf};
+}
+function monthModel(m){
+  const d = dayModel(m), n = DAYS[m];
+  return {gen:d.gen*n, selfD:d.selfD*n, dis:d.dis*n, sold:d.sold*n, buy:d.buy*n};
+}
+function yearModel(){
+  const ms = MNAME.map((_,m)=>monthModel(m));
+  const sum = k => ms.reduce((s,x)=>s+x[k],0);
+  const loadY = MNAME.reduce((s,_,m)=>{const d=dayModel(m);return s+(d.loadD+d.loadN)*DAYS[m];},0);
+  return {ms, gen:sum("gen"), selfD:sum("selfD"), dis:sum("dis"), sold:sum("sold"), buy:sum("buy"), loadY};
+}
+
+/* ---------- 屋根キャパシティ（面ごとの最大搭載量） ---------- */
+function capacity(z){
+  const md = brand(z.brand).mod, m = S.margin;
+  const uW = Math.max(0, z.geom.w - 2*m);
+  const slopeLen = z.geom.d / Math.cos(z.geom.pitch*Math.PI/180);
+  const uL = Math.max(0, slopeLen - 2*m);
+  const o1 = {cols:Math.floor(uW/md.w), rows:Math.floor(uL/md.h), or:"横置き", pw:md.w, ph:md.h};
+  const o2 = {cols:Math.floor(uW/md.h), rows:Math.floor(uL/md.w), or:"縦置き", pw:md.h, ph:md.w};
+  const n1 = o1.cols*o1.rows, n2 = o2.cols*o2.rows;
+  const best = n1>=n2 ? {...o1,n:n1} : {...o2,n:n2};
+  return {...best, uW, uL, slopeLen, kw: Math.round(best.n*md.kw*100)/100, md};
+}
+
+/* ---------- 経済モデル ---------- */
+function systemCost(){
+  const pvPanels = ZONES.filter(z=>z.on).reduce((s,z)=>s + z.kw*priceKw(z.brand), 0);
+  const pv = pvPanels>0 ? pvPanels + priceIns() : 0;
+  const batt = S.batt.cap>0 ? priceBat() : 0;
+  const hw = priceHw();
+  return {pv, batt, hw, sub: subTotal(), total: pv + batt + hw - subTotal()};
+}
+/* ---------- 自動連携計算（令和8年度 都・国基準／設備連動） ---------- */
+function calcSubPv(){
+  const kw = activeKw();
+  const allElectric = (S.hw.id==="ohisama" || S.hw.id==="ecocute");
+  const r1 = allElectric ? 130000 : 120000;   // 新築 ≤3.6kW
+  const r2 = allElectric ? 110000 : 100000;   // 新築 3.6kW超
+  return kw>0 ? Math.round(Math.min(kw,3.6)*r1 + Math.max(0,kw-3.6)*r2) : 0;
+}
+function calcSubBatt(){
+  return S.batt.cap>0 ? Math.round(Math.min(S.batt.cap*100000, 1200000, priceBat())) : 0;
+}
+function calcSubHw(){
+  return S.hw.id==="ohisama" ? 130000 : (S.hw.id==="ecocute" ? 60000 : 0);
+}
+function pcsAuto(){ // パワコン: 容量連動＋蓄電池ありならハイブリッド想定
+  const kw = activeKw();
+  if(kw<=0) return 0;
+  return Math.round(((S.batt.cap>0 ? 250000 : 150000) + kw*20000)/10000)*10000;
+}
+function repairAuto(){ return Math.round(activeKw()*1000); } // 1,000円/kW/年
+function computeAutos(){
+  if(S.auto.subPv)   S.sub.pv   = calcSubPv();
+  if(S.auto.subBatt) S.sub.batt = calcSubBatt();
+  if(S.auto.subHw)   S.sub.hw   = calcSubHw();
+  if(S.auto.pcs)     S.maint.pcs = pcsAuto();
+  if(S.auto.repair)  S.maint.repair = repairAuto();
+}
+function subsidyAuto(){ // 「すべて自動に戻す」
+  S.auto = { subPv:true, subBatt:true, subHw:true, pcs:true, repair:true };
+  computeAutos();
+}
+function fitPrice(year){
+  let acc = 0;
+  for(const st of S.fit.steps){ acc += st.y; if(year<=acc) return st.p; }
+  return POST_FIT;
+}
+function battReplaceCost(){
+  return S.maint.battCost ?? Math.round(priceBat()*0.7/10000)*10000; // 将来価格は現在の約7割を初期値に
+}
+function maintYear(y){
+  const hasPv = activeKw()>0;
+  let c = hasPv ? (S.maint.annual + S.maint.repair) : 0;
+  const events = [];
+  if(hasPv && y===S.maint.pcsYear){ c += S.maint.pcs; events.push("パワコン交換"); }
+  if(S.batt.cap>0 && S.maint.battOn && y===S.maint.battYear){ c += battReplaceCost(); events.push("蓄電池交換"); }
+  return {c, events};
+}
+function cashflow20(){
+  const y1 = yearModel(), cost = systemCost();
+  const rows = []; let cum = -cost.total; let payback = null;
+  let maint20 = 0;
+  for(let y=1; y<=20; y++){
+    const deg = Math.pow(1-DEGRADE, y-1);
+    const save = (y1.selfD + y1.dis) * deg * S.buy;
+    const sell = y1.sold * deg * fitPrice(y);
+    const gen  = y1.gen * deg;
+    const mt = maintYear(y);
+    maint20 += mt.c;
+    cum += save + sell - mt.c;
+    if(payback===null && cum>=0) payback = y;
+    rows.push({y, save, sell, gen, cum, mcost:mt.c, events:mt.events});
+  }
+  return {rows, payback, cost, maint20, annual: rows[0].save + rows[0].sell - rows[0].mcost};
+}
+
+/* ============================================================
+   SCENE
+   ============================================================ */
+const NS = "http://www.w3.org/2000/svg";
+function el(tag, attrs, parent){
+  const e = document.createElementNS(NS, tag);
+  for(const k in attrs) e.setAttribute(k, attrs[k]);
+  if(parent) parent.appendChild(e);
+  return e;
+}
+function skyColors(m, night){
+  if(night) return ["#050b18","#0a1428"];
+  const warm = Math.abs(m-5.5)/5.5;
+  return [`hsl(${210+warm*8},${62-warm*14}%,${16+(1-warm)*10}%)`,
+          `hsl(${205+warm*15},${55-warm*10}%,${28+(1-warm)*10}%)`];
+}
+function sunPos(m){
+  const alt = 31 + 47 * (0.5 + 0.5*Math.cos((m-5.5)/6*Math.PI));
+  const t = (alt-25)/60, groundY = 360;
+  return {x:630, y:groundY - 60 - t*230, alt};
+}
+
+function buildScene(){
+  const svg = $("scene"); svg.innerHTML = "";
+  const [c1,c2] = skyColors(S.month, S.night);
+  const defs = el("defs",{},svg);
+  const sky = el("linearGradient",{id:"sky",x1:0,y1:0,x2:0,y2:1},defs);
+  el("stop",{offset:"0%","stop-color":c1},sky);
+  el("stop",{offset:"100%","stop-color":c2},sky);
+  const glow = el("radialGradient",{id:"sunG"},defs);
+  el("stop",{offset:"0%","stop-color":"#fff6dd"},glow);
+  el("stop",{offset:"35%","stop-color":"#ffd464"},glow);
+  el("stop",{offset:"100%","stop-color":"rgba(255,185,53,0)"},glow);
+  // ブランド別セルグラデーション
+  for(const b of BRANDS){
+    const g = el("linearGradient",{id:"cell_"+b.id,x1:0,y1:0,x2:1,y2:1},defs);
+    el("stop",{offset:"0%","stop-color":b.look.c1},g);
+    el("stop",{offset:"100%","stop-color":b.look.c2},g);
+  }
+  el("rect",{x:0,y:0,width:980,height:430,fill:"url(#sky)"},svg);
+  if(S.night){
+    for(let i=0;i<60;i++){
+      el("circle",{cx:Math.random()*980, cy:Math.random()*300, r:Math.random()*1.2+0.3,
+        fill:"#cfe4ff", opacity:(Math.random()*0.7+0.2).toFixed(2)},svg);
+    }
+  }
+  const gY = 360, p = sunPos(S.month);
+  el("path",{d:`M 180 ${gY} Q ${p.x} ${p.y-120} 900 ${gY}`,fill:"none",
+    stroke:"rgba(255,255,255,.18)","stroke-dasharray":"3 7"},svg);
+  if(!S.night){
+    el("circle",{cx:p.x, cy:p.y, r:55, fill:"url(#sunG)", class:"anim"},svg);
+    el("circle",{cx:p.x, cy:p.y, r:17, fill:"#ffd464", class:"sun-glow"},svg);
+    for(const [tx,ty] of [[470,158],[560,143],[650,170]]){
+      const ln = el("line",{x1:p.x,y1:p.y,x2:tx,y2:ty,stroke:"rgba(255,214,100,.35)","stroke-width":2,
+        "stroke-dasharray":"6 10",class:"anim"},svg);
+      animateDash(ln, 900);
+    }
+    el("text",{x:p.x, y:p.y-30, "text-anchor":"middle", fill:"#ffd88a","font-size":11},svg)
+      .textContent = `南中高度 ${p.alt.toFixed(0)}°`;
+  }else{
+    el("circle",{cx:800, cy:80, r:16, fill:"#e8edf5", opacity:.9},svg);
+    el("circle",{cx:794, cy:76, r:14, fill:c1},svg);
+  }
+  el("rect",{x:0,y:gY,width:980,height:70,fill:S.night?"#07101e":"#0a1a2c"},svg);
+  el("line",{x1:0,y1:gY,x2:980,y2:gY,stroke:"var(--bp-line)","stroke-width":1},svg);
+  drawHouse(svg, gY, p);
+  drawFlows(svg, gY);
+}
+
+function drawHouse(svg, gY, sun){
+  const g = el("g",{},svg);
+  const bodyF = S.night ? "#122436" : "#1b3a55";
+  const bodyS = "#2e5a7d";
+  el("rect",{x:300,y:gY-200,width:300,height:200,fill:bodyF,stroke:bodyS},g);
+  el("polygon",{points:"300,160 600,160 660,110 360,110",fill:S.night?"#0e1c2c":"#15304a",stroke:bodyS},g);
+  el("line",{x1:360,y1:110,x2:660,y2:110,stroke:bodyS,"stroke-width":2},g);
+
+  // 北面（棟の向こう側のスリバー表示）
+  el("polygon",{points:"360,110 660,110 636,92 336,92",fill:S.night?"#0a1522":"#102638",stroke:bodyS},g);
+  const zoneGeo = {
+    A:{pts:[[318,156],[458,156],[506,116],[366,116]], label:[412,148]},
+    B:{pts:[[470,156],[586,156],[634,116],[518,116]], label:[552,148]},
+    N:{pts:[[350,108],[646,108],[626,94],[330,94]],   label:[488,84]},
+    C:{pts:[[652,268],[792,268],[812,252],[672,252]], label:[732,246]},
+  };
+  const mm = monthModel(S.month);
+  const maxGen = Math.max(...MNAME.map((_,i)=>monthModel(i).gen), 1);
+  const intensity = S.night ? 0 : mm.gen / maxGen;
+  const sunT = (sun.alt-31)/47; // 0冬..1夏 → 反射位置
+
+  for(const z of ZONES){
+    const gz = zoneGeo[z.id];
+    const bk = brand(z.brand), of = orient(z.orient).f;
+    const grp = el("g",{style:"cursor:pointer"},g);
+    const poly = el("polygon",{points:gz.pts.map(pp=>pp.join(",")).join(" "),
+      fill: z.on ? `url(#cell_${z.brand})` : "rgba(46,90,125,.25)",
+      stroke: z.on ? bk.look.frame : "var(--bp-line)",
+      "stroke-width": z.on?2:1, "stroke-dasharray": z.on?"none":"4 4"},grp);
+    if(z.on && !S.night){
+      const gl = intensity*of;
+      poly.style.filter = `drop-shadow(0 0 ${4+gl*16}px rgba(255,185,53,${0.2+gl*0.55}))`;
+    }
+    if(z.on){
+      const [p0,p1,p2,p3] = gz.pts;
+      // セル格子（ブランドごとに濃さが違う。MAXeonはバックコンタクトで格子なし）
+      if(bk.look.grid){
+        for(let i=1;i<5;i++){
+          const t=i/5;
+          el("line",{x1:p0[0]+(p1[0]-p0[0])*t, y1:p0[1], x2:p3[0]+(p2[0]-p3[0])*t, y2:p3[1],
+            stroke:bk.look.grid,"stroke-width":.7},grp);
+        }
+        el("line",{x1:(p0[0]+p3[0])/2,y1:(p0[1]+p3[1])/2,x2:(p1[0]+p2[0])/2,y2:(p1[1]+p2[1])/2,
+          stroke:bk.look.grid,"stroke-width":.7},grp);
+      }
+      // ---- 光の反射（太陽高度と面の向きで位置・強さが変化） ----
+      if(!S.night){
+        const gt = Math.max(0.06, Math.min(0.84, sunT*0.8 + (of-0.85)*0.5));
+        const w = 0.10;
+        const lerp=(a,b,t)=>[a[0]+(b[0]-a[0])*t, a[1]+(b[1]-a[1])*t];
+        const q0=lerp(p0,p1,gt), q1=lerp(p0,p1,gt+w), q2=lerp(p3,p2,gt+w), q3=lerp(p3,p2,gt);
+        el("polygon",{points:[q0,q1,q2,q3].map(pp=>pp.join(",")).join(" "),
+          fill:"#ffffff", opacity:(bk.look.gloss*intensity*of).toFixed(2), class:"anim"},grp);
+      }
+    }
+    const t = el("text",{x:gz.label[0],y:gz.label[1],"text-anchor":"middle",
+      fill:z.on?"#ffd88a":"#5d7f99","font-size":10.5,"font-weight":600},grp);
+    t.textContent = z.on
+      ? (z.id==="N" ? `N ${z.kw}kW` : `${z.id} ${z.kw}kW ${bk.short}·${orient(z.orient).name.split(" ")[0]}`)
+      : `${z.id} (OFF)`;
+    grp.addEventListener("click",()=>{ z.on=!z.on; S.preset='custom'; refreshAll(); });
+    el("title",{},grp).textContent = `${z.name} ${z.desc}／${bk.name}／${orient(z.orient).name}（係数${of}）— クリックでON/OFF`;
+  }
+
+  const zc = ZONES.find(z=>z.id==="C");
+  for(const px of [668,788]) el("line",{x1:px,y1:268,x2:px,y2:gY,stroke:bodyS,"stroke-width":3,
+    opacity:zc&&zc.on?1:.35},g);
+
+  const winF = S.night ? "#ffd88a" : "#9cc4de";
+  for(const [x,y] of [[330,205],[420,205],[510,205],[330,300],[500,300]]){
+    el("rect",{x,y,width:52,height:40,fill:winF,opacity:S.night?0.9:0.5,stroke:bodyS},g);
+  }
+  el("rect",{x:432,y:gY-62,width:40,height:62,fill:"#0d2137",stroke:bodyS},g);
+
+  if(S.hw.id==="enefarm"){
+    el("rect",{x:236,y:gY-52,width:28,height:52,fill:"#1b3a55",stroke:"#3ec8b0","stroke-width":1.5},g);
+    el("text",{x:250,y:gY+14,"text-anchor":"middle",fill:"#3ec8b0","font-size":9},g).textContent="エネファーム";
+  }else if(S.hw.id==="ohisama" || S.hw.id==="ecocute"){
+    el("rect",{x:234,y:gY-72,width:32,height:72,rx:8,fill:"#1b3a55",
+      stroke:S.hw.id==="ohisama"?"var(--amber)":"#9cc4de","stroke-width":1.5},g);
+    const hf = HWF[S.month]/1.3;
+    el("rect",{x:238,y:gY-6-58*hf,width:24,height:58*hf,rx:5,
+      fill:S.hw.id==="ohisama"?"rgba(255,185,53,.55)":"rgba(156,196,222,.45)"},g);
+    el("text",{x:250,y:gY+14,"text-anchor":"middle",fill:S.hw.id==="ohisama"?"var(--amber)":"#9cc4de","font-size":9},g)
+      .textContent = S.hw.id==="ohisama"?"おひさまEQ":"エコキュート";
+    if(S.hw.id==="ohisama" && !S.night){
+      el("text",{x:250,y:gY-80,"text-anchor":"middle",fill:"#ffd88a","font-size":9},g).textContent="☀→♨ 昼沸き上げ";
+    }
+  }
+  if(S.batt.cap>0){
+    const bh = 44;
+    el("rect",{x:186,y:gY-bh,width:36,height:bh,fill:"#1a1633",stroke:"var(--violet)","stroke-width":1.5},g);
+    const mm2 = dayModel(S.month);
+    const lvl = S.batt.usable>0 ? Math.min(1, (S.night? mm2.dis/S.batt.eff : Math.min(Math.max(0,mm2.gen-mm2.selfD), S.batt.usable)) / S.batt.usable) : 0;
+    el("rect",{x:189,y:gY-3-(bh-6)*Math.max(0,lvl),width:30,height:(bh-6)*Math.max(0,lvl),fill:"var(--violet)",opacity:.85},g);
+    el("text",{x:204,y:gY-bh-6,"text-anchor":"middle",fill:"var(--violet)","font-size":9},g).textContent=`蓄電池 ${S.batt.cap}kWh`;
+  }
+  el("line",{x1:880,y1:gY,x2:880,y2:gY-190,stroke:bodyS,"stroke-width":4},g);
+  el("line",{x1:850,y1:gY-175,x2:910,y2:gY-175,stroke:bodyS,"stroke-width":3},g);
+  el("text",{x:880,y:gY+16,"text-anchor":"middle",fill:"#8fb0c7","font-size":9},g).textContent="系統";
+  el("text",{x:450,y:gY+38,"text-anchor":"middle",fill:"#5d7f99","font-size":10,"letter-spacing":"3"},g)
+    .textContent = "MINAMI-OGIKUBO RESIDENCE — SHAWOOD";
+}
+
+function drawFlows(svg, gY){
+  const mm = dayModel(S.month);
+  const flows = [];
+  if(!S.night){
+    if(mm.selfD>0.05) flows.push({d:`M 480 170 C 480 240, 460 260, 452 ${gY-40}`, c:"var(--green)", n:2});
+    if(S.hw.id==="ohisama" && mm.hwSelf>0.05)
+      flows.push({d:`M 380 170 C 300 210, 262 240, 250 ${gY-70}`, c:"var(--amber)", n:2});
+    if(S.batt.usable>0 && (mm.gen-mm.selfD)>0.05)
+      flows.push({d:`M 400 170 C 300 210, 220 250, 204 ${gY-46}`, c:"var(--violet)", n:2});
+    if(mm.sold>0.05) flows.push({d:`M 600 150 C 720 170, 820 150, 878 ${gY-160}`, c:"var(--amber)", n:3});
+    if((mm.loadD-mm.selfD)>0.05)
+      flows.push({d:`M 878 ${gY-150} C 800 250, 700 300, 604 ${gY-60}`, c:"var(--red)", n:1});
+    if(S.hw.id==="enefarm")
+      flows.push({d:`M 252 ${gY-30} C 300 ${gY-40}, 360 ${gY-40}, 430 ${gY-40}`, c:"#3ec8b0", n:2});
+  }else{
+    if(mm.dis>0.05) flows.push({d:`M 204 ${gY-40} C 260 280, 360 300, 440 ${gY-40}`, c:"var(--violet)", n:2});
+    const nightBuy = mm.loadN - mm.dis;
+    if(nightBuy>0.05) flows.push({d:`M 878 ${gY-150} C 800 250, 700 300, 604 ${gY-60}`, c:"var(--red)", n:2});
+    if(S.hw.id==="ecocute" && nightBuy>0.05)
+      flows.push({d:`M 878 ${gY-150} C 700 290, 400 320, 254 ${gY-40}`, c:"#9cc4de", n:2});
+    if(S.hw.id==="enefarm")
+      flows.push({d:`M 252 ${gY-30} C 300 ${gY-40}, 360 ${gY-40}, 430 ${gY-40}`, c:"#3ec8b0", n:2});
+  }
+  for(const f of flows){
+    const path = el("path",{d:f.d,fill:"none",stroke:f.c,"stroke-width":1.2,opacity:.35},svg);
+    const len = path.getTotalLength();
+    for(let i=0;i<f.n;i++){
+      const dot = el("circle",{r:4,fill:f.c,class:"anim"},svg);
+      animateAlong(dot, path, len, 2600, i*(2600/f.n));
+    }
+  }
+}
+
+const anims = [];
+function animateAlong(dot, path, len, dur, delay){
+  const start = performance.now() + delay;
+  function frame(t){
+    const e = ((t-start)%dur+dur)%dur/dur;
+    const pt = path.getPointAtLength(e*len);
+    dot.setAttribute("cx",pt.x); dot.setAttribute("cy",pt.y);
+    dot.setAttribute("opacity", e<0.05||e>0.95 ? 0 : 0.95);
+    anims.push(requestAnimationFrame(frame));
+  }
+  anims.push(requestAnimationFrame(frame));
+}
+function animateDash(line, dur){
+  const start = performance.now();
+  function frame(t){
+    line.setAttribute("stroke-dashoffset", -((t-start)/dur*16)%16);
+    anims.push(requestAnimationFrame(frame));
+  }
+  anims.push(requestAnimationFrame(frame));
+}
+function stopAnims(){ while(anims.length) cancelAnimationFrame(anims.pop()); }
+
+/* ============================================================
+   CHARTS
+   ============================================================ */
+function chartMonthly(){
+  const svg = $("chartMonthly"); svg.innerHTML="";
+  const Y = yearModel();
+  const W=640,H=300,L=46,R=14,T=16,B=34;
+  const maxV = Math.max(...Y.ms.map(m=>Math.max(m.gen, m.buy)))*1.12 || 1;
+  const y = v => T + (H-T-B)*(1 - v/maxV);
+  const bw = (W-L-R)/12;
+  for(let i=0;i<=4;i++){
+    const v = maxV*i/4, yy = y(v);
+    el("line",{x1:L,y1:yy,x2:W-R,y2:yy,stroke:"rgba(120,180,220,.15)"},svg);
+    el("text",{x:L-6,y:yy+4,"text-anchor":"end",fill:"#8fb0c7","font-size":10},svg).textContent=Math.round(v);
+  }
+  Y.ms.forEach((m,i)=>{
+    const x = L + bw*i + bw*0.14, w = bw*0.5;
+    let cur = 0;
+    for(const [k,c] of [["selfD","var(--green)"],["dis","var(--violet)"],["sold","var(--amber)"]]){
+      const h = (H-T-B)*m[k]/maxV;
+      const r = el("rect",{x, y:y(cur+m[k]), width:w, height:Math.max(0,h), fill:c, opacity: i===S.month?1:.72},svg);
+      el("title",{},r).textContent = `${MNAME[i]} ${{selfD:"自家消費",dis:"蓄電利用",sold:"売電"}[k]}: ${Math.round(m[k])}kWh`;
+      cur += m[k];
+    }
+    const bx = x+w+2;
+    el("rect",{x:bx, y:y(m.buy), width:bw*0.18, height:(H-T-B)*m.buy/maxV, fill:"var(--red)", opacity:i===S.month?1:.6},svg);
+    el("text",{x:L+bw*i+bw/2, y:H-14,"text-anchor":"middle",fill:i===S.month?"var(--amber)":"#8fb0c7","font-size":10},svg)
+      .textContent = (i+1)+"月";
+    const hit = el("rect",{x:L+bw*i,y:T,width:bw,height:H-T-B+20,fill:"transparent",style:"cursor:pointer"},svg);
+    hit.addEventListener("click",()=>{ S.month=i; $("monthSlider").value=i; refreshAll(); });
+  });
+  el("text",{x:L,y:12,fill:"#8fb0c7","font-size":10},svg).textContent="kWh/月";
+}
+
+function chartTimeline(){
+  const svg = $("chartTimeline"); svg.innerHTML="";
+  const cf = cashflow20();
+  const W=640,H=280,L=52,R=52,T=20,B=32;
+  const maxGen = cf.rows[0].gen*1.15 || 1;
+  const maxYen = Math.max(...cf.rows.map(r=>r.save+r.sell))*1.15 || 1;
+  const x = yr => L + (W-L-R)*(yr-0.5)/20;
+  const yG = v => T + (H-T-B)*(1-v/maxGen);
+  const yY = v => T + (H-T-B)*(1-v/maxYen);
+  for(let i=0;i<=4;i++){
+    const yy = T+(H-T-B)*i/4;
+    el("line",{x1:L,y1:yy,x2:W-R,y2:yy,stroke:"rgba(120,180,220,.15)"},svg);
+    el("text",{x:L-6,y:yy+4,"text-anchor":"end",fill:"#ffd88a","font-size":10},svg)
+      .textContent = Math.round(maxGen*(4-i)/4/100)*100;
+    el("text",{x:W-R+6,y:yy+4,"text-anchor":"start",fill:"#3ed598","font-size":10},svg)
+      .textContent = (maxYen*(4-i)/4/10000).toFixed(0)+"万";
+  }
+  let acc=0;
+  for(const [j,st] of S.fit.steps.entries()){
+    el("rect",{x:x(acc)+(acc?0:-(x(1)-x(0.5))), y:T, width:x(acc+st.y)-x(acc)+(acc?0:(x(1)-x(0.5))), height:H-T-B,
+      fill:`rgba(255,185,53,${0.10-0.04*j})`},svg);
+    el("text",{x:(x(acc)+x(acc+st.y))/2,y:T+11,"text-anchor":"middle",fill:"#ffd88a","font-size":9},svg)
+      .textContent=`FIT ${st.p}円`;
+    acc+=st.y;
+  }
+  el("text",{x:(x(acc)+x(20))/2,y:T+11,"text-anchor":"middle",fill:"#8fb0c7","font-size":9},svg)
+    .textContent=`卒FIT ${POST_FIT}円`;
+  const bw = (W-L-R)/20*0.55;
+  cf.rows.forEach(r=>{
+    const bx = x(r.y)-bw/2;
+    const r1 = el("rect",{x:bx,y:yY(r.save),width:bw,height:(H-T-B)*r.save/maxYen,fill:"var(--green)",opacity:.75},svg);
+    el("title",{},r1).textContent=`${r.y}年目 電気代節約 ${yen(r.save)}`;
+    const r2 = el("rect",{x:bx,y:yY(r.save+r.sell),width:bw,height:(H-T-B)*r.sell/maxYen,fill:"var(--amber)",opacity:.8},svg);
+    el("title",{},r2).textContent=`${r.y}年目 売電収入 ${yen(r.sell)}`;
+    if(r.mcost>0){
+      const mh = Math.min(H-T-B, (H-T-B)*r.mcost/maxYen);
+      const r3 = el("rect",{x:bx+bw+1.5, y:yY(r.mcost), width:bw*0.35, height:mh, fill:"var(--red)",
+        opacity:r.events.length?0.95:0.55},svg);
+      el("title",{},r3).textContent=`${r.y}年目 維持・交換費 ${yen(r.mcost)}${r.events.length?"（"+r.events.join("・")+"）":""}`;
+      if(r.events.length){
+        el("text",{x:x(r.y)+bw*0.6, y:yY(r.mcost)-4,"text-anchor":"middle",fill:"var(--red)","font-size":8.5},svg)
+          .textContent="▼";
+      }
+    }
+  });
+  let d = "";
+  cf.rows.forEach((r,i)=>{ d += (i?" L ":"M ")+x(r.y)+" "+yG(r.gen); });
+  el("path",{d,fill:"none",stroke:"#ffd88a","stroke-width":2},svg);
+  cf.rows.forEach(r=>{
+    const c = el("circle",{cx:x(r.y),cy:yG(r.gen),r:2.6,fill:"#ffd88a"},svg);
+    el("title",{},c).textContent=`${r.y}年目 発電量 ${fmt(r.gen)}kWh（劣化込）`;
+  });
+  for(const yr of [1,5,10,15,20]){
+    el("text",{x:x(yr),y:H-8,"text-anchor":"middle",fill:"#8fb0c7","font-size":10},svg).textContent=yr+"年";
+  }
+  el("text",{x:L,y:12,fill:"#ffd88a","font-size":10},svg).textContent="発電量 kWh/年 →線";
+  el("text",{x:W-R,y:12,"text-anchor":"end",fill:"#3ed598","font-size":10},svg).textContent="年間メリット 円 →棒";
+}
+
+function chartPayback(){
+  const svg = $("chartPayback"); svg.innerHTML="";
+  const cf = cashflow20();
+  const W=640,H=280,L=56,R=14,T=18,B=32;
+  const vals = cf.rows.map(r=>r.cum).concat([-cf.cost.total,0]);
+  const minV = Math.min(...vals)*1.08, maxV = Math.max(...vals)*1.12 || 1;
+  const x = yr => L + (W-L-R)*yr/20;
+  const y = v => T + (H-T-B)*(1-(v-minV)/(maxV-minV));
+  for(let i=0;i<=4;i++){
+    const v = minV + (maxV-minV)*i/4, yy=y(v);
+    el("line",{x1:L,y1:yy,x2:W-R,y2:yy,stroke:"rgba(120,180,220,.15)"},svg);
+    el("text",{x:L-6,y:yy+4,"text-anchor":"end",fill:"#8fb0c7","font-size":10},svg).textContent=(v/10000).toFixed(0)+"万";
+  }
+  el("line",{x1:L,y1:y(0),x2:W-R,y2:y(0),stroke:"#8fb0c7","stroke-width":1.2,"stroke-dasharray":"5 4"},svg);
+  let d = `M ${x(0)} ${y(-cf.cost.total)}`;
+  cf.rows.forEach(r=>{ d += ` L ${x(r.y)} ${y(r.cum)}`; });
+  el("path",{d,fill:"none",stroke:"var(--green)","stroke-width":2.5},svg);
+  cf.rows.forEach(r=>{
+    const c = el("circle",{cx:x(r.y),cy:y(r.cum),r:3.2,fill:r.cum>=0?"var(--green)":"var(--red)"},svg);
+    el("title",{},c).textContent=`${r.y}年目 累積 ${yen(r.cum)}（節約 ${yen(r.save)} + 売電 ${yen(r.sell)} − 維持 ${yen(r.mcost)}/年）`;
+  });
+  // 交換イベント注記
+  cf.rows.filter(r=>r.events.length).forEach(r=>{
+    el("line",{x1:x(r.y),y1:y(r.cum),x2:x(r.y),y2:y(r.cum)-26,stroke:"var(--red)","stroke-width":1,"stroke-dasharray":"2 2"},svg);
+    el("text",{x:x(r.y),y:y(r.cum)-30,"text-anchor":"middle",fill:"var(--red)","font-size":9},svg)
+      .textContent = r.events.join("・");
+  });
+  if(cf.payback){
+    el("line",{x1:x(cf.payback),y1:T,x2:x(cf.payback),y2:H-B,stroke:"var(--amber)","stroke-dasharray":"4 4"},svg);
+    el("text",{x:x(cf.payback),y:H-B+16,"text-anchor":"middle",fill:"var(--amber)","font-size":11,"font-weight":600},svg)
+      .textContent=`回収 ${cf.payback}年目`;
+  }
+  for(const yr of [5,10,15,20]){
+    el("text",{x:x(yr),y:H-6,"text-anchor":"middle",fill:"#8fb0c7","font-size":10},svg).textContent=yr+"年";
+  }
+}
+
+/* ============================================================
+   ROOF CAPACITY CARD
+   ============================================================ */
+function buildRoofCap(){
+  const svg = $("roofSvg"); svg.innerHTML = "";
+  const caps = ZONES.map(z=>({z, c:capacity(z)}));
+  // スケール決定
+  const gap = 0.6;
+  const sumW = caps.reduce((s,x)=>s+x.z.geom.w, 0) + gap*(caps.length-1);
+  const maxL = Math.max(...caps.map(x=>x.c.slopeLen));
+  const scale = Math.min(600/sumW, 168/maxL);
+  let cx = 20;
+  const baseY = 200;
+  for(const {z,c} of caps){
+    const W = z.geom.w*scale, L = c.slopeLen*scale;
+    const x = cx, y = baseY - L;
+    const bk = brand(z.brand);
+    // 屋根面（展開）
+    el("rect",{x,y,width:W,height:L,fill:z.on?"rgba(21,48,74,.9)":"rgba(21,48,74,.35)",
+      stroke:z.on?"var(--amber)":"var(--bp-line)","stroke-width":z.on?1.4:1,
+      "stroke-dasharray":z.on?"none":"4 4"},svg);
+    // 有効エリア（マージン控除）
+    const m = S.margin*scale;
+    el("rect",{x:x+m,y:y+m,width:Math.max(0,W-2*m),height:Math.max(0,L-2*m),fill:"none",
+      stroke:"rgba(143,176,199,.4)","stroke-dasharray":"3 3"},svg);
+    // パネルタイル
+    if(c.n>0){
+      const pw = c.pw*scale, ph = c.ph*scale;
+      const ox = x + m + (c.uW*scale - c.cols*pw)/2;
+      const oy = y + m + (c.uL*scale - c.rows*ph)/2;
+      for(let r=0;r<c.rows;r++) for(let col=0;col<c.cols;col++){
+        el("rect",{x:ox+col*pw+1, y:oy+r*ph+1, width:pw-2, height:ph-2,
+          fill:bk.look.c1, stroke:bk.look.frame, "stroke-width":1, opacity:z.on?1:.45},svg);
+      }
+    }
+    // ラベル
+    el("text",{x:x+W/2, y:baseY+16, "text-anchor":"middle", fill:z.on?"var(--amber)":"#5d7f99",
+      "font-size":11, "font-weight":600},svg).textContent = `${z.id} ${z.name}`;
+    el("text",{x:x+W/2, y:baseY+30, "text-anchor":"middle", fill:"#8fb0c7","font-size":10},svg)
+      .textContent = `最大 ${c.n}枚 = ${c.kw.toFixed(2)}kW`;
+    el("text",{x:x+W/2, y:y-6, "text-anchor":"middle", fill:"#5d7f99","font-size":9},svg)
+      .textContent = `${z.geom.w.toFixed(1)}m × ${c.slopeLen.toFixed(2)}m（展開）`;
+    cx += W + gap*scale;
+  }
+  // 行エディタ
+  const box = $("roofRows"); box.innerHTML = "";
+  for(const {z,c} of caps){
+    const row = document.createElement("div");
+    row.className = "rrow"+(z.on?" on":"");
+    row.innerHTML = `
+      <span class="rid">${z.id}</span>
+      <span class="rcell"><label>幅 m</label><input type="number" class="rw" step="0.1" min="0.5" value="${z.geom.w}"></span>
+      <span class="rcell"><label>奥行 m(平面)</label><input type="number" class="rd" step="0.1" min="0.5" value="${z.geom.d}"></span>
+      <span class="rcell"><label>勾配</label><select class="rp">${PITCHES.map(p=>`<option value="${p.v}" ${p.v===z.geom.pitch?"selected":""}>${p.name}</option>`).join("")}</select></span>
+      <span class="rres">${c.or} ${c.cols}×${c.rows} = <b>${c.n}枚 ${c.kw.toFixed(2)}kW</b><small>（${brand(z.brand).short} ${Math.round(c.md.kw*1000)}W／現在 ${z.on?z.kw.toFixed(1):"OFF"}kW）</small></span>
+      <button class="btn mini rapply">最大を適用</button>`;
+    row.querySelector(".rw").addEventListener("change",e=>{ z.geom.w=Math.max(0.5,+e.target.value||0.5); refreshAll(); });
+    row.querySelector(".rd").addEventListener("change",e=>{ z.geom.d=Math.max(0.5,+e.target.value||0.5); refreshAll(); });
+    row.querySelector(".rp").addEventListener("change",e=>{ z.geom.pitch=+e.target.value; refreshAll(); });
+    row.querySelector(".rapply").addEventListener("click",()=>{
+      const cc = capacity(z);
+      z.kw = cc.kw; z.on = cc.kw>0; refreshAll();
+    });
+    box.appendChild(row);
+  }
+  // 合計
+  const south = caps.filter(x=>["A","B"].includes(x.z.id)).reduce((s,x)=>s+x.c.kw,0);
+  const roofAll = caps.filter(x=>x.z.id!=="C").reduce((s,x)=>s+x.c.kw,0);
+  const all = caps.reduce((s,x)=>s+x.c.kw,0);
+  $("roofTotal").innerHTML =
+    `南面（A+B）最大 <b class="am">${south.toFixed(2)}kW</b>（図面提案は3.0kW）　`+
+    `屋根全体（北面含む）<b>${roofAll.toFixed(2)}kW</b>　カーポート込み <b>${all.toFixed(2)}kW</b>`;
+}
+
+/* ============================================================
+   UI
+   ============================================================ */
+function buildZoneEditor(){
+  const box = $("zoneEditor"); box.innerHTML="";
+  for(const z of ZONES){
+    const row = document.createElement("div");
+    row.className = "zrow"+(z.on?" on":"");
+    row.innerHTML = `
+      <button class="ztoggle ${z.on?"on":""}" title="${z.desc}">${z.id}<span>${z.on?"ON":"OFF"}</span></button>
+      <div class="zcell"><label>kW</label>
+        <input type="number" class="zkw" value="${z.kw}" min="0" max="6" step="0.1"></div>
+      <div class="zcell"><label>パネル</label>
+        <select class="zbrand">${BRANDS.map(b=>`<option value="${b.id}" ${b.id===z.brand?"selected":""}>${b.short}</option>`).join("")}</select></div>
+      <div class="zcell"><label>向き・勾配</label>
+        <select class="zorient">${ORIENTS.map(o=>`<option value="${o.id}" ${o.id===z.orient?"selected":""}>${o.name}</option>`).join("")}</select></div>`;
+    row.querySelector(".ztoggle").addEventListener("click",()=>{ z.on=!z.on; S.preset='custom'; refreshAll(); });
+    row.querySelector(".zkw").addEventListener("change",e=>{ z.kw=Math.max(0,+e.target.value||0); S.preset='custom'; refreshAll(); });
+    row.querySelector(".zbrand").addEventListener("change",e=>{ z.brand=e.target.value; S.preset='custom'; refreshAll(); });
+    row.querySelector(".zorient").addEventListener("change",e=>{ z.orient=e.target.value; S.preset='custom'; refreshAll(); });
+    box.appendChild(row);
+  }
+  $("kwTotal").textContent = activeKw().toFixed(1)+" kW";
+}
+
+/* 費用設定（すべて編集可・万円単位） */
+function buildCostEditor(){
+  const box = $("costFields"); box.innerHTML="";
+  const rows = [];
+  const usedBrands = [...new Set(ZONES.filter(z=>z.on).map(z=>z.brand))];
+  for(const bid of usedBrands){
+    const b = brand(bid);
+    rows.push({key:"b_"+bid,
+      label:`パネル ${b.short} 単価 <small class="clsub">係数${b.perf.toFixed(2)}・${Math.round(b.mod.kw*1000)}W/枚</small>`,
+      title:`${b.name}｜性能係数 ${b.perf}（発電量に反映）／モジュール ${b.mod.w}×${b.mod.h}m ${Math.round(b.mod.kw*1000)}W（屋根キャパシティに反映）`,
+      unit:"万円/kW", val:priceKw(bid)});
+  }
+  rows.push({key:"install", label:"基本工事費（足場・配線等）", unit:"万円", val:priceIns()});
+  if(S.batt.cap>0) rows.push({key:"batt_"+S.batt.id, label:`蓄電池 ${S.batt.name}`, unit:"万円", val:priceBat()});
+  if(S.hw.cost>0 || S.hw.id!=="gas") rows.push({key:"hw_"+S.hw.id, label:`給湯 ${S.hw.name.split("（")[0]}`, unit:"万円", val:priceHw()});
+  for(const r of rows){
+    const div = document.createElement("div");
+    div.className = "crow";
+    div.innerHTML = `<span class="cl" title="${r.title||""}">${r.label}</span>
+      <input type="number" step="0.5" min="0" value="${(r.val/10000).toFixed(1)}"><span class="cu">${r.unit}</span>`;
+    div.querySelector("input").addEventListener("change",e=>{
+      S.priceOv[r.key] = Math.max(0,(+e.target.value||0))*10000;
+      refreshAll();
+    });
+    box.appendChild(div);
+  }
+  // ---- 維持・交換費 ----
+  const div0 = document.createElement("div");
+  div0.className = "cdivider";
+  div0.textContent = "維持・交換費（20年ライフサイクル）";
+  box.appendChild(div0);
+  const mrows = [
+    {key:"pcs",    auto:"pcs",    label:"パワーコンディショナ交換", unit:"万円", val:S.maint.pcs, step:1,
+     hint:"搭載kW・蓄電池有無に連動（蓄電池ありはハイブリッド機想定）"},
+    {key:"pcsYear",auto:null,     label:"　└ 交換タイミング",       unit:"年目", val:S.maint.pcsYear, raw:true, step:1, min:2, max:20},
+    {key:"annual", auto:null,     label:"定期点検・保守",           unit:"万円/年", val:S.maint.annual, step:0.1},
+    {key:"repair", auto:"repair", label:"パネル故障・修理予備費",   unit:"万円/年", val:S.maint.repair, step:0.1,
+     hint:"搭載kWに連動（1,000円/kW/年）"},
+  ];
+  for(const r of mrows){
+    const div = document.createElement("div");
+    div.className = "crow";
+    const disp = r.raw ? r.val : (r.val/10000);
+    const badge = r.auto ? `<button class="abadge ${S.auto[r.auto]?"a":"m"}" title="クリックで自動⇔手動を切替">${S.auto[r.auto]?"自動":"手動"}</button>` : "";
+    div.innerHTML = `<span class="cl" title="${r.hint||""}">${r.label} ${badge}</span>
+      <input type="number" step="${r.step}" min="${r.min??0}" ${r.max?`max="${r.max}"`:""} value="${r.raw?disp:disp.toFixed(1)}"><span class="cu">${r.unit}</span>`;
+    div.querySelector("input").addEventListener("change",e=>{
+      const v = Math.max(r.min??0, +e.target.value||0);
+      S.maint[r.key] = r.raw ? Math.round(v) : v*10000;
+      if(r.auto) S.auto[r.auto] = false;
+      refreshAll();
+    });
+    const bd = div.querySelector(".abadge");
+    if(bd) bd.addEventListener("click",()=>{ S.auto[r.auto] = !S.auto[r.auto]; refreshAll(); });
+    box.appendChild(div);
+  }
+  if(S.batt.cap>0){
+    const div = document.createElement("div");
+    div.className = "crow brepl";
+    const bc = battReplaceCost();
+    div.innerHTML = `<span class="cl"><label style="display:flex;gap:6px;align-items:center;font-weight:400;margin:0;cursor:pointer">
+        <input type="checkbox" ${S.maint.battOn?"checked":""} style="width:auto"> 蓄電池交換（${S.maint.battYear}年目）</label></span>
+      <input type="number" step="5" min="0" value="${(bc/10000).toFixed(0)}" ${S.maint.battOn?"":"disabled"}><span class="cu">万円</span>`;
+    div.querySelector("input[type=checkbox]").addEventListener("change",e=>{
+      S.maint.battOn = e.target.checked; refreshAll();
+    });
+    div.querySelector("input[type=number]").addEventListener("change",e=>{
+      S.maint.battCost = Math.max(0,(+e.target.value||0))*10000; refreshAll();
+    });
+    box.appendChild(div);
+  }
+  const cost = systemCost();
+  const cf20m = (()=>{let t=0;for(let y=1;y<=20;y++)t+=maintYear(y).c;return t;})();
+  $("costTotal").innerHTML = `設備 <b>${man(cost.pv+cost.batt+cost.hw)}</b> ＋20年維持 <b>${man(cf20m)}</b>`;
+}
+
+/* 補助金（項目別・編集可・万円単位） */
+function buildSubsidyEditor(){
+  const box = $("subFields"); box.innerHTML="";
+  const rows = [
+    {key:"pv",   auto:"subPv",   label:"太陽光（東京都）",   hint:"搭載kWに連動: 新築 12万円/kW≤3.6kW・超過10万円/kW（オール電化13/11万円）"},
+    {key:"batt", auto:"subBatt", label:"蓄電池（東京都）",   hint:"蓄電池容量に連動: 10万円/kWh・上限120万円"},
+    {key:"dr",   auto:null,      label:"DR上乗せ・国DR併用", hint:"都DR実証+10万円、国DR補助 最大60万円（先着・別申請）— 手動入力"},
+    {key:"hw",   auto:"subHw",   label:"給湯省エネ（国）",   hint:"給湯システムに連動: おひさまエコキュート最大13万円"},
+  ];
+  for(const r of rows){
+    const div = document.createElement("div");
+    div.className = "crow";
+    const badge = r.auto ? `<button class="abadge ${S.auto[r.auto]?"a":"m"}" title="クリックで自動⇔手動を切替">${S.auto[r.auto]?"自動":"手動"}</button>` : "";
+    div.innerHTML = `<span class="cl" title="${r.hint}">${r.label} ${badge}</span>
+      <input type="number" step="1" min="0" value="${(S.sub[r.key]/10000).toFixed(0)}"><span class="cu">万円</span>`;
+    div.querySelector("input").addEventListener("change",e=>{
+      S.sub[r.key] = Math.max(0,(+e.target.value||0))*10000;
+      if(r.auto) S.auto[r.auto] = false;   // 手動固定
+      refreshAll();
+    });
+    const bd = div.querySelector(".abadge");
+    if(bd) bd.addEventListener("click",()=>{ S.auto[r.auto] = !S.auto[r.auto]; refreshAll(); });
+    box.appendChild(div);
+  }
+  $("subTotal").innerHTML = `補助金合計 <b>−${man(subTotal())}</b>`;
+}
+
+function buildPresets(){
+  const bar = $("presetBar"); bar.innerHTML="";
+  for(const p of PRESETS){
+    const b = document.createElement("button");
+    b.className = "preset"+(S.preset===p.id?" on":"");
+    b.textContent = p.name;
+    b.addEventListener("click",()=>applyPreset(p.id));
+    bar.appendChild(b);
+  }
+  const cur = PRESETS.find(p=>p.id===S.preset);
+  $("presetHint").textContent = cur ? cur.note : "カスタム構成（プリセットから変更されています）";
+}
+function buildControls(){
+  buildPresets();
+  buildZoneEditor();
+  fillSelect("battSel", BATTS, S.batt.id);
+  fillSelect("hwSel", HWSYS, S.hw.id);
+  fillSelect("fitSel", FITS, S.fit.id);
+  $("battHint").textContent = S.batt.hint;
+  $("hwHint").textContent = S.hw.hint;
+  $("fitHint").textContent = S.fit.hint;
+  buildCostEditor();
+  buildSubsidyEditor();
+}
+function fillSelect(id, arr, cur){
+  const s = $(id);
+  if(s.options.length!==arr.length){
+    s.innerHTML = arr.map(a=>`<option value="${a.id}">${a.name}</option>`).join("");
+  }
+  s.value = cur;
+}
+
+function buildSummary(){
+  const d = dayModel(S.month);
+  const cf = cashflow20();
+  const Y = yearModel();
+  const selfRate = Y.loadY>0 ? (Y.selfD+Y.dis)/Y.loadY*100 : 0;
+  const parts = [];
+  parts.push(`<b>${MNAME[S.month]}の1日</b>: 屋根で <b class="am">${d.gen.toFixed(1)}kWh</b> 発電`);
+  parts.push(`昼の生活${S.hw.id==="ohisama"?"＋お湯の沸き上げ":""}に <b class="gr">${d.selfD.toFixed(1)}kWh</b> を直接使用`);
+  if(S.batt.usable>0 && d.dis>0.05) parts.push(`蓄電池に貯めて夜 <b class="vi">${d.dis.toFixed(1)}kWh</b> を使用`);
+  if(d.sold>0.05) parts.push(`余った <b class="am">${d.sold.toFixed(1)}kWh</b> を売電`);
+  if(d.buy>0.05) parts.push(`足りない <b class="rd">${d.buy.toFixed(1)}kWh</b> だけ購入`);
+  else parts.push(`<b class="gr">買電ゼロ</b>`);
+  const line2 = `年間では電気の <b class="gr">${selfRate.toFixed(0)}%</b> を自給し、初年度メリット <b class="gr">約${man(cf.annual)}</b>（維持費差引後）。実質負担 <b>${man(cf.cost.total)}</b>＋20年維持 <b>${man(cf.maint20)}</b> で回収は <b>${cf.payback?cf.payback+"年":"20年超"}</b>。`;
+  $("summaryBox").innerHTML = `<span class="sumline">${parts.join(" → ")}</span><span class="sumline2">${line2}</span>`;
+}
+
+function buildKpis(){
+  const Y = yearModel(), cf = cashflow20(), cost = cf.cost;
+  const selfRate = Y.loadY>0 ? (Y.selfD+Y.dis)/Y.loadY*100 : 0;
+  const kpis = [
+    {k:"年間発電量", v:fmt(Y.gen), s:"kWh／搭載 "+activeKw().toFixed(1)+"kW", c:"amber"},
+    {k:"電力自給率", v:fmt(selfRate,0)+"%", s:`自家消費 ${fmt(Y.selfD)} + 蓄電 ${fmt(Y.dis)} kWh`, c:"green"},
+    {k:"年間メリット（初年度・維持費差引後）", v:yen(cf.annual), s:`節約 ${yen(cf.rows[0].save)} + 売電 ${yen(cf.rows[0].sell)} − 保守 ${yen(cf.rows[0].mcost)}`, c:"green"},
+    {k:"実質負担（補助金後）", v:yen(cost.total), s:`PV ${man(cost.pv)}＋蓄電池 ${man(cost.batt)}＋給湯 ${man(cost.hw)}−補助 ${man(cost.sub)}`, c:""},
+    {k:"投資回収", v:cf.payback?cf.payback+"年":"20年超", s:`劣化0.5%/年・20年維持費 ${man(cf.maint20)} 込み`, c:cf.payback&&cf.payback<=12?"green":"red"},
+  ];
+  $("kpis").innerHTML = kpis.map(x=>
+    `<div class="kpi"><div class="k">${x.k}</div><div class="v ${x.c}">${x.v}</div><div class="s">${x.s}</div></div>`).join("");
+}
+
+function refreshLive(){
+  const m = monthModel(S.month);
+  $("lvGen").textContent = fmt(m.gen);
+  $("lvSelf").textContent = fmt(m.selfD + m.dis);
+  $("lvSell").textContent = fmt(m.sold);
+  $("lvBuy").textContent = fmt(m.buy);
+  $("mLabel").textContent = MNAME[S.month];
+  $("mSub").textContent = MSUB[S.month];
+}
+
+function refreshAll(){
+  stopAnims();
+  computeAutos();
+  buildControls();
+  buildScene();
+  refreshLive();
+  buildSummary();
+  buildKpis();
+  buildRoofCap();
+  chartMonthly();
+  chartTimeline();
+  chartPayback();
+}
+
+/* ---------- イベント ---------- */
+function wire(){
+  $("monthSlider").addEventListener("input", e=>{ S.month=+e.target.value; refreshAll(); });
+  $("battSel").addEventListener("change", e=>{ S.batt = BATTS.find(b=>b.id===e.target.value); S.preset='custom'; refreshAll(); });
+  $("hwSel").addEventListener("change", e=>{ S.hw = HWSYS.find(h=>h.id===e.target.value); S.preset='custom'; refreshAll(); });
+  $("fitSel").addEventListener("change", e=>{ S.fit = FITS.find(f=>f.id===e.target.value); refreshAll(); });
+  $("dailyUse").addEventListener("input", e=>{ S.daily=+e.target.value; $("dailyVal").textContent=S.daily.toFixed(1)+" kWh/日"; refreshAll(); });
+  $("dayRatio").addEventListener("input", e=>{ S.dayRatio=+e.target.value/100; $("dayVal").textContent=e.target.value+"%"; refreshAll(); });
+  $("buyPrice").addEventListener("change", e=>{ S.buy=Math.max(0,+e.target.value||0); refreshAll(); });
+  $("subAuto").addEventListener("click", e=>{ e.preventDefault(); subsidyAuto(); refreshAll(); });
+  $("marginIn").addEventListener("change", e=>{ S.margin=Math.max(0,+e.target.value||0); refreshAll(); });
+  $("nightBtn").addEventListener("click", ()=>{
+    S.night=!S.night;
+    $("nightBtn").textContent = S.night ? "☀ 昼間モード" : "🌙 夜間モード";
+    refreshAll();
+  });
+  let timer=null;
+  $("playBtn").addEventListener("click", ()=>{
+    if(timer){ clearInterval(timer); timer=null; $("playBtn").textContent="▶ 1年再生"; return; }
+    $("playBtn").textContent="■ 停止";
+    timer = setInterval(()=>{
+      S.month = (S.month+1)%12;
+      $("monthSlider").value = S.month;
+      refreshAll();
+      if(S.month===11){ clearInterval(timer); timer=null; $("playBtn").textContent="▶ 1年再生"; }
+    }, 900);
+  });
+}
+
+wire();
+applyPreset("reco");
+
+</script>
+</body>
+</html>

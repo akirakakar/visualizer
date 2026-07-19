@@ -171,7 +171,7 @@
   </div>
   <div class="stamp">
     図面参照: <b>TWSX26060017</b>（配置図・小屋裏レベル平面図）<br>
-    屋根搭載計画: <b>南面 1.7kW + 1.3kW（提案標準 3.0kW）</b>／切妻・非歩行屋根<br>
+    屋根搭載計画: <b>東棟(3寸勾配) 1.7kW ＋ 西棟(非歩行フラット) 1.3kW</b>＝提案標準 3.0kW<br>
     地点: 東京都杉並区（NEDO 東京 南面30°傾斜 日射量ベース）
   </div>
 </header>
@@ -204,7 +204,7 @@
         <div class="roofctl">
           <span>離隔マージン（軒・けらば・棟）</span>
           <input type="number" id="marginIn" value="0.25" step="0.05" min="0" style="width:80px"> m
-          <span class="hint" style="margin:0">面の寸法は小屋裏レベル平面図の 5000×3500 グリッドからの推定値。実測・構造検討で要確認。</span>
+          <span class="hint" style="margin:0">図面読取値: 東棟 太陽電池設置面 5.0×3.5m・勾配3寸(30/100)／西棟 非歩行屋根(フラット) 3.5×5.0m・平置き6枚。フラット置きは架台費+2〜3万円/kWと風荷重対策が別途。実測・構造検討で要確認。</span>
         </div>
         <svg id="roofSvg" viewBox="0 0 640 236" width="100%"></svg>
         <div id="roofRows"></div>
@@ -257,7 +257,17 @@
         <div class="field">
           <label>屋根面ごとの設定<span class="val" id="kwTotal">3.0 kW</span></label>
           <div id="zoneEditor"></div>
-          <div class="hint">A・B面は図面の太陽電池設置面。面ごとにパネルの見た目・反射・発電係数が変わります。搭載可能量は下の「屋根搭載キャパシティ」で寸法から計算できます。</div>
+          <div class="hint">A=東棟の太陽電池設置面（3寸勾配）、B=西棟の非歩行屋根（フラット平置き・係数0.88）。面ごとにブランド・向きを変えられます。搭載可能量は「屋根搭載キャパシティ」で計算。</div>
+        </div>
+
+        <div class="field">
+          <label>建物方位（真南からの振れ）</label>
+          <div class="roofctl" style="margin-bottom:0">
+            真南から
+            <select id="azDir" style="width:76px"><option value="W" selected>西へ</option><option value="E">東へ</option></select>
+            <input type="number" id="azIn" value="15" min="0" max="60" step="1" style="width:70px"> °
+          </div>
+          <div class="hint">図面の真北記号からの読取推定値（15°で発電−0.6%程度）。配置図の真北角度で正確な値に修正してください。フラット置きの西棟は方位の影響を受けません。</div>
         </div>
 
         <div class="field">
@@ -316,7 +326,7 @@
 
 <div class="footnote">
   ※ 発電量は NEDO 日射量データベース（東京）を元にした簡易推計です。実際の発電量は屋根方位・周辺影・気象により変動します。※ 屋根キャパシティは小屋裏レベル平面図のグリッド寸法（5000/3500）からの推定で、垂木ピッチ・雪止め・換気ガラリ等の制約は未考慮です。正式な搭載可能量はSekisui構造検討でご確認ください。
-  ※ プリセットの回収年は本シミュレーターの前提（買電31円・FIT2026年度・劣化0.5%/年・20年維持費込み）での試算値。国DR補助は約3.7万円/kWh（上限60万円・先着）＋都DR実証10万円の現実的な取得額で計上しています。都補助は2026年10月以降、海外メーカー製パネルが対象外となる方向のため、着工2027年1月の本件では国産（シャープ等）選定が補助上安全です。※ パワーコンディショナは寿命10〜15年が目安（メーカー保証15年が主流）。パネル本体は出力保証25年前後・機器保証15年前後が一般的で、保証期間内の故障は原則無償のため、予備費は配線・架台等の軽微修理を想定した値です。※ 補助金は令和8年度基準（都 太陽光: 新築12万円/kW・3.6kW超10万円/kW、オール電化13/11万円／都 蓄電池: 10万円/kWh 上限120万円／国DR: 約3.7万円/kWh 上限60万円・先着／国 給湯省エネ2026: エコキュート7〜10万円／都 熱と電気の有効利用: 太陽光連携日中沸き上げ型14万円+再エネ電力5万+DR8万）。都の給湯高額メニューは太陽光併設が前提。同一機器への都制度重複は不可（ゼロエミポイントとの併用不可）。事前申込が契約前に必要・先着順のため、Sekisui契約スケジュールとの整合に注意。
+  ※ 瓦一体型は屋根材を兼ねるため通気層がなく発電効率が約1〜2割低下・単価も高め（本試算は−14%・34万円/kWで計上）。屋根材代の相殺分と外観価値は含みません。固定資産税は屋根材扱いでわずかに上がります。※ プリセットの回収年は本シミュレーターの前提（買電31円・FIT2026年度・劣化0.5%/年・20年維持費込み）での試算値。国DR補助は約3.7万円/kWh（上限60万円・先着）＋都DR実証10万円の現実的な取得額で計上しています。都補助は2026年10月以降、海外メーカー製パネルが対象外となる方向のため、着工2027年1月の本件では国産（シャープ等）選定が補助上安全です。※ パワーコンディショナは寿命10〜15年が目安（メーカー保証15年が主流）。パネル本体は出力保証25年前後・機器保証15年前後が一般的で、保証期間内の故障は原則無償のため、予備費は配線・架台等の軽微修理を想定した値です。※ 補助金は令和8年度基準（都 太陽光: 新築12万円/kW・3.6kW超10万円/kW、オール電化13/11万円／都 蓄電池: 10万円/kWh 上限120万円／国DR: 約3.7万円/kWh 上限60万円・先着／国 給湯省エネ2026: エコキュート7〜10万円／都 熱と電気の有効利用: 太陽光連携日中沸き上げ型14万円+再エネ電力5万+DR8万）。都の給湯高額メニューは太陽光併設が前提。同一機器への都制度重複は不可（ゼロエミポイントとの併用不可）。事前申込が契約前に必要・先着順のため、Sekisui契約スケジュールとの整合に注意。
   ※ 本邸の図面はエネファーム搭載計画です。おひさまエコキュートを選ぶ場合は「ガス発電給湯→電気給湯」への設計変更となり、ガス配管・EneFarm置場の見直しが必要です。エネファームのガス代・おひさまエコキュート向け料金プラン（東電の昼間割安プラン等）は本試算に含みません。
 </div>
 
@@ -340,17 +350,22 @@ const HWF   = [1.30,1.25,1.10,0.95,0.85,0.75,0.70,0.70,0.80,0.95,1.10,1.25];
 
 /* ---------- 方位・勾配 ---------- */
 const ORIENTS = [
-  {id:"s30", name:"南 30°",        f:1.00},
-  {id:"se",  name:"南東/南西 30°", f:0.96},
-  {id:"low", name:"南 緩勾配 10°", f:0.93},
-  {id:"ew",  name:"東/西 30°",     f:0.85},
-  {id:"n",   name:"北 30°",        f:0.62},
+  {id:"s30", name:"南 30°",          f:1.00},
+  {id:"s17", name:"南 3寸(16.7°)",   f:0.97},
+  {id:"se",  name:"南東/南西 30°",   f:0.96},
+  {id:"low", name:"南 緩勾配 10°",   f:0.93},
+  {id:"flat",name:"水平（フラット置き）", f:0.88},
+  {id:"ew",  name:"東/西 30°",       f:0.85},
+  {id:"n",   name:"北 3寸",          f:0.64},
 ];
 const orient = id => ORIENTS.find(o=>o.id===id);
 
 /* ---------- ブランド（単価は費用設定で編集可） ---------- */
 const BRANDS = [
-  {id:"sharp",  short:"SHARP",  name:"シャープ BLACKSOLAR ZERO（積水標準）", yenPerKw:260000, perf:1.00,
+  {id:"tile",   short:"瓦一体",  name:"シャープ 瓦一体型（積水標準・屋根材一体）", yenPerKw:340000, perf:0.86,
+   look:{c1:"#1a1d24",c2:"#0c0e13",grid:"rgba(255,255,255,.07)",frame:"#23262e",gloss:.16},
+   mod:{w:1.116,h:0.902,kw:0.185,note:"瓦寸法モジュール・屋根材を兼ねる"}},
+  {id:"sharp",  short:"SHARP",  name:"シャープ BLACKSOLAR ZERO（積水標準・屋根置き）", yenPerKw:260000, perf:1.00,
    look:{c1:"#10151f",c2:"#050a12",grid:"rgba(255,255,255,.10)",frame:"#0a0f18",gloss:.28},
    mod:{w:1.318,h:1.004,kw:0.256,note:"小型モジュール・狭小屋根で敷き詰めやすい"}},
   {id:"pana",   short:"Pana",   name:"パナソニック（長州産業OEM）", yenPerKw:285000, perf:1.02,
@@ -370,13 +385,13 @@ const brand = id => BRANDS.find(b=>b.id===id);
 
 /* ---------- 屋根面（面ごとにブランド・方位・容量） ---------- */
 const ZONES = [
-  {id:"A", name:"南面 A", kw:1.7, on:true,  brand:"sharp", orient:"s30", desc:"図面 太陽光1.7kW面",
-   geom:{w:5.0, d:3.5, pitch:26.6}},
-  {id:"B", name:"南面 B", kw:1.3, on:true,  brand:"sharp", orient:"s30", desc:"図面 太陽光1.3kW面",
-   geom:{w:3.5, d:3.5, pitch:26.6}},
-  {id:"N", name:"北面",   kw:0,   on:false, brand:"sharp", orient:"n",   desc:"非歩行屋根（北流れ）",
-   geom:{w:8.5, d:3.5, pitch:26.6}},
-  {id:"C", name:"増設 C", kw:1.0, on:false, brand:"canad", orient:"low", desc:"カーポート等 増設案",
+  {id:"A", name:"東棟 太陽電池設置面", kw:1.7, on:true,  brand:"sharp", orient:"s17", desc:"図面 太陽光1.7kW・勾配3寸(30/100)・5.0×3.5m",
+   geom:{w:5.0, d:3.5, pitch:16.7}},
+  {id:"B", name:"西棟 非歩行屋根",     kw:1.3, on:true,  brand:"sharp", orient:"flat", desc:"図面 太陽光1.3kW・フラット平置き6枚・3.5×5.0m",
+   geom:{w:3.5, d:5.0, pitch:0}},
+  {id:"N", name:"東棟 北側",           kw:0,   on:false, brand:"sharp", orient:"n",   desc:"東棟の北流れ面（通常非搭載）",
+   geom:{w:5.0, d:3.5, pitch:16.7}},
+  {id:"C", name:"増設 C",              kw:1.0, on:false, brand:"canad", orient:"low", desc:"カーポート等 増設案",
    geom:{w:5.0, d:2.5, pitch:10}},
 ];
 const PITCHES = [
@@ -421,21 +436,21 @@ const FITS = [
 /* ---------- 構成プリセット（グリッドサーチで検証済み） ---------- */
 const PRESETS = [
   {id:"reco", name:"★おすすめ（回収重視）",
-   note:"南面最大3.8kW＋蓄電池なし＋おひさまエコキュート。補助合計 約73万円・回収 約11年・20年累積 +58万円・自給率51%。蓄電池は補助込みでも回収を遅らせるため外し、余剰は昼の湯沸かしに使う構成。",
-   apply(){ setZones([["A",2.3,"sharp","s30",true],["B",1.5,"sharp","s30",true],["N",0,"sharp","n",false],["C",1.0,"canad","low",false]]);
+   note:"東棟2.3kW＋西棟フラット2.05kW（計4.35kW）＋蓄電池なし＋おひさまエコキュート。補助 約79万円・回収 約12年・20年累積 +53万円・自給率51%。",
+   apply(){ setZones([["A",2.3,"sharp","s17",true],["B",2.05,"sharp","flat",true],["N",0,"sharp","n",false],["C",1.0,"canad","low",false]]);
      S.batt=BATTS[0]; S.hw=HWSYS.find(h=>h.id==="ohisama"); S.sub.dr=0; }},
   {id:"plan", name:"図面標準",
-   note:"図面どおり 3.0kW＋エネファーム＋蓄電池なし。補助 約36万円・回収 約13年・20年累積 +2万円。エネファームが宅内負荷を先に賄うため太陽光の経済メリットは薄め。",
-   apply(){ setZones([["A",1.7,"sharp","s30",true],["B",1.3,"sharp","s30",true],["N",0,"sharp","n",false],["C",1.0,"canad","low",false]]);
+   note:"図面どおり 東棟1.7kW＋西棟1.3kW＋エネファーム＋蓄電池なし。補助 約36万円・回収 約14年・20年累積 ほぼ±0。西棟フラット置きは発電係数0.88。",
+   apply(){ setZones([["A",1.7,"sharp","s17",true],["B",1.3,"sharp","flat",true],["N",0,"sharp","n",false],["C",1.0,"canad","low",false]]);
      S.batt=BATTS[0]; S.hw=HWSYS.find(h=>h.id==="enefarm"); S.sub.dr=0; }},
   {id:"resil", name:"防災・自給重視",
-   note:"3.8kW＋オムロン6.5kWh＋エネファーム＋DR補助（現実値34万円）。補助合計 約144万円・回収 約14年だが自給率96%・停電時も電気とお湯を維持。",
-   apply(){ setZones([["A",2.3,"sharp","s30",true],["B",1.5,"sharp","s30",true],["N",0,"sharp","n",false],["C",1.0,"canad","low",false]]);
+   note:"4.35kW＋オムロン6.5kWh＋エネファーム＋DR補助34万円。補助合計 約150万円・回収 約14年・自給率96%。停電時も電気とお湯を維持。",
+   apply(){ setZones([["A",2.3,"sharp","s17",true],["B",2.05,"sharp","flat",true],["N",0,"sharp","n",false],["C",1.0,"canad","low",false]]);
      S.batt=BATTS.find(b=>b.id==="omron"); S.hw=HWSYS.find(h=>h.id==="enefarm");
      S.sub.dr=340000; }},
   {id:"full", name:"フル搭載",
-   note:"南3.8kW＋カーポート1.3kW＋シャープ9.5kWh＋おひさまEQ＋DR補助45万円。補助合計 約227万円・回収 約12年・20年累積 +83万円。カーポート本体の建設費(50〜100万)は別途。",
-   apply(){ setZones([["A",2.3,"sharp","s30",true],["B",1.5,"sharp","s30",true],["N",0,"sharp","n",false],["C",1.3,"sharp","low",true]]);
+   note:"4.35kW＋カーポート1.3kW＋シャープ9.5kWh＋おひさまEQ＋DR補助45万円。補助 約230万円・自給率最大級。カーポート本体の建設費(50〜100万)は別途。",
+   apply(){ setZones([["A",2.3,"sharp","s17",true],["B",2.05,"sharp","flat",true],["N",0,"sharp","n",false],["C",1.3,"sharp","low",true]]);
      S.batt=BATTS.find(b=>b.id==="sharp9"); S.hw=HWSYS.find(h=>h.id==="ohisama");
      S.sub.dr=450000; }},
 ];
@@ -461,7 +476,7 @@ const DEGRADE  = 0.005;
 const S = {
   month: 5, night: false,
   batt: BATTS[2], hw: HWSYS[0], fit: FITS[0],
-  daily: 12, dayRatio: 0.35, buy: 31, margin: 0.25,
+  daily: 12, dayRatio: 0.35, buy: 31, margin: 0.25, azimuth: 15, azDir: 'W',
   // 費用オーバーライド（円）: b_<brandId>=円/kW, install, batt_<id>, hw_<id>
   priceOv: { install: 150000 },
   // 補助金（円・編集可）
@@ -491,9 +506,16 @@ const subTotal = ()  => S.sub.pv + S.sub.batt + S.sub.dr + S.sub.hw + S.sub.hwTo
 
 /* ---------- 発電モデル ---------- */
 function activeKw(){ return ZONES.filter(z=>z.on).reduce((s,z)=>s+z.kw,0); }
+function azFactor(){ // 真南からの振れによる低減（近似・緩勾配ほど影響小）
+  return 1 - Math.pow(S.azimuth/90, 2) * 0.22;
+}
+const AZ_SENSITIVE = ["s30","s17","low","se"]; // 傾斜南面のみ方位の影響を受ける（水平は無関係）
+function zoneF(z){
+  const base = orient(z.orient).f * brand(z.brand).perf;
+  return AZ_SENSITIVE.includes(z.orient) ? base * azFactor() : base;
+}
 function effKw(){
-  return ZONES.filter(z=>z.on)
-    .reduce((s,z)=>s + z.kw * orient(z.orient).f * brand(z.brand).perf, 0);
+  return ZONES.filter(z=>z.on).reduce((s,z)=>s + z.kw * zoneF(z), 0);
 }
 function dayModel(m){
   const f = HWF[m];
@@ -665,7 +687,7 @@ function buildScene(){
   if(!S.night){
     el("circle",{cx:p.x, cy:p.y, r:55, fill:"url(#sunG)", class:"anim"},svg);
     el("circle",{cx:p.x, cy:p.y, r:17, fill:"#ffd464", class:"sun-glow"},svg);
-    for(const [tx,ty] of [[470,158],[560,143],[650,170]]){
+    for(const [tx,ty] of [[340,172],[560,132],[660,140]]){
       const ln = el("line",{x1:p.x,y1:p.y,x2:tx,y2:ty,stroke:"rgba(255,214,100,.35)","stroke-width":2,
         "stroke-dasharray":"6 10",class:"anim"},svg);
       animateDash(ln, 900);
@@ -676,6 +698,19 @@ function buildScene(){
     el("circle",{cx:800, cy:80, r:16, fill:"#e8edf5", opacity:.9},svg);
     el("circle",{cx:794, cy:76, r:14, fill:c1},svg);
   }
+  // 方位コンパス（配置図の真北・南面の振れ）
+  (function(){
+    const cx=64, cy=64, r=30;
+    el("circle",{cx,cy,r,fill:"rgba(16,42,68,.75)",stroke:"var(--bp-line)"},svg);
+    const th=(-S.azimuth*(S.azDir==="W"?1:-1))*Math.PI/180; // 画面上=図面上=建物北
+    const nx=cx+Math.sin(th)*r*0.78, ny=cy-Math.cos(th)*r*0.78;
+    el("line",{x1:cx,y1:cy,x2:nx,y2:ny,stroke:"#ff7a6b","stroke-width":2},svg);
+    el("polygon",{points:`${nx},${ny} ${nx-4},${ny+9} ${nx+4},${ny+9}`,fill:"#ff7a6b",
+      transform:`rotate(${-S.azimuth*(S.azDir==="W"?1:-1)} ${nx} ${ny})`},svg);
+    el("text",{x:cx,y:cy+r+12,"text-anchor":"middle",fill:"#8fb0c7","font-size":9},svg).textContent="真北";
+    el("text",{x:cx,y:cy+r+24,"text-anchor":"middle",fill:"#5d7f99","font-size":8.5},svg)
+      .textContent=`南面: 真南から${S.azDir==="W"?"西":"東"}へ${S.azimuth}°`;
+  })();
   el("rect",{x:0,y:gY,width:980,height:70,fill:S.night?"#07101e":"#0a1a2c"},svg);
   el("line",{x1:0,y1:gY,x2:980,y2:gY,stroke:"var(--bp-line)","stroke-width":1},svg);
   drawHouse(svg, gY, p);
@@ -685,23 +720,29 @@ function buildScene(){
 function drawHouse(svg, gY, sun){
   const g = el("g",{},svg);
   const bodyF = S.night ? "#122436" : "#1b3a55";
+  const bodyF2 = S.night ? "#0f1e2e" : "#173349";
   const bodyS = "#2e5a7d";
-  el("rect",{x:300,y:gY-200,width:300,height:200,fill:bodyF,stroke:bodyS},g);
-  el("polygon",{points:"300,160 600,160 660,110 360,110",fill:S.night?"#0e1c2c":"#15304a",stroke:bodyS},g);
-  el("line",{x1:360,y1:110,x2:660,y2:110,stroke:bodyS,"stroke-width":2},g);
 
-  // 北面（棟の向こう側のスリバー表示）
-  el("polygon",{points:"360,110 660,110 636,92 336,92",fill:S.night?"#0a1522":"#102638",stroke:bodyS},g);
+  // ---- 西棟（低め・非歩行フラット屋根） ----
+  el("rect",{x:250,y:gY-184,width:170,height:184,fill:bodyF2,stroke:bodyS},g);
+  el("line",{x1:250,y1:gY-184,x2:420,y2:gY-184,stroke:bodyS,"stroke-width":2},g);
+  // ---- 東棟（高め・南へ3寸勾配の太陽電池設置面） ----
+  el("rect",{x:430,y:gY-210,width:270,height:210,fill:bodyF,stroke:bodyS},g);
+  el("polygon",{points:"430,150 700,150 718,114 448,114",fill:S.night?"#0e1c2c":"#15304a",stroke:bodyS},g);
+  el("line",{x1:448,y1:114,x2:718,y2:114,stroke:bodyS,"stroke-width":2},g);
+  el("text",{x:565,y:gY-190,"text-anchor":"middle",fill:"#5d7f99","font-size":8.5},g).textContent="勾配 3寸(30/100)";
+  el("text",{x:335,y:gY-190,"text-anchor":"middle",fill:"#5d7f99","font-size":8.5},g).textContent="非歩行屋根(フラット)";
+
   const zoneGeo = {
-    A:{pts:[[318,156],[458,156],[506,116],[366,116]], label:[412,148]},
-    B:{pts:[[470,156],[586,156],[634,116],[518,116]], label:[552,148]},
-    N:{pts:[[350,108],[646,108],[626,94],[330,94]],   label:[488,84]},
-    C:{pts:[[652,268],[792,268],[812,252],[672,252]], label:[732,246]},
+    A:{pts:[[440,148],[690,148],[708,116],[458,116]], label:[574,138]},
+    B:{pts:[[258,180],[412,180],[420,170],[266,170]], label:[339,196]},
+    N:{pts:[[456,112],[706,112],[694,100],[444,100]], label:[575,96]},
+    C:{pts:[[726,268],[856,268],[876,252],[746,252]], label:[801,246]},
   };
   const mm = monthModel(S.month);
   const maxGen = Math.max(...MNAME.map((_,i)=>monthModel(i).gen), 1);
   const intensity = S.night ? 0 : mm.gen / maxGen;
-  const sunT = (sun.alt-31)/47; // 0冬..1夏 → 反射位置
+  const sunT = (sun.alt-31)/47;
 
   for(const z of ZONES){
     const gz = zoneGeo[z.id];
@@ -717,17 +758,16 @@ function drawHouse(svg, gY, sun){
     }
     if(z.on){
       const [p0,p1,p2,p3] = gz.pts;
-      // セル格子（ブランドごとに濃さが違う。MAXeonはバックコンタクトで格子なし）
+      const nDiv = z.id==="B" ? 3 : 5;   // 西棟は図面通り2列×3段イメージ
       if(bk.look.grid){
-        for(let i=1;i<5;i++){
-          const t=i/5;
-          el("line",{x1:p0[0]+(p1[0]-p0[0])*t, y1:p0[1], x2:p3[0]+(p2[0]-p3[0])*t, y2:p3[1],
+        for(let i=1;i<nDiv;i++){
+          const t=i/nDiv;
+          el("line",{x1:p0[0]+(p1[0]-p0[0])*t, y1:p0[1]+(p1[1]-p0[1])*t, x2:p3[0]+(p2[0]-p3[0])*t, y2:p3[1]+(p2[1]-p3[1])*t,
             stroke:bk.look.grid,"stroke-width":.7},grp);
         }
         el("line",{x1:(p0[0]+p3[0])/2,y1:(p0[1]+p3[1])/2,x2:(p1[0]+p2[0])/2,y2:(p1[1]+p2[1])/2,
           stroke:bk.look.grid,"stroke-width":.7},grp);
       }
-      // ---- 光の反射（太陽高度と面の向きで位置・強さが変化） ----
       if(!S.night){
         const gt = Math.max(0.06, Math.min(0.84, sunT*0.8 + (of-0.85)*0.5));
         const w = 0.10;
@@ -740,49 +780,50 @@ function drawHouse(svg, gY, sun){
     const t = el("text",{x:gz.label[0],y:gz.label[1],"text-anchor":"middle",
       fill:z.on?"#ffd88a":"#5d7f99","font-size":10.5,"font-weight":600},grp);
     t.textContent = z.on
-      ? (z.id==="N" ? `N ${z.kw}kW` : `${z.id} ${z.kw}kW ${bk.short}·${orient(z.orient).name.split(" ")[0]}`)
+      ? (z.id==="N" ? `N ${z.kw}kW` : `${z.id} ${z.kw}kW ${bk.short}·${orient(z.orient).name.split("（")[0].split(" ")[0]}`)
       : `${z.id} (OFF)`;
     grp.addEventListener("click",()=>{ z.on=!z.on; S.preset='custom'; refreshAll(); });
-    el("title",{},grp).textContent = `${z.name} ${z.desc}／${bk.name}／${orient(z.orient).name}（係数${of}）— クリックでON/OFF`;
+    el("title",{},grp).textContent = `${z.name} ${z.desc}／${bk.name}／${orient(z.orient).name}（実効係数${zoneF(z).toFixed(2)}）— クリックでON/OFF`;
   }
 
   const zc = ZONES.find(z=>z.id==="C");
-  for(const px of [668,788]) el("line",{x1:px,y1:268,x2:px,y2:gY,stroke:bodyS,"stroke-width":3,
+  for(const px of [740,850]) el("line",{x1:px,y1:268,x2:px,y2:gY,stroke:bodyS,"stroke-width":3,
     opacity:zc&&zc.on?1:.35},g);
 
   const winF = S.night ? "#ffd88a" : "#9cc4de";
-  for(const [x,y] of [[330,205],[420,205],[510,205],[330,300],[500,300]]){
-    el("rect",{x,y,width:52,height:40,fill:winF,opacity:S.night?0.9:0.5,stroke:bodyS},g);
+  for(const [x,y,w] of [[268,gY-140,52],[340,gY-140,52],[268,gY-70,52],
+                        [452,gY-160,52],[540,gY-160,52],[630,gY-160,52],[452,gY-70,52],[630,gY-70,52]]){
+    el("rect",{x,y,width:w,height:40,fill:winF,opacity:S.night?0.9:0.5,stroke:bodyS},g);
   }
-  el("rect",{x:432,y:gY-62,width:40,height:62,fill:"#0d2137",stroke:bodyS},g);
+  el("rect",{x:548,y:gY-62,width:40,height:62,fill:"#0d2137",stroke:bodyS},g);
 
   if(S.hw.id==="enefarm"){
-    el("rect",{x:236,y:gY-52,width:28,height:52,fill:"#1b3a55",stroke:"#3ec8b0","stroke-width":1.5},g);
-    el("text",{x:250,y:gY+14,"text-anchor":"middle",fill:"#3ec8b0","font-size":9},g).textContent="エネファーム";
+    el("rect",{x:216,y:gY-52,width:26,height:52,fill:"#1b3a55",stroke:"#3ec8b0","stroke-width":1.5},g);
+    el("text",{x:229,y:gY+14,"text-anchor":"middle",fill:"#3ec8b0","font-size":9},g).textContent="エネファーム";
   }else if(S.hw.id==="ohisama" || S.hw.id==="ecocute"){
-    el("rect",{x:234,y:gY-72,width:32,height:72,rx:8,fill:"#1b3a55",
+    el("rect",{x:212,y:gY-72,width:32,height:72,rx:8,fill:"#1b3a55",
       stroke:S.hw.id==="ohisama"?"var(--amber)":"#9cc4de","stroke-width":1.5},g);
     const hf = HWF[S.month]/1.3;
-    el("rect",{x:238,y:gY-6-58*hf,width:24,height:58*hf,rx:5,
+    el("rect",{x:216,y:gY-6-58*hf,width:24,height:58*hf,rx:5,
       fill:S.hw.id==="ohisama"?"rgba(255,185,53,.55)":"rgba(156,196,222,.45)"},g);
-    el("text",{x:250,y:gY+14,"text-anchor":"middle",fill:S.hw.id==="ohisama"?"var(--amber)":"#9cc4de","font-size":9},g)
+    el("text",{x:228,y:gY+14,"text-anchor":"middle",fill:S.hw.id==="ohisama"?"var(--amber)":"#9cc4de","font-size":9},g)
       .textContent = S.hw.id==="ohisama"?"おひさまEQ":"エコキュート";
     if(S.hw.id==="ohisama" && !S.night){
-      el("text",{x:250,y:gY-80,"text-anchor":"middle",fill:"#ffd88a","font-size":9},g).textContent="☀→♨ 昼沸き上げ";
+      el("text",{x:228,y:gY-80,"text-anchor":"middle",fill:"#ffd88a","font-size":9},g).textContent="☀→♨";
     }
   }
   if(S.batt.cap>0){
     const bh = 44;
-    el("rect",{x:186,y:gY-bh,width:36,height:bh,fill:"#1a1633",stroke:"var(--violet)","stroke-width":1.5},g);
+    el("rect",{x:164,y:gY-bh,width:36,height:bh,fill:"#1a1633",stroke:"var(--violet)","stroke-width":1.5},g);
     const mm2 = dayModel(S.month);
     const lvl = S.batt.usable>0 ? Math.min(1, (S.night? mm2.dis/S.batt.eff : Math.min(Math.max(0,mm2.gen-mm2.selfD), S.batt.usable)) / S.batt.usable) : 0;
-    el("rect",{x:189,y:gY-3-(bh-6)*Math.max(0,lvl),width:30,height:(bh-6)*Math.max(0,lvl),fill:"var(--violet)",opacity:.85},g);
-    el("text",{x:204,y:gY-bh-6,"text-anchor":"middle",fill:"var(--violet)","font-size":9},g).textContent=`蓄電池 ${S.batt.cap}kWh`;
+    el("rect",{x:167,y:gY-3-(bh-6)*Math.max(0,lvl),width:30,height:(bh-6)*Math.max(0,lvl),fill:"var(--violet)",opacity:.85},g);
+    el("text",{x:182,y:gY-bh-6,"text-anchor":"middle",fill:"var(--violet)","font-size":9},g).textContent=`蓄電池 ${S.batt.cap}kWh`;
   }
-  el("line",{x1:880,y1:gY,x2:880,y2:gY-190,stroke:bodyS,"stroke-width":4},g);
-  el("line",{x1:850,y1:gY-175,x2:910,y2:gY-175,stroke:bodyS,"stroke-width":3},g);
-  el("text",{x:880,y:gY+16,"text-anchor":"middle",fill:"#8fb0c7","font-size":9},g).textContent="系統";
-  el("text",{x:450,y:gY+38,"text-anchor":"middle",fill:"#5d7f99","font-size":10,"letter-spacing":"3"},g)
+  el("line",{x1:920,y1:gY,x2:920,y2:gY-190,stroke:bodyS,"stroke-width":4},g);
+  el("line",{x1:890,y1:gY-175,x2:950,y2:gY-175,stroke:bodyS,"stroke-width":3},g);
+  el("text",{x:920,y:gY+16,"text-anchor":"middle",fill:"#8fb0c7","font-size":9},g).textContent="系統";
+  el("text",{x:480,y:gY+38,"text-anchor":"middle",fill:"#5d7f99","font-size":10,"letter-spacing":"3"},g)
     .textContent = "MINAMI-OGIKUBO RESIDENCE — SHAWOOD";
 }
 
@@ -790,24 +831,24 @@ function drawFlows(svg, gY){
   const mm = dayModel(S.month);
   const flows = [];
   if(!S.night){
-    if(mm.selfD>0.05) flows.push({d:`M 480 170 C 480 240, 460 260, 452 ${gY-40}`, c:"var(--green)", n:2});
+    if(mm.selfD>0.05) flows.push({d:`M 565 145 C 565 220, 570 260, 568 ${gY-40}`, c:"var(--green)", n:2});
     if(S.hw.id==="ohisama" && mm.hwSelf>0.05)
-      flows.push({d:`M 380 170 C 300 210, 262 240, 250 ${gY-70}`, c:"var(--amber)", n:2});
+      flows.push({d:`M 340 174 C 300 210, 250 240, 228 ${gY-70}`, c:"var(--amber)", n:2});
     if(S.batt.usable>0 && (mm.gen-mm.selfD)>0.05)
-      flows.push({d:`M 400 170 C 300 210, 220 250, 204 ${gY-46}`, c:"var(--violet)", n:2});
-    if(mm.sold>0.05) flows.push({d:`M 600 150 C 720 170, 820 150, 878 ${gY-160}`, c:"var(--amber)", n:3});
+      flows.push({d:`M 470 140 C 340 190, 210 240, 182 ${gY-46}`, c:"var(--violet)", n:2});
+    if(mm.sold>0.05) flows.push({d:`M 700 132 C 790 140, 870 150, 918 ${gY-160}`, c:"var(--amber)", n:3});
     if((mm.loadD-mm.selfD)>0.05)
-      flows.push({d:`M 878 ${gY-150} C 800 250, 700 300, 604 ${gY-60}`, c:"var(--red)", n:1});
+      flows.push({d:`M 918 ${gY-150} C 840 260, 760 300, 700 ${gY-60}`, c:"var(--red)", n:1});
     if(S.hw.id==="enefarm")
-      flows.push({d:`M 252 ${gY-30} C 300 ${gY-40}, 360 ${gY-40}, 430 ${gY-40}`, c:"#3ec8b0", n:2});
+      flows.push({d:`M 230 ${gY-30} C 300 ${gY-40}, 380 ${gY-40}, 450 ${gY-40}`, c:"#3ec8b0", n:2});
   }else{
-    if(mm.dis>0.05) flows.push({d:`M 204 ${gY-40} C 260 280, 360 300, 440 ${gY-40}`, c:"var(--violet)", n:2});
+    if(mm.dis>0.05) flows.push({d:`M 182 ${gY-40} C 260 290, 420 300, 540 ${gY-40}`, c:"var(--violet)", n:2});
     const nightBuy = mm.loadN - mm.dis;
-    if(nightBuy>0.05) flows.push({d:`M 878 ${gY-150} C 800 250, 700 300, 604 ${gY-60}`, c:"var(--red)", n:2});
+    if(nightBuy>0.05) flows.push({d:`M 918 ${gY-150} C 840 260, 760 300, 700 ${gY-60}`, c:"var(--red)", n:2});
     if(S.hw.id==="ecocute" && nightBuy>0.05)
-      flows.push({d:`M 878 ${gY-150} C 700 290, 400 320, 254 ${gY-40}`, c:"#9cc4de", n:2});
+      flows.push({d:`M 918 ${gY-150} C 720 290, 420 320, 232 ${gY-40}`, c:"#9cc4de", n:2});
     if(S.hw.id==="enefarm")
-      flows.push({d:`M 252 ${gY-30} C 300 ${gY-40}, 360 ${gY-40}, 430 ${gY-40}`, c:"#3ec8b0", n:2});
+      flows.push({d:`M 230 ${gY-30} C 300 ${gY-40}, 380 ${gY-40}, 450 ${gY-40}`, c:"#3ec8b0", n:2});
   }
   for(const f of flows){
     const path = el("path",{d:f.d,fill:"none",stroke:f.c,"stroke-width":1.2,opacity:.35},svg);
@@ -1271,6 +1312,8 @@ function wire(){
   $("buyPrice").addEventListener("change", e=>{ S.buy=Math.max(0,+e.target.value||0); refreshAll(); });
   $("subAuto").addEventListener("click", e=>{ e.preventDefault(); subsidyAuto(); refreshAll(); });
   $("marginIn").addEventListener("change", e=>{ S.margin=Math.max(0,+e.target.value||0); refreshAll(); });
+  $("azIn").addEventListener("change", e=>{ S.azimuth=Math.min(60,Math.max(0,+e.target.value||0)); refreshAll(); });
+  $("azDir").addEventListener("change", e=>{ S.azDir=e.target.value; refreshAll(); });
   $("nightBtn").addEventListener("click", ()=>{
     S.night=!S.night;
     $("nightBtn").textContent = S.night ? "☀ 昼間モード" : "🌙 夜間モード";

@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Home Network Architecture — Final | TWSX26060017 南荻窪</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FAFAF7;
+  --ink:#1B2733;
+  --ink-soft:#4A5A68;
+  --rule:#C9D2D9;
+  --print-blue:#2456A6;
+  --c-10g:#0B7285;      /* 10GbE */
+  --c-1g:#1B3A6B;       /* 1GbE Cat6A */
+  --c-wifi:#7A8894;     /* Wi-Fi */
+  --c-wisun:#C2410C;    /* Wi-SUN B-route */
+  --c-jema:#6D3FBF;     /* JEM-A / CPEV-S */
+  --c-vpn:#9A2E7A;      /* WireGuard VPN */
+  --c-matter:#2F7D46;   /* Matter */
+  --zone:#F1F3F0;
+  --zone-line:#B9C4CC;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"IBM Plex Sans JP",sans-serif;
+  font-size:15px;
+  line-height:1.7;
+  padding:40px 16px 80px;
+}
+.sheet{max-width:1180px;margin:0 auto}
+.mono{font-family:"IBM Plex Mono",monospace}
+
+/* ---- drawing title block ---- */
+.titleblock{
+  border:2px solid var(--ink);
+  display:grid;
+  grid-template-columns:1fr auto;
+  margin-bottom:34px;
+  background:#fff;
+}
+.tb-main{padding:22px 26px;border-right:2px solid var(--ink)}
+.tb-eyebrow{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.22em;color:var(--print-blue);text-transform:uppercase;margin-bottom:8px}
+.tb-main h1{font-size:26px;font-weight:700;letter-spacing:.01em;line-height:1.35}
+.tb-main .sub{color:var(--ink-soft);font-size:14px;margin-top:6px}
+.tb-meta{display:grid;grid-template-columns:auto auto;font-family:"IBM Plex Mono",monospace;font-size:12px;min-width:300px}
+.tb-meta div{padding:9px 16px;border-bottom:1px solid var(--rule)}
+.tb-meta div:nth-child(odd){color:var(--ink-soft);border-right:1px solid var(--rule);letter-spacing:.08em}
+.tb-meta div:nth-last-child(-n+2){border-bottom:none}
+
+/* ---- sections ---- */
+section{margin-bottom:52px}
+h2{
+  font-size:18px;font-weight:700;letter-spacing:.02em;
+  border-bottom:2px solid var(--ink);
+  padding-bottom:8px;margin-bottom:6px;
+  display:flex;align-items:baseline;gap:12px;
+}
+h2 .no{font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--print-blue)}
+.h2sub{color:var(--ink-soft);font-size:13.5px;margin-bottom:18px}
+
+/* ---- principles ---- */
+.principles{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.principles div{background:#fff;padding:14px 18px;font-size:13.5px}
+.principles b{display:block;font-size:13px;color:var(--print-blue);font-family:"IBM Plex Mono",monospace;letter-spacing:.04em;margin-bottom:3px}
+
+/* ---- diagram ---- */
+.figure{background:#fff;border:1px solid var(--rule);padding:18px 14px 8px;overflow-x:auto}
+.figure svg{display:block;min-width:900px;width:100%;height:auto}
+.figcap{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--ink-soft);padding:10px 6px 12px;letter-spacing:.05em}
+
+/* ---- legend ---- */
+.legend{display:flex;flex-wrap:wrap;gap:18px;padding:12px 6px 4px;font-size:12.5px;font-family:"IBM Plex Mono",monospace}
+.legend span{display:inline-flex;align-items:center;gap:8px}
+.lg{width:34px;height:0;border-top-width:3px;border-top-style:solid;display:inline-block}
+.lg.thin{border-top-width:2px}
+.lg.dash{border-top-style:dashed}
+.lg.dot{border-top-style:dotted}
+
+/* ---- tables ---- */
+table{width:100%;border-collapse:collapse;background:#fff;font-size:13.5px}
+th{
+  text-align:left;font-family:"IBM Plex Mono",monospace;font-size:11.5px;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);
+  border-bottom:2px solid var(--ink);padding:8px 12px;
+}
+td{border-bottom:1px solid var(--rule);padding:10px 12px;vertical-align:top}
+td.key{font-weight:700;white-space:nowrap}
+.tag{
+  display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:11px;
+  padding:1px 8px;border:1px solid currentColor;border-radius:2px;margin-right:6px;white-space:nowrap
+}
+.t10{color:var(--c-10g)} .t1{color:var(--c-1g)} .tw{color:#5B6B78}
+.ts{color:var(--c-wisun)} .tj{color:var(--c-jema)} .tv{color:var(--c-vpn)} .tm{color:var(--c-matter)}
+
+.note{
+  border-left:3px solid var(--print-blue);background:#fff;
+  padding:12px 18px;font-size:13.5px;margin-top:14px;color:var(--ink-soft)
+}
+.note b{color:var(--ink)}
+ul{padding-left:22px;font-size:13.5px}
+li{margin-bottom:5px}
+
+@media (max-width:720px){
+  .titleblock{grid-template-columns:1fr}
+  .tb-main{border-right:none;border-bottom:2px solid var(--ink)}
+}
+</style>
+</head>
+<body>
+<div class="sheet">
+
+<!-- ============ TITLE BLOCK ============ -->
+<header class="titleblock">
+  <div class="tb-main">
+    <div class="tb-eyebrow">Smart Home Infrastructure — Final Design</div>
+    <h1>ネットワーク&amp;スマートホーム アーキテクチャ 最終版</h1>
+    <div class="sub">Apple Home = 日常UI ／ Home Assistant = 統合コア ／ 10GbEは帯域が必要な箇所のみ、IoTは通常LAN</div>
+  </div>
+  <div class="tb-meta">
+    <div>PROJECT</div><div>TWSX26060017（南荻窪）</div>
+    <div>REV</div><div>Q — FINAL</div>
+    <div>DATE</div><div>2026-07-28</div>
+    <div>SCALE</div><div>NTS</div>
+    <div>SHEET</div><div>NW-01</div>
+  </div>
+</header>
+
+<!-- ============ PRINCIPLES ============ -->
+<section>
+  <h2><span class="no">00</span>設計原則</h2>
+  <div class="h2sub">この版で確定した役割分担。以降のすべての判断はこの表に従う。</div>
+  <div class="principles">
+    <div><b>APPLE HOME / SIRI</b>日常のUIと音声操作。家族が触るのはここだけ。HomePodがHome hub。</div>
+    <div><b>MINI PC / HOME ASSISTANT</b>統合コア。ECHONET Lite・Matter・JEM-A→IP・Bルートを束ね、HomeKit Bridgeで公開。ローカル完結・クラウド非依存。</div>
+    <div><b>ALEXA ×2</b>Amazon Music専用。スマートホーム連携は一切持たせない。</div>
+    <div><b>ECHONET LITE</b>通常のLAN/Wi-Fiで十分。10GbE要件なし。</div>
+    <div><b>10GbE ポリシー</b>帯域が必要な箇所のみ（WAN、コア間、Mac miniサーバ）。IoT・TV・APは1GbE。</div>
+    <div><b>VPN</b>思想は「仮想的なLAN参加」。主経路 WireGuard（IPv6待受）＋予備 Teleport の2段構え。Apple Home遠隔はApple経由でVPN不要。</div>
+    <div><b>追加サブスク ゼロ</b>継続課金は既存のiCloud+のみ（家唯一のサブスク）。HKSVはこれを活用。Nabu Casa・Tailscale等の新規課金は不採用、ハードは買い切り。</div>
+  </div>
+</section>
+
+<!-- ============ PHYSICAL TOPOLOGY ============ -->
+<section>
+  <h2><span class="no">01</span>物理トポロジ</h2>
+  <div class="h2sub">配線・電波の物理レイヤ。ゾーン＝設置場所、線色＝伝送方式。</div>
+
+  <div class="figure">
+  <svg viewBox="0 0 1160 880" xmlns="http://www.w3.org/2000/svg" font-family="'IBM Plex Sans JP',sans-serif">
+    <defs>
+      <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/>
+      </marker>
+    </defs>
+
+    <!-- ===== zones ===== -->
+    <g font-family="'IBM Plex Mono',monospace" font-size="11" fill="#5B6B78" letter-spacing="1">
+      <rect x="16" y="16" width="1128" height="130" fill="var(--zone)" stroke="var(--zone-line)"/>
+      <text x="1132" y="34" text-anchor="end">屋外 / WAN</text>
+
+      <rect x="16" y="176" width="700" height="250" fill="var(--zone)" stroke="var(--zone-line)"/>
+      <text x="704" y="194" text-anchor="end">書斎クローゼット 12Uラック</text>
+
+      <rect x="740" y="176" width="404" height="250" fill="var(--zone)" stroke="var(--zone-line)"/>
+      <text x="1132" y="194" text-anchor="end">情報盤</text>
+
+      <rect x="16" y="460" width="1128" height="170" fill="var(--zone)" stroke="var(--zone-line)"/>
+      <text x="1132" y="478" text-anchor="end">有線端末 — Cat6A 7系統＋予備3（玄関カメラ・ドアホン・パワコン）</text>
+
+      <rect x="16" y="664" width="900" height="190" fill="var(--zone)" stroke="var(--zone-line)"/>
+      <text x="904" y="682" text-anchor="end">無線端末 — Wi-Fi (U7 Pro ×2)</text>
+
+      <rect x="940" y="664" width="204" height="190" fill="var(--zone)" stroke="var(--zone-line)"/>
+      <text x="1132" y="682" text-anchor="end">玄関 / 非IP</text>
+    </g>
+
+    <!-- ===== links (behind boxes) ===== -->
+    <!-- Internet -> ONU : fiber drop -->
+    <line x1="345" y1="120" x2="265" y2="216" stroke="var(--c-10g)" stroke-width="4"/>
+    <text x="322" y="176" font-size="11" fill="var(--c-10g)" font-family="'IBM Plex Mono',monospace">光ファイバ</text>
+
+    <!-- ONU -> UCG : 10GBASE-T -->
+    <line x1="320" y1="250" x2="370" y2="250" stroke="var(--c-10g)" stroke-width="4"/>
+    <text x="349" y="250" font-size="10.5" fill="var(--c-10g)" font-family="'IBM Plex Mono',monospace" text-anchor="middle" transform="rotate(-90 349 250)">10GBASE-T</text>
+
+    <!-- VPN client -> UCG -->
+    <line x1="595" y1="120" x2="520" y2="216" stroke="var(--c-vpn)" stroke-width="2.5" stroke-dasharray="7 5" marker-end="url(#arr)"/>
+    <text x="540" y="168" font-size="11" fill="var(--c-vpn)" font-family="'IBM Plex Mono',monospace">WireGuard UDP/51820</text>
+
+    <!-- UCG -> Switch : 10GbE -->
+    <line x1="420" y1="284" x2="420" y2="326" stroke="var(--c-10g)" stroke-width="4"/>
+    <text x="431" y="312" font-size="11" fill="var(--c-10g)" font-family="'IBM Plex Mono',monospace">10GbE</text>
+
+    <!-- Switch -> Mac mini : 10GbE optional -->
+    <line x1="470" y1="352" x2="580" y2="352" stroke="var(--c-10g)" stroke-width="4"/>
+    <text x="478" y="344" font-size="11" fill="var(--c-10g)" font-family="'IBM Plex Mono',monospace">10GbE(任意)</text>
+
+    <!-- Switch -> 情報盤 converter : Cat6A -->
+    <path d="M470,386 H940 V288" fill="none" stroke="var(--c-1g)" stroke-width="2.5"/>
+    <text x="700" y="379" font-size="11" fill="var(--c-1g)" font-family="'IBM Plex Mono',monospace">Cat6A 1GbE（盤内コンセント併設）</text>
+
+    <!-- Switch -> wired endpoints -->
+    <path d="M230,394 V446 H180 V500" fill="none" stroke="var(--c-1g)" stroke-width="2.5"/>
+    <path d="M285,394 V438 H410 V500" fill="none" stroke="var(--c-1g)" stroke-width="2.5"/>
+    <path d="M340,394 V430 H615 V500" fill="none" stroke="var(--c-1g)" stroke-width="2.5"/>
+    <path d="M395,394 V422 H835 V500" fill="none" stroke="var(--c-1g)" stroke-width="2.5"/>
+    <text x="624" y="424" font-size="11" fill="var(--c-1g)" font-family="'IBM Plex Mono',monospace">PoE</text>
+    <text x="844" y="416" font-size="11" fill="var(--c-1g)" font-family="'IBM Plex Mono',monospace">PoE</text>
+
+    <!-- APs -> wireless zone -->
+    <line x1="615" y1="564" x2="615" y2="664" stroke="var(--c-wifi)" stroke-width="2" stroke-dasharray="5 5"/>
+    <line x1="835" y1="564" x2="835" y2="664" stroke="var(--c-wifi)" stroke-width="2" stroke-dasharray="5 5"/>
+    <text x="628" y="620" font-size="11" fill="#5B6B78" font-family="'IBM Plex Mono',monospace">Wi-Fi 2.4/5GHz</text>
+
+    <!-- Smart meter -> Wi-SUN dongle -->
+    <path d="M130,120 V152 H26 V556 H60" fill="none" stroke="var(--c-wisun)" stroke-width="2.5" stroke-dasharray="2 5" marker-end="url(#arr)"/>
+    <text x="44" y="330" font-size="11" fill="var(--c-wisun)" font-family="'IBM Plex Mono',monospace" transform="rotate(-90 44 330)">Wi-SUN 920MHz（Bルート）</text>
+
+    <!-- Smart lock -> JEM-A converter -->
+    <line x1="1040" y1="704" x2="1040" y2="288" stroke="var(--c-jema)" stroke-width="2.5" marker-end="url(#arr)"/>
+    <text x="1054" y="520" font-size="11" fill="var(--c-jema)" font-family="'IBM Plex Mono',monospace" transform="rotate(-90 1054 520)">CPEV-S 0.9-2P ×2（JEM-A制御/状態）</text>
+
+    <!-- ===== nodes ===== -->
+    <g stroke="var(--ink)" stroke-width="1.5">
+      <!-- outside -->
+      <rect x="40"  y="56" width="180" height="64" fill="#fff"/>
+      <rect x="250" y="56" width="190" height="64" fill="#fff"/>
+      <rect x="480" y="56" width="230" height="64" fill="#fff"/>
+      <!-- rack -->
+      <rect x="200" y="216" width="120" height="68" fill="#fff"/>
+      <rect x="370" y="216" width="200" height="68" fill="#fff"/>
+      <rect x="200" y="326" width="270" height="68" fill="#fff"/>
+      <rect x="580" y="322" width="130" height="60" fill="#fff" stroke-dasharray="6 4"/>
+      <!-- 情報盤 -->
+      <rect x="770" y="212" width="340" height="76" fill="#fff"/>
+      <!-- wired -->
+      <rect x="60"  y="500" width="240" height="84" fill="#fff"/>
+      <rect x="330" y="500" width="160" height="64" fill="#fff"/>
+      <rect x="520" y="500" width="190" height="64" fill="#fff"/>
+      <rect x="740" y="500" width="190" height="64" fill="#fff"/>
+      <!-- wireless -->
+      <rect x="50"  y="704" width="170" height="76" fill="#fff"/>
+      <rect x="240" y="704" width="180" height="76" fill="#fff"/>
+      <rect x="440" y="692" width="280" height="150" fill="#fff"/>
+      <rect x="740" y="704" width="170" height="104" fill="#fff"/>
+      <!-- entrance -->
+      <rect x="956" y="704" width="172" height="112" fill="#fff"/>
+    </g>
+
+    <!-- chips inside boxes -->
+    <g stroke="var(--rule)" stroke-width="1">
+      <rect x="76" y="550" width="208" height="24" fill="#F4F6F8"/>
+      <rect x="456" y="728" width="248" height="26" fill="#F4F6F8"/>
+      <rect x="456" y="762" width="248" height="26" fill="#F4F6F8"/>
+      <rect x="456" y="796" width="248" height="26" fill="#F4F6F8"/>
+    </g>
+
+    <!-- ===== labels ===== -->
+    <g font-size="13" font-weight="700" fill="var(--ink)">
+      <text x="130" y="82" text-anchor="middle">TEPCO</text>
+      <text x="345" y="82" text-anchor="middle">インターネット</text>
+      <text x="595" y="82" text-anchor="middle">外出先クライアント</text>
+      <text x="260" y="246" text-anchor="middle">ONU</text>
+      <text x="470" y="242" text-anchor="middle">UCG Fiber</text>
+      <text x="335" y="352" text-anchor="middle">UniFi Pro Max 16 PoE</text>
+      <text x="645" y="348" text-anchor="middle">Mac mini（任意）</text>
+      <text x="940" y="238" text-anchor="middle">JEM-A → IP 変換</text>
+      <text x="180" y="526" text-anchor="middle">Mini PC — Home Assistant</text>
+      <text x="410" y="526" text-anchor="middle">BRAVIA</text>
+      <text x="615" y="526" text-anchor="middle">U7 Pro AP #1</text>
+      <text x="835" y="526" text-anchor="middle">U7 Pro AP #2</text>
+      <text x="135" y="730" text-anchor="middle">HomePod</text>
+      <text x="330" y="730" text-anchor="middle">Alexa ×2</text>
+      <text x="580" y="714" text-anchor="middle">ECHONET Lite（AIF）</text>
+      <text x="825" y="730" text-anchor="middle">SwitchBot Relay 1</text>
+      <text x="1042" y="730" text-anchor="middle">玄関スマートロック</text>
+    </g>
+    <g font-size="11.5" fill="var(--ink-soft)">
+      <text x="130" y="102" text-anchor="middle">スマートメーター</text>
+      <text x="345" y="102" text-anchor="middle">FTTH 10G（フレッツ 光クロス等）</text>
+      <text x="595" y="102" text-anchor="middle">iPhone / MacBook（WireGuard）</text>
+      <text x="260" y="264" text-anchor="middle">回線終端装置</text>
+      <text x="260" y="278" text-anchor="middle">（事業者支給）</text>
+      <text x="470" y="262" text-anchor="middle">Router / FW / VPNサーバ</text>
+      <text x="470" y="278" text-anchor="middle">WAN: SFP+（RJ45モジュール）</text>
+      <text x="335" y="372" text-anchor="middle">L2コア・PoE給電</text>
+      <text x="645" y="368" text-anchor="middle">10GbEサーバ</text>
+      <text x="940" y="258" text-anchor="middle">JEM-A変換アダプタ → 直接LAN → HA</text>
+      <text x="940" y="276" text-anchor="middle">市販アダプタのみ・自作(ATOM Lite)不採用</text>
+      <text x="410" y="546" text-anchor="middle">2F LDK TV</text>
+      <text x="615" y="546" text-anchor="middle">天井付・PoE給電</text>
+      <text x="835" y="546" text-anchor="middle">天井付・PoE給電</text>
+      <text x="135" y="750" text-anchor="middle">日常UI / Siri</text>
+      <text x="135" y="768" text-anchor="middle">Home hub</text>
+      <text x="330" y="750" text-anchor="middle">Amazon Music 専用</text>
+      <text x="330" y="768" text-anchor="middle">連携なし</text>
+      <text x="825" y="750" text-anchor="middle">照明リレー</text>
+      <text x="825" y="768" text-anchor="middle">Matter over Wi-Fi</text>
+      <text x="825" y="786" text-anchor="middle">（Thread前提にしない）</text>
+      <text x="1042" y="752" text-anchor="middle">AC100V有線</text>
+      <text x="1042" y="770" text-anchor="middle">JEM-A端子（Plan A）</text>
+      <text x="1042" y="788" text-anchor="middle">制御盤 → 情報盤へ配線</text>
+    </g>
+    <g font-size="11.5" fill="var(--ink)">
+      <text x="580" y="746" text-anchor="middle">三菱エアコン ×4（AC-01計画）</text>
+      <text x="580" y="780" text-anchor="middle">給湯機（EneFarm/エコキュート・選定中）</text>
+      <text x="580" y="814" text-anchor="middle">風呂自動・給湯温度もECHONETで制御</text>
+    </g>
+    <text x="180" y="567" font-size="11" font-family="'IBM Plex Mono',monospace" fill="var(--ink-soft)" text-anchor="middle">USB: Wi-SUNドングル（Bルート）</text>
+  </svg>
+  <div class="legend">
+    <span><i class="lg" style="border-color:var(--c-10g)"></i>10GbE</span>
+    <span><i class="lg thin" style="border-color:var(--c-1g)"></i>1GbE Cat6A</span>
+    <span><i class="lg thin dash" style="border-color:var(--c-wifi)"></i>Wi-Fi</span>
+    <span><i class="lg thin dot" style="border-color:var(--c-wisun)"></i>Wi-SUN 920MHz</span>
+    <span><i class="lg thin" style="border-color:var(--c-jema)"></i>JEM-A / CPEV-S</span>
+    <span><i class="lg thin dash" style="border-color:var(--c-vpn)"></i>WireGuard VPN</span>
+  </div>
+  <div class="figcap">FIG.1 — 物理トポロジ。10GbEはWAN・コア・Mac miniのみ。IoTと映像・APはすべて1GbE/Wi-Fiの通常LAN。</div>
+  </div>
+</section>
+
+<!-- ============ LOGICAL / CONTROL PLANE ============ -->
+<section>
+  <h2><span class="no">02</span>論理構成（コントロールプレーン）</h2>
+  <div class="h2sub">統合はすべてHome Assistantに集約し、Apple Homeにだけ公開する。Alexaは音楽専用で連携経路を持たない。</div>
+
+  <div class="figure">
+  <svg viewBox="0 0 1160 600" xmlns="http://www.w3.org/2000/svg" font-family="'IBM Plex Sans JP',sans-serif">
+    <defs>
+      <marker id="arr2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/>
+      </marker>
+    </defs>
+
+    <!-- arrows -->
+    <line x1="360" y1="105" x2="430" y2="200" stroke="var(--ink-soft)" stroke-width="2" marker-end="url(#arr2)"/>
+    <line x1="360" y1="220" x2="430" y2="240" stroke="var(--c-matter)" stroke-width="2" marker-end="url(#arr2)"/>
+    <line x1="360" y1="325" x2="430" y2="280" stroke="var(--c-jema)" stroke-width="2" marker-end="url(#arr2)"/>
+    <line x1="360" y1="425" x2="430" y2="315" stroke="var(--c-wisun)" stroke-width="2" marker-end="url(#arr2)"/>
+    <line x1="740" y1="235" x2="830" y2="180" stroke="var(--print-blue)" stroke-width="3" marker-end="url(#arr2)"/>
+    <text x="742" y="196" font-size="11.5" fill="var(--print-blue)" font-family="'IBM Plex Mono',monospace">HomeKit Bridge</text>
+    <path d="M830,350 H786 V320" fill="none" stroke="var(--c-vpn)" stroke-width="2.5" stroke-dasharray="7 5" marker-end="url(#arr2)"/>
+    <text x="700" y="368" font-size="11.5" fill="var(--c-vpn)" font-family="'IBM Plex Mono',monospace">WireGuard</text>
+
+    <!-- protocol labels -->
+    <g font-size="11.5" font-family="'IBM Plex Mono',monospace">
+      <text x="368" y="140" fill="var(--ink-soft)">ECHONET Lite</text>
+      <text x="368" y="222" fill="var(--c-matter)">Matter</text>
+      <text x="368" y="318" fill="var(--c-jema)">JEM-A→IP</text>
+      <text x="368" y="408" fill="var(--c-wisun)">Bルート</text>
+    </g>
+
+    <!-- source boxes -->
+    <g stroke="var(--ink)" stroke-width="1.5">
+      <rect x="40" y="50" width="320" height="110" fill="#fff"/>
+      <rect x="40" y="190" width="320" height="64" fill="#fff"/>
+      <rect x="40" y="284" width="320" height="80" fill="#fff"/>
+      <rect x="40" y="394" width="320" height="64" fill="#fff"/>
+    </g>
+    <g font-size="13" font-weight="700">
+      <text x="56" y="76">ECHONET Lite 機器（通常LAN/Wi-Fi）</text>
+      <text x="56" y="215">SwitchBot Relay Switch 1</text>
+      <text x="56" y="310">玄関スマートロック（JEM-A）</text>
+      <text x="56" y="419">スマートメーター 電力量</text>
+    </g>
+    <g font-size="12" fill="var(--ink-soft)">
+      <text x="56" y="98">エアコン×4 ／ 給湯機（風呂自動・湯温）／ 太陽光</text>
+      <text x="56" y="118">10GbE要件なし — 帯域はkbpsオーダー</text>
+      <text x="56" y="236">Matter over Wi-Fi（Threadは前提にしない）</text>
+      <text x="56" y="332">変換アダプタが直接IP化（ECHONET Lite対応品優先）</text>
+      <text x="56" y="350">CPEV-S ×2 → 情報盤 → LAN（AiSEG2は不採用）</text>
+      <text x="56" y="440">Wi-SUNドングル（USB, Mini PC直挿し）</text>
+    </g>
+
+    <!-- HA core -->
+    <rect x="430" y="150" width="310" height="230" fill="#fff" stroke="var(--ink)" stroke-width="2.5"/>
+    <text x="585" y="184" text-anchor="middle" font-size="15" font-weight="700">Home Assistant（Mini PC）</text>
+    <text x="585" y="206" text-anchor="middle" font-size="12" fill="var(--ink-soft)">統合コア — ローカル完結・クラウド非依存</text>
+    <g stroke="var(--rule)" stroke-width="1">
+      <rect x="452" y="226" width="266" height="28" fill="#F4F6F8"/>
+      <rect x="452" y="262" width="266" height="28" fill="#F4F6F8"/>
+      <rect x="452" y="298" width="266" height="28" fill="#F4F6F8"/>
+      <rect x="452" y="334" width="266" height="28" fill="#F4F6F8"/>
+    </g>
+    <g font-size="12" text-anchor="middle">
+      <text x="585" y="245">HomeKit Bridge（Apple Homeへ公開）</text>
+      <text x="585" y="281">オートメーション／シーン</text>
+      <text x="585" y="317">エネルギー計測（Bルート＋ECHONET Lite）</text>
+      <text x="585" y="353">履歴・ダッシュボード（VPN経由で閲覧）</text>
+    </g>
+
+    <!-- Apple Home -->
+    <rect x="830" y="80" width="290" height="150" fill="#fff" stroke="var(--ink)" stroke-width="2.5"/>
+    <text x="975" y="112" text-anchor="middle" font-size="15" font-weight="700">Apple Home / Siri</text>
+    <g font-size="12" fill="var(--ink-soft)" text-anchor="middle">
+      <text x="975" y="136">日常のUIと音声操作</text>
+      <text x="975" y="156">HomePod = Home hub</text>
+      <text x="975" y="176">家族の操作面はここに一本化</text>
+      <text x="975" y="200">遠隔操作はAppleリレー経由（VPN不要）</text>
+    </g>
+
+    <!-- Remote access -->
+    <rect x="830" y="290" width="290" height="120" fill="#fff" stroke="var(--c-vpn)" stroke-width="2" stroke-dasharray="7 4"/>
+    <text x="975" y="320" text-anchor="middle" font-size="13.5" font-weight="700" fill="var(--c-vpn)">外出先アクセス（VPN）</text>
+    <g font-size="12" fill="var(--ink-soft)" text-anchor="middle">
+      <text x="975" y="344">WireGuard → UCG Fiber</text>
+      <text x="975" y="364">HAダッシュボード／UniFi Console</text>
+      <text x="975" y="384">ポート開放・クラウド公開はしない</text>
+    </g>
+
+    <!-- Alexa isolated -->
+    <rect x="430" y="450" width="310" height="100" fill="#fff" stroke="var(--ink-soft)" stroke-width="1.5" stroke-dasharray="6 4"/>
+    <text x="585" y="482" text-anchor="middle" font-size="13.5" font-weight="700">Alexa ×2 — Amazon Music専用</text>
+    <g font-size="12" fill="var(--ink-soft)" text-anchor="middle">
+      <text x="585" y="506">スマートホーム連携なし（意図的に非接続）</text>
+      <text x="585" y="526">HA・Apple Homeへの経路を持たない</text>
+    </g>
+  </svg>
+  <div class="figcap">FIG.2 — コントロールプレーン。4系統の入力 → Home Assistant → HomeKit Bridge → Apple Home。Alexaは孤立させ音楽専用。</div>
+  </div>
+</section>
+
+<!-- ============ TRANSPORT POLICY ============ -->
+<section>
+  <h2><span class="no">03</span>伝送方式ポリシー</h2>
+  <div class="h2sub">「10GbEは帯域が必要な箇所のみ」を機器単位で確定。</div>
+  <table>
+    <thead><tr><th style="width:170px">方式</th><th>対象</th><th>理由</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="key"><span class="tag t10">10GbE</span></td>
+        <td>ONU（事業者支給・10GBASE-T出力）→ UCG Fiber WAN（SFP+ + RJ45モジュール）／ UCG Fiber ↔ Pro Max 16 ／ Mac mini（任意の専用サーバ）</td>
+        <td>大容量転送・将来のNAS/メディア用途。ここ以外に10GbEを広げない。</td>
+      </tr>
+      <tr>
+        <td class="key"><span class="tag t1">1GbE Cat6A</span></td>
+        <td>Mini PC（HA）／ BRAVIA ／ U7 Pro AP ×2（PoE）／ 情報盤（JEM-A変換器）— スター配線 7系統。<b>予備3系統を追加</b>: 玄関カメラ（PoE）／ 玄関ドアホン（PoE）／ パワコン・太陽光計測ユニット（ECHONET Lite監視用）。当面未使用でも着工時に配線。</td>
+        <td>安定性重視の有線。配線自体はCat6Aなので将来2.5/10Gへの引き直し不要。</td>
+      </tr>
+      <tr>
+        <td class="key"><span class="tag tw">Wi-Fi</span></td>
+        <td>HomePod ／ Alexa ×2 ／ ECHONET Lite機器（エアコン×4・給湯機）／ SwitchBot Relay（<span class="tm">Matter over Wi-Fi</span>）</td>
+        <td>IoTの実帯域はkbps〜Mbpsオーダー。通常LANで十分。Thread専用インフラは前提にしない。</td>
+      </tr>
+      <tr>
+        <td class="key"><span class="tag ts">Wi-SUN</span></td>
+        <td>スマートメーター →（920MHz）→ USBドングル → Home Assistant</td>
+        <td>Bルートの標準経路。IPネットワークに載る前にMini PCで終端。</td>
+      </tr>
+      <tr>
+        <td class="key"><span class="tag tj">JEM-A</span></td>
+        <td>玄関スマートロック → CPEV-S 0.9-2P ×2 → 情報盤 → JEM-A→IP変換 → LAN</td>
+        <td>非IPの接点制御を情報盤で一箇所だけIP化。詳細は §05。</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="note"><b>ONU（回線終端装置）について:</b> 日本のFTTHでは事業者支給のONUが必須で、光ファイバをUCG FiberのSFP+に直接収容することはできない。構成は <span class="mono">光ファイバ → ONU → 10GBASE-T → UCG Fiber WAN</span>。フレッツ 光クロス系はXG-PON ONUの10GBASE-T（RJ45）出力なので、UCG側はSFP+→RJ45（10GBASE-T）モジュールが1個必要。SFP型の「小型ONU」は1G（GE-PON）フレッツ向けのみで10Gクロスには存在しない。またフレッツ系IPoE（MAP-E/DS-Lite）を使う場合はUCG Fiberの対応方式をプロバイダ契約前に要確認 — 固定IPオプションやPPPoE併用が確実な逃げ道。NURO・auひかりは事業者HGWが実質必須でブリッジ構成が難しいため、UniFiをルータとして使うならフレッツ系IPoE（または固定IP系ISP）を推奨。ラック設計上はONU用に1U相当の棚＋コンセント1口を確保。</div>
+</section>
+
+<!-- ============ VPN DESIGN ============ -->
+<section>
+  <h2><span class="no">04</span>リモートアクセス（VPN）設計</h2>
+  <div class="h2sub">外部公開は行わず、管理系アクセスはすべてWireGuardトンネル経由に限定する。</div>
+  <table>
+    <thead><tr><th style="width:190px">項目</th><th>設計</th></tr></thead>
+    <tbody>
+      <tr><td class="key">設計思想</td><td><b>VPNクライアントは「仮想的にLANへ参加」させる。</b>外出先端末はトンネル越しに宅内LANの一員として振る舞い、HA・UniFi・変換器・（将来）カメラへ宅内と同じIP/名前でそのまま到達する。外向けに個別サービスを公開する発想は採らない。</td></tr>
+      <tr><td class="key">VPNサーバ</td><td>UCG Fiber 内蔵 WireGuard（UDP/51820）。追加ハードウェア不要。</td></tr>
+      <tr><td class="key">クライアント</td><td>Akira の iPhone / MacBook（＋必要に応じて配偶者端末）。端末ごとに個別鍵ペア・個別ピア登録。</td></tr>
+      <tr><td class="key">アドレス設計</td><td>VPNクライアント用に宅内LANと別のサブネットを割当（例: 宅内 <span class="mono">192.168.10.0/24</span> ／ VPN <span class="mono">192.168.30.0/24</span>）。HA・UniFi・変換器はDHCP固定割当。</td></tr>
+      <tr><td class="key">経路</td><td>スプリットトンネル: AllowedIPsを<b>宅内LANサブネット＋VPNサブネットのみ</b>に限定し、宅内向けは全ポート素通し（＝LAN参加と同じ到達性）。その他トラフィックはトンネルに通さない（モバイル電池・速度のため）。</td></tr>
+      <tr><td class="key">名前解決・発見</td><td>VPNクライアントのDNSはUCG（内部DNS）を指定し、<span class="mono">ha.home.arpa</span> 等の内部名を宅内外で同一に。WireGuardはL3ルーテッドのためmDNSは素では越えない — HomeKit/AirPlayの発見まで外から使いたい場合はHA上のmDNSリフレクタ（avahi）でWGサブネットへ反射。通常運用はHAダッシュボード＋Apple遠隔で足りるためリフレクタは任意。</td></tr>
+      <tr><td class="key">用途</td><td>HAダッシュボード／履歴・エネルギー確認、UniFi Console、変換器等の管理画面、（将来）カメラ。</td></tr>
+      <tr><td class="key">Apple Home遠隔</td><td>VPN不要。HomePod（Home hub）がAppleの中継経由で遠隔操作を提供。家族はVPNを意識しない。</td></tr>
+      <tr><td class="key">WAN側の到達性</td><td>光クロスはIPoE専用。<b>DS-Lite（クロスパス/transix）はIPv4着信が一切不可、MAP-E（v6プラス等）は割当ポート範囲のみ着信可</b>のため、WireGuard待受は原則 <b>IPv6エンドポイント</b>で運用（IPoEのIPv6はフィルタなしで直接到達可・追加費用なし。モバイル各社はIPv6対応済み）。IPv4で待ち受けたい場合のみ固定IPv4オプションISPを選ぶ。DDNSはIPv6アドレスをFQDN登録。詳細は §07。</td></tr>
+      <tr><td class="key">予備経路</td><td><b>UniFi Teleport</b>（標準機能・無料）。招待リンクだけで端末が宅内LANに参加するため家族用に最適。主経路は鍵管理が明示的なWireGuardとする。</td></tr>
+      <tr><td class="key">コスト方針</td><td><b>追加サブスクリプション ゼロ。</b>WireGuard・Teleport・内部DNS・avahiはすべて無料/内蔵機能。Nabu Casa（月額）不採用、Tailscale/Headscale不採用。継続費用は回線・ISP料金＋既存iCloud+のみ。</td></tr>
+    </tbody>
+  </table>
+  <div class="note"><b>方針:</b> 「外から入る」＝サービス公開ではなく<b>仮想的なLAN参加</b>。入口はWireGuardのUDPポート1つ（IPv6待受）、入った後は宅内と同じ世界。なおWireGuardはL3ルーテッド接続であり、真のL2ブリッジ（同一ブロードキャストドメイン化）は行わない — 必要な「LANに居る感覚」は 内部DNS統一＋任意のmDNSリフレクタ で満たすのが軽くて安全。</div>
+</section>
+
+<!-- ============ JEM-A DOOR IOT ============ -->
+<section>
+  <h2><span class="no">05</span>玄関ドアIoT — JEM-A → IP 変換チェーン</h2>
+  <div class="h2sub">確定済み Plan A（AC100V有線スマートキー＋JEM-A端子）を、センサー状態込みでIPに載せるまでの経路。</div>
+  <table>
+    <thead><tr><th style="width:60px">#</th><th style="width:250px">要素</th><th>仕様・役割</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">1</td><td class="key">玄関スマートロック</td><td>AC100V有線スマートキー。JEM-A（HA端子）で施錠/解錠の<b>制御</b>と<b>状態（モニタ）</b>の両方を提供。</td></tr>
+      <tr><td class="mono">2</td><td class="key">配線</td><td><span class="mono">CPEV-S 0.9-2P ×2</span>（制御用＋モニタ用）を玄関制御ユニット → 情報盤へ。盤内にCat6A 1系統＋AC100Vコンセントを併設（確定済み配線仕様）。</td></tr>
+      <tr><td class="mono">3</td><td class="key">JEM-A → IP 変換</td><td><b>変換アダプタ → LAN → HA の直接構成（AiSEG2は挟まない）。</b>アダプタ選定の判断順序: ①<b>ECHONET Lite（電気錠クラス 0x026F）対応品</b> — HAの既存インテグレーションでそのまま認識、最優先。②文書化されたHTTP/UDP API品 — HAのRESTfulで直接統合（YAML数十行）。<b>自作（ATOM Lite/ESPHome）は不採用</b> — 保守を個人に依存させない。①②を満たす市販JEM-A変換アダプタ（Panasonic系エコシステム含む）で構成し、チャネル不足は同型アダプタの増設で対応。プロトコル非公開・専用アプリのみの製品は選ばない。</td></tr>
+      <tr><td class="mono">4</td><td class="key">LAN</td><td>変換器を情報盤のCat6AでPro Max 16へ接続（1GbE、DHCP固定割当）。</td></tr>
+      <tr><td class="mono">5</td><td class="key">Home Assistant</td><td>lockエンティティ化（施錠/解錠＋状態）。開閉状態はオートメーション条件に使用（例: 全員外出＋解錠状態 → 通知）。</td></tr>
+      <tr><td class="mono">6</td><td class="key">Apple Home</td><td>HomeKit Bridge経由でロックアクセサリとして公開。Siri・自動化・遠隔（Appleリレー）はApple Home側で完結。</td></tr>
+    </tbody>
+  </table>
+  <div class="note"><b>拡張:</b> 玄関以外のドア・窓センサーは同じパターンに載せる — 接点/センサー → （JEM-A変換 or Matter対応センサー） → HA → Apple Home。非IP機器のIP化ポイントは情報盤に集約し、分散させない。<br><br><b>お風呂もSiriで:</b> 給湯機（EneFarm/エコキュートいずれ採用でも）はECHONET Lite給湯器クラスで「ふろ自動」「給湯温度」「湯張り状態」を公開する。HA経由でHomeKitにスイッチ＋温度センサとして出せば「Hey Siri, お風呂入れて」や帰宅検知での自動湯張りが成立（HomeKitに給湯専用アクセサリ型は無いためスイッチ表現になる）。機種選定時はECHONET Lite AIF認証・風呂自動の遠隔操作対応を要件に含めること。<br><br><b>AiSEG2は不採用:</b> エネルギー計測はBルート＋各機器のECHONET Liteで足り、JEM-A変換も直接アダプタで完結するため役割が残らない。唯一の再考条件は分岐回路別の詳細計測（専用計測ユニット併用）が欲しくなった場合のみ。</div>
+</section>
+
+<!-- ============ OPERATIONS NOTES ============ -->
+<section>
+  <h2><span class="no">06</span>運用メモ</h2>
+  <ul>
+    <li><b>L2設計はVLAN分離（§10）に移行。</b>ECHONET Liteのマルチキャストはルータを越えないため、HA（Mini PC）をトランク接続しIoT VLANにL2の足を持たせるのが前提条件。</li>
+    <li><b>IoT用SSIDは2.4GHz対応で1本用意</b>（ECHONET Lite機器・SwitchBot向け）。HomePod/Alexa/端末はメインSSID。</li>
+    <li><b>DHCP固定割当リスト</b>を作る対象: Mini PC（HA）、JEM-A変換器、給湯機、エアコン×4、パワコン、BRAVIA、AP×2、Mac mini。</li>
+    <li><b>Alexaのスマートホームスキルは登録しない。</b>誤って機器検出した場合は無効化。音楽以外の経路を作らないことが設計。</li>
+    <li><b>停電復帰順序:</b> UCG → Switch → Mini PC の順に自動起動（Mini PCはBIOSでAC復帰ON）。HAが上がればロック・空調の状態は自動再取得。</li>
+    <li><b>引き渡し前チェック:</b> 情報盤内のCPEV-S ×2 導通確認、Cat6A 7系統の結線試験（Fluke等の成績書）、盤内コンセント通電。</li>
+  </ul>
+</section>
+
+<!-- ============ ISP SELECTION ============ -->
+<section>
+  <h2><span class="no">07</span>回線・ISP選定（南荻窪 / 杉並区）</h2>
+  <div class="h2sub">杉並区は主要10G回線の提供エリア内。選定基準は ①UniFiルータで完結できるIPoE方式か ②WireGuard待受が成立するか の2点。提供状況・料金は契約前にNTT東の提供判定で最終確認（2026年時点情報）。</div>
+  <table>
+    <thead><tr><th style="width:230px">回線 × ISP</th><th style="width:150px">IPv4方式</th><th>UniFi適合 / VPN待受</th><th style="width:90px">評価</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="key">フレッツ 光クロス × enひかりクロス</td>
+        <td>クロスパス（DS-Lite）</td>
+        <td>DS-LiteはUCGで設定可能な見込み（ファーム世代の対応要確認）。IPv4着信不可のため<b>WireGuardはIPv6待受</b>。縛り・解約金なし、シンプルな料金体系。</td>
+        <td><b>第1候補</b></td>
+      </tr>
+      <tr>
+        <td class="key">フレッツ 光クロス × GMOとくとくBB光クロス</td>
+        <td>v6プラス（MAP-E）</td>
+        <td>MAP-Eは割当ポートのみ着信可（51820は使えず割当ポートにWGを合わせる）。UCGのMAP-E対応は要確認、非対応なら§09のRTX1300案。速度実績は豊富。</td>
+        <td>第2候補</td>
+      </tr>
+      <tr>
+        <td class="key">ドコモ光 10ギガ / ソフトバンク光 10G 等コラボ</td>
+        <td>OCNバーチャルコネクト等（MAP-E）</td>
+        <td>スマホセット割があるなら検討価値。技術条件はGMO案と同じ（MAP-E制約）。</td>
+        <td>条件付き</td>
+      </tr>
+      <tr>
+        <td class="key">フレッツ 1G × 固定IP系ISP（インターリンク・かもめ等）</td>
+        <td>固定IPv4（IPoE/PPPoE）</td>
+        <td>VPN運用が最も素直（IPv4固定で待受）。1Gで足りるなら<b>小型ONU（SFP）をUCGに直挿し</b>できラックも1箱減る。10Gを捨てる判断が必要。</td>
+        <td>堅実案</td>
+      </tr>
+      <tr>
+        <td class="key">auひかり 10G</td>
+        <td>独自網（HGW必須）</td>
+        <td>BL系HGWが実質必須でブリッジ困難。UniFi前提の本設計と相性が悪い。</td>
+        <td>非推奨</td>
+      </tr>
+      <tr>
+        <td class="key">NURO 光 10G</td>
+        <td>ONU/ルータ一体型</td>
+        <td>一体型HGWで二重ルータ化しがち。VPN・固定運用の自由度が低い。</td>
+        <td>非推奨</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="note"><b>推奨:</b> enひかりクロス（クロスパス）＋ WireGuard IPv6待受。UCG FiberでDS-Lite/MAP-Eが安定しない場合のフォールバックは「WANルータをYamaha RTX1300に置換し、UniFiはその配下でL2/AP専任」（§09）。この場合もVPNはIPsec IKEv2（iOS標準クライアント）またはHA側でWireGuardアドオンを立てて成立する。</div>
+</section>
+
+<!-- ============ DESIGN IMPROVEMENTS ============ -->
+<section>
+  <h2><span class="no">08</span>設計改善ポイント（REV G追記）</h2>
+  <ul>
+    <li><b>VPN待受のIPv6化（最重要）:</b> IPoE前提の回線ではIPv4待受は成立しないか制約付き。WireGuardのエンドポイントをIPv6 FQDNにし、クライアント側プロファイルもIPv6優先で作成。§04・§07に反映済み。</li>
+    <li><b>ラックUPS:</b> ONU・UCG・Pro Max 16・Mini PCを小型UPS（550〜750VA）に収容。瞬停でHA・ロック状態・通知が途切れない。スマートロックはAC100V直結のため停電時は物理鍵運用になる点を家族に共有。</li>
+    <li><b>PoEバジェットとスペア:</b> U7 Pro ×2で約40W。Pro Max 16 PoEの給電余力を確認の上、<b>PoEポート2口を玄関カメラ・ドアホン用に予約</b>。予備配線3系統（§03）とセットで着工前に確定。</li>
+    <li><b>空配管の追加:</b> ラック⇔情報盤、ラック⇔屋外（軒下）に呼び22以上の空配管。V2H用空配管と同じ思想で弱電系にも保険をかける。着工前（2027年1月）までに配線図へ反映が必要な唯一の項目。</li>
+    <li><b>HAのバックアップ:</b> 日次スナップショットをMac mini（またはNAS）へ自動転送。SSDのSMART監視をHA上でアラート化。復旧手順を1枚のrunbookに。</li>
+    <li><b>IoT SSIDの固定化:</b> ECHONET Lite機器・SwitchBotは2.4GHz固定・WPA2-PSK・band steering除外のSSIDに収容。機器側の再接続不良を予防。</li>
+    <li><b>WAN監視:</b> HAからWAN死活・IPv6プレフィックス変化を監視し、変化時にDDNS更新＋通知。プロバイダ側のプレフィックス再割当に無人で追従。</li>
+  </ul>
+</section>
+
+<!-- ============ NON-UNIFI ALTERNATIVES ============ -->
+<section>
+  <h2><span class="no">09</span>UniFi以外の機器候補</h2>
+  <div class="h2sub">全とっかえは不要。日本のIPoE適合が問われるのは<b>ルータだけ</b>で、スイッチ・APはL2なので回線と無関係に選べる。</div>
+  <table>
+    <thead><tr><th style="width:90px">区分</th><th style="width:230px">製品</th><th>特徴・使いどころ</th></tr></thead>
+    <tbody>
+      <tr><td class="key">Router</td><td>Yamaha RTX1300</td><td>10G×2ポート。v6プラス／クロスパス／transix／OCNバーチャルコネクトを<b>ネイティブ全対応</b>する国内定番。UniFiのIPoE対応が不安ならルータのみこれに置換が最小変更・最大効果。VPNはIPsec IKEv2（iOS標準）。WireGuardは非対応なのでWGはHA側アドオンで。</td></tr>
+      <tr><td class="key">Router</td><td>NEC UNIVERGE IX2310</td><td>10G対応・IPoE各方式対応。中古市場が安く玄人に人気。CLI前提でGUIは簡素。</td></tr>
+      <tr><td class="key">Router</td><td>MikroTik RB5009 / CCR2004</td><td>価格対性能最強、WireGuardネイティブ対応。ただしMAP-Eは手動計算スクリプトが必要で日本方式の面倒は最大。DS-Lite運用なら現実的。</td></tr>
+      <tr><td class="key">Switch</td><td>TP-Link Omada SG3210XHP-M2 / SG3428XPP-M2</td><td>2.5G PoE++＋10Gアップリンクが安価。Omadaコントローラで一元管理でき、UniFiに最も近い運用感。</td></tr>
+      <tr><td class="key">Switch</td><td>QNAP QSW-M2108-2C / Buffalo BS-MP2008</td><td>静音・安価な10Gスイッチ。PoEなしなのでAP給電は別途インジェクタが必要（本設計ではPoEスイッチ推奨）。</td></tr>
+      <tr><td class="key">AP</td><td>Ruckus R550 / R650</td><td>BeamFlexでRF性能は頭一つ抜ける。鉄骨・吹抜・高密度に最強だが高価。Unleashed（コントローラレス）で宅内運用可。</td></tr>
+      <tr><td class="key">AP</td><td>Aruba Instant On AP25</td><td>クラウド管理が簡単で品質安定。小規模宅内の鉄板。PoE給電。</td></tr>
+      <tr><td class="key">AP</td><td>TP-Link Omada EAP670 / EAP683 LR</td><td>Wi-Fi 6/6Eが安価。Omadaスイッチと合わせると管理一元化。コスト最優先ならこれ。</td></tr>
+    </tbody>
+  </table>
+  <div class="note"><b>現実的な3構成:</b> ①<b>UniFi続投</b>（enひかりクロス＋IPv6待受で変更ゼロ・管理一元）／ ②<b>RTX1300＋UniFi配下</b>（回線適合を日本定番に任せ、Pro Max 16とU7 Proはそのまま。管理画面は2つに分かれる）／ ③<b>全Omada化</b>（ER8411＋SG3428XPP＋EAP683でコスト2〜3割減・一元管理維持。完成度はUniFiにやや劣る）。本設計の推奨は①、保険が②。</div>
+</section>
+
+<!-- ============ VLAN SEGMENTATION ============ -->
+<section>
+  <h2><span class="no">10</span>ネットワーク分離（VLAN設計）</h2>
+  <div class="h2sub">家族・ゲスト・開発・IoTを4面に分離し、IoT面の唯一の出入口をHome Assistant（Mini PC）にする。UniFiのネットワーク＋SSID機能で完結、追加機器不要。</div>
+  <table>
+    <thead><tr><th style="width:180px">VLAN</th><th style="width:190px">サブネット / SSID</th><th>収容機器</th><th>ポリシー</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="key">10 — Trusted（家族）</td>
+        <td class="mono">192.168.10.0/24<br>SSID: 家族用（5/6GHz）</td>
+        <td>家族のiPhone/Mac、HomePod、BRAVIA</td>
+        <td>フル権限。HomeKitコントローラ（HomePod）とHAのHomeKit Bridgeは同一VLANに置き、mDNSリフレクタ不要で発見。</td>
+      </tr>
+      <tr>
+        <td class="key">20 — IoT</td>
+        <td class="mono">192.168.20.0/24<br>SSID: IoT（2.4GHz固定・WPA2）</td>
+        <td>エアコン×4、給湯機、パワコン（有線）、JEM-A変換、SwitchBot Relay、Alexa ×2</td>
+        <td><b>インターネット遮断がデフォルト</b>（例外の許可リスト: Alexa=Amazon Music、SwitchBot=ファーム更新時のみ）。IoT→他VLANの発信は全拒否。到達できる相手はHAのみ。</td>
+      </tr>
+      <tr>
+        <td class="key">30 — Dev（開発）</td>
+        <td class="mono">192.168.30.0/24<br>SSID: なし（有線/必要時）</td>
+        <td><b>Mac mini（10GbE・SSHホスト）</b>、開発VM・検証機</td>
+        <td>インターネット可。<b>SSH（:22）はTrustedとVPNサブネットからのみ許可</b>（鍵認証のみ・パスワード無効、<span class="mono">macmini.home.arpa</span>）。IoT面へは直接触れず、HAのAPI経由のみ。例外許可: HA→Mac mini（日次バックアップ転送）。本番HAを検証で壊さない防壁。</td>
+      </tr>
+      <tr>
+        <td class="key">40 — Guest</td>
+        <td class="mono">192.168.40.0/24<br>SSID: ゲスト用</td>
+        <td>来客端末</td>
+        <td>インターネットのみ。クライアント分離ON、宅内資源への到達ゼロ。UniFiのGuest Hotspot機能で帯域制限（例: 50Mbps/端末）や利用時間制限も可。パスワードはQRコード化して玄関/リビングに掲示、家族用SSIDとは鍵・VLANとも完全分離。両AP（U7 Pro ×2）から同一SSIDで吹く。</td>
+      </tr>
+      <tr>
+        <td class="key">60 — Camera（将来）</td>
+        <td class="mono">192.168.60.0/24<br>SSID: なし（PoE有線）</td>
+        <td>ローカル解析カメラを置く場合の枠（予備配線に収容）</td>
+        <td>インターネット遮断。到達できる相手はHA（映像処理・録画）のみ。クラウドカメラは採用しない。閲覧はHA/Apple Home経由。</td>
+      </tr>
+      <tr>
+        <td class="key">VPN — WireGuard</td>
+        <td class="mono">192.168.50.0/24</td>
+        <td>外出先の家族端末（仮想LAN参加）</td>
+        <td>Trusted相当の権限（HA・UniFi・変換器へ到達可）＋<b>Dev面へのSSH可</b> — 外出先からWireGuardで入り、そのままMac miniに<span class="mono">ssh macmini.home.arpa</span>できる。ファイアウォール上はVLAN 10と同格。</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="note"><b>成立条件（最重要）:</b> ECHONET Liteのマルチキャスト（<span class="mono">224.0.23.0</span>）とmDNSは<b>ルーティングを越えない</b>。そのため Mini PC はスイッチの<b>トランクポート</b>に接続し、<b>VLAN 10（HomeKit Bridge公開用）とVLAN 20（ECHONET/Matter機器との対話用）の両方にL2インターフェース</b>を持たせる。これで「IoTはMini PCで管理」がプロトコルレベルで成立し、リフレクタ類は不要。IoT面の機器はHA以外の誰とも会話できず、HAだけが両世界の翻訳者になる。導入は入居後でよい（配線は不変・UniFi設定のみ）が、SSID名とサブネット番号は今決めて§04のVPN設定と整合させておく。</div>
+</section>
+
+<!-- ============ DOORBELL ============ -->
+<section>
+  <h2><span class="no">11</span>ドアホン（インターホン）のApple Home連携</h2>
+  <div class="h2sub">可能。ただし国内標準ドアホン（Panasonic/アイホン）はHomeKit非対応のため、経路の選び方が全て。玄関へのCat6A（PoE）予備配線1本が全案の共通前提。</div>
+  <table>
+    <thead><tr><th style="width:210px">ルート</th><th>構成</th><th>評価</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="key">A — HomeKit対応ドアホン</td>
+        <td>Aqara G4等のHomeKit対応ビデオドアベルを玄関に設置。呼出通知がiPhone・HomePod・Apple TVにネイティブ着信、顔スナップショット付き。</td>
+        <td>最も素直。注意: HomeKit Secure Videoでの<b>録画</b>はiCloud+契約が前提（既契約なら追加費ゼロ、未契約ならルートB）。通知・ライブ視聴は録画なしでも動作。</td>
+      </tr>
+      <tr>
+        <td class="key">B — RTSP/ONVIF＋HA経由</td>
+        <td>PoE給電のRTSP対応ドアホン/カメラ → HA（Frigate/Scrypted）→ HomeKitへドアベル型アクセサリとして公開。録画はMac mini/NASにローカル保存。</td>
+        <td><b>サブスクゼロ・ローカル完結の原則に完全整合。</b>録画保持も自前。構築の手間は最大だが本設計の思想的本命。</td>
+      </tr>
+      <tr>
+        <td class="key">C — 国内ドアホン＋接点連携</td>
+        <td>セキスイ標準のPanasonicドアホンを採用し、親機の呼出連動接点出力を<b>情報盤のJEM-A変換アダプタのモニタ入力</b>に収容（玄関ロックと同一アダプタ系統・自作なし）。HA側でbinary_sensor化 → iPhoneプッシュ＋HomePodアナウンス。映像はドアホン親機で見る。</td>
+        <td>「ピンポンが鳴ったらiPhoneに通知＋玄関ロック解錠をSiriで」までは実現。映像のApple Home統合は諦める折衷案。工務店調整が最少。</td>
+      </tr>
+    </tbody>
+  </table>
+  <h2 style="font-size:14px;border-bottom:1px solid var(--rule);margin-top:26px"><span class="no">11.1</span>カメラ・ドアホン機器候補</h2>
+  <table>
+    <thead><tr><th style="width:150px">設置場所 / 用途</th><th style="width:230px">製品候補</th><th style="width:130px">接続 / VLAN</th><th>備考</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="key">玄関カメラ（顔認識・本命）</td>
+        <td><b>Aqara Camera Hub G5 Pro（PoE版）</b></td>
+        <td>PoE有線 / Trusted-IoT側</td>
+        <td>HKSV対応・屋外IP65・4MP。Apple顔認識→Siriアナウンスの主役。PoE版を指定（Wi-Fi版と併売のため要注意）。エッジAI検知内蔵でHKSV外の通知も可。</td>
+      </tr>
+      <tr>
+        <td class="key">玄関ドアホン（ルートA採用時）</td>
+        <td>Aqara Smart Video Doorbell G4</td>
+        <td>電池/AC / Wi-Fi 2.4GHz</td>
+        <td>HKSV対応ドアベル。ただし本設計はPanasonicドアホン＋JEM-A（ルートC）確定のため<b>予備候補</b>。採用時はチャイム配線流用可否を確認。</td>
+      </tr>
+      <tr>
+        <td class="key">玄関カメラの視野設計</td>
+        <td>—（G5 Proの画角で兼用）</td>
+        <td>—</td>
+        <td>駐車場専用カメラは設けない。玄関カメラの設置位置・画角で駐車スペース入口まで視野に含められるか、外構図面で確認。将来必要になった場合は空配管（§08）経由で追設。</td>
+      </tr>
+      <tr>
+        <td class="key">室内（将来・任意）</td>
+        <td>Aqara G3 / Eve Cam</td>
+        <td>Wi-Fi / Trusted</td>
+        <td>HKSV対応の室内見守り（子供部屋・プレイルーム）。在宅時オフのHomeKitプライバシー自動化とセットで。</td>
+      </tr>
+      <tr>
+        <td class="key">避ける枠</td>
+        <td>クラウド専用カメラ全般（月額型）、HomeKit対応を外した新型Eufy等</td>
+        <td>—</td>
+        <td>追加サブスク発生・クラウド依存のため原則違反。HKSV対応/ONVIF対応の二択から選ぶ。</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="note" style="margin-bottom:14px"><b>選定基準:</b> ①HKSV対応（Apple顔認識ルート）または ②ONVIF/RTSP対応（Frigateルート）のどちらかを必ず満たすこと。両方満たさない製品は買わない。屋外はPoE有線を必須要件とし（予備配線4系統に収容）、Wi-Fi屋外カメラは採用しない。製品の技適・国内版の有無と、G5 ProのHKSV対応状況は購入直前に最新ファーム情報を要確認。</div>
+  <div class="note"><b>推奨:</b> 着工前は「玄関Cat6A（PoE）1本＋ドアホン設置位置の背面ボックス」だけ確定しておき、機種決定はルートA/Bの製品状況を見て入居直前に。標準ドアホンを外す場合はセキスイ側の火災報知・電気錠連動仕様との干渉確認が必要。Frigate系カメラはVLAN 60（インターネット遮断・HAのみ到達）に収容し、クラウドカメラは採用しない。<br><br>
+  <b>来客の顔認識アナウンス（確定構成）:</b> iCloud+既契約のため<b>HomeKit Secure Video＋Apple顔認識を第1候補</b>とする。玄関にHKSV対応PoEカメラ（Aqara G5 Pro等）を設置し、写真ライブラリと連携 — 「（名前）さんが玄関にいます」を<b>Siriの声でHomePodが自動アナウンス</b>、iPhoneには顔サムネイル付きリッチ通知。解析はHomePod/Apple TV（Home hub）上でローカル実行、録画はiCloudにE2E暗号化保存（容量は50GB=1台/200GB=5台/2TB=無制限、映像はストレージ枠を消費しない）。呼出トリガーはJEM-A（ルートC）のまま併用し、「ピンポン→HA通知」と「顔認識→Siriアナウンス」の二層で動く。<b>注意:</b> HKSVカメラはHome hubとの疎通が必要なためVLAN 60ではなくTrusted/IoT側に収容（VLAN 60はFrigate等ローカル解析カメラ用）。Frigateルート（Mac mini・完全ローカル顔認識→HA→TTSアナウンス）は将来の代替として温存 — この場合の発話音声はSiri声ではなくTTSになる。</div>
+</section>
+
+<!-- ============ ROADMAP ============ -->
+<section>
+  <h2><span class="no">12</span>導入ロードマップ — Day 1 と将来プロジェクトの切り分け</h2>
+  <div class="h2sub">「家族が初日から不自由しないもの」をDay 1に置き、それ以外は楽しみとして残すプロジェクト枠へ。P0だけが工事に依存し、P1以降はすべて自分の作業。</div>
+  <table>
+    <thead><tr><th style="width:190px">フェーズ</th><th>項目</th><th>基準・理由</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="key">P0 — 着工前確定<br><span class="mono" style="font-weight:400">〜2027/01</span></td>
+        <td>Cat6A 7系統＋予備3（玄関カメラ・ドアホン・パワコン）／ 空配管（ラック⇔情報盤・屋外）／ 情報盤仕様（CPEV-S ×2・Cat6A・コンセント）／ ドアホン型番の呼出接点出力確認 ／ JEM-A変換アダプタ選定（ECHONET Lite対応可否）</td>
+        <td><b>後からやると数十倍高い、または不可能</b>になるものだけ。ここが唯一の締切あり項目。</td>
+      </tr>
+      <tr>
+        <td class="key">P1 — Day 1<br><span class="mono" style="font-weight:400">引渡し〜入居週</span></td>
+        <td>ONU＋UCG Fiber＋Pro Max 16＋AP×2で回線開通 ／ SSID 3面（家族・IoT・ゲスト）とVLAN 10/20/40 ／ Mini PC＋HA＋HomeKit Bridge ／ エアコン×4・給湯機（風呂自動）のECHONET Lite接続 ／ 玄関ロック（JEM-A→IP→Apple Home）／ HomePod・Alexa設置 ／ SwitchBot Relay照明 ／ WireGuard VPN＋内部DNS ／ UPS</td>
+        <td><b>家族が初日から使う機能</b>＝ネット・照明・空調・風呂・鍵・音楽。IoT機器は最初からIoT SSIDに載せ、後のペアリングし直しを発生させない。VPNとUPSは安価かつ初日から効く保険。</td>
+      </tr>
+      <tr>
+        <td class="key">P2 — 入居後 1〜3ヶ月</td>
+        <td>Bルート（Wi-SUNドングル）電力監視 ／ パワコンECHONET Lite監視 ／ ドアホン呼出のJEM-Aモニタ連携（プッシュ＋HomePodアナウンス）／ HA日次バックアップ→Mac mini ／ Dev VLAN＋Mac mini SSH体制 ／ Teleportの家族展開</td>
+        <td>生活は既に回っている前提で、<b>計測・通知・開発環境</b>を足す層。工事不要・設定とUSB挿しのみ。</td>
+      </tr>
+      <tr>
+        <td class="key">P3 — プロジェクト枠<br><span class="mono" style="font-weight:400">任意・順不同</span></td>
+        <td>玄関カメラ G5 Pro＋HKSV顔認識アナウンス（購入直前に対応状況再確認）／ mDNSリフレクタ（VPN越しHomeKit発見）／ WAN・IPv6プレフィックス監視の自動化 ／ VLAN 60＋Frigateローカル解析（Appleルートの代替）／ 室内見守りカメラ ／ ドアホンのルートA/B移行検討</td>
+        <td><b>無くても困らないが、あると楽しい層。</b>それぞれ独立していて順序自由。子育て・仕事の隙間に1件ずつ。</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="note"><b>切り分けの原則:</b> Day 1の合格ラインは「スマホを触らない家族でも、照明・エアコン・風呂・鍵・音楽が説明なしで使える」こと。凝った機能をDay 1に詰め込むと引越し週の負債になる。P2以降は全て「配線済み・設計済み・締切なし」なので、焦る理由が構造的に存在しない。</div>
+</section>
+
+<footer style="border-top:2px solid var(--ink);padding-top:14px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
+  <span>TWSX26060017 南荻窪 — SMART HOME NETWORK ARCHITECTURE</span>
+  <span>REV Q (FINAL) · 2026-07-28 · SHEET NW-01</span>
+</footer>
+
+</div>
+</body>
+</html>

@@ -119,11 +119,11 @@ li{margin-bottom:5px}
   <div class="tb-main">
     <div class="tb-eyebrow">Smart Home Infrastructure — Final Design</div>
     <h1>ネットワーク&amp;スマートホーム アーキテクチャ 最終版</h1>
-    <div class="sub">Apple Home = 日常UI ／ Home Assistant = 統合コア ／ 10GbEは帯域が必要な箇所のみ、IoTは通常LAN</div>
+    <div class="sub">Apple Home = 日常UI ／ Home Assistant = 統合コア ／ 1G基準・機器は全て後日交換可（Cat6A配線が10Gまで担保）</div>
   </div>
   <div class="tb-meta">
     <div>PROJECT</div><div>TWSX26060017（南荻窪）</div>
-    <div>REV</div><div>Q — FINAL</div>
+    <div>REV</div><div>AV — FINAL</div>
     <div>DATE</div><div>2026-07-28</div>
     <div>SCALE</div><div>NTS</div>
     <div>SHEET</div><div>NW-01</div>
@@ -139,7 +139,7 @@ li{margin-bottom:5px}
     <div><b>MINI PC / HOME ASSISTANT</b>統合コア。ECHONET Lite・Matter・JEM-A→IP・Bルートを束ね、HomeKit Bridgeで公開。ローカル完結・クラウド非依存。</div>
     <div><b>ALEXA ×2</b>Amazon Music専用。スマートホーム連携は一切持たせない。</div>
     <div><b>ECHONET LITE</b>通常のLAN/Wi-Fiで十分。10GbE要件なし。</div>
-    <div><b>10GbE ポリシー</b>帯域が必要な箇所のみ（WAN、コア間、Mac miniサーバ）。IoT・TV・APは1GbE。</div>
+    <div><b>1G基準・機器交換で昇格</b>全機器を1Gの最安現行品で構成。不変投資は壁の中（Cat6A＝10G対応）だけで、速度が必要になった日はスイッチ・ルータ・回線を交換するのみ。増築・再配線は永久に不要。</div>
     <div><b>VPN</b>思想は「仮想的なLAN参加」。主経路 WireGuard（IPv6待受）＋予備 Teleport の2段構え。Apple Home遠隔はApple経由でVPN不要。</div>
     <div><b>追加サブスク ゼロ</b>継続課金は既存のiCloud+のみ（家唯一のサブスク）。HKSVはこれを活用。Nabu Casa・Tailscale等の新規課金は不採用、ハードは買い切り。</div>
   </div>
@@ -164,16 +164,16 @@ li{margin-bottom:5px}
       <text x="1132" y="34" text-anchor="end">屋外 / WAN</text>
 
       <rect x="16" y="176" width="700" height="250" fill="var(--zone)" stroke="var(--zone-line)"/>
-      <text x="704" y="194" text-anchor="end">書斎クローゼット 12Uラック</text>
+      <text x="704" y="194" text-anchor="end">書斎クローゼット 壁掛けラック</text>
 
       <rect x="740" y="176" width="404" height="250" fill="var(--zone)" stroke="var(--zone-line)"/>
-      <text x="1132" y="194" text-anchor="end">情報盤</text>
+      <text x="1132" y="194" text-anchor="end">ラック棚段（情報盤レス）</text>
 
       <rect x="16" y="460" width="1128" height="170" fill="var(--zone)" stroke="var(--zone-line)"/>
       <text x="1132" y="478" text-anchor="end">有線端末 — Cat6A 7系統＋予備3（玄関カメラ・ドアホン・パワコン）</text>
 
       <rect x="16" y="664" width="900" height="190" fill="var(--zone)" stroke="var(--zone-line)"/>
-      <text x="904" y="682" text-anchor="end">無線端末 — Wi-Fi (U7 Pro ×2)</text>
+      <text x="904" y="682" text-anchor="end">無線端末 — Wi-Fi (U7 Lite ×2)</text>
 
       <rect x="940" y="664" width="204" height="190" fill="var(--zone)" stroke="var(--zone-line)"/>
       <text x="1132" y="682" text-anchor="end">玄関 / 非IP</text>
@@ -186,7 +186,7 @@ li{margin-bottom:5px}
 
     <!-- ONU -> UCG : 10GBASE-T -->
     <line x1="320" y1="250" x2="370" y2="250" stroke="var(--c-10g)" stroke-width="4"/>
-    <text x="349" y="250" font-size="10.5" fill="var(--c-10g)" font-family="'IBM Plex Mono',monospace" text-anchor="middle" transform="rotate(-90 349 250)">10GBASE-T</text>
+    <text x="349" y="250" font-size="10.5" fill="var(--c-10g)" font-family="'IBM Plex Mono',monospace" text-anchor="middle" transform="rotate(-90 349 250)">1GBASE-T</text>
 
     <!-- VPN client -> UCG -->
     <line x1="595" y1="120" x2="520" y2="216" stroke="var(--c-vpn)" stroke-width="2.5" stroke-dasharray="7 5" marker-end="url(#arr)"/>
@@ -194,15 +194,15 @@ li{margin-bottom:5px}
 
     <!-- UCG -> Switch : 10GbE -->
     <line x1="420" y1="284" x2="420" y2="326" stroke="var(--c-10g)" stroke-width="4"/>
-    <text x="431" y="312" font-size="11" fill="var(--c-10g)" font-family="'IBM Plex Mono',monospace">10GbE</text>
+    <text x="431" y="312" font-size="11" fill="var(--c-10g)" font-family="'IBM Plex Mono',monospace">1G</text>
 
     <!-- Switch -> Mac mini : 10GbE optional -->
     <line x1="470" y1="352" x2="580" y2="352" stroke="var(--c-10g)" stroke-width="4"/>
-    <text x="478" y="344" font-size="11" fill="var(--c-10g)" font-family="'IBM Plex Mono',monospace">10GbE(任意)</text>
+    <text x="478" y="344" font-size="11" fill="var(--c-10g)" font-family="'IBM Plex Mono',monospace">1G</text>
 
     <!-- Switch -> 情報盤 converter : Cat6A -->
     <path d="M470,386 H940 V288" fill="none" stroke="var(--c-1g)" stroke-width="2.5"/>
-    <text x="700" y="379" font-size="11" fill="var(--c-1g)" font-family="'IBM Plex Mono',monospace">Cat6A 1GbE（盤内コンセント併設）</text>
+    <text x="700" y="379" font-size="11" fill="var(--c-1g)" font-family="'IBM Plex Mono',monospace">Cat6A（ラックへ直接集約）</text>
 
     <!-- Switch -> wired endpoints -->
     <path d="M230,394 V446 H180 V500" fill="none" stroke="var(--c-1g)" stroke-width="2.5"/>
@@ -266,14 +266,14 @@ li{margin-bottom:5px}
       <text x="345" y="82" text-anchor="middle">インターネット</text>
       <text x="595" y="82" text-anchor="middle">外出先クライアント</text>
       <text x="260" y="246" text-anchor="middle">ONU</text>
-      <text x="470" y="242" text-anchor="middle">UCG Fiber</text>
-      <text x="335" y="352" text-anchor="middle">UniFi Pro Max 16 PoE</text>
-      <text x="645" y="348" text-anchor="middle">Mac mini（任意）</text>
+      <text x="470" y="242" text-anchor="middle">UCG Ultra</text>
+      <text x="335" y="352" text-anchor="middle">USW Lite 16 PoE</text>
+      <text x="645" y="348" text-anchor="middle">Mac mini</text>
       <text x="940" y="238" text-anchor="middle">JEM-A → IP 変換</text>
       <text x="180" y="526" text-anchor="middle">Mini PC — Home Assistant</text>
       <text x="410" y="526" text-anchor="middle">BRAVIA</text>
-      <text x="615" y="526" text-anchor="middle">U7 Pro AP #1</text>
-      <text x="835" y="526" text-anchor="middle">U7 Pro AP #2</text>
+      <text x="615" y="526" text-anchor="middle">U7 Lite AP #1（1F廊下）</text>
+      <text x="835" y="526" text-anchor="middle">U7 Lite AP #2（2F LDK）</text>
       <text x="135" y="730" text-anchor="middle">HomePod</text>
       <text x="330" y="730" text-anchor="middle">Alexa ×2</text>
       <text x="580" y="714" text-anchor="middle">ECHONET Lite（AIF）</text>
@@ -282,19 +282,19 @@ li{margin-bottom:5px}
     </g>
     <g font-size="11.5" fill="var(--ink-soft)">
       <text x="130" y="102" text-anchor="middle">スマートメーター</text>
-      <text x="345" y="102" text-anchor="middle">FTTH 10G（フレッツ 光クロス等）</text>
+      <text x="345" y="102" text-anchor="middle">FTTH 1G（フレッツ光）</text>
       <text x="595" y="102" text-anchor="middle">iPhone / MacBook（WireGuard）</text>
       <text x="260" y="264" text-anchor="middle">回線終端装置</text>
       <text x="260" y="278" text-anchor="middle">（事業者支給）</text>
       <text x="470" y="262" text-anchor="middle">Router / FW / VPNサーバ</text>
-      <text x="470" y="278" text-anchor="middle">WAN: SFP+（RJ45モジュール）</text>
-      <text x="335" y="372" text-anchor="middle">L2コア・PoE給電</text>
-      <text x="645" y="368" text-anchor="middle">10GbEサーバ</text>
+      <text x="470" y="278" text-anchor="middle">WAN: 1G運用（ポートは2.5G）</text>
+      <text x="335" y="372" text-anchor="middle">L2コア・16×1G・PoE 45W（3台凍結運用）</text>
+      <text x="645" y="368" text-anchor="middle">書斎デスク設置・VLAN30</text>
       <text x="940" y="258" text-anchor="middle">JEM-A変換アダプタ → 直接LAN → HA</text>
       <text x="940" y="276" text-anchor="middle">市販アダプタのみ・自作(ATOM Lite)不採用</text>
       <text x="410" y="546" text-anchor="middle">2F LDK TV</text>
-      <text x="615" y="546" text-anchor="middle">天井付・PoE給電</text>
-      <text x="835" y="546" text-anchor="middle">天井付・PoE給電</text>
+      <text x="615" y="546" text-anchor="middle">平天井付・PoE給電</text>
+      <text x="835" y="546" text-anchor="middle">平天井付（吹抜上部NG）</text>
       <text x="135" y="750" text-anchor="middle">日常UI / Siri</text>
       <text x="135" y="768" text-anchor="middle">Home hub</text>
       <text x="330" y="750" text-anchor="middle">Amazon Music 専用</text>
@@ -314,14 +314,14 @@ li{margin-bottom:5px}
     <text x="180" y="567" font-size="11" font-family="'IBM Plex Mono',monospace" fill="var(--ink-soft)" text-anchor="middle">USB: Wi-SUNドングル（Bルート）</text>
   </svg>
   <div class="legend">
-    <span><i class="lg" style="border-color:var(--c-10g)"></i>10GbE</span>
+    <span><i class="lg" style="border-color:var(--c-10g)"></i>バックボーン（1G運用）</span>
     <span><i class="lg thin" style="border-color:var(--c-1g)"></i>1GbE Cat6A</span>
     <span><i class="lg thin dash" style="border-color:var(--c-wifi)"></i>Wi-Fi</span>
     <span><i class="lg thin dot" style="border-color:var(--c-wisun)"></i>Wi-SUN 920MHz</span>
     <span><i class="lg thin" style="border-color:var(--c-jema)"></i>JEM-A / CPEV-S</span>
     <span><i class="lg thin dash" style="border-color:var(--c-vpn)"></i>WireGuard VPN</span>
   </div>
-  <div class="figcap">FIG.1 — 物理トポロジ。10GbEはWAN・コア・Mac miniのみ。IoTと映像・APはすべて1GbE/Wi-Fiの通常LAN。</div>
+  <div class="figcap">FIG.1 — 物理トポロジ。全区間1G運用。昇格はスイッチ・ルータの交換のみで配線は不変。</div>
   </div>
 </section>
 
@@ -409,7 +409,7 @@ li{margin-bottom:5px}
     <rect x="830" y="290" width="290" height="120" fill="#fff" stroke="var(--c-vpn)" stroke-width="2" stroke-dasharray="7 4"/>
     <text x="975" y="320" text-anchor="middle" font-size="13.5" font-weight="700" fill="var(--c-vpn)">外出先アクセス（VPN）</text>
     <g font-size="12" fill="var(--ink-soft)" text-anchor="middle">
-      <text x="975" y="344">WireGuard → UCG Fiber</text>
+      <text x="975" y="344">WireGuard → UCG Ultra</text>
       <text x="975" y="364">HAダッシュボード／UniFi Console</text>
       <text x="975" y="384">ポート開放・クラウド公開はしない</text>
     </g>
@@ -429,18 +429,18 @@ li{margin-bottom:5px}
 <!-- ============ TRANSPORT POLICY ============ -->
 <section>
   <h2><span class="no">03</span>伝送方式ポリシー</h2>
-  <div class="h2sub">「10GbEは帯域が必要な箇所のみ」を機器単位で確定。</div>
+  <div class="h2sub">「1G基準・昇格は機器交換のみ」を機器単位で確定。</div>
   <table>
     <thead><tr><th style="width:170px">方式</th><th>対象</th><th>理由</th></tr></thead>
     <tbody>
       <tr>
-        <td class="key"><span class="tag t10">10GbE</span></td>
-        <td>ONU（事業者支給・10GBASE-T出力）→ UCG Fiber WAN（SFP+ + RJ45モジュール）／ UCG Fiber ↔ Pro Max 16 ／ Mac mini（任意の専用サーバ）</td>
-        <td>大容量転送・将来のNAS/メディア用途。ここ以外に10GbEを広げない。</td>
+        <td class="key"><span class="tag t10">1G バックボーン</span></td>
+        <td>ONU（1G）→ UCG Ultra ／ UCG Ultra ↔ Lite 16 PoE ／ 全有線端末 — すべて1G運用</td>
+        <td>全区間1Gで統一。実需（WAN 1G・IoT・映像）に対し十分。昇格が必要になった日はスイッチ/ルータの交換のみ — Cat6A配線が10Gまで担保。</td>
       </tr>
       <tr>
         <td class="key"><span class="tag t1">1GbE Cat6A</span></td>
-        <td>Mini PC（HA）／ BRAVIA ／ U7 Pro AP ×2（PoE）／ 情報盤（JEM-A変換器）— スター配線 7系統。<b>予備3系統を追加</b>: 玄関カメラ（PoE）／ 玄関ドアホン（PoE）／ パワコン・太陽光計測ユニット（ECHONET Lite監視用）。当面未使用でも着工時に配線。</td>
+        <td>Mini PC（HA）／ BRAVIA ／ U7 Lite AP ×2（PoE）／ JEM-A変換器（ラック棚段）— スター配線 7系統。<b>予備3系統を追加</b>: 玄関カメラ（PoE）／ 玄関ドアホン（PoE）／ パワコン・太陽光計測ユニット（ECHONET Lite監視用）。当面未使用でも着工時に配線。</td>
         <td>安定性重視の有線。配線自体はCat6Aなので将来2.5/10Gへの引き直し不要。</td>
       </tr>
       <tr>
@@ -460,7 +460,126 @@ li{margin-bottom:5px}
       </tr>
     </tbody>
   </table>
-  <div class="note"><b>ONU（回線終端装置）について:</b> 日本のFTTHでは事業者支給のONUが必須で、光ファイバをUCG FiberのSFP+に直接収容することはできない。構成は <span class="mono">光ファイバ → ONU → 10GBASE-T → UCG Fiber WAN</span>。フレッツ 光クロス系はXG-PON ONUの10GBASE-T（RJ45）出力なので、UCG側はSFP+→RJ45（10GBASE-T）モジュールが1個必要。SFP型の「小型ONU」は1G（GE-PON）フレッツ向けのみで10Gクロスには存在しない。またフレッツ系IPoE（MAP-E/DS-Lite）を使う場合はUCG Fiberの対応方式をプロバイダ契約前に要確認 — 固定IPオプションやPPPoE併用が確実な逃げ道。NURO・auひかりは事業者HGWが実質必須でブリッジ構成が難しいため、UniFiをルータとして使うならフレッツ系IPoE（または固定IP系ISP）を推奨。ラック設計上はONU用に1U相当の棚＋コンセント1口を確保。</div>
+  <h2 style="font-size:14px;border-bottom:1px solid var(--rule);margin-top:26px"><span class="no">03.1</span>ポート割当（USW Lite 16 PoE・全16×1G）</h2>
+  <table>
+    <thead><tr><th style="width:220px">接続先</th><th style="width:110px">速度</th><th style="width:70px">PoE</th><th>備考</th></tr></thead>
+    <tbody>
+      <tr><td class="key">UCG Ultra（uplink）</td><td class="mono">1G</td><td>—</td><td>RJ45直結。</td></tr>
+      <tr><td class="key">書斎デスク #2 — Mac mini</td><td class="mono">1G（内蔵）</td><td>—</td><td><b>設置は書斎デスク</b>（ラックから移動・モニタ直結で開発性向上）。壁ポートをVLAN30アクセスに設定。BTO・アダプタ不要。</td></tr>
+      <tr><td class="key">U7 Lite AP ×2</td><td class="mono">1G運用</td><td>要</td><td>天井付。AP側ポートは2.5Gだが1Gリンクで運用（スイッチ更新時に自動昇格）。</td></tr>
+      <tr><td class="key">書斎デスク #1</td><td class="mono">1G</td><td>—</td><td>仕事用Mac（VLAN10）。USB-C対応モニタのLANポート経由でケーブル1本化可。</td></tr>
+      <tr><td class="key">Mini PC（HA）</td><td class="mono">1G運用</td><td>—</td><td>N100標準の2.5G NICを1Gリンクで運用（スイッチ更新時に自動昇格）。</td></tr>
+      <tr><td class="key">BRAVIA</td><td class="mono">1G</td><td>—</td><td>ストリーミングは数十Mbps。TV側ポートも1G。</td></tr>
+      <tr><td class="key">玄関カメラ</td><td class="mono">1G</td><td>要</td><td>4MPストリームは〜10Mbps級。予備配線に収容。</td></tr>
+      <tr><td class="key">玄関ドアホン（予備）</td><td class="mono">1G</td><td>要</td><td>ルートA/B移行時のみ使用。</td></tr>
+      <tr><td class="key">パワコン / 太陽光計測</td><td class="mono">1G</td><td>—</td><td>ECHONET Liteはkbpsオーダー。</td></tr>
+      <tr><td class="key">JEM-A変換（ラック内）</td><td class="mono">1G</td><td>—</td><td>ラック棚段設置・パッチコード直結。アダプタ側は100Mの場合も多いが1Gポートで収容。</td></tr>
+      <tr><td class="key">エコキュート/給湯機</td><td class="mono">1G（機種次第）</td><td>—</td><td><b>有線ポートを持つ機種は少数派</b> — 無線LANアダプタのみの機種はIoT SSID（2.4GHz）に収容。給湯機選定要件に「有線LAN可否」を追加。</td></tr>
+    </tbody>
+  </table>
+  <div class="note"><b>速度割当の原則:</b> 全区間1G運用。2.5G対応NICを持つ機器（AP・Mini PC）はスイッチ交換の日に自動昇格する。<b>スイッチ適合:</b> Lite 16 PoE（16×1G・PoE 8口/45W）1台で全フェーズ収容 — 全消化でも10口で空き6口、増設不要。<b>PoE成立条件: 給電機器を「AP×2＋玄関カメラ」の3台で凍結</b>（実負荷 約25W/45W。ドアホンはルートC=JEM-A確定でPoE不要になったため成立）。凍結を破るイベント — AP3台目・ドアホンのルートA/B移行・カメラ2台目 — が起きた日がスイッチ交換日（Pro Max 16 PoE 180Wへ更新、在庫要確認）。全ポート2.5Gのため速度マップの1G表記は「2.5Gポートに1G機器を収容」の意。PoE実負荷 約40W — Flex 8 PoEの給電上限を購入前に要確認。<b>スイッチは買い替え前提</b>の消耗品扱いとし、10Gが必要になった時点で本体ごと更新（配線・他機器は無変更）。</div>
+  <h2 style="font-size:14px;border-bottom:1px solid var(--rule);margin-top:26px"><span class="no">03.2</span>ラック立面図（書斎クローゼット・壁掛けヒンジ式 9U）</h2>
+  <div class="figure">
+  <svg viewBox="0 0 760 560" xmlns="http://www.w3.org/2000/svg" font-family="'IBM Plex Sans JP',sans-serif">
+    <defs>
+      <marker id="arr3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/>
+      </marker>
+    </defs>
+    <!-- incoming cables from wall -->
+    <path d="M300,28 V70" stroke="var(--c-1g)" stroke-width="2.5" marker-end="url(#arr3)"/>
+    <text x="314" y="46" font-size="11.5" font-family="'IBM Plex Mono',monospace" fill="var(--c-1g)">壁内Cat6A ×10＋CPEV-S ×2＋同軸（引込はラック直上・余長1.5〜2m）</text>
+
+    <!-- rack frame -->
+    <rect x="140" y="70" width="420" height="416" fill="#fff" stroke="var(--ink)" stroke-width="2.5"/>
+    <!-- hinge annotation -->
+    <line x1="140" y1="70" x2="140" y2="486" stroke="var(--ink)" stroke-width="6"/>
+    <text x="128" y="300" font-size="11" font-family="'IBM Plex Mono',monospace" fill="var(--ink-soft)" transform="rotate(-90 128 300)">固定式（背面=壁・全作業は前面から）</text>
+
+    <!-- U labels -->
+    <g font-size="10.5" font-family="'IBM Plex Mono',monospace" fill="var(--ink-soft)" text-anchor="end">
+      <text x="132" y="98">U9</text><text x="132" y="142">U8</text><text x="132" y="186">U7</text>
+      <text x="132" y="230">U6</text><text x="132" y="274">U5</text><text x="132" y="318">U4</text>
+      <text x="132" y="362">U3</text><text x="132" y="406">U2</text><text x="132" y="450">U1</text>
+    </g>
+
+    <!-- U9: patch panel -->
+    <rect x="156" y="80" width="388" height="34" fill="#EDF1F5" stroke="var(--ink)" stroke-width="1.5"/>
+    <text x="176" y="102" font-size="12.5" font-weight="700">24口パッチパネル</text>
+    <text x="544" y="102" font-size="11" fill="var(--ink-soft)" text-anchor="end">キーストン成端10口＋空き14</text>
+
+    <!-- U8: cable management bar -->
+    <rect x="156" y="124" width="388" height="34" fill="#fff" stroke="var(--ink)" stroke-width="1.5"/>
+    <g stroke="var(--ink-soft)" stroke-width="1.5" fill="none">
+      <path d="M190,132 v18 M240,132 v18 M290,132 v18 M340,132 v18 M390,132 v18 M440,132 v18 M490,132 v18"/>
+    </g>
+    <text x="176" y="146" font-size="12.5" font-weight="700" fill="#fff" stroke="#fff" stroke-width="4" paint-order="stroke">管理バー</text>
+    <text x="176" y="146" font-size="12.5" font-weight="700">管理バー</text>
+    <text x="544" y="146" font-size="11" fill="var(--ink-soft)" text-anchor="end">パッチコードを横流し</text>
+
+    <!-- U7: switch -->
+    <rect x="156" y="168" width="388" height="34" fill="#EDF1F5" stroke="var(--ink)" stroke-width="1.5"/>
+    <text x="176" y="190" font-size="12.5" font-weight="700">USW Lite 16 PoE</text>
+    <text x="544" y="190" font-size="11" fill="var(--ink-soft)" text-anchor="end">PoE: AP×2＋カメラ（3台凍結）</text>
+
+    <!-- patch cord loop annotation -->
+    <path d="M560,97 C596,97 596,185 560,185" fill="none" stroke="var(--c-10g)" stroke-width="2" stroke-dasharray="4 4" marker-end="url(#arr3)"/>
+    <text x="604" y="128" font-size="11" font-family="'IBM Plex Mono',monospace" fill="var(--c-10g)">パッチコード</text>
+    <text x="604" y="144" font-size="11" font-family="'IBM Plex Mono',monospace" fill="var(--c-10g)">（バー経由で整線）</text>
+
+    <!-- U6: coax (conditional) -->
+    <rect x="156" y="212" width="388" height="34" fill="none" stroke="var(--ink)" stroke-width="1.5" stroke-dasharray="6 4"/>
+    <text x="176" y="234" font-size="12.5" font-weight="700">同軸中継点（当面機器なし）</text>
+    <text x="544" y="234" font-size="11" fill="var(--ink-soft)" text-anchor="end">将来: 分配器/ブースターの増設枠</text>
+
+    <!-- U5-U4: shelf 1 -->
+    <rect x="156" y="256" width="388" height="76" fill="#fff" stroke="var(--ink)" stroke-width="1.5"/>
+    <line x1="156" y1="256" x2="544" y2="256" stroke="var(--ink)" stroke-width="3"/>
+    <g stroke="var(--rule)" stroke-width="1">
+      <rect x="172" y="270" width="110" height="48" fill="#F4F6F8"/>
+      <rect x="296" y="270" width="110" height="48" fill="#F4F6F8"/>
+      <rect x="420" y="270" width="110" height="48" fill="#F4F6F8"/>
+    </g>
+    <g font-size="12" text-anchor="middle" font-weight="700">
+      <text x="227" y="290">ONU</text>
+      <text x="351" y="290">UCG Ultra</text>
+      <text x="475" y="290">WATCH BOOT</text>
+    </g>
+    <g font-size="10.5" fill="var(--ink-soft)" text-anchor="middle">
+      <text x="227" y="308">事業者支給</text>
+      <text x="351" y="308">Router / VPN</text>
+      <text x="475" y="308">P2導入</text>
+    </g>
+    <text x="548" y="250" font-size="10.5" fill="var(--ink-soft)" text-anchor="end">棚板 2U</text>
+
+    <!-- U3-U2: shelf 2 -->
+    <rect x="156" y="344" width="388" height="76" fill="#fff" stroke="var(--ink)" stroke-width="1.5"/>
+    <line x1="156" y1="344" x2="544" y2="344" stroke="var(--ink)" stroke-width="3"/>
+    <rect x="172" y="358" width="160" height="48" fill="#F4F6F8" stroke="var(--rule)"/>
+    <text x="252" y="378" font-size="12" text-anchor="middle" font-weight="700">Mini PC（HA）</text>
+    <text x="252" y="396" font-size="10.5" fill="var(--ink-soft)" text-anchor="middle">BIOS自動起動ON</text>
+    <rect x="352" y="358" width="178" height="48" fill="none" stroke="var(--rule)" stroke-dasharray="5 4"/>
+    <text x="441" y="378" font-size="11" fill="var(--ink-soft)" text-anchor="middle">Wi-SUNドングル（USB）</text>
+    <text x="441" y="396" font-size="10.5" fill="var(--ink-soft)" text-anchor="middle">＋将来余白</text>
+    <text x="548" y="338" font-size="10.5" fill="var(--ink-soft)" text-anchor="end">棚板 2U</text>
+
+    <!-- U1: blank / AC -->
+    <rect x="156" y="432" width="388" height="34" fill="#EDF1F5" stroke="var(--ink)" stroke-width="1.5"/>
+    <text x="176" y="454" font-size="12.5" font-weight="700">電源タップ（専用回路・4口以上）</text>
+    <text x="544" y="454" font-size="11" fill="var(--ink-soft)" text-anchor="end">マグネット固定</text>
+
+    <!-- floor: UPS -->
+    <line x1="60" y1="522" x2="700" y2="522" stroke="var(--ink)" stroke-width="2.5"/>
+    <rect x="140" y="486" width="150" height="36" fill="#fff" stroke="var(--ink)" stroke-width="1.5" stroke-dasharray="6 4"/>
+    <text x="215" y="503" font-size="11.5" text-anchor="middle" font-weight="700">UPS（P2・床置き）</text>
+    <text x="215" y="517" font-size="10" fill="var(--ink-soft)" text-anchor="middle">BR550S / BY50S</text>
+    <text x="690" y="516" font-size="10.5" font-family="'IBM Plex Mono',monospace" fill="var(--ink-soft)" text-anchor="end">床（棚・床は家族の収納に解放）</text>
+    <text x="560" y="80" font-size="10.5" font-family="'IBM Plex Mono',monospace" fill="var(--ink-soft)"> </text>
+  </svg>
+  <div class="figcap">FIG.3 — 壁掛け固定式ラック立面（約10kg）。壁内配線は直上から引込→U9パネルに成端→U8管理バーで整線→U7スイッチへ。Mac miniは書斎デスク側のため非搭載。JEM-A変換アダプタは棚段（U5-4）に同居。U6は同軸の中継点（アンテナ→LDK 1端子・分配なしのため機器非搭載）。多部屋化や受信レベル不足の日に分配器/ブースターを挿す増設枠。</div>
+  </div>
+  <div class="note"><b>熱設計:</b> 庫内実発熱 ≈ <span class="mono">ONU 6W ＋ UCG Ultra 10W ＋ スイッチ 15W ＋ Mini PC 12W ＋ WATCH BOOT 3W ≈ 45W</span>（PoE給電分約25WはAP・カメラ側で発熱するため庫内に含めない）。温度上昇の目安: 完全密閉で室温＋5〜8℃、上下通気ありで＋2〜3℃ — 夏の室温28℃でも庫内30〜31℃となり機器動作上限（40〜45℃）に余裕。通気は ルーバー扉（第一希望）＞ 扉上下ガラリ ＞ アンダーカット20mm＋上部ガラリ の順で建具に指定。P1でHA温度センサー（約¥2千）を庫内に設置し、実測32℃超が出た夏にP3のUSBファンを追加する。</div>
+  <div class="note"><b>ONU（回線終端装置）について:</b> 日本のFTTHでは事業者支給のONUが必須。1GフレッツはGE-PON ONU（RJ45 1G出力）で、<span class="mono">光ファイバ → ONU → 1GBASE-T → UCG Ultra WAN</span> と直結するだけ。固定IP系ISP（§07第1候補）ならIPoE方式の適合問題もほぼ消える。将来10G化する場合は回線を光クロスに変更（ONUがXG-PON 10GBASE-Tに変わる）し、ルータを10G対応機に更新 — 宅内配線は無変更。ラック設計上はONU用に1U相当の棚＋コンセント1口を確保。</div>
 </section>
 
 <!-- ============ VPN DESIGN ============ -->
@@ -471,14 +590,14 @@ li{margin-bottom:5px}
     <thead><tr><th style="width:190px">項目</th><th>設計</th></tr></thead>
     <tbody>
       <tr><td class="key">設計思想</td><td><b>VPNクライアントは「仮想的にLANへ参加」させる。</b>外出先端末はトンネル越しに宅内LANの一員として振る舞い、HA・UniFi・変換器・（将来）カメラへ宅内と同じIP/名前でそのまま到達する。外向けに個別サービスを公開する発想は採らない。</td></tr>
-      <tr><td class="key">VPNサーバ</td><td>UCG Fiber 内蔵 WireGuard（UDP/51820）。追加ハードウェア不要。</td></tr>
+      <tr><td class="key">VPNサーバ</td><td>UCG Ultra 内蔵 WireGuard（UDP/51820）。追加ハードウェア不要。</td></tr>
       <tr><td class="key">クライアント</td><td>Akira の iPhone / MacBook（＋必要に応じて配偶者端末）。端末ごとに個別鍵ペア・個別ピア登録。</td></tr>
       <tr><td class="key">アドレス設計</td><td>VPNクライアント用に宅内LANと別のサブネットを割当（例: 宅内 <span class="mono">192.168.10.0/24</span> ／ VPN <span class="mono">192.168.30.0/24</span>）。HA・UniFi・変換器はDHCP固定割当。</td></tr>
       <tr><td class="key">経路</td><td>スプリットトンネル: AllowedIPsを<b>宅内LANサブネット＋VPNサブネットのみ</b>に限定し、宅内向けは全ポート素通し（＝LAN参加と同じ到達性）。その他トラフィックはトンネルに通さない（モバイル電池・速度のため）。</td></tr>
       <tr><td class="key">名前解決・発見</td><td>VPNクライアントのDNSはUCG（内部DNS）を指定し、<span class="mono">ha.home.arpa</span> 等の内部名を宅内外で同一に。WireGuardはL3ルーテッドのためmDNSは素では越えない — HomeKit/AirPlayの発見まで外から使いたい場合はHA上のmDNSリフレクタ（avahi）でWGサブネットへ反射。通常運用はHAダッシュボード＋Apple遠隔で足りるためリフレクタは任意。</td></tr>
       <tr><td class="key">用途</td><td>HAダッシュボード／履歴・エネルギー確認、UniFi Console、変換器等の管理画面、（将来）カメラ。</td></tr>
       <tr><td class="key">Apple Home遠隔</td><td>VPN不要。HomePod（Home hub）がAppleの中継経由で遠隔操作を提供。家族はVPNを意識しない。</td></tr>
-      <tr><td class="key">WAN側の到達性</td><td>光クロスはIPoE専用。<b>DS-Lite（クロスパス/transix）はIPv4着信が一切不可、MAP-E（v6プラス等）は割当ポート範囲のみ着信可</b>のため、WireGuard待受は原則 <b>IPv6エンドポイント</b>で運用（IPoEのIPv6はフィルタなしで直接到達可・追加費用なし。モバイル各社はIPv6対応済み）。IPv4で待ち受けたい場合のみ固定IPv4オプションISPを選ぶ。DDNSはIPv6アドレスをFQDN登録。詳細は §07。</td></tr>
+      <tr><td class="key">WAN側の到達性</td><td>第1候補の固定IP系ISP（§07）なら<b>固定IPv4でそのまま待受</b> — DDNS不要・ポートマップ制約なしで最も素直。IPoE系ISP（DS-Lite/MAP-E）を選んだ場合のみIPv6待受に切替（IPoEのIPv6はフィルタなしで直接到達可、モバイル各社IPv6対応済み）。</td></tr>
       <tr><td class="key">予備経路</td><td><b>UniFi Teleport</b>（標準機能・無料）。招待リンクだけで端末が宅内LANに参加するため家族用に最適。主経路は鍵管理が明示的なWireGuardとする。</td></tr>
       <tr><td class="key">コスト方針</td><td><b>追加サブスクリプション ゼロ。</b>WireGuard・Teleport・内部DNS・avahiはすべて無料/内蔵機能。Nabu Casa（月額）不採用、Tailscale/Headscale不採用。継続費用は回線・ISP料金＋既存iCloud+のみ。</td></tr>
     </tbody>
@@ -494,14 +613,14 @@ li{margin-bottom:5px}
     <thead><tr><th style="width:60px">#</th><th style="width:250px">要素</th><th>仕様・役割</th></tr></thead>
     <tbody>
       <tr><td class="mono">1</td><td class="key">玄関スマートロック</td><td>AC100V有線スマートキー。JEM-A（HA端子）で施錠/解錠の<b>制御</b>と<b>状態（モニタ）</b>の両方を提供。</td></tr>
-      <tr><td class="mono">2</td><td class="key">配線</td><td><span class="mono">CPEV-S 0.9-2P ×2</span>（制御用＋モニタ用）を玄関制御ユニット → 情報盤へ。盤内にCat6A 1系統＋AC100Vコンセントを併設（確定済み配線仕様）。</td></tr>
+      <tr><td class="mono">2</td><td class="key">配線</td><td><span class="mono">CPEV-S 0.9-2P ×2</span>（制御用＋モニタ用）を玄関制御ユニット → <b>書斎クローゼットのラックへ直接</b>（情報盤レス）。ラック側で端子台受けし棚段のアダプタへ。</td></tr>
       <tr><td class="mono">3</td><td class="key">JEM-A → IP 変換</td><td><b>変換アダプタ → LAN → HA の直接構成（AiSEG2は挟まない）。</b>アダプタ選定の判断順序: ①<b>ECHONET Lite（電気錠クラス 0x026F）対応品</b> — HAの既存インテグレーションでそのまま認識、最優先。②文書化されたHTTP/UDP API品 — HAのRESTfulで直接統合（YAML数十行）。<b>自作（ATOM Lite/ESPHome）は不採用</b> — 保守を個人に依存させない。①②を満たす市販JEM-A変換アダプタ（Panasonic系エコシステム含む）で構成し、チャネル不足は同型アダプタの増設で対応。プロトコル非公開・専用アプリのみの製品は選ばない。</td></tr>
-      <tr><td class="mono">4</td><td class="key">LAN</td><td>変換器を情報盤のCat6AでPro Max 16へ接続（1GbE、DHCP固定割当）。</td></tr>
+      <tr><td class="mono">4</td><td class="key">LAN</td><td>変換器はラック棚段設置、パッチコードでスイッチへ直結（DHCP固定割当）。</td></tr>
       <tr><td class="mono">5</td><td class="key">Home Assistant</td><td>lockエンティティ化（施錠/解錠＋状態）。開閉状態はオートメーション条件に使用（例: 全員外出＋解錠状態 → 通知）。</td></tr>
       <tr><td class="mono">6</td><td class="key">Apple Home</td><td>HomeKit Bridge経由でロックアクセサリとして公開。Siri・自動化・遠隔（Appleリレー）はApple Home側で完結。</td></tr>
     </tbody>
   </table>
-  <div class="note"><b>拡張:</b> 玄関以外のドア・窓センサーは同じパターンに載せる — 接点/センサー → （JEM-A変換 or Matter対応センサー） → HA → Apple Home。非IP機器のIP化ポイントは情報盤に集約し、分散させない。<br><br><b>お風呂もSiriで:</b> 給湯機（EneFarm/エコキュートいずれ採用でも）はECHONET Lite給湯器クラスで「ふろ自動」「給湯温度」「湯張り状態」を公開する。HA経由でHomeKitにスイッチ＋温度センサとして出せば「Hey Siri, お風呂入れて」や帰宅検知での自動湯張りが成立（HomeKitに給湯専用アクセサリ型は無いためスイッチ表現になる）。機種選定時はECHONET Lite AIF認証・風呂自動の遠隔操作対応を要件に含めること。<br><br><b>AiSEG2は不採用:</b> エネルギー計測はBルート＋各機器のECHONET Liteで足り、JEM-A変換も直接アダプタで完結するため役割が残らない。唯一の再考条件は分岐回路別の詳細計測（専用計測ユニット併用）が欲しくなった場合のみ。</div>
+  <div class="note"><b>拡張:</b> 玄関以外のドア・窓センサーは同じパターンに載せる — 接点/センサー → （JEM-A変換 or Matter対応センサー） → HA → Apple Home。非IP機器のIP化ポイントはラックに集約し、分散させない。<br><br><b>お風呂もSiriで:</b> 給湯機（EneFarm/エコキュートいずれ採用でも）はECHONET Lite給湯器クラスで「ふろ自動」「給湯温度」「湯張り状態」を公開する。HA経由でHomeKitにスイッチ＋温度センサとして出せば「Hey Siri, お風呂入れて」や帰宅検知での自動湯張りが成立（HomeKitに給湯専用アクセサリ型は無いためスイッチ表現になる）。機種選定時はECHONET Lite AIF認証・風呂自動の遠隔操作対応・<b>有線LANポートの有無</b>（無ければIoT SSID収容）を要件に含めること。<br><br><b>AiSEG2は不採用:</b> エネルギー計測はBルート＋各機器のECHONET Liteで足り、JEM-A変換も直接アダプタで完結するため役割が残らない。唯一の再考条件は分岐回路別の詳細計測（専用計測ユニット併用）が欲しくなった場合のみ。</div>
 </section>
 
 <!-- ============ OPERATIONS NOTES ============ -->
@@ -513,7 +632,8 @@ li{margin-bottom:5px}
     <li><b>DHCP固定割当リスト</b>を作る対象: Mini PC（HA）、JEM-A変換器、給湯機、エアコン×4、パワコン、BRAVIA、AP×2、Mac mini。</li>
     <li><b>Alexaのスマートホームスキルは登録しない。</b>誤って機器検出した場合は無効化。音楽以外の経路を作らないことが設計。</li>
     <li><b>停電復帰順序:</b> UCG → Switch → Mini PC の順に自動起動（Mini PCはBIOSでAC復帰ON）。HAが上がればロック・空調の状態は自動再取得。</li>
-    <li><b>引き渡し前チェック:</b> 情報盤内のCPEV-S ×2 導通確認、Cat6A 7系統の結線試験（Fluke等の成績書）、盤内コンセント通電。</li>
+    <li><b>AP設置位置（P0で座標確定）:</b> 吹抜上部の高天井はNG（真下向き放射で全階に中途半端・メンテ不能）。2Fは吹抜のへりから1〜2m離れたLDK側の平天井（吹抜開口越しに1Fホールもカバー）、1Fは寝室群中心の廊下天井。天井Cat6Aの出口座標として電気図面に指定。</li>
+    <li><b>引き渡し前チェック:</b> ラック着のCPEV-S ×2 導通確認、Cat6A 全10系統のパッチパネル成端＋結線試験（Fluke等の成績書）、盤内コンセント通電。</li>
   </ul>
 </section>
 
@@ -527,14 +647,14 @@ li{margin-bottom:5px}
       <tr>
         <td class="key">フレッツ 光クロス × enひかりクロス</td>
         <td>クロスパス（DS-Lite）</td>
-        <td>DS-LiteはUCGで設定可能な見込み（ファーム世代の対応要確認）。IPv4着信不可のため<b>WireGuardはIPv6待受</b>。縛り・解約金なし、シンプルな料金体系。</td>
-        <td><b>第1候補</b></td>
+        <td>DS-LiteはUCGで設定可能な見込み（要確認）。IPv4着信不可のためWireGuardはIPv6待受。縛りなし。</td>
+        <td>将来10G化時の第1候補</td>
       </tr>
       <tr>
         <td class="key">フレッツ 光クロス × GMOとくとくBB光クロス</td>
         <td>v6プラス（MAP-E）</td>
         <td>MAP-Eは割当ポートのみ着信可（51820は使えず割当ポートにWGを合わせる）。UCGのMAP-E対応は要確認、非対応なら§09のRTX1300案。速度実績は豊富。</td>
-        <td>第2候補</td>
+        <td>将来10G化時の第2候補</td>
       </tr>
       <tr>
         <td class="key">ドコモ光 10ギガ / ソフトバンク光 10G 等コラボ</td>
@@ -545,8 +665,8 @@ li{margin-bottom:5px}
       <tr>
         <td class="key">フレッツ 1G × 固定IP系ISP（インターリンク・かもめ等）</td>
         <td>固定IPv4（IPoE/PPPoE）</td>
-        <td>VPN運用が最も素直（IPv4固定で待受）。1Gで足りるなら<b>小型ONU（SFP）をUCGに直挿し</b>できラックも1箱減る。10Gを捨てる判断が必要。</td>
-        <td>堅実案</td>
+        <td>VPN運用が最も素直（固定IPv4で待受・DDNS不要）。1G基準の本設計と完全整合。通常のGE-PON ONU（RJ45）でUCG Ultraに直結。</td>
+        <td><b>第1候補</b></td>
       </tr>
       <tr>
         <td class="key">auひかり 10G</td>
@@ -562,7 +682,7 @@ li{margin-bottom:5px}
       </tr>
     </tbody>
   </table>
-  <div class="note"><b>推奨:</b> enひかりクロス（クロスパス）＋ WireGuard IPv6待受。UCG FiberでDS-Lite/MAP-Eが安定しない場合のフォールバックは「WANルータをYamaha RTX1300に置換し、UniFiはその配下でL2/AP専任」（§09）。この場合もVPNはIPsec IKEv2（iOS標準クライアント）またはHA側でWireGuardアドオンを立てて成立する。</div>
+  <div class="note"><b>推奨（1G基準・確定）:</b> フレッツ光1G × 固定IP系ISP（インターリンク・かもめ等）＋ WireGuard固定IPv4待受。月額も10G比で下がる。将来10Gが本当に必要になったら回線を光クロス系（表の上2行）へ変更＋ルータを10G機に更新 — 宅内は無工事。IPoE適合の保険（RTX1300）は光クロス移行時のみ再考すればよい。</div>
 </section>
 
 <!-- ============ DESIGN IMPROVEMENTS ============ -->
@@ -570,33 +690,78 @@ li{margin-bottom:5px}
   <h2><span class="no">08</span>設計改善ポイント（REV G追記）</h2>
   <ul>
     <li><b>VPN待受のIPv6化（最重要）:</b> IPoE前提の回線ではIPv4待受は成立しないか制約付き。WireGuardのエンドポイントをIPv6 FQDNにし、クライアント側プロファイルもIPv6優先で作成。§04・§07に反映済み。</li>
-    <li><b>ラックUPS:</b> ONU・UCG・Pro Max 16・Mini PCを小型UPS（550〜750VA）に収容。瞬停でHA・ロック状態・通知が途切れない。スマートロックはAC100V直結のため停電時は物理鍵運用になる点を家族に共有。</li>
-    <li><b>PoEバジェットとスペア:</b> U7 Pro ×2で約40W。Pro Max 16 PoEの給電余力を確認の上、<b>PoEポート2口を玄関カメラ・ドアホン用に予約</b>。予備配線3系統（§03）とセットで着工前に確定。</li>
+    <li><b>ラックUPS:</b> ONU・UCG・スイッチ・Mini PCを小型UPS（P2導入・550VA級）に収容。瞬停でHA・通知が途切れない。スマートロックはAC100V直結のため停電時は物理鍵運用になる点を家族に共有。</li>
+    <li><b>PoEバジェットとスペア:</b> PoE給電は「AP×2＋玄関カメラ」の3台で凍結（実負荷約25W/45W）。<b>PoEポート1口を玄関カメラ用に予約</b>。給電機器を増やすイベントが起きた日にPoE余裕機へスイッチ交換。</li>
     <li><b>空配管の追加:</b> ラック⇔情報盤、ラック⇔屋外（軒下）に呼び22以上の空配管。V2H用空配管と同じ思想で弱電系にも保険をかける。着工前（2027年1月）までに配線図へ反映が必要な唯一の項目。</li>
     <li><b>HAのバックアップ:</b> 日次スナップショットをMac mini（またはNAS）へ自動転送。SSDのSMART監視をHA上でアラート化。復旧手順を1枚のrunbookに。</li>
     <li><b>IoT SSIDの固定化:</b> ECHONET Lite機器・SwitchBotは2.4GHz固定・WPA2-PSK・band steering除外のSSIDに収容。機器側の再接続不良を予防。</li>
-    <li><b>WAN監視:</b> HAからWAN死活・IPv6プレフィックス変化を監視し、変化時にDDNS更新＋通知。プロバイダ側のプレフィックス再割当に無人で追従。</li>
+    <li><b>WAN監視と自動リスタート:</b> ONU・ルータのハングは<b>既製専用機 WATCH BOOT nino（P2導入）</b>が単体でping監視→自動電源サイクル（HA・ネット非依存・リトライ制御内蔵）。AP・カメラのハングはHA→UniFi APIの<b>PoEポート再給電</b>（費用ゼロ）。HA自体はBIOS自動起動＋UPS復電で復旧。回線障害と機器ハングの区別はWATCH BOOTのリトライ上限設定で担保。あわせてHAでWAN死活・DDNS更新・停電/復旧通知を自動化。</li>
   </ul>
 </section>
 
 <!-- ============ NON-UNIFI ALTERNATIVES ============ -->
 <section>
-  <h2><span class="no">09</span>UniFi以外の機器候補</h2>
-  <div class="h2sub">全とっかえは不要。日本のIPoE適合が問われるのは<b>ルータだけ</b>で、スイッチ・APはL2なので回線と無関係に選べる。</div>
-  <table>
-    <thead><tr><th style="width:90px">区分</th><th style="width:230px">製品</th><th>特徴・使いどころ</th></tr></thead>
+  <h2><span class="no">09</span>機器構成 — UniFi本命 ＋ 低コスト代替</h2>
+  <div class="h2sub">UniFi現行ラインナップと突き合わせた確定BOM。価格は2026年時点の概算・購入時要再確認。</div>
+  <table style="margin-bottom:22px">
+    <thead><tr><th style="width:90px">購入時期</th><th style="width:250px">ハード（確定）</th><th style="width:100px">概算</th><th>選定理由・見送った同格品</th></tr></thead>
     <tbody>
-      <tr><td class="key">Router</td><td>Yamaha RTX1300</td><td>10G×2ポート。v6プラス／クロスパス／transix／OCNバーチャルコネクトを<b>ネイティブ全対応</b>する国内定番。UniFiのIPoE対応が不安ならルータのみこれに置換が最小変更・最大効果。VPNはIPsec IKEv2（iOS標準）。WireGuardは非対応なのでWGはHA側アドオンで。</td></tr>
-      <tr><td class="key">Router</td><td>NEC UNIVERGE IX2310</td><td>10G対応・IPoE各方式対応。中古市場が安く玄人に人気。CLI前提でGUIは簡素。</td></tr>
-      <tr><td class="key">Router</td><td>MikroTik RB5009 / CCR2004</td><td>価格対性能最強、WireGuardネイティブ対応。ただしMAP-Eは手動計算スクリプトが必要で日本方式の面倒は最大。DS-Lite運用なら現実的。</td></tr>
-      <tr><td class="key">Switch</td><td>TP-Link Omada SG3210XHP-M2 / SG3428XPP-M2</td><td>2.5G PoE++＋10Gアップリンクが安価。Omadaコントローラで一元管理でき、UniFiに最も近い運用感。</td></tr>
-      <tr><td class="key">Switch</td><td>QNAP QSW-M2108-2C / Buffalo BS-MP2008</td><td>静音・安価な10Gスイッチ。PoEなしなのでAP給電は別途インジェクタが必要（本設計ではPoEスイッチ推奨）。</td></tr>
-      <tr><td class="key">AP</td><td>Ruckus R550 / R650</td><td>BeamFlexでRF性能は頭一つ抜ける。鉄骨・吹抜・高密度に最強だが高価。Unleashed（コントローラレス）で宅内運用可。</td></tr>
-      <tr><td class="key">AP</td><td>Aruba Instant On AP25</td><td>クラウド管理が簡単で品質安定。小規模宅内の鉄板。PoE給電。</td></tr>
-      <tr><td class="key">AP</td><td>TP-Link Omada EAP670 / EAP683 LR</td><td>Wi-Fi 6/6Eが安価。Omadaスイッチと合わせると管理一元化。コスト最優先ならこれ。</td></tr>
+      <tr><td class="mono">P1</td><td class="key">UCG Ultra</td><td class="mono">¥20,000</td><td>WireGuard/Teleport・VLAN・内部DNSはMax/Fiberと同機能。LAN 1Gだが本設計は1G基準のため損失なし（クロスVLAN通信も1Gで実用十分）。上位のMax（¥3万・2.5G/NVMe）は速度昇格の第一段として温存。UX7/UDR7はAP一体型でラック設置に不向き。</td></tr>
+      <tr><td class="mono">P1</td><td class="key">USW Lite 16 PoE</td><td class="mono">¥30,000</td><td>16×1G・PoE 45W・ファンレス。ドアホンPoE不要化（ルートC確定）により給電3台凍結（AP×2＋カメラ・実負荷約25W）で成立。凍結を破る日にPro Max 16 PoE等へ交換。Pro Max 16 PoEは在庫難のため本命から外し、上位互換として温存。</td></tr>
+      <tr><td class="mono">P1</td><td class="key">U7 Lite ×2</td><td class="mono">¥16,000×2</td><td>Wi-Fi 7・天井付・2台運用で確定（1F廊下／2F LDK平天井・吹抜上部NG）。Lite 16 PoE配下では1Gリンク運用、スイッチ更新時に2.5Gへ自動昇格。</td></tr>
+      <tr><td class="mono">P0末</td><td class="key">壁掛けオープンフレームラック: <b>Pekaro 9U（Amazon）で確定</b></td><td class="mono">¥10,000級</td><td>固定式・19インチ対応・W53.8×D45×H48cm・0.8mm冷間圧延鋼・<b>耐荷重35kg</b>・防錆塗装。全要件適合（オープンフレーム=通気は建具ガラリで担保・二重箱回避、9U=FIG.3割付そのまま、奥行45cmで配線余裕）。<b>購入時の同時確認3点</b>: ①本体自重を仕様欄で確認し機器込み合計で下地指定を最終化（20kg超なら30kg指定へ） ②ケージナット/M6ネジの付属確認（無ければ別途） ③純正棚板なしのため<b>汎用19インチ1Uパンチング棚×2（各¥2千前後）を同時購入</b>。取付・成端はセキスイ弱電業者へ材工依頼（施主支給: ラック・パネル・ジャック・棚板）。</td></tr>
+      <tr><td class="mono">P0末</td><td class="key">パッチパネル一式（施主支給・工事店成端）</td><td class="mono">¥10,000</td><td>ラックと同時に支給。24口キーストン式空パネル（約¥4千）＋Cat6Aキーストンジャック×10（約¥500/個）＋パッチコード＋1Uケーブルマネジメントバー＋<b>パンチング棚板×2（1U・耐荷重5kg以上・ラック同メーカー純正）＋強力面ファスナー（3Mデュアルロック等）</b> — スイッチはラックマウントネジ固定、UCG Ultra・ONU・WATCH BOOTは棚板＋面ファスナー底面固定が定石。壁内の単線Cat6AはRJ45直付けNG・キーストン成端が正式。予備3系統もパネルまで成端し「使う日はコード1本」に。</td></tr>
+      <tr><td class="mono">P1</td><td class="key">Mini PC（N100級）</td><td class="mono">¥30,000</td><td>UniFi外。HA用2.5G NIC標準機。BIOSで「AC復帰時自動起動」を必ず設定。</td></tr>
+      <tr><td class="mono">P2</td><td class="key">UPS: APC BR550S-JP または オムロン BY50S</td><td class="mono">¥15,000</td><td><b>Day 1からP2へ後送り</b> — 停電復旧の無人化はBIOS自動起動＋WATCH BOOTで既に担保され、ロックは元々ラックUPS外（AC直結・停電時は物理鍵）のため。残余リスクは瞬断時のSSDのみで、P2の日次バックアップと同時に導入して閉じる。正弦波・復電時自動再起動対応、公式ストアで購入。床置き（壁掛けラック外・5〜6kg）、NUT連携で残量監視。</td></tr>
+      <tr><td class="mono">P2</td><td class="key">（スイッチ増設なし）</td><td class="mono">¥0</td><td>Lite 16 PoEの空き口にMac mini・パワコンを収容するのみ。</td></tr>
+      <tr><td class="mono">P2</td><td class="key">明京電機 WATCH BOOT nino（RPC-M2C）</td><td class="mono">¥25,000</td><td>WAN監視・自動電源リスタートの既製専用機。ping監視→ONU・UCG Ultraの2口を自動電源サイクル。HA・ネット非依存の独立動作＋リトライ制御内蔵 — 自作オートメーション保守を負わない（JEM-Aと同じ「既製品優先」原則）。配線: 壁→UPS（バックアップ口）→WATCH BOOT→ONU/UCG。</td></tr>
+      <tr><td class="mono">P3</td><td class="key">（Aqara G5 Pro PoE — §11.1）</td><td class="mono">¥30,000</td><td>カメラはHKSV要件によりUniFi Protect機ではなくAqara。ProtectはHomeKitドアベル通知・顔アナウンス非対応のため。</td></tr>
+      <tr><td class="mono">将来</td><td class="key">速度昇格ラダー（任意・順に）</td><td class="mono">—</td><td>①スイッチを2.5G機へ交換（AP・Mini PCが自動昇格）→ ②ルータをUCG Maxへ → ③回線を光クロス10G＋UCG Fiber＋10Gスイッチ。どの段も機器交換のみで宅内無工事。</td></tr>
     </tbody>
   </table>
-  <div class="note"><b>現実的な3構成:</b> ①<b>UniFi続投</b>（enひかりクロス＋IPv6待受で変更ゼロ・管理一元）／ ②<b>RTX1300＋UniFi配下</b>（回線適合を日本定番に任せ、Pro Max 16とU7 Proはそのまま。管理画面は2つに分かれる）／ ③<b>全Omada化</b>（ER8411＋SG3428XPP＋EAP683でコスト2〜3割減・一元管理維持。完成度はUniFiにやや劣る）。本設計の推奨は①、保険が②。</div>
+  <div class="h2sub" style="margin-top:4px">以下は役割別の比較（上位・代替オプション）。</div>
+  <table>
+    <thead><tr><th style="width:80px">役割</th><th style="width:250px">本命（UniFi・確定）</th><th style="width:250px">低コスト代替</th><th>妥協点・判断基準</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="key">Router</td>
+        <td><b>UCG Ultra</b>（約¥2万）<br>WireGuard・Teleport・VLAN内蔵</td>
+        <td>上位: UCG Max（約¥3万・2.5G/NVMe）</td>
+        <td>機能は同等、差は速度とNVMe（Protect用）のみ。1G基準の本設計ではUltraで損失なし。</td>
+      </tr>
+      <tr>
+        <td class="key">Switch</td>
+        <td><b>USW Lite 16 PoE</b>（約¥3万）<br>16×1G・PoE 45W・ファンレス</td>
+        <td>上位: USW-24-PoE（95W・約¥5万）／ Pro Max 16 PoE（180W・2.5G・約¥6.5万・在庫難）</td>
+        <td>ドアホンPoEの消滅で要件が軽くなりLite 16 PoEが成立（¥3万・最安のUniFi解）。PoE余裕が欲しければ＋¥2万で24-PoE、在庫が戻ればPro Maxが決定版。いずれも交換のみで移行可。</td>
+      </tr>
+      <tr>
+        <td class="key">AP ×2</td>
+        <td><b>U7 Lite ×2</b>（約¥1.6万×2）<br>Wi-Fi 7・2.5G PoE</td>
+        <td>上位: U7 Pro ×2（約¥3.3万×2・6GHz/4x4）</td>
+        <td><b>Liteの2台運用で確定。</b>U7 LiteはUniFi現行最安APで機種面の削減余地なし。6GHz級が欲しくなったら上位差し替え（配線共通・工事不要）。</td>
+      </tr>
+      <tr>
+        <td class="key">HA機</td>
+        <td>Mini PC（N100級・約¥3万）</td>
+        <td>同左（既に最安クラス）</td>
+        <td>Raspberry Pi 5も可だがWi-SUNドングル・将来の解析余力を考えるとN100 Mini PCのコスパが上。削らない。</td>
+      </tr>
+      <tr>
+        <td class="key">UPS</td>
+        <td>APC/CyberPower 550〜750VA（約¥1.5万）</td>
+        <td>同左</td>
+        <td>元々安価。ラック内4機器（ONU/UCG/SW/Mini PC)を1台でカバー。削らない。</td>
+      </tr>
+      <tr>
+        <td class="key">カメラ</td>
+        <td>Aqara G5 Pro PoE版（約¥3万、§11.1）</td>
+        <td>Aqara G4（ドアベル型・約¥1.5万）</td>
+        <td>G4はWi-Fi 2.4GHz・電池運用になり画質・常時性で劣る。HKSV要件は両者満たす。P3項目なので入居後にゆっくり判断。</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="note"><b>予算:</b> ①<b>Day 1構成 約¥11.2万＋P0末のラック等 約¥2.5万</b>（UCG Ultra 約¥2万＋Lite 16 PoE 約¥3万＋U7 Lite×2 約¥3.2万＋Mini PC 約¥3万／ 壁掛けラック¥1.5万＋パッチパネル一式¥1万、いずれも概算）— AP2台・WireGuard/Teleport/VLAN込み・PoEは3台凍結運用。UPS（¥1.5万）とWATCH BOOT（¥2.5万）はP2。／ ②<b>速度昇格ラダー（後日可・全段宅内無工事）:</b> ①スイッチを2.5G/PoE余裕機へ（PoE凍結を破る日と兼用）→ ②UCG Max化 → ③光クロス10G＋UCG Fiber。体感が欲しくなった段だけ払う。<br><b>IPoE保険:</b> 固定IP系ISP採用なら不要。将来光クロス移行時のみRTX1300案を再考。</div>
 </section>
 
 <!-- ============ VLAN SEGMENTATION ============ -->
@@ -615,20 +780,20 @@ li{margin-bottom:5px}
       <tr>
         <td class="key">20 — IoT</td>
         <td class="mono">192.168.20.0/24<br>SSID: IoT（2.4GHz固定・WPA2）</td>
-        <td>エアコン×4、給湯機、パワコン（有線）、JEM-A変換、SwitchBot Relay、Alexa ×2</td>
-        <td><b>インターネット遮断がデフォルト</b>（例外の許可リスト: Alexa=Amazon Music、SwitchBot=ファーム更新時のみ）。IoT→他VLANの発信は全拒否。到達できる相手はHAのみ。</td>
+        <td>エアコン×4、給湯機、パワコン（有線）、JEM-A変換、SwitchBot Relay、Alexa ×2、ロボット掃除機×2（1F/2F）</td>
+        <td><b>インターネット遮断がデフォルト</b>（例外の許可リスト: Alexa=Amazon Music、ロボット掃除機=クラウド制御、SwitchBot=ファーム更新時のみ）。IoT→他VLANの発信は全拒否。到達できる相手はHAのみ。</td>
       </tr>
       <tr>
         <td class="key">30 — Dev（開発）</td>
         <td class="mono">192.168.30.0/24<br>SSID: なし（有線/必要時）</td>
-        <td><b>Mac mini（10GbE・SSHホスト）</b>、開発VM・検証機</td>
+        <td><b>Mac mini（SSHホスト）</b>、開発VM・検証機</td>
         <td>インターネット可。<b>SSH（:22）はTrustedとVPNサブネットからのみ許可</b>（鍵認証のみ・パスワード無効、<span class="mono">macmini.home.arpa</span>）。IoT面へは直接触れず、HAのAPI経由のみ。例外許可: HA→Mac mini（日次バックアップ転送）。本番HAを検証で壊さない防壁。</td>
       </tr>
       <tr>
         <td class="key">40 — Guest</td>
         <td class="mono">192.168.40.0/24<br>SSID: ゲスト用</td>
         <td>来客端末</td>
-        <td>インターネットのみ。クライアント分離ON、宅内資源への到達ゼロ。UniFiのGuest Hotspot機能で帯域制限（例: 50Mbps/端末）や利用時間制限も可。パスワードはQRコード化して玄関/リビングに掲示、家族用SSIDとは鍵・VLANとも完全分離。両AP（U7 Pro ×2）から同一SSIDで吹く。</td>
+        <td>インターネットのみ。クライアント分離ON、宅内資源への到達ゼロ。UniFiのGuest Hotspot機能で帯域制限（例: 50Mbps/端末）や利用時間制限も可。パスワードはQRコード化して玄関/リビングに掲示、家族用SSIDとは鍵・VLANとも完全分離。両AP（U7 Lite ×2）から同一SSIDで吹く。</td>
       </tr>
       <tr>
         <td class="key">60 — Camera（将来）</td>
@@ -721,22 +886,22 @@ li{margin-bottom:5px}
     <tbody>
       <tr>
         <td class="key">P0 — 着工前確定<br><span class="mono" style="font-weight:400">〜2027/01</span></td>
-        <td>Cat6A 7系統＋予備3（玄関カメラ・ドアホン・パワコン）／ 空配管（ラック⇔情報盤・屋外）／ 情報盤仕様（CPEV-S ×2・Cat6A・コンセント）／ ドアホン型番の呼出接点出力確認 ／ JEM-A変換アダプタ選定（ECHONET Lite対応可否）</td>
+        <td>Cat6A 7系統＋予備3（玄関カメラ・ドアホン・パワコン）／ <b>書斎デスクはCat6A×2本</b>（①仕事用=VLAN10 ②開発用Mac mini=VLAN30、壁ポート単位でVLAN割当）／ 空配管（ラック⇔情報盤・屋外）／ <b>情報盤は設けない（標準のまとめてねット等は削除依頼）</b>: 全弱電（Cat6A×10＋玄関CPEV-S×2）を書斎クローゼットの施主支給ラックへ直接集約し、JEM-A変換アダプタはラック棚段に設置／ ドアホン型番の呼出接点出力確認 ／ JEM-A変換アダプタ選定（ECHONET Lite対応可否）／ パワコンのECHONET Lite対応・有線LAN可否確認（非対応でもBルートで総量監視は成立）／ 成端仕様（A案確定）: <b>施主支給ラックを器具付け後〜引き渡し前に先行設置し、ラック搭載の24口パッチパネルへキーストン成端</b>・全10系統・<b>ケーブル余長1.5〜2m（サービスループ）指定</b>・Fluke成績書付き。余長があれば将来のラック交換はパネル載せ替え30分・再成端不要 ／ ラック設置条件（壁掛け）: <b>壁掛け荷重用合板下地（位置指定・耐荷重20kg以上）</b>・専用AC回路4口以上・配線引込口はラック取付位置の直上 ／ クローゼット三層構成の造作: 上=壁掛けラック・中=<b>可動造作棚（最上段の天板高さをラック底面に一致させ、壁固定＋棚受けの二重支持とする）</b>・下=<b>1Fロボット掃除機基地（床レベルAC 1口＋前方クリアランス50cm）</b> ／ <b>2F LDKロボット掃除機基地: タンク式ドック前提で確定（給排水配管は不要）</b> — ドック位置（パントリー脇等）にAC 1口＋設置スペース（幅50×奥行60cm級＋前方クリアランス）を図面指定 ／ 通気: 第一希望<b>ルーバー扉</b>、不可なら<b>扉アンダーカット20mm＋上部ガラリ</b>（下吸気・上排気の煙突効果。庫内発熱約45W→通気ありで室温＋2〜3℃見込み。P1でHA温度センサー設置・実測32℃超でP3ファン）／ <b>テレビ受信: 地デジUHF＋BS/110度CSアンテナで確定・CATVなし・テレビ端子はLDKの1箇所のみ</b>。屋外混合器→同軸1本→ラック経由（中継接続のみ）→LDK。<b>1端子・分配なしのためブースター・分配器は非搭載</b>（LNB給電はBRAVIA/レコーダーが直接担う）。入居後に受信レベルを実測し不足時のみU6へブースター追加。将来の多部屋化もU6に分配器を挿すだけで配線変更ゼロ。アンテナ設置位置は太陽光パネル（南面）との干渉を外構図で確認 ／ ラックは弱電業者に材工込み手配（仕様指定: 19インチ・6〜9U・耐荷重20kg以上・奥行30cm級）、<b>施主支給はパッチパネル・ジャックのみ（型番リスト早期提出）</b>、Cat6Aキーストン成端＋Fluke成績書の対応可否を事前確認</td>
         <td><b>後からやると数十倍高い、または不可能</b>になるものだけ。ここが唯一の締切あり項目。</td>
       </tr>
       <tr>
         <td class="key">P1 — Day 1<br><span class="mono" style="font-weight:400">引渡し〜入居週</span></td>
-        <td>ONU＋UCG Fiber＋Pro Max 16＋AP×2で回線開通 ／ SSID 3面（家族・IoT・ゲスト）とVLAN 10/20/40 ／ Mini PC＋HA＋HomeKit Bridge ／ エアコン×4・給湯機（風呂自動）のECHONET Lite接続 ／ 玄関ロック（JEM-A→IP→Apple Home）／ HomePod・Alexa設置 ／ SwitchBot Relay照明 ／ WireGuard VPN＋内部DNS ／ UPS</td>
+        <td>ONU＋UCG Ultra＋Lite 16 PoE＋AP×2で回線開通 ／ SSID 3面（家族・IoT・ゲスト）とVLAN 10/20/40 ／ Mini PC＋HA＋HomeKit Bridge（BIOS自動起動設定）／ エアコン×4・給湯機（風呂自動）のECHONET Lite接続 ／ 玄関ロック（JEM-A→IP→Apple Home）／ HomePod・Alexa設置 ／ SwitchBot Relay照明 ／ WireGuard VPN＋内部DNS</td>
         <td><b>家族が初日から使う機能</b>＝ネット・照明・空調・風呂・鍵・音楽。IoT機器は最初からIoT SSIDに載せ、後のペアリングし直しを発生させない。VPNとUPSは安価かつ初日から効く保険。</td>
       </tr>
       <tr>
         <td class="key">P2 — 入居後 1〜3ヶ月</td>
-        <td>Bルート（Wi-SUNドングル）電力監視 ／ パワコンECHONET Lite監視 ／ ドアホン呼出のJEM-Aモニタ連携（プッシュ＋HomePodアナウンス）／ HA日次バックアップ→Mac mini ／ Dev VLAN＋Mac mini SSH体制 ／ Teleportの家族展開</td>
+        <td>Bルート（Wi-SUNドングル）電力監視 ／ パワコンECHONET Lite監視 ／ UPS導入＋NUT連携 ／ ドアホン呼出のJEM-Aモニタ連携（プッシュ＋HomePodアナウンス）／ HA日次バックアップ→Mac mini ／ Dev VLAN＋Mac mini SSH体制 ／ Teleportの家族展開</td>
         <td>生活は既に回っている前提で、<b>計測・通知・開発環境</b>を足す層。工事不要・設定とUSB挿しのみ。</td>
       </tr>
       <tr>
         <td class="key">P3 — プロジェクト枠<br><span class="mono" style="font-weight:400">任意・順不同</span></td>
-        <td>玄関カメラ G5 Pro＋HKSV顔認識アナウンス（購入直前に対応状況再確認）／ mDNSリフレクタ（VPN越しHomeKit発見）／ WAN・IPv6プレフィックス監視の自動化 ／ VLAN 60＋Frigateローカル解析（Appleルートの代替）／ 室内見守りカメラ ／ ドアホンのルートA/B移行検討</td>
+        <td>玄関カメラ G5 Pro＋HKSV顔認識アナウンス（購入直前に対応状況再確認）／ ラック庫内温度連動ファン（HA温度センサー＋静音USBファン・32℃超で自動ON、夏場の実測次第）／ mDNSリフレクタ（VPN越しHomeKit発見）／ WAN・IPv6プレフィックス監視の自動化 ／ VLAN 60＋Frigateローカル解析（Appleルートの代替）／ 室内見守りカメラ ／ 2F LDK用ロボット掃除機（<b>Matter対応要件</b>・タンク式自動給水ドック機、Apple Home/Siriから直接操作）／ ドアホンのルートA/B移行検討</td>
         <td><b>無くても困らないが、あると楽しい層。</b>それぞれ独立していて順序自由。子育て・仕事の隙間に1件ずつ。</td>
       </tr>
     </tbody>
@@ -744,9 +909,33 @@ li{margin-bottom:5px}
   <div class="note"><b>切り分けの原則:</b> Day 1の合格ラインは「スマホを触らない家族でも、照明・エアコン・風呂・鍵・音楽が説明なしで使える」こと。凝った機能をDay 1に詰め込むと引越し週の負債になる。P2以降は全て「配線済み・設計済み・締切なし」なので、焦る理由が構造的に存在しない。</div>
 </section>
 
+<!-- ============ CONTRACTOR REQUESTS ============ -->
+<section>
+  <h2><span class="no">13</span>積水ハウス・工事店への依頼事項一覧</h2>
+  <div class="h2sub">打合せでこのままわたせる指示書形式。区分＝先方の担当職種、時期＝図面確定（設計）／施工中／引き渡し前。</div>
+  <table>
+    <thead><tr><th style="width:110px">区分</th><th>依頼内容</th><th style="width:110px">時期</th></tr></thead>
+    <tbody>
+      <tr><td class="key">弱電配線</td><td>Cat6A 10系統（7＋予備3: 玄関カメラ・玄関ドアホン・パワコン）＋<b>書斎デスクは2口</b>。全系統を書斎クローゼットへスター配線、引込はラック取付位置の直上、<b>余長1.5〜2m</b>確保。</td><td class="mono">図面確定</td></tr>
+      <tr><td class="key">弱電配線</td><td>玄関スマートロック制御ユニット → クローゼットへ <span class="mono">CPEV-S 0.9-2P ×2</span>（制御＋モニタ）。</td><td class="mono">図面確定</td></tr>
+      <tr><td class="key">弱電配線</td><td><b>標準の情報盤（まとめてねット等）は削除。</b>全弱電はクローゼットの施主支給ラックへ集約。</td><td class="mono">図面確定</td></tr>
+      <tr><td class="key">弱電配線</td><td>空配管（呼び22以上）: ラック⇔玄関まわり、ラック⇔屋外軒下 の2ルート。</td><td class="mono">図面確定</td></tr>
+      <tr><td class="key">テレビ</td><td>地デジUHF＋BS/110度CSアンテナ・屋外混合器で同軸1本→クローゼット直上引込→<b>中継のみでLDK 1端子へ</b>（ブースター・分配器なし）。アンテナ位置は太陽光パネルと非干渉の面で。</td><td class="mono">図面確定</td></tr>
+      <tr><td class="key">電気</td><td>クローゼット: 専用回路コンセント4口以上（ラック脇）＋<b>床レベルAC 1口（1F掃除機基地）</b>。<b>2F LDKドック位置にAC 1口＋設置スペース（幅50×奥行60cm級）</b>。書斎デスク: AC 4口以上。光コンセント位置はラック脇に指定。</td><td class="mono">図面確定</td></tr>
+      <tr><td class="key">建具・造作</td><td>クローゼット扉は<b>ルーバー扉（第一希望）</b>、不可ならアンダーカット20mm＋上部ガラリ。造作: 中段可動棚（<b>最上段天板をラック底面高さに一致</b>=二重支持）、下段ルンバスペース（前方50cm）。</td><td class="mono">図面確定</td></tr>
+      <tr><td class="key">下地</td><td>ラック取付位置に<b>壁掛け荷重用合板下地</b>（位置図提出・耐荷重は機器込み合計で指定、20〜30kg）。AP×2の天井Cat6A出口は<b>平天井指定（吹抜上部NG）</b>: 2F=LDK側平天井（吹抜へり1〜2m離し）、1F=寝室群中心の廊下天井。</td><td class="mono">図面確定</td></tr>
+      <tr><td class="key">機器確認</td><td>①ドアホン標準機の<b>呼出連動接点出力</b>の有無（無ければ出力付き型番へ変更）②給湯機は<b>ECHONET Lite AIF＋風呂自動遠隔対応</b>を要件化 ③パワコンのECHONET Lite・有線LAN対応 ④JEM-A変換アダプタのECHONET Lite対応 — 各メーカー回答の取得。</td><td class="mono">図面確定</td></tr>
+      <tr><td class="key">施工</td><td>施主支給品の受入・取付: <b>Pekaro 9Uラック</b>（器具付け後の埃の少ない工程で壁面固定）＋パッチパネル・ジャック・棚板。<b>事前確認3段</b>: (a)支給品の現場受入可否 (b)壁面取付の実施可否（不可なら下地までを依頼し取付は施主） (c)搭載パネルへの成端可否 — 不可の場合はラックを積水側調達（日東工業等・仕様指定）へ切替。責任分界（支給品起因/施工起因）は書面化。</td><td class="mono">施工中</td></tr>
+      <tr><td class="key">成端・試験</td><td>ラック搭載パッチパネルへ<b>Cat6Aキーストン成端 全10系統＋Fluke等の成績書</b>提出。CPEV-S ×2はラック側端子台受け・導通確認。</td><td class="mono">引き渡し前</td></tr>
+      <tr><td class="key">引き渡し</td><td>成績書・盤図・配線経路図の受領、専用回路・ルンバAC通電確認、ガラリ通気確認。</td><td class="mono">引き渡し前</td></tr>
+    </tbody>
+  </table>
+  <div class="note"><b>使い方:</b> この表を打合せ資料としてそのまま提出し、各行に先方担当者と回答期限を書き込んで管理する。図面確定行が2027年1月着工前の締切対象。</div>
+</section>
+
 <footer style="border-top:2px solid var(--ink);padding-top:14px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
   <span>TWSX26060017 南荻窪 — SMART HOME NETWORK ARCHITECTURE</span>
-  <span>REV Q (FINAL) · 2026-07-28 · SHEET NW-01</span>
+  <span>REV AV (FINAL) · 2026-07-28 · SHEET NW-01</span>
 </footer>
 
 </div>

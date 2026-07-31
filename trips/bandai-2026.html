@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BANDAI EXPEDITION | 8.29–8.30</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Shippori+Mincho:wght@500;600;800&family=Noto+Sans+JP:wght@300;400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0c1210;
+    --bg2: #101a16;
+    --panel: #16221d;
+    --line: #24352d;
+    --mist: #9db3a6;
+    --snow: #e9efe9;
+    --moss: #6fae82;
+    --amber: #e0a44c;
+    --lake: #5fa8c4;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background: var(--bg);
+    color: var(--snow);
+    font-family:"Noto Sans JP",sans-serif;
+    font-weight:300;
+    line-height:1.85;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  .mono{font-family:"JetBrains Mono",monospace;}
+  .bebas{font-family:"Bebas Neue",sans-serif;}
+  .mincho{font-family:"Shippori Mincho",serif;}
+
+  /* faint contour-line texture */
+  body::before{
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+    background-image: repeating-radial-gradient(circle at 80% -10%, transparent 0 58px, rgba(111,174,130,0.045) 58px 59px);
+  }
+  .layer{ position:relative; z-index:1; }
+
+  .wrap{ max-width:920px; margin:0 auto; padding:0 24px; }
+
+  /* ============ HERO ============ */
+  .hero{
+    min-height:92vh;
+    display:flex; flex-direction:column; justify-content:center;
+    position:relative;
+    background:
+      linear-gradient(180deg, rgba(12,18,16,0.2) 0%, rgba(12,18,16,0.85) 70%, var(--bg) 100%),
+      radial-gradient(ellipse 120% 60% at 50% 110%, #1c2f26 0%, transparent 60%),
+      linear-gradient(180deg,#0e1815 0%, #0c1210 100%);
+    border-bottom:1px solid var(--line);
+    padding: 70px 0 90px;
+  }
+  .hero-top{
+    display:flex; justify-content:space-between; align-items:center; gap:16px;
+    font-size:11px; letter-spacing:0.3em; color:var(--mist);
+    text-transform:uppercase; margin-bottom:60px; flex-wrap:wrap;
+  }
+  .hero-top .dot{ color:var(--amber); }
+  .hero-top a{ color:var(--mist); text-decoration:none; border-bottom:1px solid transparent; }
+  .hero-top a:hover{ color:var(--amber); border-bottom-color:var(--amber); }
+  .hero h1{
+    font-family:"Bebas Neue",sans-serif;
+    font-size:clamp(72px, 15vw, 168px);
+    line-height:0.92;
+    letter-spacing:0.02em;
+    background: linear-gradient(180deg,#f2f6f0 30%, #7fa58d 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .hero .jp-sub{
+    font-family:"Shippori Mincho",serif;
+    font-size:clamp(17px,2.6vw,24px); font-weight:600;
+    color:var(--snow); margin-top:22px; letter-spacing:0.14em;
+  }
+  .hero .jp-sub em{ color:var(--moss); font-style:normal; }
+  .hero-stats{
+    display:flex; gap:0; margin-top:56px;
+    border:1px solid var(--line); border-radius:10px; overflow:hidden;
+    background:rgba(22,34,29,0.6); backdrop-filter:blur(6px);
+    flex-wrap:wrap;
+  }
+  .hstat{
+    flex:1; min-width:140px; padding:18px 20px;
+    border-right:1px solid var(--line);
+  }
+  .hstat:last-child{ border-right:none; }
+  .hstat .k{ font-family:"JetBrains Mono",monospace; font-size:10px; letter-spacing:0.2em; color:var(--mist); text-transform:uppercase; }
+  .hstat .v{ font-family:"Bebas Neue",sans-serif; font-size:30px; letter-spacing:0.04em; color:var(--snow); margin-top:2px;}
+  .hstat .v small{ font-size:14px; color:var(--mist); font-family:"Noto Sans JP",sans-serif; font-weight:400;}
+  .hstat.temp .v{ color:var(--moss); }
+
+  /* nav */
+  .nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(12,18,16,0.85); backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{
+    max-width:920px; margin:0 auto; padding:0 24px;
+    display:flex; gap:4px; overflow-x:auto;
+  }
+  .nav a{
+    font-family:"JetBrains Mono",monospace; font-size:11px; letter-spacing:0.12em;
+    color:var(--mist); text-decoration:none; padding:14px 16px; white-space:nowrap;
+    border-bottom:2px solid transparent;
+  }
+  .nav a:hover{ color:var(--amber); border-bottom-color:var(--amber); }
+  .nav a.back{ color:var(--moss); }
+
+  /* ============ SECTION HEAD ============ */
+  section{ padding-top:90px; }
+  .shead{ margin-bottom:38px; }
+  .shead .idx{
+    font-family:"JetBrains Mono",monospace; font-size:12px; color:var(--amber);
+    letter-spacing:0.24em;
+  }
+  .shead h2{
+    font-family:"Bebas Neue",sans-serif; font-size:clamp(38px,6vw,58px);
+    letter-spacing:0.03em; line-height:1.05; margin-top:4px;
+  }
+  .shead .jp{
+    font-family:"Shippori Mincho",serif; font-size:15px; color:var(--mist); margin-top:6px; letter-spacing:0.1em;
+  }
+
+  /* ============ TIMELINE ============ */
+  .tl{
+    border-left:1px solid var(--line);
+    margin-left:8px; padding-left:0;
+  }
+  .tl-row{
+    display:grid; grid-template-columns:96px 1fr; gap:0;
+    position:relative; padding:20px 0 20px 28px;
+    border-bottom:1px dashed rgba(36,53,45,0.7);
+  }
+  .tl-row:last-child{ border-bottom:none; }
+  .tl-row::before{
+    content:""; position:absolute; left:-5px; top:30px;
+    width:9px; height:9px; border-radius:50%;
+    background:var(--bg); border:2px solid var(--moss);
+  }
+  .tl-row.hl::before{ border-color:var(--amber); background:var(--amber); box-shadow:0 0 12px rgba(224,164,76,0.5);}
+  .tl-time{
+    font-family:"Bebas Neue",sans-serif; font-size:24px; color:var(--mist); letter-spacing:0.06em; padding-top:1px;
+  }
+  .tl-row.hl .tl-time{ color:var(--amber); }
+  .tl-body h4{ font-size:15.5px; font-weight:700; color:var(--snow); }
+  .tl-body p{ font-size:13.5px; color:var(--mist); margin-top:3px; }
+  .chip{
+    display:inline-block; margin-top:8px; margin-right:6px;
+    font-family:"JetBrains Mono",monospace; font-size:10px; letter-spacing:0.08em;
+    color:var(--moss); border:1px solid var(--line); border-radius:4px; padding:3px 8px;
+  }
+  .chip.a{ color:var(--amber); }
+  .chip.l{ color:var(--lake); }
+  @media(max-width:540px){
+    .tl-row{ grid-template-columns:1fr; }
+    .tl-time{ font-size:20px; margin-bottom:2px; }
+  }
+  .daybar{
+    display:flex; align-items:center; gap:16px; margin:0 0 26px;
+  }
+  .daybar .dnum{
+    font-family:"Bebas Neue",sans-serif; font-size:46px; color:var(--moss); line-height:1;
+  }
+  .daybar.two .dnum{ color:var(--lake); }
+  .daybar .dinfo .dt{ font-weight:700; font-size:15px; }
+  .daybar .dinfo .ds{ font-size:12px; color:var(--mist); font-family:"JetBrains Mono",monospace; letter-spacing:0.1em;}
+
+  /* ============ LODGING CARDS ============ */
+  .stay-note{
+    font-size:13px; color:var(--mist); margin-bottom:26px; max-width:640px;
+  }
+  .stay-grid{ display:grid; gap:18px; }
+  .stay{
+    background:var(--panel); border:1px solid var(--line); border-radius:14px;
+    padding:24px 26px; position:relative; overflow:hidden;
+    transition:border-color .25s, transform .25s;
+  }
+  .stay:hover{ border-color:var(--moss); transform:translateY(-2px); }
+  .stay .rank{
+    position:absolute; top:0; right:0;
+    font-family:"Bebas Neue",sans-serif; font-size:64px; color:rgba(111,174,130,0.12);
+    line-height:1; padding:8px 16px;
+  }
+  .stay h3{ font-family:"Shippori Mincho",serif; font-size:19px; font-weight:600; letter-spacing:0.04em;}
+  .stay .badge{
+    display:inline-block; font-family:"JetBrains Mono",monospace; font-size:10px;
+    letter-spacing:0.15em; color:var(--bg); background:var(--moss);
+    padding:3px 10px; border-radius:4px; margin-bottom:10px; font-weight:700;
+  }
+  .stay .badge.amber{ background:var(--amber); }
+  .stay .badge.lake{ background:var(--lake); }
+  .stay .meta{
+    display:flex; gap:18px; flex-wrap:wrap; margin:10px 0 12px;
+    font-family:"JetBrains Mono",monospace; font-size:11.5px; color:var(--mist);
+  }
+  .stay .meta b{ color:var(--amber); font-weight:700; }
+  .stay p{ font-size:13.5px; color:#b9c9be; }
+  .stay .addr{ font-size:11.5px; color:var(--mist); margin-top:10px; font-family:"JetBrains Mono",monospace; }
+
+  /* ============ GAME NIGHT ============ */
+  .arena{
+    background:
+      radial-gradient(ellipse 70% 100% at 50% 0%, rgba(224,164,76,0.08), transparent 60%),
+      var(--panel);
+    border:1px solid var(--line); border-radius:16px; padding:34px 30px;
+  }
+  .arena-head{
+    display:flex; align-items:baseline; gap:14px; margin-bottom:22px; flex-wrap:wrap;
+  }
+  .arena-head .t{ font-family:"Bebas Neue",sans-serif; font-size:32px; color:var(--amber); letter-spacing:0.05em;}
+  .arena-head .s{ font-size:12px; color:var(--mist); font-family:"JetBrains Mono",monospace; letter-spacing:0.1em;}
+  .games{ display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:14px; }
+  .game{
+    border:1px solid var(--line); border-radius:10px; padding:16px 18px;
+    background:rgba(12,18,16,0.5);
+  }
+  .game .gname{ font-weight:700; font-size:14.5px; color:var(--snow); }
+  .game .gspec{ font-family:"JetBrains Mono",monospace; font-size:10.5px; color:var(--moss); letter-spacing:0.08em; margin:4px 0 6px;}
+  .game p{ font-size:12.5px; color:var(--mist); }
+  .arena-foot{ margin-top:20px; font-size:12.5px; color:var(--mist); border-top:1px dashed var(--line); padding-top:16px;}
+
+  /* ============ GEAR ============ */
+  .gear{ display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:10px; }
+  .gitem{
+    display:flex; align-items:center; gap:12px;
+    background:var(--panel); border:1px solid var(--line); border-radius:8px;
+    padding:13px 16px; font-size:13.5px; color:#c5d2c8;
+    cursor:pointer; user-select:none; transition:opacity .2s;
+  }
+  .gitem .cb{
+    flex:0 0 17px; height:17px; border:1.5px solid var(--moss); border-radius:4px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:11px; color:var(--bg); transition:background .15s;
+  }
+  .gitem.done{ opacity:0.42; }
+  .gitem.done .cb{ background:var(--moss); }
+  .gitem.done .cb::after{ content:"✓"; font-weight:700; }
+  .gear-hint{ font-family:"JetBrains Mono",monospace; font-size:10.5px; color:var(--mist); letter-spacing:0.1em; margin-top:14px;}
+
+  /* ============ BRIEFING ============ */
+  .brief{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  @media(max-width:640px){ .brief{ grid-template-columns:1fr; } }
+  .bcard{ background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:22px 24px; }
+  .bcard h4{
+    font-family:"JetBrains Mono",monospace; font-size:11px; letter-spacing:0.2em;
+    color:var(--amber); text-transform:uppercase; margin-bottom:10px;
+  }
+  .bcard p{ font-size:13.5px; color:#b9c9be; }
+  .bcard b{ color:var(--snow); font-weight:700; }
+
+  footer{
+    margin-top:100px; padding:34px 24px 46px;
+    border-top:1px solid var(--line);
+    text-align:center;
+  }
+  footer .f1{ font-family:"Bebas Neue",sans-serif; font-size:22px; letter-spacing:0.2em; color:var(--mist); }
+  footer .f2{ font-family:"JetBrains Mono",monospace; font-size:10px; letter-spacing:0.3em; color:#5d6f64; margin-top:6px;}
+  footer .fback{ display:inline-block; margin-top:16px; font-family:"JetBrains Mono",monospace; font-size:11px; letter-spacing:0.14em; color:var(--moss); text-decoration:none; }
+  footer .fback:hover{ color:var(--amber); }
+
+  ::selection{ background:var(--amber); color:var(--bg); }
+</style>
+</head>
+<body>
+
+<div class="hero layer">
+  <div class="wrap">
+    <div class="hero-top">
+      <span>FAMILY EXPEDITION <span class="dot">●</span> FUKUSHIMA</span>
+      <span><span class="mono">N37°36′ / E140°04′</span> &nbsp;·&nbsp; <a href="../trips.html">← ALL TRIPS</a></span>
+    </div>
+    <h1>BANDAI<br>ALTITUDE 750</h1>
+    <div class="jp-sub">磐梯高原 ── <em>標高がつくる、8月の涼</em>。大人7名+1歳児1名、1泊2日。</div>
+    <div class="hero-stats">
+      <div class="hstat"><div class="k">Dates</div><div class="v">8.29 – 8.30 <small>SAT/SUN</small></div></div>
+      <div class="hstat"><div class="k">Crew</div><div class="v">7+1 <small>1歳児 / 2名後発</small></div></div>
+      <div class="hstat temp"><div class="k">Max Temp</div><div class="v">≈27°C <small>vs 東京34°C</small></div></div>
+      <div class="hstat"><div class="k">Night Low</div><div class="v">≈19°C <small>要・羽織り</small></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="nav layer">
+  <div class="nav-inner">
+    <a class="back" href="../trips.html">← TRIPS</a>
+    <a href="#day1">01 DAY 1</a>
+    <a href="#day2">02 DAY 2</a>
+    <a href="#stay">03 STAY</a>
+    <a href="#night">04 GAME NIGHT</a>
+    <a href="#gear">05 GEAR</a>
+    <a href="#brief">06 BRIEFING</a>
+  </div>
+</div>
+
+<div class="wrap layer">
+
+  <!-- ============ DAY 1 ============ -->
+  <section id="day1">
+    <div class="shead">
+      <div class="idx">01 / ITINERARY</div>
+      <h2>DAY 1 — INTO THE HIGHLANDS</h2>
+      <div class="jp">五色沼を歩き、高原の夜に火を囲む</div>
+    </div>
+
+    <div class="daybar">
+      <div class="dnum">1</div>
+      <div class="dinfo">
+        <div class="dt">8月29日(土)</div>
+        <div class="ds">TOKYO → INAWASHIRO → GOSHIKINUMA → COTTAGE</div>
+      </div>
+    </div>
+
+    <div class="tl">
+      <div class="tl-row">
+        <div class="tl-time">07:30</div>
+        <div class="tl-body">
+          <h4>東京発</h4>
+          <p>首都高→東北道→磐越道「猪苗代磐梯高原IC」。土曜午前の東北道は混みやすく、純走行3.5〜4h+休憩で<b style="color:var(--snow);">実質5時間見込み</b>。7:30発なら渋滞に捕まっても午後の予定が崩れない。</p>
+          <span class="chip a">早出が正義</span>
+        </div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">09:30</div>
+        <div class="tl-body">
+          <h4>SA休憩 ①(那須高原SA など)</h4>
+          <p>1歳児のおむつ替え+ハイハイ休憩。ベビー連れは90分に1回停まる前提でスケジュールを組む。</p>
+          <span class="chip">ベビー休憩</span>
+        </div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">11:00</div>
+        <div class="tl-body">
+          <h4>SA休憩 ②(安達太良SA)</h4>
+          <p>磐越道に入る前の最終休憩。ここで昼食予約店に到着見込みを連絡。</p>
+        </div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">12:00</div>
+        <div class="tl-body">
+          <h4>猪苗代着 → 昼食(そば)</h4>
+          <p>ICを降りてそのまま昼食へ。8名なので事前予約推奨。順番が前後してもいいように、買い出しより食事を先に。</p>
+          <span class="chip a">要予約</span>
+        </div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">13:15</div>
+        <div class="tl-body">
+          <h4>道の駅 猪苗代 — 買い出し</h4>
+          <p>BBQ食材・地元野菜・会津の酒を確保。ベビーの昼寝はこの後の移動(約25分)に重ねる。</p>
+          <span class="chip">買い出し</span>
+        </div>
+      </div>
+      <div class="tl-row hl">
+        <div class="tl-time">14:15</div>
+        <div class="tl-body">
+          <h4>五色沼自然探勝路</h4>
+          <p>毘沙門沼→柳沼、約3.6km/90分の森のトレイル。標高約800m、木陰と沼の冷気で体感はさらに涼しい。エメラルドとコバルトが混ざる沼は本州屈指の景観。<b style="color:var(--snow);">1歳児は抱っこ紐必須</b>(未舗装区間ありベビーカー不可)。到着が遅れた場合は毘沙門沼周辺だけの短縮版(30〜40分)に切替。</p>
+          <span class="chip">本日のハイライト</span><span class="chip l">避暑</span><span class="chip a">抱っこ紐</span>
+        </div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">16:00</div>
+        <div class="tl-body">
+          <h4>裏磐梯物産館 / ソフトクリーム休憩</h4>
+          <p>探勝路の柳沼側出口すぐ。歩き切ったご褒美タイム。</p>
+        </div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">16:30</div>
+        <div class="tl-body">
+          <h4>コテージ チェックイン</h4>
+          <p>荷解きと風呂。夕食準備の分担を決定(火起こし班/仕込み班/ベビー班)。1歳児はここで夕寝タイムを確保しておくと夜が平和。</p>
+        </div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">18:00</div>
+        <div class="tl-body">
+          <h4>BBQ 点火</h4>
+          <p>高原の夕方は既に25℃以下。会津牛・高原野菜・焼きおにぎりで先発組が乾杯。後発組の分の肉は死守すること。</p>
+          <span class="chip a">🔥</span>
+        </div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">18:30〜</div>
+        <div class="tl-body">
+          <h4>後発組2名 合流</h4>
+          <p>新幹線なら郡山17:00台着→レンタカーで約40〜50分。車なら直接コテージへ(土曜夕方の東北道も渋滞想定で+1h見込むこと)。到着次第BBQ第2ラウンド。合流時刻が読めないので炭を絶やさない担当を1名指名。</p>
+          <span class="chip l">LATE CREW</span><span class="chip">要・到着時刻共有</span>
+        </div>
+      </div>
+      <div class="tl-row hl">
+        <div class="tl-time">20:00</div>
+        <div class="tl-body">
+          <h4>GAME NIGHT 開幕</h4>
+          <p>後発組も揃い大人7名フル参加。1歳児を寝かしつけてから本戦開始。ラインナップはセクション04参照。</p>
+        </div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">23:00</div>
+        <div class="tl-body">
+          <h4>消灯</h4>
+          <p>夜は19℃前後まで下がる。窓を少し開ければエアコン不要の睡眠環境。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ DAY 2 ============ -->
+  <section id="day2">
+    <div class="shead">
+      <div class="idx">02 / ITINERARY</div>
+      <h2>DAY 2 — LAKE INAWASHIRO</h2>
+      <div class="jp">天神浜の白砂と、湖水の透明度</div>
+    </div>
+
+    <div class="daybar two">
+      <div class="dnum">2</div>
+      <div class="dinfo">
+        <div class="dt">8月30日(日)</div>
+        <div class="ds">COTTAGE → TENJINHAMA → HIDEYO NOGUCHI → TOKYO</div>
+      </div>
+    </div>
+
+    <div class="tl">
+      <div class="tl-row">
+        <div class="tl-time">07:30</div>
+        <div class="tl-body">
+          <h4>朝食</h4>
+          <p>前日仕込みのホットサンド or 残り食材で高原モーニング。テラス推奨。</p>
+        </div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">09:00</div>
+        <div class="tl-body">
+          <h4>チェックアウト</h4>
+          <p>ゴミ分別・忘れ物チェック。ボードゲームの駒数確認を忘れずに。</p>
+        </div>
+      </div>
+      <div class="tl-row hl">
+        <div class="tl-time">09:40</div>
+        <div class="tl-body">
+          <h4>猪苗代湖・天神浜</h4>
+          <p>「東北のハワイ」の異名を持つ白砂ビーチ。波がほぼなく遠浅なので、1歳児の初水遊びにちょうどいい。大人はSUPやカヤックのレンタルも(希望者のみ)。日陰が少ないためサンシェード持参推奨。</p>
+          <span class="chip">水遊び</span><span class="chip l">サンシェード</span>
+        </div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">11:30</div>
+        <div class="tl-body">
+          <h4>湖畔カフェ / 木陰でクールダウン</h4>
+          <p>浜遊びのあとは着替えて湖畔のカフェへ。志田浜〜長浜方面に湖ビューの店が点在。ベビーの離乳食タイムもここで。</p>
+        </div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">12:15</div>
+        <div class="tl-body">
+          <h4>ランチ — 湖畔レストラン</h4>
+          <p>湖畔〜猪苗代市街に食事処が集中。ソースカツ丼か喜多方ラーメン系で会津らしく締める。</p>
+        </div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">13:00</div>
+        <div class="tl-body">
+          <h4>お土産調達</h4>
+          <p>道の駅 猪苗代に再訪。赤べこ、ままどおる、地酒。</p>
+        </div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">13:30</div>
+        <div class="tl-body">
+          <h4>帰路(SA休憩2回込み)</h4>
+          <p>日曜午後の東北道上りは<b style="color:var(--snow);">渋滞ほぼ確実</b>。13:30台に離脱し、ベビー休憩を90分に1回挟んで<b style="color:var(--snow);">18:00〜18:30 東京着見込み</b>。15時以降の出発だと+1〜2h覚悟。</p>
+          <span class="chip a">渋滞回避</span><span class="chip">ベビー休憩×2</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STAY ============ -->
+  <section id="stay">
+    <div class="shead">
+      <div class="idx">03 / ACCOMMODATION</div>
+      <h2>STAY — 8名で泊まれる候補</h2>
+      <div class="jp">貸別荘・コテージ 実在の候補 4選</div>
+    </div>
+    <p class="stay-note">8名+BBQ+ボードゲームという条件で、猪苗代・裏磐梯エリアの評価が高い施設を選定。8月最終週末は繁忙期のため<b style="color:var(--amber);">早めの予約必須</b>。Airbnbでも「裏磐梯」「猪苗代」で検索すると同エリアの一棟貸しが出ます。</p>
+
+    <div class="stay-grid">
+      <div class="stay">
+        <div class="rank">01</div>
+        <span class="badge">本命</span>
+        <h3>All Resort Service(私営ヴィラ&コテージ)</h3>
+        <div class="meta"><span>★ <b>4.6</b> (341件)</span><span>猪苗代スキー場エリア</span><span>BBQ設備あり</span></div>
+        <p>棟数が多く8名向けの大型棟を選びやすい。BBQ食材デリバリーやパンの提供などサービスが手厚く、清潔・家族連れ歓迎のレビュー多数。猪苗代湖至近で2日目の動線も最短。</p>
+        <div class="addr">📍 猪苗代町出雲壇35-1 ｜ ☎ 0242-63-0355</div>
+      </div>
+
+      <div class="stay">
+        <div class="rank">02</div>
+        <span class="badge amber">高評価</span>
+        <h3>グルもてコテージ Sengan(裏磐梯・桧原湖)</h3>
+        <div class="meta"><span>★ <b>4.5</b> (108件)</span><span>裏磐梯・桧原湖畔</span><span>5寝室・大浴槽</span></div>
+        <p>5つの個室+各洗面という大人数特化の造り。1階の大きな浴槽とトイレ2基×2階分で8名でも渋滞しない。五色沼まで車で数分と、1日目の動線が最強。</p>
+        <div class="addr">📍 北塩原村桧原 ｜ ☎ 0241-32-2471</div>
+      </div>
+
+      <div class="stay">
+        <div class="rank">03</div>
+        <span class="badge lake">雰囲気重視</span>
+        <h3>Dannondan(裏磐梯)</h3>
+        <div class="meta"><span>★ <b>4.9</b> (55件)</span><span>裏磐梯・細野</span><span>オーナー夫妻のもてなし</span></div>
+        <p>レビュー4.9のオーナー運営コテージ。静けさと自然に包まれるロケーションで「また帰りたくなる宿」との声多数。棟の定員は要確認(8名は2棟利用の可能性あり)。</p>
+        <div class="addr">📍 北塩原村桧原曽原山 ｜ ☎ 0241-32-3560</div>
+      </div>
+
+      <div class="stay">
+        <div class="rank">04</div>
+        <span class="badge">コスパ</span>
+        <h3>しゃくなげ平 貸別荘(第1別荘地)</h3>
+        <div class="meta"><span>★ <b>4.7</b> (25件)</span><span>猪苗代・清水</span><span>棟間隔が広い</span></div>
+        <p>ログハウス一棟貸し。棟同士の距離があり子供が騒いでも気兼ねなし。吹き抜けリビングの棟はゲームナイト向き。アメニティは持参制なのでタオル類は忘れずに。</p>
+        <div class="addr">📍 猪苗代町清水2680 ｜ ☎ 0242-62-4748</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ GAME NIGHT ============ -->
+  <section id="night">
+    <div class="shead">
+      <div class="idx">04 / MAIN EVENT</div>
+      <h2>GAME NIGHT</h2>
+      <div class="jp">20:00 開幕 ── 8人で戦うための編成</div>
+    </div>
+
+    <div class="arena">
+      <div class="arena-head">
+        <span class="t">TONIGHT'S LINEUP</span>
+        <span class="s">7 ADULTS / 寝かしつけ後 20:00–23:00</span>
+      </div>
+      <div class="games">
+        <div class="game">
+          <div class="gname">ワンナイト人狼</div>
+          <div class="gspec">3–10人 / 10分 / 心理戦</div>
+          <p>7人はこのゲームの黄金人数。1ゲーム10分で回るので寝かしつけ交代の合間にも挟める。</p>
+        </div>
+        <div class="game">
+          <div class="gname">ito(イト)</div>
+          <div class="gspec">2–10人 / 30分 / 協力</div>
+          <p>数字を口に出さず価値観ですり合わせる協力ゲーム。7人全員一斉に遊べて、静かに盛り上がれるので寝かしつけ後の序盤に最適。</p>
+        </div>
+        <div class="game">
+          <div class="gname">ナンジャモンジャ</div>
+          <div class="gspec">2–6人 / 15分 / 瞬発力</div>
+          <p>謎生物に名前をつけて叫ぶだけの瞬発力ゲーム。声が大きくなりがちなので、ベビー就寝前の夕方 or 別室で。</p>
+        </div>
+        <div class="game">
+          <div class="gname">カタン(2卓制)</div>
+          <div class="gspec">3–4人 / 60–90分 / 戦略</div>
+          <p>大人のガチ枠。4人×2卓 or 1卓+観戦交代制。勝者同士の決勝戦を翌朝やる手も。</p>
+        </div>
+        <div class="game">
+          <div class="gname">ボブジテン</div>
+          <div class="gspec">3–8人 / 30分 / 語彙力</div>
+          <p>カタカナ語をカタカナ抜きで説明する。酒が入った大人が一番面白くなるやつ。</p>
+        </div>
+        <div class="game">
+          <div class="gname">大富豪 / UNO</div>
+          <div class="gspec">∞ / 深夜枠</div>
+          <p>終盤、疲れてルール説明が不要になった時間帯のクローザー。</p>
+        </div>
+      </div>
+      <div class="arena-foot">
+        進行案:①ベビー就寝(19:30目標)→ ②ito で静かに肩慣らし → ③ワンナイト人狼を連戦 → ④3人+4人に分かれてカタン&ボブジテン → ⑤深夜は大富豪。ベビーモニター or 寝室ドア担当をローテーションで決めておくと親も本気で参加できる。持参分担は事前にグループLINEで確定。
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ GEAR ============ -->
+  <section id="gear">
+    <div class="shead">
+      <div class="idx">05 / PACKING</div>
+      <h2>GEAR CHECK</h2>
+      <div class="jp">タップでチェック ── 高原仕様の装備</div>
+    </div>
+    <div class="gear" id="gearList">
+      <div class="gitem"><span class="cb"></span>羽織り(夜は19℃)</div>
+      <div class="gitem"><span class="cb"></span>歩きやすい靴(五色沼3.6km)</div>
+      <div class="gitem"><span class="cb"></span>虫除け+ポイズンリムーバー</div>
+      <div class="gitem"><span class="cb"></span>水着・タオル(天神浜)</div>
+      <div class="gitem"><span class="cb"></span>ボードゲーム一式(分担)</div>
+      <div class="gitem"><span class="cb"></span>BBQ:炭・着火剤・軍手</div>
+      <div class="gitem"><span class="cb"></span>抱っこ紐(五色沼はベビーカー不可)</div>
+      <div class="gitem"><span class="cb"></span>おむつ・おしりふき(2日分+予備)</div>
+      <div class="gitem"><span class="cb"></span>離乳食・ミルク・マグ</div>
+      <div class="gitem"><span class="cb"></span>ベビーの着替え多め+スリーパー(夜19℃)</div>
+      <div class="gitem"><span class="cb"></span>サンシェード・レジャーシート</div>
+      <div class="gitem"><span class="cb"></span>ベビー用日焼け止め・虫除け</div>
+      <div class="gitem"><span class="cb"></span>日焼け止め・帽子</div>
+      <div class="gitem"><span class="cb"></span>常備薬・絆創膏</div>
+      <div class="gitem"><span class="cb"></span>モバイルバッテリー</div>
+      <div class="gitem"><span class="cb"></span>サンダル(湖用)</div>
+      <div class="gitem"><span class="cb"></span>現金(道の駅・浜の駐車場)</div>
+    </div>
+    <div class="gear-hint">※ チェック状態はこのページを開いている間だけ保持されます</div>
+  </section>
+
+  <!-- ============ BRIEFING ============ -->
+  <section id="brief">
+    <div class="shead">
+      <div class="idx">06 / LOGISTICS</div>
+      <h2>BRIEFING</h2>
+      <div class="jp">アクセス・気候・リスク管理</div>
+    </div>
+    <div class="brief">
+      <div class="bcard">
+        <h4>Access</h4>
+        <p><b>車:</b>東北道→磐越道「猪苗代磐梯高原IC」。純走行3.5〜4h、週末は休憩・渋滞込みで<b>実質5h</b>を見込む。<br><b>鉄道:</b>東北新幹線 郡山駅 → レンタカー約50分(磐越西線は本数少なめ)。現地は車必須。</p>
+      </div>
+      <div class="bcard">
+        <h4>Climate</h4>
+        <p>裏磐梯(標高約800m)の8月末:日中<b>25–27℃</b>、朝晩<b>17–20℃</b>。東京比で体感マイナス7℃。夕立の可能性があるため折り畳み傘を1本。</p>
+      </div>
+      <div class="bcard">
+        <h4>Baby Ops(1歳1ヶ月)</h4>
+        <p>五色沼は<b>抱っこ紐で参加</b>(交代要員が6人いるのが大所帯の強み)。昼寝は車移動と重ねて2回確保。天神浜は水温がやや低めなので<b>足だけ短時間</b>から。おむつ・離乳食は道の駅では揃わない前提で持参。宿に<b>ベビーベッド/ベッドガードの有無を予約時に確認</b>。</p>
+      </div>
+      <div class="bcard">
+        <h4>Contingency</h4>
+        <p>雨天時:五色沼→<b>諸橋近代美術館</b>(ダリ・コレクション、五色沼至近)。湖水浴→<b>アクアマリンいなわしろカワセミ水族館</b>に切替。1歳児は水族館が特にウケる。</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer class="layer">
+  <div class="f1">BANDAI ALTITUDE 750</div>
+  <div class="f2">2026.08.29 — 08.30 / FAMILY EXPEDITION</div>
+  <a class="fback" href="../trips.html">← ALL TRIPS</a>
+</footer>
+
+<script>
+  document.querySelectorAll('.gitem').forEach(el=>{
+    el.addEventListener('click',()=> el.classList.toggle('done'));
+  });
+</script>
+</body>
+</html>

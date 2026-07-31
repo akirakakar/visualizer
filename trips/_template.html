@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<!--
+  ============================================================
+  TRIP TEMPLATE — 新しい旅程を作るときはこのファイルをコピー
+  ============================================================
+  使い方:
+    1) このファイルを trips/<trip-id>.html にコピー
+    2) [[ ]] で囲まれた箇所をすべて置き換える
+    3) 不要なセクションは <section> ごと削除し、nav のリンクも消す
+    4) ../trips.html の TRIPS 配列にカードを1件追加する
+
+  スタイルは全旅程ページ共通。CSS は原則いじらない。
+  ============================================================
+-->
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[[TRIP TITLE]] | [[M.DD–M.DD]]</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Shippori+Mincho:wght@500;600;800&family=Noto+Sans+JP:wght@300;400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0c1210;
+    --bg2: #101a16;
+    --panel: #16221d;
+    --line: #24352d;
+    --mist: #9db3a6;
+    --snow: #e9efe9;
+    --moss: #6fae82;
+    --amber: #e0a44c;
+    --lake: #5fa8c4;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background: var(--bg);
+    color: var(--snow);
+    font-family:"Noto Sans JP",sans-serif;
+    font-weight:300;
+    line-height:1.85;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  .mono{font-family:"JetBrains Mono",monospace;}
+  .bebas{font-family:"Bebas Neue",sans-serif;}
+  .mincho{font-family:"Shippori Mincho",serif;}
+
+  /* faint contour-line texture */
+  body::before{
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+    background-image: repeating-radial-gradient(circle at 80% -10%, transparent 0 58px, rgba(111,174,130,0.045) 58px 59px);
+  }
+  .layer{ position:relative; z-index:1; }
+
+  .wrap{ max-width:920px; margin:0 auto; padding:0 24px; }
+
+  /* ============ HERO ============ */
+  .hero{
+    min-height:92vh;
+    display:flex; flex-direction:column; justify-content:center;
+    position:relative;
+    background:
+      linear-gradient(180deg, rgba(12,18,16,0.2) 0%, rgba(12,18,16,0.85) 70%, var(--bg) 100%),
+      radial-gradient(ellipse 120% 60% at 50% 110%, #1c2f26 0%, transparent 60%),
+      linear-gradient(180deg,#0e1815 0%, #0c1210 100%);
+    border-bottom:1px solid var(--line);
+    padding: 70px 0 90px;
+  }
+  .hero-top{
+    display:flex; justify-content:space-between; align-items:center; gap:16px;
+    font-size:11px; letter-spacing:0.3em; color:var(--mist);
+    text-transform:uppercase; margin-bottom:60px; flex-wrap:wrap;
+  }
+  .hero-top .dot{ color:var(--amber); }
+  .hero-top a{ color:var(--mist); text-decoration:none; border-bottom:1px solid transparent; }
+  .hero-top a:hover{ color:var(--amber); border-bottom-color:var(--amber); }
+  .hero h1{
+    font-family:"Bebas Neue",sans-serif;
+    font-size:clamp(72px, 15vw, 168px);
+    line-height:0.92;
+    letter-spacing:0.02em;
+    background: linear-gradient(180deg,#f2f6f0 30%, #7fa58d 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .hero .jp-sub{
+    font-family:"Shippori Mincho",serif;
+    font-size:clamp(17px,2.6vw,24px); font-weight:600;
+    color:var(--snow); margin-top:22px; letter-spacing:0.14em;
+  }
+  .hero .jp-sub em{ color:var(--moss); font-style:normal; }
+  .hero-stats{
+    display:flex; gap:0; margin-top:56px;
+    border:1px solid var(--line); border-radius:10px; overflow:hidden;
+    background:rgba(22,34,29,0.6); backdrop-filter:blur(6px);
+    flex-wrap:wrap;
+  }
+  .hstat{
+    flex:1; min-width:140px; padding:18px 20px;
+    border-right:1px solid var(--line);
+  }
+  .hstat:last-child{ border-right:none; }
+  .hstat .k{ font-family:"JetBrains Mono",monospace; font-size:10px; letter-spacing:0.2em; color:var(--mist); text-transform:uppercase; }
+  .hstat .v{ font-family:"Bebas Neue",sans-serif; font-size:30px; letter-spacing:0.04em; color:var(--snow); margin-top:2px;}
+  .hstat .v small{ font-size:14px; color:var(--mist); font-family:"Noto Sans JP",sans-serif; font-weight:400;}
+  .hstat.temp .v{ color:var(--moss); }
+
+  /* nav */
+  .nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(12,18,16,0.85); backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{
+    max-width:920px; margin:0 auto; padding:0 24px;
+    display:flex; gap:4px; overflow-x:auto;
+  }
+  .nav a{
+    font-family:"JetBrains Mono",monospace; font-size:11px; letter-spacing:0.12em;
+    color:var(--mist); text-decoration:none; padding:14px 16px; white-space:nowrap;
+    border-bottom:2px solid transparent;
+  }
+  .nav a:hover{ color:var(--amber); border-bottom-color:var(--amber); }
+  .nav a.back{ color:var(--moss); }
+
+  /* ============ SECTION HEAD ============ */
+  section{ padding-top:90px; }
+  .shead{ margin-bottom:38px; }
+  .shead .idx{
+    font-family:"JetBrains Mono",monospace; font-size:12px; color:var(--amber);
+    letter-spacing:0.24em;
+  }
+  .shead h2{
+    font-family:"Bebas Neue",sans-serif; font-size:clamp(38px,6vw,58px);
+    letter-spacing:0.03em; line-height:1.05; margin-top:4px;
+  }
+  .shead .jp{
+    font-family:"Shippori Mincho",serif; font-size:15px; color:var(--mist); margin-top:6px; letter-spacing:0.1em;
+  }
+
+  /* ============ TIMELINE ============ */
+  .tl{
+    border-left:1px solid var(--line);
+    margin-left:8px; padding-left:0;
+  }
+  .tl-row{
+    display:grid; grid-template-columns:96px 1fr; gap:0;
+    position:relative; padding:20px 0 20px 28px;
+    border-bottom:1px dashed rgba(36,53,45,0.7);
+  }
+  .tl-row:last-child{ border-bottom:none; }
+  .tl-row::before{
+    content:""; position:absolute; left:-5px; top:30px;
+    width:9px; height:9px; border-radius:50%;
+    background:var(--bg); border:2px solid var(--moss);
+  }
+  .tl-row.hl::before{ border-color:var(--amber); background:var(--amber); box-shadow:0 0 12px rgba(224,164,76,0.5);}
+  .tl-time{
+    font-family:"Bebas Neue",sans-serif; font-size:24px; color:var(--mist); letter-spacing:0.06em; padding-top:1px;
+  }
+  .tl-row.hl .tl-time{ color:var(--amber); }
+  .tl-body h4{ font-size:15.5px; font-weight:700; color:var(--snow); }
+  .tl-body p{ font-size:13.5px; color:var(--mist); margin-top:3px; }
+  .tl-body b{ color:var(--snow); }
+  .chip{
+    display:inline-block; margin-top:8px; margin-right:6px;
+    font-family:"JetBrains Mono",monospace; font-size:10px; letter-spacing:0.08em;
+    color:var(--moss); border:1px solid var(--line); border-radius:4px; padding:3px 8px;
+  }
+  .chip.a{ color:var(--amber); }
+  .chip.l{ color:var(--lake); }
+  @media(max-width:540px){
+    .tl-row{ grid-template-columns:1fr; }
+    .tl-time{ font-size:20px; margin-bottom:2px; }
+  }
+  .daybar{
+    display:flex; align-items:center; gap:16px; margin:0 0 26px;
+  }
+  .daybar .dnum{
+    font-family:"Bebas Neue",sans-serif; font-size:46px; color:var(--moss); line-height:1;
+  }
+  .daybar.two .dnum{ color:var(--lake); }
+  .daybar.three .dnum{ color:var(--amber); }
+  .daybar .dinfo .dt{ font-weight:700; font-size:15px; }
+  .daybar .dinfo .ds{ font-size:12px; color:var(--mist); font-family:"JetBrains Mono",monospace; letter-spacing:0.1em;}
+
+  /* ============ LODGING CARDS ============ */
+  .stay-note{
+    font-size:13px; color:var(--mist); margin-bottom:26px; max-width:640px;
+  }
+  .stay-grid{ display:grid; gap:18px; }
+  .stay{
+    background:var(--panel); border:1px solid var(--line); border-radius:14px;
+    padding:24px 26px; position:relative; overflow:hidden;
+    transition:border-color .25s, transform .25s;
+  }
+  .stay:hover{ border-color:var(--moss); transform:translateY(-2px); }
+  .stay .rank{
+    position:absolute; top:0; right:0;
+    font-family:"Bebas Neue",sans-serif; font-size:64px; color:rgba(111,174,130,0.12);
+    line-height:1; padding:8px 16px;
+  }
+  .stay h3{ font-family:"Shippori Mincho",serif; font-size:19px; font-weight:600; letter-spacing:0.04em;}
+  .stay .badge{
+    display:inline-block; font-family:"JetBrains Mono",monospace; font-size:10px;
+    letter-spacing:0.15em; color:var(--bg); background:var(--moss);
+    padding:3px 10px; border-radius:4px; margin-bottom:10px; font-weight:700;
+  }
+  .stay .badge.amber{ background:var(--amber); }
+  .stay .badge.lake{ background:var(--lake); }
+  .stay .meta{
+    display:flex; gap:18px; flex-wrap:wrap; margin:10px 0 12px;
+    font-family:"JetBrains Mono",monospace; font-size:11.5px; color:var(--mist);
+  }
+  .stay .meta b{ color:var(--amber); font-weight:700; }
+  .stay p{ font-size:13.5px; color:#b9c9be; }
+  .stay .addr{ font-size:11.5px; color:var(--mist); margin-top:10px; font-family:"JetBrains Mono",monospace; }
+
+  /* ============ FEATURE BLOCK (game night / activity 等) ============ */
+  .arena{
+    background:
+      radial-gradient(ellipse 70% 100% at 50% 0%, rgba(224,164,76,0.08), transparent 60%),
+      var(--panel);
+    border:1px solid var(--line); border-radius:16px; padding:34px 30px;
+  }
+  .arena-head{
+    display:flex; align-items:baseline; gap:14px; margin-bottom:22px; flex-wrap:wrap;
+  }
+  .arena-head .t{ font-family:"Bebas Neue",sans-serif; font-size:32px; color:var(--amber); letter-spacing:0.05em;}
+  .arena-head .s{ font-size:12px; color:var(--mist); font-family:"JetBrains Mono",monospace; letter-spacing:0.1em;}
+  .games{ display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:14px; }
+  .game{
+    border:1px solid var(--line); border-radius:10px; padding:16px 18px;
+    background:rgba(12,18,16,0.5);
+  }
+  .game .gname{ font-weight:700; font-size:14.5px; color:var(--snow); }
+  .game .gspec{ font-family:"JetBrains Mono",monospace; font-size:10.5px; color:var(--moss); letter-spacing:0.08em; margin:4px 0 6px;}
+  .game p{ font-size:12.5px; color:var(--mist); }
+  .arena-foot{ margin-top:20px; font-size:12.5px; color:var(--mist); border-top:1px dashed var(--line); padding-top:16px;}
+
+  /* ============ GEAR ============ */
+  .gear{ display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:10px; }
+  .gitem{
+    display:flex; align-items:center; gap:12px;
+    background:var(--panel); border:1px solid var(--line); border-radius:8px;
+    padding:13px 16px; font-size:13.5px; color:#c5d2c8;
+    cursor:pointer; user-select:none; transition:opacity .2s;
+  }
+  .gitem .cb{
+    flex:0 0 17px; height:17px; border:1.5px solid var(--moss); border-radius:4px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:11px; color:var(--bg); transition:background .15s;
+  }
+  .gitem.done{ opacity:0.42; }
+  .gitem.done .cb{ background:var(--moss); }
+  .gitem.done .cb::after{ content:"✓"; font-weight:700; }
+  .gear-hint{ font-family:"JetBrains Mono",monospace; font-size:10.5px; color:var(--mist); letter-spacing:0.1em; margin-top:14px;}
+
+  /* ============ BRIEFING ============ */
+  .brief{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  @media(max-width:640px){ .brief{ grid-template-columns:1fr; } }
+  .bcard{ background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:22px 24px; }
+  .bcard h4{
+    font-family:"JetBrains Mono",monospace; font-size:11px; letter-spacing:0.2em;
+    color:var(--amber); text-transform:uppercase; margin-bottom:10px;
+  }
+  .bcard p{ font-size:13.5px; color:#b9c9be; }
+  .bcard b{ color:var(--snow); font-weight:700; }
+
+  footer{
+    margin-top:100px; padding:34px 24px 46px;
+    border-top:1px solid var(--line);
+    text-align:center;
+  }
+  footer .f1{ font-family:"Bebas Neue",sans-serif; font-size:22px; letter-spacing:0.2em; color:var(--mist); }
+  footer .f2{ font-family:"JetBrains Mono",monospace; font-size:10px; letter-spacing:0.3em; color:#5d6f64; margin-top:6px;}
+  footer .fback{ display:inline-block; margin-top:16px; font-family:"JetBrains Mono",monospace; font-size:11px; letter-spacing:0.14em; color:var(--moss); text-decoration:none; }
+  footer .fback:hover{ color:var(--amber); }
+
+  ::selection{ background:var(--amber); color:var(--bg); }
+</style>
+</head>
+<body>
+
+<div class="hero layer">
+  <div class="wrap">
+    <div class="hero-top">
+      <span>[[TRIP TYPE 例:FAMILY EXPEDITION]] <span class="dot">●</span> [[AREA]]</span>
+      <a href="../trips.html">← ALL TRIPS</a>
+    </div>
+    <h1>[[TITLE LINE 1]]<br>[[TITLE LINE 2]]</h1>
+    <div class="jp-sub">[[日本語リード]] ── <em>[[キーとなる一言]]</em>。[[人数・泊数]]</div>
+    <div class="hero-stats">
+      <div class="hstat"><div class="k">Dates</div><div class="v">[[M.DD – M.DD]] <small>[[SAT/SUN]]</small></div></div>
+      <div class="hstat"><div class="k">Crew</div><div class="v">[[N]] <small>[[補足]]</small></div></div>
+      <div class="hstat temp"><div class="k">[[指標]]</div><div class="v">[[値]] <small>[[比較]]</small></div></div>
+      <div class="hstat"><div class="k">[[指標]]</div><div class="v">[[値]] <small>[[補足]]</small></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="nav layer">
+  <div class="nav-inner">
+    <a class="back" href="../trips.html">← TRIPS</a>
+    <a href="#day1">01 DAY 1</a>
+    <a href="#day2">02 DAY 2</a>
+    <a href="#stay">03 STAY</a>
+    <a href="#feature">04 [[MAIN EVENT]]</a>
+    <a href="#gear">05 GEAR</a>
+    <a href="#brief">06 BRIEFING</a>
+  </div>
+</div>
+
+<div class="wrap layer">
+
+  <!-- ============ DAY 1 ============ -->
+  <section id="day1">
+    <div class="shead">
+      <div class="idx">01 / ITINERARY</div>
+      <h2>DAY 1 — [[SUBTITLE]]</h2>
+      <div class="jp">[[その日の一行要約]]</div>
+    </div>
+
+    <div class="daybar">
+      <div class="dnum">1</div>
+      <div class="dinfo">
+        <div class="dt">[[M月D日(曜)]]</div>
+        <div class="ds">[[A → B → C]]</div>
+      </div>
+    </div>
+
+    <div class="tl">
+      <!-- 行を増やすときはこの .tl-row ブロックを複製。
+           ハイライトしたい行には class="tl-row hl" を付ける。 -->
+      <div class="tl-row">
+        <div class="tl-time">[[HH:MM]]</div>
+        <div class="tl-body">
+          <h4>[[やること]]</h4>
+          <p>[[詳細。所要時間・注意点・代替案など。強調は <b>ここ</b>。]]</p>
+          <span class="chip">[[タグ]]</span>
+        </div>
+      </div>
+      <div class="tl-row hl">
+        <div class="tl-time">[[HH:MM]]</div>
+        <div class="tl-body">
+          <h4>[[本日のハイライト]]</h4>
+          <p>[[詳細]]</p>
+          <span class="chip">[[タグ]]</span><span class="chip l">[[タグ]]</span><span class="chip a">[[タグ]]</span>
+        </div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">[[HH:MM]]</div>
+        <div class="tl-body">
+          <h4>[[やること]]</h4>
+          <p>[[詳細]]</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ DAY 2 ============ -->
+  <section id="day2">
+    <div class="shead">
+      <div class="idx">02 / ITINERARY</div>
+      <h2>DAY 2 — [[SUBTITLE]]</h2>
+      <div class="jp">[[その日の一行要約]]</div>
+    </div>
+
+    <div class="daybar two">
+      <div class="dnum">2</div>
+      <div class="dinfo">
+        <div class="dt">[[M月D日(曜)]]</div>
+        <div class="ds">[[A → B → C]]</div>
+      </div>
+    </div>
+
+    <div class="tl">
+      <div class="tl-row">
+        <div class="tl-time">[[HH:MM]]</div>
+        <div class="tl-body">
+          <h4>[[やること]]</h4>
+          <p>[[詳細]]</p>
+        </div>
+      </div>
+      <div class="tl-row hl">
+        <div class="tl-time">[[HH:MM]]</div>
+        <div class="tl-body">
+          <h4>[[本日のハイライト]]</h4>
+          <p>[[詳細]]</p>
+          <span class="chip">[[タグ]]</span>
+        </div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">[[HH:MM]]</div>
+        <div class="tl-body">
+          <h4>帰路</h4>
+          <p>[[渋滞想定・到着見込みなど]]</p>
+          <span class="chip a">[[タグ]]</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STAY ============
+       日帰りならこの section ごと削除 -->
+  <section id="stay">
+    <div class="shead">
+      <div class="idx">03 / ACCOMMODATION</div>
+      <h2>STAY — [[条件]]</h2>
+      <div class="jp">[[候補の性格を一行で]]</div>
+    </div>
+    <p class="stay-note">[[選定の前提・予約タイミングの注意など]]</p>
+
+    <div class="stay-grid">
+      <div class="stay">
+        <div class="rank">01</div>
+        <span class="badge">本命</span>
+        <h3>[[施設名]]</h3>
+        <div class="meta"><span>★ <b>[[4.x]]</b> ([[件数]]件)</span><span>[[エリア]]</span><span>[[設備]]</span></div>
+        <p>[[推す理由。動線・広さ・設備。]]</p>
+        <div class="addr">📍 [[住所]] ｜ ☎ [[電話]]</div>
+      </div>
+
+      <div class="stay">
+        <div class="rank">02</div>
+        <span class="badge amber">対抗</span>
+        <h3>[[施設名]]</h3>
+        <div class="meta"><span>★ <b>[[4.x]]</b> ([[件数]]件)</span><span>[[エリア]]</span><span>[[設備]]</span></div>
+        <p>[[推す理由]]</p>
+        <div class="addr">📍 [[住所]] ｜ ☎ [[電話]]</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FEATURE / MAIN EVENT ============
+       その旅のメインイベント用。不要なら section ごと削除 -->
+  <section id="feature">
+    <div class="shead">
+      <div class="idx">04 / MAIN EVENT</div>
+      <h2>[[EVENT NAME]]</h2>
+      <div class="jp">[[開始時刻・編成など]]</div>
+    </div>
+
+    <div class="arena">
+      <div class="arena-head">
+        <span class="t">[[LINEUP 見出し]]</span>
+        <span class="s">[[人数 / 時間帯]]</span>
+      </div>
+      <div class="games">
+        <div class="game">
+          <div class="gname">[[項目名]]</div>
+          <div class="gspec">[[人数 / 所要 / 種別]]</div>
+          <p>[[ひとこと]]</p>
+        </div>
+        <div class="game">
+          <div class="gname">[[項目名]]</div>
+          <div class="gspec">[[人数 / 所要 / 種別]]</div>
+          <p>[[ひとこと]]</p>
+        </div>
+        <div class="game">
+          <div class="gname">[[項目名]]</div>
+          <div class="gspec">[[人数 / 所要 / 種別]]</div>
+          <p>[[ひとこと]]</p>
+        </div>
+      </div>
+      <div class="arena-foot">
+        [[進行案・分担・備考]]
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ GEAR ============ -->
+  <section id="gear">
+    <div class="shead">
+      <div class="idx">05 / PACKING</div>
+      <h2>GEAR CHECK</h2>
+      <div class="jp">タップでチェック ── [[この旅の装備方針]]</div>
+    </div>
+    <div class="gear" id="gearList">
+      <div class="gitem"><span class="cb"></span>[[持ち物]]</div>
+      <div class="gitem"><span class="cb"></span>[[持ち物]]</div>
+      <div class="gitem"><span class="cb"></span>[[持ち物]]</div>
+      <div class="gitem"><span class="cb"></span>[[持ち物]]</div>
+      <div class="gitem"><span class="cb"></span>[[持ち物]]</div>
+      <div class="gitem"><span class="cb"></span>[[持ち物]]</div>
+    </div>
+    <div class="gear-hint">※ チェック状態はこのページを開いている間だけ保持されます</div>
+  </section>
+
+  <!-- ============ BRIEFING ============ -->
+  <section id="brief">
+    <div class="shead">
+      <div class="idx">06 / LOGISTICS</div>
+      <h2>BRIEFING</h2>
+      <div class="jp">アクセス・気候・リスク管理</div>
+    </div>
+    <div class="brief">
+      <div class="bcard">
+        <h4>Access</h4>
+        <p><b>車:</b>[[ルート・所要]]<br><b>鉄道:</b>[[ルート・所要]]</p>
+      </div>
+      <div class="bcard">
+        <h4>Climate</h4>
+        <p>[[気温・天候の傾向と対策]]</p>
+      </div>
+      <div class="bcard">
+        <h4>[[特記事項 例:Baby Ops]]</h4>
+        <p>[[個別配慮が要る点]]</p>
+      </div>
+      <div class="bcard">
+        <h4>Contingency</h4>
+        <p>雨天時:[[代替案]]</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer class="layer">
+  <div class="f1">[[TITLE]]</div>
+  <div class="f2">[[YYYY.MM.DD — MM.DD]] / [[TRIP TYPE]]</div>
+  <a class="fback" href="../trips.html">← ALL TRIPS</a>
+</footer>
+
+<script>
+  document.querySelectorAll('.gitem').forEach(el=>{
+    el.addEventListener('click',()=> el.classList.toggle('done'));
+  });
+</script>
+</body>
+</html>

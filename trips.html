@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EXPEDITION LOG | TRIPS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Shippori+Mincho:wght@500;600;800&family=Noto+Sans+JP:wght@300;400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0c1210;
+    --bg2: #101a16;
+    --panel: #16221d;
+    --line: #24352d;
+    --mist: #9db3a6;
+    --snow: #e9efe9;
+    --moss: #6fae82;
+    --amber: #e0a44c;
+    --lake: #5fa8c4;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background: var(--bg);
+    color: var(--snow);
+    font-family:"Noto Sans JP",sans-serif;
+    font-weight:300;
+    line-height:1.85;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+    min-height:100vh;
+  }
+  .mono{font-family:"JetBrains Mono",monospace;}
+
+  /* faint contour-line texture — same signature as the trip pages */
+  body::before{
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+    background-image: repeating-radial-gradient(circle at 80% -10%, transparent 0 58px, rgba(111,174,130,0.045) 58px 59px);
+  }
+  .layer{ position:relative; z-index:1; }
+  .wrap{ max-width:920px; margin:0 auto; padding:0 24px; }
+
+  /* ============ HERO ============ */
+  .hero{
+    display:flex; flex-direction:column; justify-content:center;
+    background:
+      linear-gradient(180deg, rgba(12,18,16,0.2) 0%, rgba(12,18,16,0.85) 70%, var(--bg) 100%),
+      radial-gradient(ellipse 120% 60% at 50% 110%, #1c2f26 0%, transparent 60%),
+      linear-gradient(180deg,#0e1815 0%, #0c1210 100%);
+    border-bottom:1px solid var(--line);
+    padding: 44px 0 64px;
+  }
+  .hero-top{
+    display:flex; justify-content:space-between; align-items:center; gap:16px;
+    font-size:11px; letter-spacing:0.3em; color:var(--mist);
+    text-transform:uppercase; margin-bottom:52px; flex-wrap:wrap;
+  }
+  .hero-top .dot{ color:var(--amber); }
+  .hero-top a{ color:var(--mist); text-decoration:none; border-bottom:1px solid transparent; }
+  .hero-top a:hover{ color:var(--amber); border-bottom-color:var(--amber); }
+  .hero h1{
+    font-family:"Bebas Neue",sans-serif;
+    font-size:clamp(64px, 13vw, 148px);
+    line-height:0.92;
+    letter-spacing:0.02em;
+    background: linear-gradient(180deg,#f2f6f0 30%, #7fa58d 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .hero .jp-sub{
+    font-family:"Shippori Mincho",serif;
+    font-size:clamp(16px,2.4vw,22px); font-weight:600;
+    color:var(--snow); margin-top:20px; letter-spacing:0.14em;
+  }
+  .hero .jp-sub em{ color:var(--moss); font-style:normal; }
+  .hero-stats{
+    display:flex; gap:0; margin-top:48px;
+    border:1px solid var(--line); border-radius:10px; overflow:hidden;
+    background:rgba(22,34,29,0.6); backdrop-filter:blur(6px);
+    flex-wrap:wrap;
+  }
+  .hstat{ flex:1; min-width:140px; padding:18px 20px; border-right:1px solid var(--line); }
+  .hstat:last-child{ border-right:none; }
+  .hstat .k{ font-family:"JetBrains Mono",monospace; font-size:10px; letter-spacing:0.2em; color:var(--mist); text-transform:uppercase; }
+  .hstat .v{ font-family:"Bebas Neue",sans-serif; font-size:30px; letter-spacing:0.04em; color:var(--snow); margin-top:2px;}
+  .hstat .v small{ font-size:14px; color:var(--mist); font-family:"Noto Sans JP",sans-serif; font-weight:400;}
+  .hstat.next .v{ color:var(--amber); }
+
+  /* ============ FILTERS ============ */
+  .filters{
+    position:sticky; top:0; z-index:50;
+    background:rgba(12,18,16,0.85); backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .filters-inner{
+    max-width:920px; margin:0 auto; padding:0 24px;
+    display:flex; gap:4px; overflow-x:auto;
+  }
+  .filters button{
+    font-family:"JetBrains Mono",monospace; font-size:11px; letter-spacing:0.12em;
+    color:var(--mist); background:none; border:none; cursor:pointer;
+    padding:14px 16px; white-space:nowrap;
+    border-bottom:2px solid transparent;
+  }
+  .filters button:hover{ color:var(--amber); }
+  .filters button.on{ color:var(--amber); border-bottom-color:var(--amber); }
+  .filters .count{ opacity:0.55; }
+
+  /* ============ SECTION HEAD ============ */
+  section{ padding-top:72px; }
+  .shead{ margin-bottom:34px; }
+  .shead .idx{ font-family:"JetBrains Mono",monospace; font-size:12px; color:var(--amber); letter-spacing:0.24em; }
+  .shead h2{ font-family:"Bebas Neue",sans-serif; font-size:clamp(34px,5.5vw,52px); letter-spacing:0.03em; line-height:1.05; margin-top:4px; }
+  .shead .jp{ font-family:"Shippori Mincho",serif; font-size:15px; color:var(--mist); margin-top:6px; letter-spacing:0.1em; }
+
+  /* ============ TRIP CARDS ============ */
+  .trips{ display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:18px; }
+  .trip{
+    display:flex; flex-direction:column;
+    background:var(--panel); border:1px solid var(--line); border-radius:14px;
+    padding:24px 26px 22px; position:relative; overflow:hidden;
+    text-decoration:none; color:inherit;
+    transition:border-color .25s, transform .25s;
+  }
+  .trip:hover{ border-color:var(--moss); transform:translateY(-3px); }
+  .trip.past{ opacity:0.62; }
+  .trip.past:hover{ opacity:1; }
+  .trip::after{
+    content:""; position:absolute; inset:0 0 auto 0; height:2px;
+    background:linear-gradient(90deg,var(--moss),transparent 70%);
+    opacity:0.7;
+  }
+  .trip.upcoming::after{ background:linear-gradient(90deg,var(--amber),transparent 70%); }
+  .trip.past::after{ background:linear-gradient(90deg,var(--line),transparent 70%); }
+
+  .trip-top{ display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:14px; }
+  .badge{
+    font-family:"JetBrains Mono",monospace; font-size:10px; letter-spacing:0.15em;
+    color:var(--bg); background:var(--moss); padding:3px 10px; border-radius:4px; font-weight:700;
+  }
+  .badge.amber{ background:var(--amber); }
+  .badge.dim{ background:var(--line); color:var(--mist); }
+  .dcount{
+    font-family:"Bebas Neue",sans-serif; font-size:26px; letter-spacing:0.06em; color:var(--amber); line-height:1;
+  }
+  .trip.past .dcount, .trip.live .dcount{ color:var(--mist); }
+  .trip.live .dcount{ color:var(--moss); }
+
+  .trip .date{ font-family:"JetBrains Mono",monospace; font-size:11.5px; letter-spacing:0.1em; color:var(--mist); }
+  .trip h3{
+    font-family:"Bebas Neue",sans-serif; font-size:34px; letter-spacing:0.03em;
+    line-height:1.04; margin-top:4px; color:var(--snow);
+  }
+  .trip .jp{ font-family:"Shippori Mincho",serif; font-size:13.5px; color:var(--moss); letter-spacing:0.08em; margin-top:5px; }
+  .trip p{ font-size:13.5px; color:#b9c9be; margin-top:12px; flex-grow:1; }
+  .trip .meta{
+    display:flex; gap:14px; flex-wrap:wrap; margin-top:16px; padding-top:14px;
+    border-top:1px dashed var(--line);
+    font-family:"JetBrains Mono",monospace; font-size:10.5px; letter-spacing:0.08em; color:var(--mist);
+  }
+  .trip .meta b{ color:var(--amber); font-weight:700; }
+  .trip .open{
+    font-family:"JetBrains Mono",monospace; font-size:11px; letter-spacing:0.14em;
+    color:var(--moss); margin-top:16px;
+  }
+  .trip:hover .open{ color:var(--amber); }
+
+  /* empty state / add-a-trip card */
+  .addcard{
+    border:1px dashed var(--line); border-radius:14px; padding:24px 26px;
+    background:rgba(22,34,29,0.35);
+    display:flex; flex-direction:column; justify-content:center;
+  }
+  .addcard .t{ font-family:"Bebas Neue",sans-serif; font-size:26px; letter-spacing:0.04em; color:var(--mist); }
+  .addcard ol{ margin:12px 0 0 18px; font-size:12.5px; color:var(--mist); line-height:1.9; }
+  .addcard code{
+    font-family:"JetBrains Mono",monospace; font-size:11px; color:var(--moss);
+    background:rgba(12,18,16,0.6); border:1px solid var(--line); border-radius:4px; padding:1px 6px;
+  }
+  .noresult{
+    font-family:"JetBrains Mono",monospace; font-size:12px; letter-spacing:0.1em;
+    color:var(--mist); padding:40px 0; text-align:center; grid-column:1/-1;
+  }
+
+  footer{
+    margin-top:90px; padding:34px 24px 46px;
+    border-top:1px solid var(--line); text-align:center;
+  }
+  footer .f1{ font-family:"Bebas Neue",sans-serif; font-size:22px; letter-spacing:0.2em; color:var(--mist); }
+  footer .f2{ font-family:"JetBrains Mono",monospace; font-size:10px; letter-spacing:0.3em; color:#5d6f64; margin-top:6px;}
+
+  ::selection{ background:var(--amber); color:var(--bg); }
+</style>
+</head>
+<body>
+
+<div class="hero layer">
+  <div class="wrap">
+    <div class="hero-top">
+      <span>EXPEDITION LOG <span class="dot">●</span> TRIP SCHEDULER</span>
+      <a href="index.html">← INDEX</a>
+    </div>
+    <h1>TRIPS</h1>
+    <div class="jp-sub">旅程アーカイブ ── <em>行った旅と、これから行く旅</em>。</div>
+    <div class="hero-stats">
+      <div class="hstat"><div class="k">Trips</div><div class="v" id="statTotal">–</div></div>
+      <div class="hstat next"><div class="k">Next Departure</div><div class="v" id="statNext">–</div></div>
+      <div class="hstat"><div class="k">Nights Logged</div><div class="v" id="statNights">–</div></div>
+      <div class="hstat"><div class="k">Regions</div><div class="v" id="statRegions">–</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="filters layer">
+  <div class="filters-inner" id="filters">
+    <button data-f="all" class="on">ALL <span class="count"></span></button>
+    <button data-f="upcoming">UPCOMING <span class="count"></span></button>
+    <button data-f="past">PAST <span class="count"></span></button>
+  </div>
+</div>
+
+<div class="wrap layer">
+  <section id="list">
+    <div class="shead">
+      <div class="idx">01 / ITINERARIES</div>
+      <h2>SCHEDULED TRIPS</h2>
+      <div class="jp">各カードから詳細な旅程表へ</div>
+    </div>
+    <div class="trips" id="tripGrid"></div>
+  </section>
+</div>
+
+<footer class="layer">
+  <div class="f1">EXPEDITION LOG</div>
+  <div class="f2">TRIP SCHEDULER / PERSONAL VISUALIZER</div>
+</footer>
+
+<script>
+/* ============================================================
+   TRIPS — 新しい旅程を追加するには:
+     1) trips/_template.html をコピーして trips/<名前>.html を作る
+     2) 下の配列に 1 オブジェクト追加する（新しい順に並べると読みやすい）
+
+   フィールド:
+     id      … 任意のユニークな文字列
+     title   … カード見出し（英字・大文字が映える）
+     jp      … 日本語の副題（場所・エリア）
+     region  … 地域名。REGIONS 統計の集計キー
+     start   … 開始日 "YYYY-MM-DD"
+     end     … 終了日 "YYYY-MM-DD"（日帰りなら start と同じ）
+     crew    … 人数の表示文字列
+     summary … カード本文の 1–2 文
+     tags    … メタ行に出す短いラベル（任意・0〜3個）
+     href    … 旅程ページへのパス
+   ============================================================ */
+const TRIPS = [
+  {
+    id: "bandai-2026",
+    title: "BANDAI ALTITUDE 750",
+    jp: "磐梯高原・裏磐梯 / 福島",
+    region: "福島",
+    start: "2026-08-29",
+    end: "2026-08-30",
+    crew: "7+1",
+    summary: "標高750mの高原で避暑。五色沼トレイル3.6km、BBQ、大人7名のゲームナイト、2日目は猪苗代湖・天神浜で水遊び。",
+    tags: ["五色沼", "BBQ", "GAME NIGHT"],
+    href: "trips/bandai-2026.html"
+  }
+];
+
+/* ---------- helpers ---------- */
+const startOfToday = () => { const d = new Date(); d.setHours(0,0,0,0); return d; };
+const parseDate = s => { const [y,m,d] = s.split("-").map(Number); return new Date(y, m-1, d); };
+const DAY = 86400000;
+
+function nights(t){
+  return Math.max(0, Math.round((parseDate(t.end) - parseDate(t.start)) / DAY));
+}
+function daysUntil(t){
+  return Math.round((parseDate(t.start) - startOfToday()) / DAY);
+}
+function statusOf(t){
+  const today = startOfToday();
+  if (parseDate(t.end) < today) return "past";
+  if (parseDate(t.start) <= today) return "live";
+  return "upcoming";
+}
+function fmtRange(t){
+  const a = parseDate(t.start), b = parseDate(t.end);
+  const p = n => String(n).padStart(2,"0");
+  const head = `${a.getFullYear()}.${p(a.getMonth()+1)}.${p(a.getDate())}`;
+  if (t.start === t.end) return head;
+  const tail = a.getFullYear() === b.getFullYear()
+    ? `${p(b.getMonth()+1)}.${p(b.getDate())}`
+    : `${b.getFullYear()}.${p(b.getMonth()+1)}.${p(b.getDate())}`;
+  return `${head} — ${tail}`;
+}
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+/* ---------- render ---------- */
+const sorted = [...TRIPS].sort((a,b) => parseDate(b.start) - parseDate(a.start));
+const grid = document.getElementById("tripGrid");
+
+function cardHTML(t){
+  const st = statusOf(t);
+  const d  = daysUntil(t);
+  const badge = st === "upcoming" ? '<span class="badge amber">UPCOMING</span>'
+              : st === "live"     ? '<span class="badge">IN PROGRESS</span>'
+              :                     '<span class="badge dim">ARCHIVED</span>';
+  const counter = st === "upcoming" ? `D-${d}`
+                : st === "live"     ? "NOW"
+                :                     `${Math.abs(d)}D AGO`;
+  const n = nights(t);
+  const meta = [
+    `<span><b>${esc(t.crew)}</b> CREW</span>`,
+    `<span>${n === 0 ? "DAY TRIP" : n + "N" + (n+1) + "D"}</span>`,
+    ...(t.tags || []).map(x => `<span>${esc(x)}</span>`)
+  ].join("");
+
+  return `
+    <a class="trip ${st}" href="${esc(t.href)}" data-status="${st}">
+      <div class="trip-top">${badge}<span class="dcount">${counter}</span></div>
+      <div class="date">${fmtRange(t)}</div>
+      <h3>${esc(t.title)}</h3>
+      <div class="jp">${esc(t.jp)}</div>
+      <p>${esc(t.summary)}</p>
+      <div class="meta">${meta}</div>
+      <span class="open">VIEW ITINERARY →</span>
+    </a>`;
+}
+
+const ADD_CARD = `
+  <div class="addcard">
+    <div class="t">+ NEW TRIP</div>
+    <ol>
+      <li><code>trips/_template.html</code> をコピー</li>
+      <li>コピー先を編集して旅程を書く</li>
+      <li><code>trips.html</code> の <code>TRIPS</code> 配列に1件追加</li>
+    </ol>
+  </div>`;
+
+function render(filter){
+  const list = sorted.filter(t => filter === "all" || statusOf(t) === filter
+                                 || (filter === "upcoming" && statusOf(t) === "live"));
+  grid.innerHTML = list.length
+    ? list.map(cardHTML).join("") + (filter === "past" ? "" : ADD_CARD)
+    : `<div class="noresult">NO TRIPS IN THIS VIEW</div>` + (filter === "past" ? "" : ADD_CARD);
+}
+
+/* ---------- stats ---------- */
+(function stats(){
+  const upcoming = sorted.filter(t => statusOf(t) !== "past");
+  const next = upcoming.length ? upcoming[upcoming.length - 1] : null; // 直近の出発
+  document.getElementById("statTotal").innerHTML   = sorted.length;
+  document.getElementById("statNext").innerHTML    = next
+    ? (statusOf(next) === "live" ? 'NOW <small>進行中</small>' : `D-${daysUntil(next)} <small>${esc(next.jp.split(" / ")[0])}</small>`)
+    : '– <small>未定</small>';
+  document.getElementById("statNights").innerHTML  = sorted.reduce((s,t) => s + nights(t), 0);
+  document.getElementById("statRegions").innerHTML = new Set(sorted.map(t => t.region)).size;
+
+  const counts = {
+    all: sorted.length,
+    upcoming: sorted.filter(t => statusOf(t) !== "past").length,
+    past: sorted.filter(t => statusOf(t) === "past").length
+  };
+  document.querySelectorAll("#filters button").forEach(b => {
+    b.querySelector(".count").textContent = `(${counts[b.dataset.f]})`;
+  });
+})();
+
+/* ---------- filter tabs ---------- */
+document.querySelectorAll("#filters button").forEach(b => {
+  b.addEventListener("click", () => {
+    document.querySelectorAll("#filters button").forEach(x => x.classList.remove("on"));
+    b.classList.add("on");
+    render(b.dataset.f);
+  });
+});
+
+render("all");
+</script>
+</body>
+</html>

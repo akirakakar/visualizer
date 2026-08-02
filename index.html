@@ -40,6 +40,17 @@
   header { margin-bottom: 36px; }
   h1 { font-size: 1.75rem; font-weight: 700; letter-spacing: .02em; }
   header p { color: var(--muted); margin-top: 6px; font-size: .95rem; }
+  section + section { margin-top: 40px; }
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-head h2 { font-size: 1rem; font-weight: 700; letter-spacing: .04em; }
+  .section-head span { font-size: .82rem; color: var(--muted); }
   .grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -82,58 +93,89 @@
   <div class="container">
     <header>
       <h1>住宅設計ビジュアライザ</h1>
-      <p>南荻窪の家 — 打ち合わせ・検討用ツール集</p>
+      <p>南荻窪の家の検討ツールと、そのほかの設計資料</p>
     </header>
 
-    <main class="grid">
-      <a class="card" href="2dsimulator.html">
-        <span class="icon">🚶</span>
-        <h2>動線シミュレータ（2D）</h2>
-        <p>間取り図の上で1日の生活動線を歩いてみるシミュレータ。平面ビューで動線を確認できます。</p>
-        <span class="open">開く →</span>
-      </a>
+    <main>
+      <section>
+        <div class="section-head">
+          <h2>住まいの設計</h2>
+          <span>間取り・動線・住宅性能</span>
+        </div>
+        <div class="grid">
+          <a class="card" href="2dsimulator.html">
+            <span class="icon">🚶</span>
+            <h2>動線シミュレータ（2D）</h2>
+            <p>間取り図の上で1日の生活動線を歩いてみるシミュレータ。平面ビューで動線を確認できます。</p>
+            <span class="open">開く →</span>
+          </a>
 
-      <a class="card" href="3dsimulator.html">
-        <span class="icon">🏠</span>
-        <h2>動線シミュレータ（3D）</h2>
-        <p>3Dビューでも動線を確認できる拡張版シミュレータ。</p>
-        <span class="open">開く →</span>
-      </a>
+          <a class="card" href="3dsimulator.html">
+            <span class="icon">🏠</span>
+            <h2>動線シミュレータ（3D）</h2>
+            <p>3Dビューでも動線を確認できる拡張版シミュレータ。</p>
+            <span class="open">開く →</span>
+          </a>
 
-      <a class="card" href="insulation.html">
-        <span class="icon">🌡️</span>
-        <h2>住宅設計シミュレータ（断熱）</h2>
-        <p>断熱・住宅性能に関する打ち合わせ用14点セット。仕様検討の判断材料に。</p>
-        <span class="open">開く →</span>
-      </a>
+          <a class="card" href="insulation.html">
+            <span class="icon">🌡️</span>
+            <h2>住宅設計シミュレータ（断熱）</h2>
+            <p>断熱・住宅性能に関する打ち合わせ用14点セット。仕様検討の判断材料に。</p>
+            <span class="open">開く →</span>
+          </a>
+        </div>
+      </section>
 
-      <a class="card" href="solar.html">
-        <span class="icon">☀️</span>
-        <h2>太陽光・蓄電池シミュレーター</h2>
-        <p>月別発電量・エネルギー収支・20年間の回収シミュレーション。パネルブランドや蓄電池、補助金を含めた検討用。</p>
-        <span class="open">開く →</span>
-      </a>
+      <section>
+        <div class="section-head">
+          <h2>住宅設備・インフラ</h2>
+          <span>エネルギー・ネットワーク・配線</span>
+        </div>
+        <div class="grid">
+          <a class="card" href="solar.html">
+            <span class="icon">☀️</span>
+            <h2>太陽光・蓄電池シミュレーター</h2>
+            <p>月別発電量・エネルギー収支・20年間の回収シミュレーション。パネルブランドや蓄電池、補助金を含めた検討用。</p>
+            <span class="open">開く →</span>
+          </a>
 
-      <a class="card" href="network.html">
-        <span class="icon">🌐</span>
-        <h2>ネットワーク＆スマートホーム構成図</h2>
-        <p>ネットワーク・スマートホームのアーキテクチャ図（最終版）。機器構成と接続関係の確認用。</p>
-        <span class="open">開く →</span>
-      </a>
+          <a class="card" href="network.html">
+            <span class="icon">🌐</span>
+            <h2>ネットワーク＆スマートホーム構成図</h2>
+            <p>ネットワーク・スマートホームのアーキテクチャ図（最終版）。機器構成と接続関係の確認用。</p>
+            <span class="open">開く →</span>
+          </a>
 
-      <a class="card" href="rack.html">
-        <span class="icon">🔌</span>
-        <h2>情報配線 図面集</h2>
-        <p>LAN・情報配線ラックの図面集。配線ルートと機器配置の確認用。</p>
-        <span class="open">開く →</span>
-      </a>
+          <a class="card" href="rack.html">
+            <span class="icon">🔌</span>
+            <h2>情報配線 図面集</h2>
+            <p>LAN・情報配線ラックの図面集。配線ルートと機器配置の確認用。</p>
+            <span class="open">開く →</span>
+          </a>
+        </div>
+      </section>
 
-      <a class="card" href="trips.html">
-        <span class="icon">🏔️</span>
-        <h2>旅程スケジューラ</h2>
-        <p>旅行ごとの詳細な旅程表アーカイブ。タイムライン・宿候補・持ち物チェックまで1ページで確認。</p>
-        <span class="open">開く →</span>
-      </a>
+      <section>
+        <div class="section-head">
+          <h2>そのほか</h2>
+          <span>作業環境・旅程</span>
+        </div>
+        <div class="grid">
+          <a class="card" href="dev-environment-design.html">
+            <span class="icon">🖥️</span>
+            <h2>開発環境設計書</h2>
+            <p>Mac mini を母艦にした開発環境の設計書（Rev.B）。構成図・接続経路・キッティング・新居への移行計画まで。</p>
+            <span class="open">開く →</span>
+          </a>
+
+          <a class="card" href="trips.html">
+            <span class="icon">🏔️</span>
+            <h2>旅程スケジューラ</h2>
+            <p>旅行ごとの詳細な旅程表アーカイブ。タイムライン・宿候補・持ち物チェックまで1ページで確認。</p>
+            <span class="open">開く →</span>
+          </a>
+        </div>
+      </section>
     </main>
 
     <footer>GitHub Pages で公開中</footer>

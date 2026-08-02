@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>開発環境設計書 — Mac mini 母艦構成 Rev.B</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FAFAF6;
+    --grid:#E4E7E2;
+    --ink:#1C2B38;
+    --line:#2D5F8A;
+    --muted:#6B7885;
+    --stamp:#B3261E;
+    --panel:#FFFFFF;
+    --ok:#2E6E4E;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto;}}
+  body{
+    font-family:"IBM Plex Sans JP",-apple-system,"Hiragino Kaku Gothic ProN",sans-serif;
+    background:var(--paper);
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size:28px 28px;
+    color:var(--ink);
+    line-height:1.75;
+    font-size:15px;
+  }
+  .sheet{
+    max-width:920px;margin:32px auto 64px;background:var(--panel);
+    border:2px solid var(--ink);
+    box-shadow:6px 6px 0 rgba(28,43,56,.12);
+  }
+  /* ---------- title block ---------- */
+  .titleblock{display:grid;grid-template-columns:1fr auto;border-bottom:2px solid var(--ink);}
+  .tb-main{padding:28px 32px 22px;}
+  .tb-eyebrow{
+    font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.18em;
+    color:var(--line);text-transform:uppercase;margin-bottom:10px;
+  }
+  h1{font-size:26px;font-weight:700;letter-spacing:.01em;line-height:1.4;}
+  .tb-sub{color:var(--muted);font-size:13.5px;margin-top:6px;}
+  .tb-meta{
+    display:grid;grid-template-rows:repeat(4,1fr);border-left:1.5px solid var(--ink);
+    font-family:"IBM Plex Mono",monospace;font-size:11px;min-width:190px;
+  }
+  .tb-meta div{display:flex;align-items:center;gap:10px;padding:6px 16px;border-bottom:1px solid var(--grid);}
+  .tb-meta div:last-child{border-bottom:none;}
+  .tb-meta span:first-child{color:var(--muted);width:3.5em;}
+  .tb-meta span:last-child{font-weight:600;}
+  /* ---------- sections ---------- */
+  section{padding:34px 32px 38px;border-bottom:1.5px solid var(--ink);position:relative;}
+  section:last-of-type{border-bottom:none;}
+  .sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:18px;}
+  .sec-num{
+    font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;
+    color:#fff;background:var(--line);padding:3px 9px;letter-spacing:.1em;white-space:nowrap;
+  }
+  h2{font-size:19px;font-weight:700;}
+  h3{font-size:15px;font-weight:700;margin:22px 0 8px;}
+  p{margin-bottom:12px;}
+  p:last-child{margin-bottom:0;}
+  .principle{
+    border:1.5px solid var(--line);background:#F3F7FA;padding:18px 22px;margin:18px 0 6px;
+    font-size:15.5px;font-weight:500;line-height:1.9;
+  }
+  .principle b{color:var(--line);}
+  /* ---------- diagram ---------- */
+  .diagram-wrap{margin:6px 0 4px;}
+  .diagram-wrap svg{width:100%;height:auto;display:block;}
+  .diagram-caption{
+    font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--muted);
+    margin-top:8px;letter-spacing:.06em;
+  }
+  /* ---------- tables ---------- */
+  table{width:100%;border-collapse:collapse;font-size:14px;margin:8px 0 4px;}
+  th,td{border:1px solid var(--ink);padding:10px 14px;text-align:left;vertical-align:top;}
+  th{background:var(--ink);color:#fff;font-weight:500;font-size:12.5px;letter-spacing:.05em;}
+  td .mono,.mono{font-family:"IBM Plex Mono",monospace;font-size:12.5px;}
+  .role-tag{
+    display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:10.5px;
+    border:1px solid var(--line);color:var(--line);padding:1px 8px;margin-bottom:6px;letter-spacing:.08em;
+  }
+  .dev-mini{font-family:"IBM Plex Mono",monospace;font-size:11.5px;font-weight:600;color:#fff;background:var(--ink);padding:2px 9px;white-space:nowrap;}
+  .dev-mbp{font-family:"IBM Plex Mono",monospace;font-size:11.5px;font-weight:600;color:var(--ink);background:#fff;border:1.5px solid var(--ink);padding:1px 9px;white-space:nowrap;}
+  /* ---------- lists ---------- */
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:6px;}
+  .list-panel{border:1.5px solid var(--ink);}
+  .list-panel header{
+    padding:8px 14px;font-size:12.5px;font-weight:700;letter-spacing:.06em;
+    border-bottom:1.5px solid var(--ink);display:flex;align-items:center;gap:8px;
+  }
+  .list-panel.allow header{background:#EFF6F1;color:var(--ok);}
+  .list-panel.deny header{background:#FBF0EF;color:var(--stamp);}
+  .list-panel ul{list-style:none;padding:10px 14px 12px;}
+  .list-panel li{padding:5px 0 5px 20px;position:relative;font-size:14px;line-height:1.6;}
+  .list-panel li small{display:block;color:var(--muted);font-size:12px;line-height:1.55;}
+  .allow li::before{content:"○";position:absolute;left:0;color:var(--ok);font-size:12px;top:8px;}
+  .deny li::before{content:"×";position:absolute;left:0;color:var(--stamp);font-weight:700;top:6px;}
+  /* ---------- checklist ---------- */
+  .checklist{list-style:none;counter-reset:chk;margin-top:4px;}
+  .checklist li{
+    counter-increment:chk;display:grid;grid-template-columns:34px 1fr;gap:14px;
+    padding:12px 0;border-bottom:1px dashed var(--grid);align-items:start;
+  }
+  .checklist li:last-child{border-bottom:none;}
+  .checklist li::before{
+    content:counter(chk,decimal-leading-zero);
+    font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;color:var(--line);
+    border:1px solid var(--line);text-align:center;padding:2px 0;margin-top:2px;
+  }
+  .checklist b{display:block;font-size:14.5px;}
+  .checklist small{color:var(--muted);font-size:13px;line-height:1.7;}
+  code{
+    font-family:"IBM Plex Mono",monospace;font-size:12.5px;background:#F1F3F2;
+    padding:1px 6px;border:1px solid var(--grid);
+  }
+  /* ---------- modes ---------- */
+  .modes{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:6px;}
+  .mode{border:1.5px solid var(--ink);padding:16px 16px 14px;}
+  .mode .where{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.14em;color:var(--line);margin-bottom:6px;}
+  .mode b{font-size:14.5px;display:block;margin-bottom:6px;}
+  .mode p{font-size:13px;color:var(--muted);line-height:1.7;margin:0;}
+  /* ---------- decision / stamp ---------- */
+  .decision{
+    border:1.5px solid var(--ink);padding:20px 96px 20px 22px;position:relative;
+    margin-top:10px;background:#FDFDFB;
+  }
+  .decision b{font-size:15px;}
+  .stamp{
+    position:absolute;right:20px;top:50%;transform:translateY(-50%) rotate(-8deg);
+    width:56px;height:56px;border:2.5px solid var(--stamp);border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    color:var(--stamp);font-weight:700;font-size:17px;letter-spacing:.05em;opacity:.85;
+  }
+  .note{
+    font-size:13px;color:var(--muted);border-left:3px solid var(--grid);
+    padding:2px 0 2px 14px;margin-top:14px;line-height:1.75;
+  }
+  /* ---------- timeline ---------- */
+  .timeline{list-style:none;margin-top:10px;}
+  .timeline li{
+    display:grid;grid-template-columns:118px 1fr;gap:18px;position:relative;
+    padding:0 0 26px 0;
+  }
+  .timeline li::before{
+    content:"";position:absolute;left:132px;top:8px;bottom:-2px;width:1.5px;background:var(--ink);
+  }
+  .timeline li:last-child::before{display:none;}
+  .timeline li::after{
+    content:"";position:absolute;left:127.5px;top:7px;width:10px;height:10px;
+    background:var(--panel);border:2px solid var(--line);border-radius:50%;
+  }
+  .tl-time{
+    font-family:"IBM Plex Mono",monospace;font-size:11.5px;font-weight:600;color:var(--line);
+    text-align:right;padding-top:2px;letter-spacing:.04em;
+  }
+  .tl-time small{display:block;font-weight:400;color:var(--muted);letter-spacing:0;}
+  .tl-body{padding-left:14px;}
+  .tl-body b{font-size:14.5px;}
+  .tl-body p{font-size:13.5px;color:#3A4854;margin:4px 0 0;line-height:1.8;}
+  .tl-body .cmd{
+    display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:12px;
+    background:#F1F3F2;border:1px solid var(--grid);padding:0 7px;margin:2px 2px 0 0;
+  }
+  /* ---------- footer ---------- */
+  .footblock{
+    border-top:2px solid var(--ink);padding:14px 32px;
+    display:flex;justify-content:space-between;align-items:center;
+    font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--muted);letter-spacing:.1em;
+  }
+  @media (max-width:720px){
+    body{font-size:14.5px;}
+    .sheet{margin:12px 10px 40px;}
+    .titleblock{grid-template-columns:1fr;}
+    .tb-meta{border-left:none;border-top:1.5px solid var(--ink);grid-template-rows:none;grid-template-columns:1fr 1fr;}
+    section{padding:26px 20px 30px;}
+    .tb-main{padding:22px 20px 18px;}
+    .cols,.modes{grid-template-columns:1fr;}
+    .decision{padding-right:22px;padding-bottom:70px;}
+    .stamp{top:auto;bottom:12px;transform:rotate(-8deg);}
+    th,td{padding:8px 10px;}
+    .timeline li{grid-template-columns:74px 1fr;}
+    .timeline li::before{left:88px;}
+    .timeline li::after{left:83.5px;}
+    .footblock{padding:12px 20px;flex-direction:column;gap:4px;align-items:flex-start;}
+    .scroll-x{overflow-x:auto;}
+    .scroll-x table{min-width:560px;}
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <!-- ============ 図面枠 ============ -->
+  <div class="titleblock">
+    <div class="tb-main">
+      <div class="tb-eyebrow">DEVELOPMENT ENVIRONMENT — FINAL DESIGN</div>
+      <h1>開発環境設計書<br>Mac mini 母艦構成</h1>
+      <div class="tb-sub">状態を一箇所に集約し、MacBook Pro を「どこからでも同じ環境に届く窓」として運用する</div>
+    </div>
+    <div class="tb-meta">
+      <div><span>図番</span><span>AKR-DEV-001</span></div>
+      <div><span>版</span><span>Rev. C</span></div>
+      <div><span>日付</span><span>2026-08-02</span></div>
+      <div><span>状態</span><span style="color:var(--stamp)">承認済</span></div>
+    </div>
+  </div>
+
+  <!-- ============ 01 設計思想 ============ -->
+  <section>
+    <div class="sec-head"><span class="sec-num">SEC 01</span><h2>設計思想</h2></div>
+    <p>開発に関わる状態(リポジトリ・ランタイム・Docker・シークレット・作業セッション)はすべて Mac mini の一箇所にのみ存在させる。MacBook Pro は表示と入力を担う端末であり、紛失・故障・買い替えのいずれが起きてもキッティングキット(SEC 09)により 15〜20 分で復旧できる状態を維持する。</p>
+    <div class="principle">
+      MBP には <b>「宣言的に再現できるもの」</b> と <b>「アカウントで同期されるもの」</b> だけを置く。<br>
+      手で設定するもの・手で同期するものは一切置かない。
+    </div>
+  </section>
+
+  <!-- ============ 02 構成図 ============ -->
+  <section>
+    <div class="sec-head"><span class="sec-num">SEC 02</span><h2>システム構成図</h2></div>
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 860 440" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Mac miniを中心とした接続・配置構成図">
+        <defs>
+          <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="#2D5F8A"/>
+          </marker>
+        </defs>
+        <!-- 書斎ゾーン -->
+        <rect x="440" y="24" width="396" height="216" fill="none" stroke="#9FB3C4" stroke-width="1.5" stroke-dasharray="7 6"/>
+        <text x="456" y="48" font-family="IBM Plex Mono, monospace" font-size="11" fill="#6B7885" letter-spacing="2">書斎(デスク)</text>
+        <!-- クローゼットゾーン -->
+        <rect x="40" y="24" width="300" height="216" fill="none" stroke="#9FB3C4" stroke-width="1.5" stroke-dasharray="7 6"/>
+        <text x="56" y="48" font-family="IBM Plex Mono, monospace" font-size="11" fill="#6B7885" letter-spacing="2">弱電クローゼット(ラック)</text>
+        <!-- ラック -->
+        <g>
+          <rect x="76" y="72" width="228" height="130" fill="#FFFFFF" stroke="#1C2B38" stroke-width="1.5"/>
+          <line x1="76" y1="106" x2="304" y2="106" stroke="#E4E7E2" stroke-width="1"/>
+          <line x1="76" y1="140" x2="304" y2="140" stroke="#E4E7E2" stroke-width="1"/>
+          <line x1="76" y1="174" x2="304" y2="174" stroke="#E4E7E2" stroke-width="1"/>
+          <text x="190" y="94" text-anchor="middle" font-family="IBM Plex Sans JP, sans-serif" font-size="12.5" font-weight="700" fill="#1C2B38">UCG Fiber(回線)</text>
+          <text x="190" y="128" text-anchor="middle" font-family="IBM Plex Sans JP, sans-serif" font-size="12.5" fill="#1C2B38">Pro Max 16 PoE + U7 Pro 給電</text>
+          <text x="190" y="162" text-anchor="middle" font-family="IBM Plex Sans JP, sans-serif" font-size="12.5" fill="#1C2B38">UPS</text>
+          <text x="190" y="194" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="#6B7885">ネットワーク機器のみ · mini は置かない</text>
+        </g>
+        <!-- Dell -->
+        <g>
+          <rect x="472" y="64" width="330" height="54" fill="#FFFFFF" stroke="#1C2B38" stroke-width="1.5"/>
+          <text x="637" y="86" text-anchor="middle" font-family="IBM Plex Sans JP, sans-serif" font-size="13.5" font-weight="700" fill="#1C2B38">Dell 27" ディスプレイ</text>
+          <text x="637" y="104" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="#6B7885">MBP 持込時は同じ USB-C を挿し替え(給電+画面)</text>
+        </g>
+        <!-- mini -->
+        <g>
+          <rect x="524" y="158" width="226" height="64" fill="#1C2B38" stroke="#1C2B38" stroke-width="1.5"/>
+          <text x="637" y="184" text-anchor="middle" font-family="IBM Plex Sans JP, sans-serif" font-size="15" font-weight="700" fill="#FFFFFF">Mac mini(母艦)</text>
+          <text x="637" y="204" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="#9FB3C4">デスク直置き · 全状態を保持 · 常時稼働</text>
+        </g>
+        <!-- USB-C線 -->
+        <line x1="637" y1="118" x2="637" y2="158" stroke="#2D5F8A" stroke-width="1.5" marker-start="url(#arr)"/>
+        <text x="648" y="142" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="#6B7885">USB-C / TB 直結</text>
+        <!-- Cat6A -->
+        <line x1="304" y1="150" x2="524" y2="184" stroke="#2D5F8A" stroke-width="1.5" marker-end="url(#arr)"/>
+        <text x="352" y="152" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="#6B7885">Cat6A 有線 1本</text>
+        <!-- リビング MBP -->
+        <g>
+          <rect x="70" y="330" width="240" height="66" fill="#FFFFFF" stroke="#1C2B38" stroke-width="1.5"/>
+          <text x="190" y="356" text-anchor="middle" font-family="IBM Plex Sans JP, sans-serif" font-size="13" font-weight="700" fill="#1C2B38">MacBook Pro(窓)</text>
+          <text x="190" y="376" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="#6B7885">リビング定位置 · 充電器常設</text>
+        </g>
+        <line x1="190" y1="330" x2="190" y2="240" stroke="#2D5F8A" stroke-width="1.5" marker-end="url(#arr)"/>
+        <text x="200" y="292" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="#6B7885">宅内 Wi-Fi · SSH / 画面共有</text>
+        <!-- 外出先 MBP -->
+        <g>
+          <rect x="560" y="330" width="240" height="66" fill="#FFFFFF" stroke="#1C2B38" stroke-width="1.5"/>
+          <text x="680" y="356" text-anchor="middle" font-family="IBM Plex Sans JP, sans-serif" font-size="13" font-weight="700" fill="#1C2B38">MacBook Pro(窓)</text>
+          <text x="680" y="376" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="#6B7885">オフィス / 外出先 · 同一手順</text>
+        </g>
+        <line x1="655" y1="330" x2="642" y2="226" stroke="#2D5F8A" stroke-width="1.5" stroke-dasharray="6 5" marker-end="url(#arr)"/>
+        <text x="660" y="292" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="#6B7885">Tailscale (WireGuard)</text>
+      </svg>
+      <div class="diagram-caption">FIG.1 — mini は書斎デスクで Dell に直結。クローゼットはネットワーク機器専用。接続先は常に mini の一つ(実線=宅内 / 破線=Tailscale)</div>
+    </div>
+  </section>
+
+  <!-- ============ 03 配置計画 ============ -->
+  <section>
+    <div class="sec-head"><span class="sec-num">SEC 03</span><h2>配置計画 — どこに何を置くか</h2></div>
+
+    <div class="decision">
+      <b>Mac mini は書斎デスクに直置きし、Dell と USB-C/Thunderbolt で直結する。</b>
+      <p style="margin:8px 0 0;font-size:14px;">クローゼットのラックからデスクへ映像を引くと、パッシブ TB/USB-C ケーブルは 4K60 で実質 1〜2m が限界。光ファイバー式なら届くが 2〜5 万円かかり、得るものは「デスクから小箱が消える」だけ。mini は静音・小型でデスク置きのデメリットがほぼない。</p>
+      <div class="stamp">決</div>
+    </div>
+
+    <div class="decision" style="margin-top:16px;">
+      <b>MacBook Pro の定位置はリビングとする。</b>
+      <p style="margin:8px 0 0;font-size:14px;">充電環境は「使う場所」に置くのが原則。リビング使用が最多である以上、書斎定位置では「取りに行く・戻す」の摩擦が毎回発生する。書斎に MBP の常設場所を作らないことで「書斎 = mini ネイティブ / それ以外 = MBP」の役割分担が空間側でも固定される。</p>
+      <div class="stamp">決</div>
+    </div>
+
+    <div class="scroll-x">
+    <table style="margin-top:18px;">
+      <tr><th style="width:22%">場所</th><th style="width:30%">置くもの</th><th>設備・備考</th></tr>
+      <tr>
+        <td><b>書斎デスク</b></td>
+        <td><span class="dev-mini">Mac mini</span> + Dell 27"</td>
+        <td>USB-C 1本で映像 + ディスプレイ内蔵ハブ。Dell が USB-C 給電対応なら、MBP 持込時は同じケーブルを挿し替えるだけで給電(65〜90W)+ 外部画面になる → 書斎の予備充電ケーブルはディスプレイが兼任。</td>
+      </tr>
+      <tr>
+        <td><b>弱電クローゼット</b></td>
+        <td>ネットワーク機器のみ</td>
+        <td>UCG Fiber・Pro Max 16 PoE・UPS。<b>mini は置かない</b>。デスクへは Cat6A 1本を落とすだけ。</td>
+      </tr>
+      <tr>
+        <td><b>リビング</b></td>
+        <td><span class="dev-mbp">MBP</span> 定位置</td>
+        <td>65–70W USB-C 充電器 + ケーブル常設。閉じて置ける棚・ワゴンを一箇所決める。新居では造作・コンセント計画に組込み。</td>
+      </tr>
+      <tr>
+        <td><b>カバン</b></td>
+        <td><span class="dev-mbp">MBP</span>(外出時)</td>
+        <td>持ち出すのは MBP と充電器のみ。鍵・秘密情報は物理的に持ち歩かない(1Password + mini 側保持)。</td>
+      </tr>
+    </table>
+    </div>
+    <p class="note">帯域設計: Remote SSH は数百Kbps、画面共有 4K でも ~75Mbps のため <b>1GbE で十分</b>。将来 NAS を導入し大容量転送が日常化する場合のみ、mini の 10GbE BTO を検討(配線は Cat6A 済みで対応可能)。</p>
+  </section>
+
+  <!-- ============ 04 使い分け判断表 ============ -->
+  <section>
+    <div class="sec-head"><span class="sec-num">SEC 04</span><h2>使い分け判断表 — いつ mini、いつ MBP</h2></div>
+    <p>判断基準はシンプルに一つ:「<b>書斎のデスクに座るか否か</b>」。座るなら mini をネイティブで、それ以外はすべて MBP から mini へリモート。実行される場所は常に mini である。</p>
+    <div class="scroll-x">
+    <table>
+      <tr><th style="width:34%">シーン</th><th style="width:17%">触る機器</th><th style="width:20%">接続</th><th>備考</th></tr>
+      <tr><td>書斎で集中開発(レセまる / Gisium)</td><td><span class="dev-mini">mini</span></td><td>ネイティブ</td><td>Dell 直結。最も長い集中ブロックはここで。</td></tr>
+      <tr><td>リビングで作業・調べ物・軽い修正</td><td><span class="dev-mbp">MBP</span></td><td class="mono">ssh mini</td><td>tmux アタッチで書斎の続きがそのまま出る。</td></tr>
+      <tr><td>オフィス勤務日</td><td><span class="dev-mbp">MBP</span></td><td class="mono">ssh mini (TS)</td><td>手順は宅内と1文字も変わらない。</td></tr>
+      <tr><td>動作確認(ブラウザで dev サーバー)</td><td><span class="dev-mbp">MBP</span></td><td class="mono">http://mini:3000</td><td>ポートフォワード不要。Tailscale 名で直接叩く。</td></tr>
+      <tr><td>GUI が要る作業(E2E 目視・Docker GUI)</td><td><span class="dev-mbp">MBP</span></td><td>画面共有(高性能)</td><td>仮想ディスプレイ接続。Dell の画面と競合しない。</td></tr>
+      <tr><td>デプロイ・長時間処理・データ移行</td><td>どちらでも</td><td>tmux 内で実行</td><td>MBP を閉じても mini で続行。切断事故が構造的に消える。</td></tr>
+      <tr><td>飛行機・オフライン</td><td><span class="dev-mbp">MBP</span></td><td>ローカル clone</td><td>前日 <span class="mono">git pull</span>。復帰後 push して mini に合流。</td></tr>
+      <tr><td>読書(Kindle / Books)・私用</td><td><span class="dev-mbp">MBP</span></td><td>—</td><td>アカウント同期系。mini は関与しない。</td></tr>
+      <tr><td>海外版 Netflix(テレビ)</td><td>テレビ</td><td>Proton (UCG 経由)</td><td>SEC 07。UniFi アプリで Traffic Route をトグルするだけ。</td></tr>
+      <tr><td>公衆 Wi-Fi での通信保護</td><td><span class="dev-mbp">MBP</span></td><td>mini exit node</td><td>Proton は使わない。Tailscale からワンタップで自宅経由に。</td></tr>
+      <tr><td>MBP 買い替え・故障</td><td>新 <span class="dev-mbp">MBP</span></td><td>bootstrap.sh</td><td>SEC 09。旧機からコピーするものは何もない。</td></tr>
+    </table>
+    </div>
+    <p class="note">迷ったら:「これは<b>状態を作る作業</b>か?」→ Yes なら必ず mini 上(SSH 経由含む)で行う。MBP ローカルに状態を作った時点で設計違反。</p>
+  </section>
+
+  <!-- ============ 05 E2E 運用シナリオ ============ -->
+  <section>
+    <div class="sec-head"><span class="sec-num">SEC 05</span><h2>エンドツーエンド運用シナリオ(平日の一例)</h2></div>
+    <ul class="timeline">
+      <li>
+        <div class="tl-time">07:30<small>リビング</small></div>
+        <div class="tl-body">
+          <b>MBP でメール・Slack・軽い確認</b>
+          <p>定位置から開くだけ。開発に触れるなら <span class="cmd">ssh mini</span> → <span class="cmd">tmux attach</span> で昨夜の続きが出る。</p>
+        </div>
+      </li>
+      <li>
+        <div class="tl-time">09:00<small>書斎</small></div>
+        <div class="tl-body">
+          <b>mini ネイティブで集中開発ブロック</b>
+          <p>Dell 直結。tmux 配置は固定(win1: レセまる / win2: Gisium)。Docker・DB は mini で常時起動のため「毎朝 compose up」の儀式は存在しない。MBP はリビングに置いたまま。</p>
+        </div>
+      </li>
+      <li>
+        <div class="tl-time">12:30<small>リビング</small></div>
+        <div class="tl-body">
+          <b>昼食後、MBP で続きから</b>
+          <p>mini は放置でよい。<span class="cmd">tmux attach</span> で実行中の dev サーバー・ログがそのまま。動作確認はブラウザで <span class="cmd">http://mini:3000</span>。</p>
+        </div>
+      </li>
+      <li>
+        <div class="tl-time">14:00<small>オフィス</small></div>
+        <div class="tl-body">
+          <b>出社。手順は宅内と完全に同一</b>
+          <p>Tailscale は張りっぱなしなので切替操作なし。Milhan とのレビュー・ペア作業も MBP に映るのは mini の環境 = 普段と同じもの。重いテストを回しても MBP は発熱せずバッテリーも減らない。</p>
+        </div>
+      </li>
+      <li>
+        <div class="tl-time">17:00<small>オフィス</small></div>
+        <div class="tl-body">
+          <b>デプロイ(レセまる: 11〜25日の安全窓のみ)</b>
+          <p>必ず mini の tmux 内で実行。開始したら MBP を閉じて退社してよい — 処理は mini で続行し、帰宅後に同じセッションで結果を確認。レセプト・フリーズ(1〜10日)中はリリース作業自体を行わない。</p>
+        </div>
+      </li>
+      <li>
+        <div class="tl-time">21:00<small>リビング</small></div>
+        <div class="tl-body">
+          <b>夜: 軽い作業 or 読書</b>
+          <p>コードを触るなら同じく <span class="cmd">ssh mini</span>。Kindle / Books はローカルで完結。終わったら定位置に置いて充電 — 翌朝も満充電で始まる。</p>
+        </div>
+      </li>
+      <li>
+        <div class="tl-time">前夜<small>出張・帰省前</small></div>
+        <div class="tl-body">
+          <b>オフライン準備(所要1分)</b>
+          <p><span class="cmd">git -C ~/repos/… pull</span> だけ。機内では MBP ローカルで読み書き・mise の Node で軽い実行。着陸後に push して以後の実行は mini へ。</p>
+        </div>
+      </li>
+    </ul>
+    <h3>非日常シナリオ</h3>
+    <div class="scroll-x">
+    <table>
+      <tr><th style="width:28%">イベント</th><th>対応</th></tr>
+      <tr><td>MBP 紛失・故障・買い替え</td><td>失われる状態はゼロ。新機で bootstrap.sh(SEC 09)→ ログイン5件 → 15〜20分で完全復旧。旧機はリモートワイプ or 消去して売却。</td></tr>
+      <tr><td>mini 障害</td><td>単一障害点であることは自覚的に許容。緩和策: リポジトリは常に GitHub に push 済み + dotfiles で環境は宣言済みのため、代替機(MBP 含む)で数時間で再構築可能。Time Machine を外付け SSD に常時稼働させ、ローカルデータも保全。</td></tr>
+      <tr><td>自宅停電・回線障害</td><td>UPS + 停電後自動起動で無人復旧。外出中に mini へ届かない場合は MBP のローカル clone でオフライン運用に切替。</td></tr>
+      <tr><td>mini 買い替え(数年後)</td><td>chezmoi + mise + Brewfile(mini 用)で新機を宣言的に再構築。データは Time Machine 復元 or リポジトリ再 clone。</td></tr>
+    </table>
+    </div>
+  </section>
+
+  <!-- ============ 06 接続経路 ============ -->
+  <section>
+    <div class="sec-head"><span class="sec-num">SEC 06</span><h2>接続経路 — 3モード</h2></div>
+    <div class="modes">
+      <div class="mode">
+        <div class="where">MODE A / 書斎デスク</div>
+        <b>ネイティブ</b>
+        <p>mini + Dell 直結。リモートを介さないフル性能。最長の集中作業はここで行う。</p>
+      </div>
+      <div class="mode">
+        <div class="where">MODE B / 宅内(リビング等)</div>
+        <b>LAN 越しリモート</b>
+        <p><span class="mono">ssh mini</span> → tmux、または VS Code Remote SSH。GUI は画面共有(高パフォーマンスモード)。遅延は体感ゼロ。</p>
+      </div>
+      <div class="mode">
+        <div class="where">MODE C / オフィス・外出先</div>
+        <b>Tailscale 経由</b>
+        <p>手順は MODE B と完全に同一。切替操作は存在しない。</p>
+      </div>
+    </div>
+    <p class="note">GUI 接続の仕様: 高パフォーマンスモードは mini 側に<b>仮想ディスプレイ</b>を生成して接続するため、Dell に映る画面を奪い合わない(家族が Dell を使用中でも別セッションで作業可)。ヘッドレス期間でも HDMI ダミープラグ不要。必要帯域は 4K で ~75Mbps。作業の連続性は tmux が担保: 書斎で中断 → リビングで <code>tmux attach</code> → 続きが表示される。</p>
+  </section>
+
+  <!-- ============ 07 VPN 経路ポリシー ============ -->
+  <section>
+    <div class="sec-head"><span class="sec-num">SEC 07</span><h2>VPN 経路ポリシー — Tailscale と Proton の棲み分け</h2></div>
+    <p>Tailscale(自分のデバイス同士を繋ぐ私設網)と Proton VPN(インターネット出口の変更 = ジオ変更)は役割が異なる。原則は「<b>家中は素の回線。指定デバイスだけ VPN</b>」— 全戸常時 VPN は遅延増に加え、銀行・行政・オンライン請求系が海外 IP を弾くため採用しない。</p>
+
+    <div class="decision">
+      <b>テレビの海外版 Netflix 視聴は、UCG Fiber の VPN Client + Traffic Route で実現する。</b>
+      <p style="margin:8px 0 0;font-size:14px;">UniFi ゲートウェイ公式機能(Policy-Based Routing)。Proton の WireGuard 設定を UCG にインポートし、テレビ1台の全通信だけをトンネルへ振り分ける。テレビ側の設定は一切不要で機種を問わない。</p>
+      <div class="stamp">決</div>
+    </div>
+
+    <div class="scroll-x">
+    <table style="margin-top:18px;">
+      <tr><th style="width:22%">対象</th><th style="width:30%">方式</th><th style="width:22%">ワンクリック切替</th><th>備考</th></tr>
+      <tr>
+        <td><b>テレビ</b></td>
+        <td>UCG Fiber: Proton WireGuard トンネル + Traffic Route(デバイス単位)</td>
+        <td>UniFi アプリでルートを有効/無効</td>
+        <td>国別に複数トンネル(US/UK 等)を作り、使う方をオンにできる。Apple TV なら Proton ネイティブアプリでも代替可。</td>
+      </tr>
+      <tr>
+        <td><b>MBP</b></td>
+        <td>Proton アプリ常駐・普段オフ</td>
+        <td>メニューバーからワンクリック</td>
+        <td>動画視聴時のみ接続。接続中は mini 作業をしない(Tailscale が中継経由に落ちる場合があるため)。macOS のスプリットトンネリングは実験的機能につき依存しない。</td>
+      </tr>
+      <tr>
+        <td><b>MBP(公衆 Wi-Fi 保護)</b></td>
+        <td>mini を Tailscale exit node に</td>
+        <td>Tailscale メニューからワンタップ</td>
+        <td>全通信が WireGuard 暗号化で自宅経由に。出口 IP が自宅固定のため銀行系で弾かれにくい。Proton 不要・追加コストゼロ。</td>
+      </tr>
+      <tr>
+        <td><b>mini・その他全デバイス</b></td>
+        <td>素の回線(VPN なし)</td>
+        <td>—</td>
+        <td>開発・業務・オンライン請求系は常に国内 IP から。</td>
+      </tr>
+    </table>
+    </div>
+
+    <ul class="checklist" style="margin-top:20px;">
+      <li><div><b>Proton 有料プラン契約 + WireGuard 設定を国別に生成</b><small>ストリーミング対応と WireGuard 設定ダウンロードは有料プランが必要。まず US 1本から。</small></div></li>
+      <li><div><b>UCG Fiber に VPN Client としてインポート</b><small>設定 → VPN → VPN Client。トンネルは常設でよい(ルートをオフにすれば未使用)。</small></div></li>
+      <li><div><b>Traffic Route: テレビ → Proton トンネル</b><small>デバイス単位で紐付け。<b>ドメイン単位の振り分けは使わない</b> — 配信側が複数ドメインで位置情報をクロスチェックするため、部分的な VPN 経由は矛盾検出されやすい。デバイス丸ごとが確実。</small></div></li>
+      <li><div><b>動作確認 + ブロック時の運用</b><small>テレビで Netflix の地域が変わることを確認。VPN IP がブロックされたら Proton 側で別サーバーの設定を再生成して差し替え(いたちごっこは仕様として許容)。</small></div></li>
+    </ul>
+  </section>
+
+  <!-- ============ 08 MBP ソフトウェア構成 ============ -->
+  <section>
+    <div class="sec-head"><span class="sec-num">SEC 08</span><h2>MBP ソフトウェア構成(Brewfile がこのリストの実体)</h2></div>
+    <div class="cols">
+      <div class="list-panel allow">
+        <header>導入する(これで全部)</header>
+        <ul>
+          <li>Tailscale<small>mini への到達手段。常時接続</small></li>
+          <li>1Password + SSH エージェント<small>秘密鍵を MBP に置かない。ログイン = mini に入れる</small></li>
+          <li>ブラウザ(プロファイル同期)<small>ブックマーク・拡張・パスワード連携が自動復元</small></li>
+          <li>VS Code / Cursor<small>Remote SSH クライアント。設定は Settings Sync + mini 側</small></li>
+          <li>ターミナル + ssh config<small>chezmoi が展開。<span class="mono">Host mini</span> + ForwardAgent</small></li>
+          <li>chezmoi<small>dotfiles 展開(tmux.conf は mini と共通)</small></li>
+          <li>mise + Node<small>オフライン編集用の最小ランタイム</small></li>
+          <li>主要リポジトリの clone<small>オフライン用。外出前に <span class="mono">git pull</span></small></li>
+          <li>Kindle / Apple Books<small>アカウント同期系。ログインのみ</small></li>
+          <li>Proton VPN<small>常駐・普段オフ。動画視聴時のみワンクリック接続(SEC 07)</small></li>
+        </ul>
+      </div>
+      <div class="list-panel deny">
+        <header>置かない</header>
+        <ul>
+          <li>Docker・DB・重いランタイム群</li>
+          <li>SSH 秘密鍵ファイル・シークレットのローカル保管</li>
+          <li>手動管理の dotfiles・環境設定</li>
+          <li>Brewfile を経由しないアプリ導入</li>
+          <li>mini と手動同期が必要になる一切のもの</li>
+        </ul>
+      </div>
+    </div>
+    <p class="note">オフライン運用はレベル 1.5: ローカル clone で読み書き・軽い実行まで。復帰後 push し、以降は mini で実行。</p>
+  </section>
+
+  <!-- ============ 09 キッティング ============ -->
+  <section>
+    <div class="sec-head"><span class="sec-num">SEC 09</span><h2>キッティング — MBP 買い替えを無痛にする</h2></div>
+    <p>GitHub の dotfiles リポジトリに bootstrap.sh / Brewfile / chezmoi 設定を集約(別添キット参照)。移行アシスタントは使わず、毎回クリーンセットアップとする。</p>
+    <div class="scroll-x">
+    <table>
+      <tr><th style="width:16%">Phase</th><th style="width:14%">所要</th><th>内容</th></tr>
+      <tr><td class="mono">1 手動</td><td>~5分</td><td>macOS 初期設定 + Apple ID ログインのみ。</td></tr>
+      <tr><td class="mono">2 自動</td><td>~10分 放置</td><td><span class="mono">curl -fsSL …/bootstrap.sh | bash</span> — Homebrew → Brewfile 一括導入 → chezmoi 展開 → mise。冪等のため既存機の同期にも使用可。</td></tr>
+      <tr><td class="mono">3 手動</td><td>~5分</td><td>ログイン5件: 1Password(SSH エージェント有効化)/ Tailscale / ブラウザ / Kindle / エディタ Sync。</td></tr>
+      <tr><td class="mono">4 確認</td><td>~1分</td><td><span class="mono">ssh mini</span> → 1Password が認証ダイアログを出せば完成。</td></tr>
+    </table>
+    </div>
+  </section>
+
+  <!-- ============ 10 mini セットアップ ============ -->
+  <section>
+    <div class="sec-head"><span class="sec-num">SEC 10</span><h2>Mac mini 初期設定チェックリスト</h2></div>
+    <ul class="checklist">
+      <li><div><b>スリープ完全無効</b><small>システム設定 → エネルギー。「ディスプレイオフ時にスリープさせない」を有効化。</small></div></li>
+      <li><div><b>停電・電源断後の自動起動 ON</b><small>「停電後に自動的に起動」を有効化。無人復旧の生命線。</small></div></li>
+      <li><div><b>リモートログイン(SSH)+ 画面共有を有効化</b><small>画面共有は高パフォーマンスモード対応を確認。</small></div></li>
+      <li><div><b>Tailscale 導入・MagicDNS 確認</b><small>宅内・宅外(テザリングでテスト)の両方から <span class="mono">ssh mini</span> 到達を確認。</small></div></li>
+      <li><div><b>FileVault 方針の決定</b><small>有効のままだと遠隔再起動時にロック解除が必要。自動ログイン運用とのトレードオフを決める。</small></div></li>
+      <li><div><b>1Password 公開鍵を authorized_keys に登録</b><small>これで全 MBP が「1Password ログイン = mini に入れる」状態になる。</small></div></li>
+      <li><div><b>chezmoi で dotfiles 展開 + tmux 常用化</b><small>tmux.conf は MBP と共通。デフォルトセッションを1つ決め、全作業をその中で行う。</small></div></li>
+      <li><div><b>Tailscale exit node として広告(advertise)</b><small>MBP の公衆 Wi-Fi 保護用(SEC 07)。管理画面で exit node を承認しておく。</small></div></li>
+      <li><div><b>Time Machine(外付け SSD)</b><small>mini 単一障害点の緩和。常時接続で自動バックアップ。</small></div></li>
+    </ul>
+  </section>
+
+  <!-- ============ 11 運用3原則 ============ -->
+  <section>
+    <div class="sec-head"><span class="sec-num">SEC 11</span><h2>運用3原則</h2></div>
+    <ul class="checklist">
+      <li><div><b>コードと実行は常に mini</b><small>MBP ローカルでのうっかり実行が最大の混乱源。tmux ステータスバーのホスト名表示を保険とする。例外はオフライン時のみ。</small></div></li>
+      <li><div><b>MBP への追加は Brewfile 経由のみ</b><small>手でインストールしたら負け。リストとマシンの状態を常に一致させる。</small></div></li>
+      <li><div><b>作業はすべて tmux セッション内</b><small>素の SSH セッションは切断で消える。tmux 内なら切断・移動・蓋閉じのすべてが「中断」でなく「継続」になる。</small></div></li>
+    </ul>
+  </section>
+
+  <!-- ============ 12 新居移行 ============ -->
+  <section>
+    <div class="sec-head"><span class="sec-num">SEC 12</span><h2>新居(南荻窪・2027)への移行計画</h2></div>
+    <div class="scroll-x">
+    <table>
+      <tr><th style="width:30%">項目</th><th>方針</th></tr>
+      <tr><td>mini の設置</td><td><b>書斎デスクに直置き・Dell と USB-C 直結</b>(SEC 03 で確定)。12U ラックには入れない。</td></tr>
+      <tr><td>弱電クローゼット(12U ラック)</td><td>UCG Fiber → Pro Max 16 PoE → UPS。書斎デスクへ Cat6A 1本を落とし込み、mini を有線接続。</td></tr>
+      <tr><td>ネットワーク</td><td>MBP は U7 Pro(Wi-Fi)で MODE B 運用。1GbE で十分、NAS 導入時のみ mini の 10GbE を検討(Cat6A 配線は対応済)。</td></tr>
+      <tr><td>リビング定位置</td><td>造作・コンセント計画に「MBP 充電ステーション」を1箇所組込み(USB-C コンセント採用も検討)。</td></tr>
+      <tr><td>VPN 経路ポリシー</td><td>UCG Fiber に Proton WireGuard トンネル(国別)を常設し、リビングのテレビに Traffic Route を紐付け(SEC 07)。切替は UniFi アプリから。</td></tr>
+      <tr><td>mini の電源</td><td>デスク側で取る。保護が必要ならデスク用小型 UPS を追加、または停電後自動起動に任せる(要判断)。</td></tr>
+    </table>
+    </div>
+  </section>
+
+  <div class="footblock">
+    <span>AKR-DEV-001 / REV.C</span>
+    <span>PRINCIPLE: ONE SOURCE OF STATE — MAC MINI</span>
+    <span>2026-08-02</span>
+  </div>
+</div>
+</body>
+</html>

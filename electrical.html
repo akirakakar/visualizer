@@ -250,7 +250,7 @@ li{margin-bottom:5px}
   <div class="h2sub">「施工時にやること」と「後付けでよいこと」の確定表。この表がそのまま電気図面への指示になる。</div>
 
   <div class="facts">
-    <div><div class="n">11</div><div class="l">Cat6A 系統</div><div class="d">本設9 ＋ 予備2（§03）</div></div>
+    <div><div class="n">11</div><div class="l">Cat6A 系統</div><div class="d">本設6 ＋ 予備5（§03）</div></div>
     <div><div class="n">6</div><div class="l">PoE 給電（確定）</div><div class="d">AP×2・玄関カメラ・mmWave×3</div></div>
     <div><div class="n">4</div><div class="l">隠蔽100V（新規）</div><div class="d">玄関Voice・CO₂×3</div></div>
     <div><div class="n">2</div><div class="l">4芯弱電線</div><div class="d">書斎ドア・主要開閉窓</div></div>
@@ -313,21 +313,21 @@ li{margin-bottom:5px}
       <tr class="group"><td colspan="6">在室検知（mmWave）</td></tr>
       <tr>
         <td class="key">LDK</td><td class="key">mmWave</td>
-        <td><span class="tag pre">配線先行</span></td><td>本体は後付け可</td>
-        <td><span class="tag lan">Cat6A ×1</span> / PoE推奨</td>
-        <td>配線を見せずに常時給電できる状態にしておく。</td>
+        <td><span class="tag pre">電源先行</span></td><td>本体は後付け可</td>
+        <td><b>USB給電（隠蔽100V）</b> ／ <span class="tag lan">Cat6A ×1</span>は予備</td>
+        <td><b>Day 1はWi-Fi＋USB給電で開始。</b>CO₂センサーと同じ壁面1〜1.5mの給電点に相乗りさせる。Cat6Aは将来の天井設置・PoE化用に予備として先行。</td>
       </tr>
       <tr>
         <td class="key">書斎</td><td class="key">mmWave</td>
-        <td><span class="tag pre">配線先行</span></td><td>本体は後付け可</td>
-        <td><span class="tag lan">Cat6A ×1</span> / PoE推奨</td>
-        <td>在室判定。書斎ドアのCLOSEDと組み合わせて使う。</td>
+        <td><span class="tag pre">電源先行</span></td><td>本体は後付け可</td>
+        <td><b>USB給電（隠蔽100V）</b> ／ <span class="tag lan">Cat6A ×1</span>は予備</td>
+        <td>在室判定。書斎ドアのCLOSEDと組み合わせて使う。給電・配線の考え方はLDKと同じ。</td>
       </tr>
       <tr>
         <td class="key">主寝室</td><td class="key">mmWave</td>
-        <td><span class="tag pre">配線先行</span></td><td>本体後付け</td>
-        <td><span class="tag lan">Cat6A ×1</span> / PoE</td>
-        <td>就寝・在室。<b>本設へ格上げ</b>（LDK・書斎と同格）。</td>
+        <td><span class="tag pre">電源先行</span></td><td>本体後付け</td>
+        <td><b>USB給電（隠蔽100V）</b> ／ <span class="tag lan">Cat6A ×1</span>は予備</td>
+        <td>就寝・在室。<b>Day 1はWi-Fi</b>（LDK・書斎と同格）。PoE化は任意のタイミングで、Cat6Aは引いておく。</td>
       </tr>
       <tr>
         <td class="key">トイレ ×2</td><td class="key">mmWave</td>
@@ -355,7 +355,7 @@ li{margin-bottom:5px}
         <td class="key">LDK</td><td class="key">CO₂ ＋ 温湿度</td>
         <td><span class="tag pre">電源だけ先行推奨</span></td><td>本体後付け</td>
         <td>隠蔽100V / USB給電</td>
-        <td>壁面 1〜1.5m 程度の高さに。</td>
+        <td>壁面 1〜1.5m 程度の高さに。<b>mmWave（Wi-Fi・USB給電）が同じ給電点に相乗りするため、2口 または USB一体型コンセントとする</b>（LDK・書斎・主寝室の3室共通）。</td>
       </tr>
       <tr>
         <td class="key">書斎</td><td class="key">CO₂ ＋ 温湿度</td>
@@ -455,23 +455,23 @@ li{margin-bottom:5px}
       <th>方針</th>
     </tr></thead>
     <tbody>
-      <tr class="group"><td colspan="5">本設 — 施工時に必ず引く（9系統）</td></tr>
+      <tr class="group"><td colspan="5">本設 — 施工時に必ず引く・Day 1から使う（6系統）</td></tr>
       <tr><td class="key">U7 Lite 1F</td><td class="mono">1本</td><td>する</td><td class="dash">不要</td><td><b>確定</b></td></tr>
       <tr><td class="key">U7 Lite 2F</td><td class="mono">1本</td><td>する</td><td class="dash">不要</td><td><b>確定</b></td></tr>
       <tr><td class="key">玄関カメラ</td><td class="mono">1本</td><td>する</td><td>任意</td><td><b>確定・本設</b>（予備扱いにしない。Day 1から使う）</td></tr>
-      <tr><td class="key">LDK mmWave</td><td class="mono">1本</td><td>する</td><td class="dash">不要</td><td>配線だけ先行</td></tr>
-      <tr><td class="key">書斎 mmWave</td><td class="mono">1本</td><td>する</td><td class="dash">不要</td><td>配線だけ先行</td></tr>
-      <tr><td class="key">主寝室 mmWave</td><td class="mono">1本</td><td>する</td><td class="dash">不要</td><td><b>予備から本設へ格上げ。</b>LDK・書斎と同格で施工する</td></tr>
       <tr><td class="key">書斎デスク</td><td class="mono">2本</td><td>しない</td><td>任意</td><td>Dell / PC用（①仕事用 ②開発用）</td></tr>
       <tr><td class="key">壁掛けSony TV裏</td><td class="mono">1本</td><td>しない</td><td class="dash">不要</td><td><b>Cat6A 1本のみ。</b>TV下にAV機器を置かない前提で空配管は取りやめ</td></tr>
 
-      <tr class="group"><td colspan="5">予備 — 着工時に配線だけ通す・当面未使用（2系統）</td></tr>
+      <tr class="group"><td colspan="5">予備 — 着工時に配線だけ通す・当面未使用（5系統）</td></tr>
+      <tr><td class="key">LDK mmWave</td><td class="mono">1本</td><td>将来する</td><td class="dash">不要</td><td><span class="tag hold">予備</span> <b>Day 1はWi-Fi＋USB給電。</b>天井設置・PoE化に切り替える日のための枠</td></tr>
+      <tr><td class="key">書斎 mmWave</td><td class="mono">1本</td><td>将来する</td><td class="dash">不要</td><td><span class="tag hold">予備</span> 同上</td></tr>
+      <tr><td class="key">主寝室 mmWave</td><td class="mono">1本</td><td>将来する</td><td class="dash">不要</td><td><span class="tag hold">予備</span> 同上。<b>3室とも同格に扱う</b></td></tr>
       <tr><td class="key">玄関ドアホン</td><td class="mono">1本</td><td>する可能性あり</td><td class="dash">不要</td><td><span class="tag hold">予備</span> 呼出はJEM-A（ルートC）で成立するため当面未使用</td></tr>
       <tr><td class="key">パワコン</td><td class="mono">1本</td><td>しない</td><td class="dash">不要</td><td><span class="tag hold">予備</span> ECHONET Lite監視用。Bルートで総量は取れるため必須ではない</td></tr>
 
       <tr class="group"><td colspan="5">空配管のみ — Cat6Aは引かない</td></tr>
-      <tr><td class="key">子供部屋 ①</td><td class="dash mono">引かない</td><td class="dash">—</td><td><b>1本 ＋ 呼び線</b></td><td><b>LANはWi-Fi。</b>必要になった時に呼び線で自分で通す</td></tr>
-      <tr><td class="key">子供部屋 ②</td><td class="dash mono">引かない</td><td class="dash">—</td><td><b>1本 ＋ 呼び線</b></td><td>同上</td></tr>
+      <tr><td class="key">子供部屋 ①</td><td class="dash mono">引かない</td><td class="dash">—</td><td><b>2本 ＋ 呼び線（各本）</b></td><td><b>Day 1のLANはWi-Fi。</b>将来ネットを引くための枠を2本確保する。<b>出口を分ける</b>: ①<b>天井</b>＝将来のPoE機器（カメラ・mmWave等）／②<b>壁・机位置</b>＝デスクLAN。CD管 φ22以上・曲がり90°×2まで</td></tr>
+      <tr><td class="key">子供部屋 ②</td><td class="dash mono">引かない</td><td class="dash">—</td><td><b>2本 ＋ 呼び線（各本）</b></td><td>同上</td></tr>
 
       <tr class="group"><td colspan="5">配線不要 — 壁内配線の対象外</td></tr>
       <tr><td class="key">Home Assistant</td><td class="dash mono">壁内不要</td><td>しない</td><td class="dash">不要</td><td>書斎収納内。パッチコードでスイッチへ直結（<b>系統数に数えない</b>）</td></tr>
@@ -482,7 +482,7 @@ li{margin-bottom:5px}
   </table>
   </div>
   <div class="note"><b>TV裏について（空配管は取りやめ）:</b> 壁掛けTVなので<b>TVボード間のHDMI配管は不要</b>、Cat6A 1本で十分 — ここまでは従来どおり。加えて<b>TV裏の空配管そのものを取りやめる</b>。空配管の本来の価値は「将来のLAN」ではなく<b>壁掛けで露出させられないAV配線（AC・HDMI・光/eARC）を後から引き直せること</b>にあるが、<b>TV下にAV機器を置かない前提</b>（映像はBRAVIA内蔵アプリ＋LAN、サウンドバーなし）が確定したため、通す対象が無い。<span class="tag hold">再検討条件</span> 後からサウンドバー・Apple TV・ゲーム機をTV下に置く方針に変わった場合は、TV裏の深型BOXから<b>直下の床付近BOXへの短い縦配管（CD管 φ22〜28）</b>を追加する — これは長い横引きではなく短い縦引きが正解。</div>
-  <div class="note"><b>NW-01との突合せ（決着済み）:</b> 壁内Cat6Aは<b>合計11系統＝本設9＋予備2</b>。<b>玄関カメラは本設</b>（Day 1から使うため）、<b>主寝室mmWaveは予備から本設へ格上げ</b>（mmWave 3室すべてを同格のPoE施工にする）、<b>子供部屋×2はCat6Aを引かず空配管＋呼び線のみ</b>（LANはWi-Fi）。したがって<b>予備は玄関ドアホン・パワコンの2系統</b>。Home Assistant・JEM-A変換器は収納内パッチコードのため系統数から除外した。NW-01も本表に合わせて更新済み。パッチパネルは24口のため大幅に余裕あり。</div>
+  <div class="note"><b>NW-01との突合せ（決着済み）:</b> 壁内Cat6Aは<b>合計11系統＝本設6＋予備5</b>。<b>系統の総数は変わっていない</b> — mmWave 3室をWi-Fi＋USB給電で開始する判断により、内訳が<b>本設9＋予備2 → 本設6＋予備5</b>へ移っただけで、<b>着工図面に対する要求は1本も変わらない</b>。<b>玄関カメラは本設</b>（Day 1から使うため）、<b>mmWave 3室は予備</b>（配線は引くが当面挿さない）、<b>子供部屋×2はCat6Aを引かず空配管2本＋呼び線のみ</b>（LANはWi-Fi）。Home Assistant・JEM-A変換器は収納内パッチコードのため系統数から除外した。NW-01も本表に合わせて更新済み。パッチパネルは24口のため大幅に余裕あり。<b>mmWaveの分だけ電気図面側に要求が移る</b> — LDK・書斎・主寝室のCO₂給電点を2口化すること（§02）。</div>
 </section>
 
 <!-- ============ STUDY CLOSET SPEC ============ -->
@@ -542,8 +542,9 @@ li{margin-bottom:5px}
   <ul>
     <li><b>太陽光用Cat6Aを削除。</b>Bルートで家全体の電力を計測する前提なら、「太陽光のためだけにLANを引く」必然性がない。パワコン側の計測が欲しくなっても後付けで足りる。<b>反映するとかなりシンプルになる。</b></li>
     <li><b>TV裏は Cat6A 1本のみ・空配管なし。</b>壁掛けTVのためTVボード間のHDMI配管は不要。さらに<b>TV裏 → 弱電収納の「将来用」空配管も取りやめた</b> — 空配管が効くのは壁掛けで隠せないAV配線を引き直す時であって、TV下にAV機器を置かないなら通す物が無い。方針が変われば短い縦配管を足す（§03注記）。</li>
-    <li><b>主寝室 mmWave を予備から本設へ格上げ。</b>mmWave 3室（LDK・書斎・主寝室）をすべて同格のCat6A＋PoEで施工する。在室判定を無線に落とす部屋を作らない。</li>
-    <li><b>子供部屋のCat6Aを取りやめ、空配管＋呼び線のみに。</b>LANはWi-Fiで賄う。必要になった時点で呼び線で通せる状態は残すため、後戻り不可にはならない。<b>本設10＋予備3＝13系統 → 本設9＋予備2＝11系統</b>に減った。</li>
+    <li><b>mmWave 3室（LDK・書斎・主寝室）は Day 1 を Wi-Fi＋USB給電で開始。</b>市販のmmWaveセンサーにネイティブPoE機はほぼ無く（いずれもWi-Fi＋USB-C 5V給電）、PoE化しても実体は「PoE→USB-Cスプリッタでの給電」にしかならない。したがって<b>Cat6A 3本は引くが本設から予備へ移し</b>、機器はCO₂センサーと同じ給電点に相乗りさせる。<b>3室とも同格に扱う方針は維持</b>し、在室判定だけ無線に落とす部屋は作らない。天井設置に切り替えたくなった日にCat6Aを挿せば戻せる。</li>
+    <li><b>3台目APは採用しない。</b>U7 Lite ×2 で確定。PoE給電の最大消費者（802.3af・最大13W）を増やさないことで、<b>USW Lite 16 PoE（45W・PoE 8口）の電力制約が事実上消える</b> — 給電はAP×2＋玄関カメラの3台・実負荷約19W／45Wに戻る。将来APを増やす／上位機（802.3at）へ上げる判断は、そのままスイッチ交換の判断になる。</li>
+    <li><b>子供部屋のCat6Aを取りやめ、空配管のみに。ただし1本→2本へ増やす。</b>LANはWi-Fiで賄い、将来ネットを引く枠だけ残す。<b>出口を天井（将来のPoE機器）と壁・机位置（デスクLAN）に分ける</b> — 同じ壁面に2本出しても価値が薄いため。<b>本設10＋予備3＝13系統 → 本設6＋予備5＝11系統</b>（総数は前版から不変、内訳のみ移動）。</li>
     <li><b>照明スイッチは「深型BOX＋N線」を全数に。</b>スマートスイッチ側の製品選定を先送りしても、壁を触らずに載せ替えられる状態を作るのが目的。</li>
     <li><b>IoT用PIRは追加しない。</b>人感照明は積水標準のまま。在室判定はmmWaveへ一本化し、センサーの二重系を作らない。</li>
     <li><b>屋外カメラは玄関のみに凍結。</b>認識系（顔・服装・入退室）を1か所に集約する。</li>
@@ -564,13 +565,13 @@ li{margin-bottom:5px}
       </tr>
       <tr>
         <td class="key">Cat6A 系統数の突合せ</td>
-        <td><span class="tag none">決着</span> <b>本設9＋予備2＝11系統</b>で確定。玄関カメラ・主寝室mmWaveは本設、予備は玄関ドアホン・パワコンの2系統。子供部屋×2はCat6Aを引かず空配管＋呼び線のみ、TV裏は空配管なしのCat6A 1本。NW-01も更新済み。</td>
+        <td><span class="tag none">決着</span> <b>本設6＋予備5＝11系統</b>で確定（総数は前版と同じ・内訳のみ移動）。本設＝AP×2・玄関カメラ・書斎デスク×2・TV裏。予備＝mmWave×3・玄関ドアホン・パワコン。子供部屋×2はCat6Aを引かず<b>空配管2本＋呼び線</b>のみ、TV裏は空配管なしのCat6A 1本。NW-01も更新済み。</td>
         <td class="mono">— 反映済み</td>
       </tr>
       <tr>
         <td class="key">PoEバジェット</td>
-        <td><span class="tag hold">要確認</span> <b>主寝室mmWaveの本設格上げにより、mmWave 3台のPoE給電が確定</b> — 給電は<b>6台</b>（AP×2・玄関カメラ・mmWave×3）。NW-01の「3台で凍結・USW Lite 16 PoE（45W）」という前提はこの決定で崩れたため、<b>mmWaveの実消費（802.3af必要か・PoE級か）を製品選定時に確認</b>し、45Wに収まらなければPoE余裕機へスイッチ交換（<b>配線は無変更</b>のため図面確定はブロックしない）。</td>
-        <td class="mono">機器選定時</td>
+        <td><span class="tag none">決着</span> <b>mmWaveをWi-Fi＋USB給電に、3台目APを不採用にしたことで、PoE給電は「AP×2＋玄関カメラ」の3台に戻った</b> — 実負荷 約19W／45W・<b>PoE 3/8口</b>・<b>総ポート 13/16</b>。<b>USW Lite 16 PoE は無変更で全フェーズ収容</b>。将来 mmWave 3台をPoE化し、ドアホンをルートA/Bへ移しても<b>6/8口・約34W</b>で収まる。<b>交換トリガの再定義</b>: 電力ではなくポート数が先に効くため、「<b>PoE 8口が尽きた日＝単口PoEインジェクタ（¥3千級）で逃げる</b>」「<b>総16口が尽きた日＝スイッチ交換</b>」とする（従来の「凍結を破った日＝即スイッチ交換」は過剰）。</td>
+        <td class="mono">— 反映済み</td>
       </tr>
       <tr>
         <td class="key">主要開閉窓の隠蔽施工可否</td>

@@ -172,7 +172,7 @@ li{margin-bottom:5px}
       <text x="1132" y="194" text-anchor="end">ラック棚段（情報盤レス）</text>
 
       <rect x="16" y="460" width="1128" height="170" fill="var(--zone)" stroke="var(--zone-line)"/>
-      <text x="1132" y="478" text-anchor="end">有線端末 — Cat6A 本設9＋予備2（ドアホン・パワコン）</text>
+      <text x="1132" y="478" text-anchor="end">有線端末 — Cat6A 本設6＋予備5（mmWave×3・ドアホン・パワコン）</text>
 
       <rect x="16" y="664" width="900" height="190" fill="var(--zone)" stroke="var(--zone-line)"/>
       <text x="904" y="682" text-anchor="end">無線端末 — Wi-Fi (U7 Lite ×2)</text>
@@ -291,7 +291,7 @@ li{margin-bottom:5px}
       <text x="260" y="278" text-anchor="middle">（事業者支給）</text>
       <text x="470" y="262" text-anchor="middle">Router / FW / VPNサーバ</text>
       <text x="470" y="278" text-anchor="middle">WAN: 1G運用（ポートは2.5G）</text>
-      <text x="335" y="372" text-anchor="middle">L2コア・16×1G・PoE 45W（3台凍結運用）</text>
+      <text x="335" y="372" text-anchor="middle">L2コア・16×1G・PoE 45W（給電3台・約19W）</text>
       <text x="645" y="368" text-anchor="middle">書斎デスク設置・VLAN30</text>
       <text x="940" y="258" text-anchor="middle">JEM-A変換アダプタ → 直接LAN → HA</text>
       <text x="940" y="276" text-anchor="middle">市販アダプタのみ・自作(ATOM Lite)不採用</text>
@@ -444,7 +444,7 @@ li{margin-bottom:5px}
       </tr>
       <tr>
         <td class="key"><span class="tag t1">1GbE Cat6A</span></td>
-        <td>スター配線 <b>本設9系統</b>: U7 Lite AP ×2（PoE）／ <b>玄関カメラ（PoE）</b>／ <b>LDK・書斎・主寝室 mmWave ×3（PoE）</b>／ 書斎デスク ×2 ／ BRAVIA（TV裏・空配管なし）。<b>予備2系統</b>: 玄関ドアホン（PoE）／ パワコン・太陽光計測ユニット（ECHONET Lite監視用）— 当面未使用でも着工時に配線。<b>子供部屋 ×2はCat6Aを引かず空配管＋呼び線のみ</b>（LANはWi-Fi）。Mini PC（HA）・JEM-A変換器はラック内パッチコードのため系統数外。詳細は EL-01 §03。</td>
+        <td>スター配線 <b>本設6系統</b>: U7 Lite AP ×2（PoE）／ <b>玄関カメラ（PoE）</b>／ 書斎デスク ×2 ／ BRAVIA（TV裏・空配管なし）。<b>予備5系統</b>（着工時に配線するが当面未使用）: <b>LDK・書斎・主寝室 mmWave ×3</b> — <b>Day 1はWi-Fi＋USB給電で運用</b>し、天井設置・PoE化に切り替える日のための枠 ／ 玄関ドアホン（PoE）／ パワコン・太陽光計測ユニット（ECHONET Lite監視用）。<b>合計11系統は前版から不変</b>（本設9＋予備2 → 本設6＋予備5 へ内訳が移っただけ）。<b>子供部屋 ×2はCat6Aを引かず空配管2本＋呼び線のみ</b>（LANはWi-Fi。出口は天井＝将来のPoE機器用／壁・机位置＝デスクLANに分ける）。Mini PC（HA）・JEM-A変換器はラック内パッチコードのため系統数外。詳細は EL-01 §03。</td>
         <td>安定性重視の有線。配線自体はCat6Aなので将来2.5/10Gへの引き直し不要。</td>
       </tr>
       <tr>
@@ -478,10 +478,12 @@ li{margin-bottom:5px}
       <tr><td class="key">玄関ドアホン（予備）</td><td class="mono">1G</td><td>要</td><td>ルートA/B移行時のみ使用。</td></tr>
       <tr><td class="key">パワコン / 太陽光計測</td><td class="mono">1G</td><td>—</td><td>ECHONET Liteはkbpsオーダー。</td></tr>
       <tr><td class="key">JEM-A変換（ラック内）</td><td class="mono">1G</td><td>—</td><td>ラック棚段設置・パッチコード直結。アダプタ側は100Mの場合も多いが1Gポートで収容。</td></tr>
+      <tr><td class="key">WATCH BOOT nino（P2）</td><td class="mono">100M</td><td>—</td><td>ONU・ルータのping監視／自動電源サイクル。ポート数の勘定に入れる（P2導入時に1口消費）。</td></tr>
+      <tr><td class="key">mmWave ×3（LDK・書斎・主寝室）</td><td class="mono">Wi-Fi</td><td class="dash">—</td><td><b>スイッチポートを消費しない。</b>Day 1はWi-Fi＋USB給電で<b>IoT VLAN 20</b>に収容 → HA → HomeKit Bridge → Apple Home（§10の経路にそのまま乗る）。壁内Cat6Aは予備として引いてあり、天井設置・PoE化に切り替える日に1口ずつ消費する。</td></tr>
       <tr><td class="key">おひさまエコキュート</td><td class="mono">1G（機種次第）</td><td>—</td><td><b>有線ポートを持つ機種は少数派</b> — 無線LANアダプタのみの機種はIoT SSID（2.4GHz）に収容。<b>おひさまエコキュートは太陽光連携が前提のため無線アダプタ標準装備の機種が多い</b>。機種選定要件に「有線LAN可否」を残す。</td></tr>
     </tbody>
   </table>
-  <div class="note"><b>速度割当の原則:</b> 全区間1G運用。2.5G対応NICを持つ機器（AP・Mini PC）はスイッチ交換の日に自動昇格する。<b>スイッチ適合:</b> Lite 16 PoE（16×1G・PoE 8口/45W）1台で全フェーズ収容 — 全消化でも10口で空き6口、増設不要。<b>PoE成立条件: 給電機器を「AP×2＋玄関カメラ」の3台で凍結</b>（実負荷 約25W/45W。ドアホンはルートC=JEM-A確定でPoE不要になったため成立）。凍結を破るイベント — AP3台目・ドアホンのルートA/B移行・カメラ2台目 — が起きた日がスイッチ交換日（Pro Max 16 PoE 180Wへ更新、在庫要確認）。全ポート2.5Gのため速度マップの1G表記は「2.5Gポートに1G機器を収容」の意。PoE実負荷 約40W — Flex 8 PoEの給電上限を購入前に要確認。<b>スイッチは買い替え前提</b>の消耗品扱いとし、10Gが必要になった時点で本体ごと更新（配線・他機器は無変更）。</div>
+  <div class="note"><b>速度割当の原則:</b> 全区間1G運用。2.5G対応NICを持つ機器（AP・Mini PC）はスイッチ交換の日に自動昇格する。全ポート2.5Gの上位機へ交換した際、速度マップの1G表記は「2.5Gポートに1G機器を収容」の意。<br><br><b>スイッチ適合（決着）:</b> Lite 16 PoE（16×1G・PoE 8口/45W）1台で全フェーズ収容。<b>mmWave 3室をWi-Fi＋USB給電にし、3台目APを不採用と決めたことで、PoEは「AP×2＋玄関カメラ」の3台に戻った</b> — <b>実負荷 約19W／45W・PoE 3/8口・総ポート 13/16</b>（上表12行＋WATCH BOOT nino）。ドアホンをルートA/Bへ移し、mmWave 3台をPoE化し、子供部屋2室に将来LANを通しても <b>PoE 6/8口・約34W／45W・総15〜16口</b>で収まる。<b>U7 Lite は802.3af・最大13W</b>のため、13W級の消費者はAP 2台までが上限 — <b>APの増設・802.3at機（U7 Pro等）への更新＝スイッチ交換</b>と読み替える。玄関カメラも802.3af・実消費5W級に限定（PoE+のPTZ/投光器付きは不可）。<br><br><b>交換トリガの再定義:</b> 電力より先にポート数が効くため、<b>「PoE 8口が尽きた日＝単口PoEインジェクタ（¥3千級）で逃げる」「総16口が尽きた日＝スイッチ交換（Pro Max 16 PoE 180W等・在庫要確認）」</b>とする。従来の「給電3台の凍結を破った日＝即スイッチ交換」は過剰だった。逃げ道はもう一段あり、<b>UCG Ultra の空きLAN 3口</b>（4口中1口が上り）へ低トラフィック機器（パワコン・JEM-A変換・WATCH BOOT）を移せば、スイッチ側を3口空けられる。<b>スイッチは買い替え前提</b>の消耗品扱いとし、10Gが必要になった時点で本体ごと更新（配線・他機器は無変更）。</div>
   <h2 style="font-size:14px;border-bottom:1px solid var(--rule);margin-top:26px"><span class="no">03.2</span>ラック立面図（書斎クローゼット・壁掛けヒンジ式 9U）</h2>
   <div class="figure">
   <svg viewBox="0 0 760 560" xmlns="http://www.w3.org/2000/svg" font-family="'IBM Plex Sans JP',sans-serif">
@@ -524,7 +526,7 @@ li{margin-bottom:5px}
     <!-- U7: switch -->
     <rect x="156" y="168" width="388" height="34" fill="#EDF1F5" stroke="var(--ink)" stroke-width="1.5"/>
     <text x="176" y="190" font-size="12.5" font-weight="700">USW Lite 16 PoE</text>
-    <text x="544" y="190" font-size="11" fill="var(--ink-soft)" text-anchor="end">PoE: AP×2＋カメラ（3台凍結）</text>
+    <text x="544" y="190" font-size="11" fill="var(--ink-soft)" text-anchor="end">PoE: AP×2＋カメラ（3/8口・約19W）</text>
 
     <!-- patch cord loop annotation -->
     <path d="M560,97 C596,97 596,185 560,185" fill="none" stroke="var(--c-10g)" stroke-width="2" stroke-dasharray="4 4" marker-end="url(#arr3)"/>
@@ -637,7 +639,7 @@ li{margin-bottom:5px}
     <li><b>Alexaのスマートホームスキルは登録しない。</b>誤って機器検出した場合は無効化。音楽以外の経路を作らないことが設計。</li>
     <li><b>停電復帰順序:</b> UCG → Switch → Mini PC の順に自動起動（Mini PCはBIOSでAC復帰ON）。HAが上がればロック・空調の状態は自動再取得。</li>
     <li><b>AP設置位置（P0で座標確定）:</b> 吹抜上部の高天井はNG（真下向き放射で全階に中途半端・メンテ不能）。2Fは吹抜のへりから1〜2m離れたLDK側の平天井（吹抜開口越しに1Fホールもカバー）、1Fは寝室群中心の廊下天井。天井Cat6Aの出口座標として電気図面に指定。</li>
-    <li><b>引き渡し前チェック:</b> ラック着のCPEV-S ×2 導通確認、Cat6A 全11系統（本設9＋予備2）のパッチパネル成端＋結線試験（Fluke等の成績書）、盤内コンセント通電。</li>
+    <li><b>引き渡し前チェック:</b> ラック着のCPEV-S ×2 導通確認、Cat6A 全11系統（本設6＋予備5）のパッチパネル成端＋結線試験（Fluke等の成績書）、盤内コンセント通電。</li>
   </ul>
 </section>
 
@@ -695,7 +697,7 @@ li{margin-bottom:5px}
   <ul>
     <li><b>VPN待受のIPv6化（最重要）:</b> IPoE前提の回線ではIPv4待受は成立しないか制約付き。WireGuardのエンドポイントをIPv6 FQDNにし、クライアント側プロファイルもIPv6優先で作成。§04・§07に反映済み。</li>
     <li><b>ラックUPS:</b> ONU・UCG・スイッチ・Mini PCを小型UPS（P2導入・550VA級）に収容。瞬停でHA・通知が途切れない。スマートロックはAC100V直結のため停電時は物理鍵運用になる点を家族に共有。</li>
-    <li><b>PoEバジェットとスペア:</b> PoE給電は「AP×2＋玄関カメラ」の3台で凍結（実負荷約25W/45W）。<b>PoEポート1口を玄関カメラ用に予約</b>。給電機器を増やすイベントが起きた日にPoE余裕機へスイッチ交換。</li>
+    <li><b>PoEバジェットとスペア:</b> PoE給電は「AP×2＋玄関カメラ」の3台（実負荷約19W/45W・<b>3/8口</b>）。mmWaveはWi-Fi＋USB給電、3台目APは不採用と決めたため<b>電力側の制約は事実上消えた</b> — 将来 mmWave 3台のPoE化＋ドアホン移行まで足しても6/8口・約34W。<b>効くのはポート数</b>: PoE 8口が尽きたら単口インジェクタ（¥3千級）、総16口が尽きたらスイッチ交換。低トラフィック機器は<b>UCG Ultra の空きLAN 3口</b>へ逃がせる。</li>
     <li><b>空配管の追加:</b> ラック⇔情報盤、ラック⇔屋外（軒下）に呼び22以上の空配管。V2H用空配管と同じ思想で弱電系にも保険をかける。着工前（2027年1月）までに配線図へ反映が必要な唯一の項目。</li>
     <li><b>HAのバックアップ:</b> 日次スナップショットをMac mini（またはNAS）へ自動転送。SSDのSMART監視をHA上でアラート化。復旧手順を1枚のrunbookに。</li>
     <li><b>IoT SSIDの固定化:</b> ECHONET Lite機器・SwitchBotは2.4GHz固定・WPA2-PSK・band steering除外のSSIDに収容。機器側の再接続不良を予防。</li>
@@ -711,10 +713,10 @@ li{margin-bottom:5px}
     <thead><tr><th style="width:90px">購入時期</th><th style="width:250px">ハード（確定）</th><th style="width:100px">概算</th><th>選定理由・見送った同格品</th></tr></thead>
     <tbody>
       <tr><td class="mono">P1</td><td class="key">UCG Ultra</td><td class="mono">¥20,000</td><td>WireGuard/Teleport・VLAN・内部DNSはMax/Fiberと同機能。LAN 1Gだが本設計は1G基準のため損失なし（クロスVLAN通信も1Gで実用十分）。上位のMax（¥3万・2.5G/NVMe）は速度昇格の第一段として温存。UX7/UDR7はAP一体型でラック設置に不向き。</td></tr>
-      <tr><td class="mono">P1</td><td class="key">USW Lite 16 PoE</td><td class="mono">¥30,000</td><td>16×1G・PoE 45W・ファンレス。ドアホンPoE不要化（ルートC確定）により給電3台凍結（AP×2＋カメラ・実負荷約25W）で成立。凍結を破る日にPro Max 16 PoE等へ交換。Pro Max 16 PoEは在庫難のため本命から外し、上位互換として温存。</td></tr>
+      <tr><td class="mono">P1</td><td class="key">USW Lite 16 PoE</td><td class="mono">¥30,000</td><td>16×1G・PoE 45W・ファンレス。ドアホンPoE不要化（ルートC確定）＋<b>mmWaveのWi-Fi化</b>＋<b>3台目AP不採用</b>により、給電は<b>AP×2＋カメラの3台・実負荷約19W／45W・PoE 3/8口・総13/16口</b>。将来 mmWaveのPoE化・ドアホン移行・子供部屋の通線を全部足しても<b>6/8口・約34W</b>で収まる。<b>総16口が尽きた日</b>にPro Max 16 PoE等へ交換（PoE口だけ尽きた場合は単口インジェクタで足りる）。Pro Max 16 PoEは在庫難のため本命から外し、上位互換として温存。</td></tr>
       <tr><td class="mono">P1</td><td class="key">U7 Lite ×2</td><td class="mono">¥16,000×2</td><td>Wi-Fi 7・天井付・2台運用で確定（1F廊下／2F LDK平天井・吹抜上部NG）。Lite 16 PoE配下では1Gリンク運用、スイッチ更新時に2.5Gへ自動昇格。</td></tr>
       <tr><td class="mono">P0末</td><td class="key">壁掛けオープンフレームラック: <b>Pekaro 9U（Amazon）で確定</b></td><td class="mono">¥10,000級</td><td>固定式・19インチ対応・W53.8×D45×H48cm・0.8mm冷間圧延鋼・<b>耐荷重35kg</b>・防錆塗装。全要件適合（オープンフレーム=通気は建具ガラリで担保・二重箱回避、9U=FIG.3割付そのまま、奥行45cmで配線余裕）。<b>購入時の同時確認3点</b>: ①本体自重を仕様欄で確認し機器込み合計で下地指定を最終化（20kg超なら30kg指定へ） ②ケージナット/M6ネジの付属確認（無ければ別途） ③純正棚板なしのため<b>汎用19インチ1Uパンチング棚×2（各¥2千前後）を同時購入</b>。取付・成端はセキスイ弱電業者へ材工依頼（施主支給: ラック・パネル・ジャック・棚板）。</td></tr>
-      <tr><td class="mono">P0末</td><td class="key">パッチパネル一式（施主支給・工事店成端）</td><td class="mono">¥10,000</td><td>ラックと同時に支給。24口キーストン式空パネル（約¥4千）＋Cat6Aキーストンジャック×11（約¥500/個）＋パッチコード＋1Uケーブルマネジメントバー＋<b>パンチング棚板×2（1U・耐荷重5kg以上・ラック同メーカー純正）＋強力面ファスナー（3Mデュアルロック等）</b> — スイッチはラックマウントネジ固定、UCG Ultra・ONU・WATCH BOOTは棚板＋面ファスナー底面固定が定石。壁内の単線Cat6AはRJ45直付けNG・キーストン成端が正式。予備2系統もパネルまで成端し「使う日はコード1本」に。</td></tr>
+      <tr><td class="mono">P0末</td><td class="key">パッチパネル一式（施主支給・工事店成端）</td><td class="mono">¥10,000</td><td>ラックと同時に支給。24口キーストン式空パネル（約¥4千）＋Cat6Aキーストンジャック×11（約¥500/個）＋パッチコード＋1Uケーブルマネジメントバー＋<b>パンチング棚板×2（1U・耐荷重5kg以上・ラック同メーカー純正）＋強力面ファスナー（3Mデュアルロック等）</b> — スイッチはラックマウントネジ固定、UCG Ultra・ONU・WATCH BOOTは棚板＋面ファスナー底面固定が定石。壁内の単線Cat6AはRJ45直付けNG・キーストン成端が正式。予備5系統（mmWave×3・ドアホン・パワコン）もパネルまで成端し「使う日はコード1本」に。</td></tr>
       <tr><td class="mono">P1</td><td class="key">Mini PC（N100級）</td><td class="mono">¥30,000</td><td>UniFi外。HA用2.5G NIC標準機。BIOSで「AC復帰時自動起動」を必ず設定。</td></tr>
       <tr><td class="mono">P2</td><td class="key">UPS: APC BR550S-JP または オムロン BY50S</td><td class="mono">¥15,000</td><td><b>Day 1からP2へ後送り</b> — 停電復旧の無人化はBIOS自動起動＋WATCH BOOTで既に担保され、ロックは元々ラックUPS外（AC直結・停電時は物理鍵）のため。残余リスクは瞬断時のSSDのみで、P2の日次バックアップと同時に導入して閉じる。正弦波・復電時自動再起動対応、公式ストアで購入。床置き（壁掛けラック外・5〜6kg）、NUT連携で残量監視。</td></tr>
       <tr><td class="mono">P2</td><td class="key">（スイッチ増設なし）</td><td class="mono">¥0</td><td>Lite 16 PoEの空き口にMac mini・パワコンを収容するのみ。</td></tr>
@@ -765,7 +767,7 @@ li{margin-bottom:5px}
       </tr>
     </tbody>
   </table>
-  <div class="note"><b>予算:</b> ①<b>Day 1構成 約¥11.2万＋P0末のラック等 約¥2.5万</b>（UCG Ultra 約¥2万＋Lite 16 PoE 約¥3万＋U7 Lite×2 約¥3.2万＋Mini PC 約¥3万／ 壁掛けラック¥1.5万＋パッチパネル一式¥1万、いずれも概算）— AP2台・WireGuard/Teleport/VLAN込み・PoEは3台凍結運用。UPS（¥1.5万）とWATCH BOOT（¥2.5万）はP2。／ ②<b>速度昇格ラダー（後日可・全段宅内無工事）:</b> ①スイッチを2.5G/PoE余裕機へ（PoE凍結を破る日と兼用）→ ②UCG Max化 → ③光クロス10G＋UCG Fiber。体感が欲しくなった段だけ払う。<br><b>IPoE保険:</b> 固定IP系ISP採用なら不要。将来光クロス移行時のみRTX1300案を再考。</div>
+  <div class="note"><b>予算:</b> ①<b>Day 1構成 約¥11.2万＋P0末のラック等 約¥2.5万</b>（UCG Ultra 約¥2万＋Lite 16 PoE 約¥3万＋U7 Lite×2 約¥3.2万＋Mini PC 約¥3万／ 壁掛けラック¥1.5万＋パッチパネル一式¥1万、いずれも概算）— AP2台・WireGuard/Teleport/VLAN込み・PoEは3台（約19W/45W）。UPS（¥1.5万）とWATCH BOOT（¥2.5万）はP2。／ ②<b>速度昇格ラダー（後日可・全段宅内無工事）:</b> ①スイッチを2.5G/PoE余裕機へ（総16口が尽きる日と兼用）→ ②UCG Max化 → ③光クロス10G＋UCG Fiber。体感が欲しくなった段だけ払う。<br><b>IPoE保険:</b> 固定IP系ISP採用なら不要。将来光クロス移行時のみRTX1300案を再考。</div>
 </section>
 
 <!-- ============ VLAN SEGMENTATION ============ -->
@@ -784,8 +786,8 @@ li{margin-bottom:5px}
       <tr>
         <td class="key">20 — IoT</td>
         <td class="mono">192.168.20.0/24<br>SSID: IoT（2.4GHz固定・WPA2）</td>
-        <td>エアコン×4、おひさまエコキュート、パワコン（有線）、JEM-A変換、SwitchBot Relay Switch 1、Alexa ×2、ロボット掃除機×2（1F/2F）</td>
-        <td><b>インターネット遮断がデフォルト</b>（例外の許可リスト: Alexa=Amazon Music、ロボット掃除機=クラウド制御、SwitchBot=ファーム更新時のみ）。IoT→他VLANの発信は全拒否。到達できる相手はHAのみ。</td>
+        <td>エアコン×4、おひさまエコキュート、パワコン（有線）、JEM-A変換、SwitchBot Relay Switch 1、Alexa ×2、ロボット掃除機×2（1F/2F）、<b>mmWave ×3（LDK・書斎・主寝室／Wi-Fi＋USB給電）</b></td>
+        <td><b>インターネット遮断がデフォルト</b>（例外の許可リスト: Alexa=Amazon Music、ロボット掃除機=クラウド制御、SwitchBot=ファーム更新時のみ）。IoT→他VLANの発信は全拒否。到達できる相手はHAのみ。<b>mmWaveの機器選定はこのポリシーが決める</b>: <b>ESPHome系（Everything Presence Lite / Apollo MSR-2 等）を採用し、HA経由でHomeKitへ出す</b>。完全ローカル動作でインターネット遮断のまま成立し、在室ロジックをHA側に一本化できるため。<b>HomeKitネイティブ機（Aqara FP2等）は不採用</b> — VLAN 10のHomeKitコントローラからmDNSで発見させるために反射・例外を作る必要が生じ、本設計が意図的に得ている「リフレクタ不要」が崩れる。</td>
       </tr>
       <tr>
         <td class="key">30 — Dev（開発）</td>
@@ -890,7 +892,7 @@ li{margin-bottom:5px}
     <tbody>
       <tr>
         <td class="key">P0 — 着工前確定<br><span class="mono" style="font-weight:400">〜2027/01</span></td>
-        <td><b>Cat6A 本設9＋予備2＝11系統</b>（本設に玄関カメラ・主寝室mmWaveを含む／予備＝ドアホン・パワコン／<b>子供部屋×2は空配管＋呼び線のみ・Cat6Aなし</b>／<b>TV裏は空配管なしのCat6A 1本</b>。内訳の正はEL-01 §03）／ <b>書斎デスクはCat6A×2本</b>（①仕事用=VLAN10 ②開発用Mac mini=VLAN30、壁ポート単位でVLAN割当）／ 空配管（ラック⇔屋外／<b>子供部屋×2は呼び線入り空配管1本ずつ</b>）／ <b>情報盤は設けない（標準のまとめてねット等は削除依頼）</b>: 全弱電（Cat6A×11＋玄関CPEV-S×2）を書斎クローゼットの施主支給ラックへ直接集約し、JEM-A変換アダプタはラック棚段に設置／ ドアホン型番の呼出接点出力確認 ／ JEM-A変換アダプタ選定（ECHONET Lite対応可否）／ パワコンのECHONET Lite対応・有線LAN可否確認（非対応でもBルートで総量監視は成立）／ 成端仕様（A案確定）: <b>施主支給ラックを器具付け後〜引き渡し前に先行設置し、ラック搭載の24口パッチパネルへキーストン成端</b>・全11系統・<b>ケーブル余長1.5〜2m（サービスループ）指定</b>・Fluke成績書付き。余長があれば将来のラック交換はパネル載せ替え30分・再成端不要 ／ ラック設置条件（壁掛け）: <b>壁掛け荷重用合板下地（位置指定・耐荷重20kg以上）</b>・専用AC回路4口以上・配線引込口はラック取付位置の直上 ／ クローゼット三層構成の造作: 上=壁掛けラック・中=<b>可動造作棚（最上段の天板高さをラック底面に一致させ、壁固定＋棚受けの二重支持とする）</b>・下=<b>1Fロボット掃除機基地（床レベルAC 1口＋前方クリアランス50cm）</b> ／ <b>2F LDKロボット掃除機基地: タンク式ドック前提で確定（給排水配管は不要）</b> — ドック位置（パントリー脇等）にAC 1口＋設置スペース（幅50×奥行60cm級＋前方クリアランス）を図面指定 ／ 通気: 第一希望<b>ルーバー扉</b>、不可なら<b>扉アンダーカット20mm＋上部ガラリ</b>（下吸気・上排気の煙突効果。庫内発熱約45W→通気ありで室温＋2〜3℃見込み。P1でHA温度センサー設置・実測32℃超でP3ファン）／ <b>テレビ受信: 地デジUHF＋BS/110度CSアンテナで確定・CATVなし・テレビ端子はLDKの1箇所のみ</b>。屋外混合器→同軸1本→ラック経由（中継接続のみ）→LDK。<b>1端子・分配なしのためブースター・分配器は非搭載</b>（LNB給電はBRAVIA/レコーダーが直接担う）。入居後に受信レベルを実測し不足時のみU6へブースター追加。将来の多部屋化もU6に分配器を挿すだけで配線変更ゼロ。アンテナ設置位置は太陽光パネル（南面）との干渉を外構図で確認 ／ ラックは弱電業者に材工込み手配（仕様指定: 19インチ・6〜9U・耐荷重20kg以上・奥行30cm級）、<b>施主支給はパッチパネル・ジャックのみ（型番リスト早期提出）</b>、Cat6Aキーストン成端＋Fluke成績書の対応可否を事前確認</td>
+        <td><b>Cat6A 本設6＋予備5＝11系統</b>（総数は前版と同じ・内訳のみ移動。本設＝AP×2・玄関カメラ・書斎デスク×2・TV裏／予備＝<b>mmWave×3（Day 1はWi-Fi＋USB給電）</b>・ドアホン・パワコン／<b>子供部屋×2は空配管＋呼び線のみ・Cat6Aなし</b>／<b>TV裏は空配管なしのCat6A 1本</b>。内訳の正はEL-01 §03）／ <b>書斎デスクはCat6A×2本</b>（①仕事用=VLAN10 ②開発用Mac mini=VLAN30、壁ポート単位でVLAN割当）／ 空配管（ラック⇔屋外／<b>子供部屋×2は呼び線入り空配管を各室2本・出口は天井＝将来のPoE機器用／壁・机位置＝デスクLANに分ける</b>）／ <b>情報盤は設けない（標準のまとめてねット等は削除依頼）</b>: 全弱電（Cat6A×11＋玄関CPEV-S×2）を書斎クローゼットの施主支給ラックへ直接集約し、JEM-A変換アダプタはラック棚段に設置／ ドアホン型番の呼出接点出力確認 ／ JEM-A変換アダプタ選定（ECHONET Lite対応可否）／ パワコンのECHONET Lite対応・有線LAN可否確認（非対応でもBルートで総量監視は成立）／ 成端仕様（A案確定）: <b>施主支給ラックを器具付け後〜引き渡し前に先行設置し、ラック搭載の24口パッチパネルへキーストン成端</b>・全11系統・<b>ケーブル余長1.5〜2m（サービスループ）指定</b>・Fluke成績書付き。余長があれば将来のラック交換はパネル載せ替え30分・再成端不要 ／ ラック設置条件（壁掛け）: <b>壁掛け荷重用合板下地（位置指定・耐荷重20kg以上）</b>・専用AC回路4口以上・配線引込口はラック取付位置の直上 ／ クローゼット三層構成の造作: 上=壁掛けラック・中=<b>可動造作棚（最上段の天板高さをラック底面に一致させ、壁固定＋棚受けの二重支持とする）</b>・下=<b>1Fロボット掃除機基地（床レベルAC 1口＋前方クリアランス50cm）</b> ／ <b>2F LDKロボット掃除機基地: タンク式ドック前提で確定（給排水配管は不要）</b> — ドック位置（パントリー脇等）にAC 1口＋設置スペース（幅50×奥行60cm級＋前方クリアランス）を図面指定 ／ 通気: 第一希望<b>ルーバー扉</b>、不可なら<b>扉アンダーカット20mm＋上部ガラリ</b>（下吸気・上排気の煙突効果。庫内発熱約45W→通気ありで室温＋2〜3℃見込み。P1でHA温度センサー設置・実測32℃超でP3ファン）／ <b>テレビ受信: 地デジUHF＋BS/110度CSアンテナで確定・CATVなし・テレビ端子はLDKの1箇所のみ</b>。屋外混合器→同軸1本→ラック経由（中継接続のみ）→LDK。<b>1端子・分配なしのためブースター・分配器は非搭載</b>（LNB給電はBRAVIA/レコーダーが直接担う）。入居後に受信レベルを実測し不足時のみU6へブースター追加。将来の多部屋化もU6に分配器を挿すだけで配線変更ゼロ。アンテナ設置位置は太陽光パネル（南面）との干渉を外構図で確認 ／ ラックは弱電業者に材工込み手配（仕様指定: 19インチ・6〜9U・耐荷重20kg以上・奥行30cm級）、<b>施主支給はパッチパネル・ジャックのみ（型番リスト早期提出）</b>、Cat6Aキーストン成端＋Fluke成績書の対応可否を事前確認</td>
         <td><b>後からやると数十倍高い、または不可能</b>になるものだけ。ここが唯一の締切あり項目。</td>
       </tr>
       <tr>
@@ -920,7 +922,7 @@ li{margin-bottom:5px}
   <table>
     <thead><tr><th style="width:110px">区分</th><th>依頼内容</th><th style="width:110px">時期</th></tr></thead>
     <tbody>
-      <tr><td class="key">弱電配線</td><td>Cat6A <b>11系統（本設9＋予備2: 玄関ドアホン・パワコン）</b>。本設9＝AP×2・<b>玄関カメラ</b>・<b>LDK/書斎/主寝室 mmWave ×3</b>・書斎デスク×2・TV裏。<b>書斎デスクは2口</b>。<b>子供部屋×2は空配管＋呼び線のみ・Cat6Aなし</b>、<b>TV裏は空配管なし</b>。全系統を書斎クローゼットへスター配線、引込はラック取付位置の直上、<b>余長1.5〜2m</b>確保。内訳の正はEL-01 §03。</td><td class="mono">図面確定</td></tr>
+      <tr><td class="key">弱電配線</td><td>Cat6A <b>11系統（本設6＋予備5）</b>。本設6＝AP×2・<b>玄関カメラ</b>・書斎デスク×2・TV裏。予備5＝<b>LDK/書斎/主寝室 mmWave ×3（Day 1はWi-Fi＋USB給電のため当面未使用）</b>・玄関ドアホン・パワコン。<b>書斎デスクは2口</b>。<b>子供部屋×2は空配管2本＋呼び線のみ・Cat6Aなし</b>、<b>TV裏は空配管なし</b>。全系統を書斎クローゼットへスター配線、引込はラック取付位置の直上、<b>余長1.5〜2m</b>確保。内訳の正はEL-01 §03。</td><td class="mono">図面確定</td></tr>
       <tr><td class="key">弱電配線</td><td>玄関スマートロック制御ユニット → クローゼットへ <span class="mono">CPEV-S 0.9-2P ×2</span>（制御＋モニタ）。</td><td class="mono">図面確定</td></tr>
       <tr><td class="key">弱電配線</td><td><b>標準の情報盤（まとめてねット等）は削除。</b>全弱電はクローゼットの施主支給ラックへ集約。</td><td class="mono">図面確定</td></tr>
       <tr><td class="key">弱電配線</td><td>空配管（呼び22以上）: ラック⇔玄関まわり、ラック⇔屋外軒下 の2ルート。</td><td class="mono">図面確定</td></tr>

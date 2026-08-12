@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>電気・スマート化 施工仕様 — Final | TWSX26060017 南荻窪</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FAFAF7;
+  --ink:#1B2733;
+  --ink-soft:#4A5A68;
+  --rule:#C9D2D9;
+  --print-blue:#2456A6;
+  --c-must:#B42318;      /* 先行必須 */
+  --c-pre:#2456A6;       /* 配線・電源だけ先行 */
+  --c-none:#2F7D46;      /* 施工不要（無線後付け） */
+  --c-hold:#B45309;      /* 保留・要確認 */
+  --c-lan:#1B3A6B;       /* Cat6A */
+  --c-wisun:#C2410C;     /* Bルート */
+  --c-jema:#6D3FBF;      /* JEM-A / 弱電線 */
+  --zone:#F1F3F0;
+  --zone-line:#B9C4CC;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"IBM Plex Sans JP",sans-serif;
+  font-size:15px;
+  line-height:1.7;
+  padding:40px 16px 80px;
+}
+.sheet{max-width:1180px;margin:0 auto}
+.mono{font-family:"IBM Plex Mono",monospace}
+
+/* ---- drawing title block ---- */
+.navback{
+  font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.14em;
+  color:var(--ink-soft);text-decoration:none;display:inline-block;margin-bottom:14px;
+}
+.navback:hover{color:var(--print-blue)}
+.titleblock{
+  border:2px solid var(--ink);
+  display:grid;
+  grid-template-columns:1fr auto;
+  margin-bottom:34px;
+  background:#fff;
+}
+.tb-main{padding:22px 26px;border-right:2px solid var(--ink)}
+.tb-eyebrow{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.22em;color:var(--print-blue);text-transform:uppercase;margin-bottom:8px}
+.tb-main h1{font-size:26px;font-weight:700;letter-spacing:.01em;line-height:1.35}
+.tb-main .sub{color:var(--ink-soft);font-size:14px;margin-top:6px}
+.tb-meta{display:grid;grid-template-columns:auto auto;font-family:"IBM Plex Mono",monospace;font-size:12px;min-width:300px}
+.tb-meta div{padding:9px 16px;border-bottom:1px solid var(--rule)}
+.tb-meta div:nth-child(odd){color:var(--ink-soft);border-right:1px solid var(--rule);letter-spacing:.08em}
+.tb-meta div:nth-last-child(-n+2){border-bottom:none}
+
+/* ---- sections ---- */
+section{margin-bottom:52px}
+h2{
+  font-size:18px;font-weight:700;letter-spacing:.02em;
+  border-bottom:2px solid var(--ink);
+  padding-bottom:8px;margin-bottom:6px;
+  display:flex;align-items:baseline;gap:12px;
+}
+h2 .no{font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--print-blue)}
+.h2sub{color:var(--ink-soft);font-size:13.5px;margin-bottom:18px}
+h3{font-size:14px;font-weight:700;letter-spacing:.04em;margin:26px 0 10px;color:var(--print-blue);font-family:"IBM Plex Mono",monospace}
+
+/* ---- principles ---- */
+.principles{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.principles div{background:#fff;padding:14px 18px;font-size:13.5px}
+.principles b{display:block;font-size:13px;color:var(--print-blue);font-family:"IBM Plex Mono",monospace;letter-spacing:.04em;margin-bottom:3px}
+
+/* ---- priority ladders ---- */
+.ladders{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:22px}
+.ladder{background:#fff;border:1px solid var(--rule)}
+.ladder-h{
+  border-bottom:2px solid var(--ink);padding:10px 16px;
+  font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--print-blue);
+}
+.ladder-h span{display:block;text-transform:none;letter-spacing:0;font-family:"IBM Plex Sans JP",sans-serif;font-size:13px;color:var(--ink);font-weight:700;margin-top:3px}
+.rank{display:flex;align-items:flex-start;gap:12px;padding:11px 16px;border-bottom:1px solid var(--rule);font-size:13.5px}
+.rank:last-child{border-bottom:none}
+.rank .n{
+  font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;
+  width:22px;height:22px;flex:none;border-radius:2px;
+  display:grid;place-items:center;color:#fff;background:var(--print-blue);
+  font-style:normal;
+}
+.rank.r2 .n{background:#5B7FBF} .rank.r3 .n{background:#93A7C4} .rank.r4 .n{background:#B9C4CC;color:var(--ink)}
+.rank b{display:block}
+.rank em{font-style:normal;color:var(--ink-soft);font-size:12.5px}
+.ladder-foot{padding:12px 16px;font-size:12.5px;color:var(--ink-soft);background:var(--zone);border-top:1px solid var(--rule)}
+.ladder-foot b{color:var(--ink)}
+.maprow{display:flex;gap:10px;align-items:baseline;font-size:13px;padding:3px 0}
+.maprow .cond{color:var(--ink-soft);flex:1}
+.maprow .arrow{font-family:"IBM Plex Mono",monospace;color:var(--print-blue)}
+.maprow .pick{font-weight:700;white-space:nowrap}
+
+/* ---- key facts ---- */
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);margin-bottom:22px}
+.facts div{background:#fff;padding:14px 16px}
+.facts .n{font-family:"IBM Plex Mono",monospace;font-size:26px;font-weight:600;line-height:1.1;color:var(--print-blue)}
+.facts .l{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.1em;color:var(--ink-soft);text-transform:uppercase;margin-top:6px}
+.facts .d{font-size:12px;color:var(--ink-soft);margin-top:4px}
+
+/* ---- tables ---- */
+.tablewrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;background:#fff;font-size:13.5px;min-width:720px}
+th{
+  text-align:left;font-family:"IBM Plex Mono",monospace;font-size:11.5px;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);
+  border-bottom:2px solid var(--ink);padding:8px 12px;
+}
+td{border-bottom:1px solid var(--rule);padding:10px 12px;vertical-align:top}
+td.key{font-weight:700;white-space:nowrap}
+tr.group td{
+  background:var(--zone);font-family:"IBM Plex Mono",monospace;font-size:11.5px;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);
+  border-bottom:1px solid var(--zone-line);padding:6px 12px;
+}
+.tag{
+  display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:11px;
+  padding:1px 8px;border:1px solid currentColor;border-radius:2px;white-space:nowrap;
+  font-style:normal
+}
+.must{color:var(--c-must)} .pre{color:var(--c-pre)} .none{color:var(--c-none)} .hold{color:var(--c-hold)}
+.lan{color:var(--c-lan)} .wisun{color:var(--c-wisun)} .jema{color:var(--c-jema)}
+.dash{color:var(--ink-soft)}
+
+.legend{display:flex;flex-wrap:wrap;gap:16px;padding:12px 2px 16px;font-size:12.5px;font-family:"IBM Plex Mono",monospace;color:var(--ink-soft)}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+
+.note{
+  border-left:3px solid var(--print-blue);background:#fff;
+  padding:12px 18px;font-size:13.5px;margin-top:14px;color:var(--ink-soft)
+}
+.note.warn{border-left-color:var(--c-hold)}
+.note b{color:var(--ink)}
+ul{padding-left:22px;font-size:13.5px}
+li{margin-bottom:5px}
+
+@media (max-width:720px){
+  .titleblock{grid-template-columns:1fr}
+  .tb-main{border-right:none;border-bottom:2px solid var(--ink)}
+}
+</style>
+</head>
+<body>
+<div class="sheet">
+
+<a class="navback" href="index.html">← INDEX</a>
+
+<!-- ============ TITLE BLOCK ============ -->
+<header class="titleblock">
+  <div class="tb-main">
+    <div class="tb-eyebrow">Electrical &amp; Smart-Home Rough-in — Final Design</div>
+    <h1>電気・スマート化 施工仕様 最終版</h1>
+    <div class="sub">住宅性能 &gt; 見た目 &gt; IoT。壁の中（配線・BOX・空配管）だけを先行し、機器本体はすべて後付け・交換可とする。電力計測はBルート中心、太陽光専用Cat6Aは不要。</div>
+  </div>
+  <div class="tb-meta">
+    <div>PROJECT</div><div>TWSX26060017（南荻窪）</div>
+    <div>REV</div><div>A — FINAL</div>
+    <div>DATE</div><div>2026-08-12</div>
+    <div>SCALE</div><div>NTS</div>
+    <div>SHEET</div><div>EL-01</div>
+  </div>
+</header>
+
+<!-- ============ PRINCIPLES ============ -->
+<section>
+  <h2><span class="no">00</span>設計原則</h2>
+  <div class="h2sub">この版で確定した判断基準。個別の行はすべてこの原則から導かれる。</div>
+  <div class="principles">
+    <div><b>WALL-ONLY COMMITMENT</b>先行工事するのは<b>壁の中だけ</b>（Cat6A・隠蔽100V・弱電線・深型BOX・空配管）。機器本体は入居後に選定・後付け・交換できるようにしておく。</div>
+    <div><b>B-ROUTE FIRST</b>電力計測はBルート（Wi-SUN）で家全体を取得する前提。したがって<b>太陽光のためだけにLANを引く必要はない</b> — 太陽光専用Cat6Aは削除。</div>
+    <div><b>POE OVER OUTLET</b>常時給電が要る天井・壁の機器（AP・玄関カメラ・mmWave）はPoEに寄せ、アダプタと配線を露出させない。</div>
+    <div><b>HOME-RUN TO 書斎収納</b>LAN・弱電線は原則すべて書斎収納へホームラン。IP化・変換・電源の集約点をここ1か所に限定する。</div>
+    <div><b>DEEP BOX + NEUTRAL</b>照明スイッチは<b>全数を深型BOX＋N線</b>で施工。スマートスイッチの型番が後で変わっても壁を触らずに済ませる。</div>
+    <div><b>NO EXTRA IoT PIR</b>人感照明は積水標準のPIR＋通常照明配線のまま。IoT用PIRは追加せず、在室判定はmmWaveに一本化する。</div>
+    <div><b>SINGLE OUTDOOR CAMERA</b>屋外カメラは玄関のみ。認識系（顔・服装・入退室）を1か所に集中させ、他は無線センサーで賄う。</div>
+  </div>
+</section>
+
+<!-- ============ PRIORITY ORDER ============ -->
+<section>
+  <h2><span class="no">01</span>優先順位</h2>
+  <div class="h2sub">迷ったらこの順位で決める。個別の設備で判断が割れたときの上位ルール。</div>
+
+  <div class="ladders">
+
+    <div class="ladder">
+      <div class="ladder-h">Overall<span>家づくり全体</span></div>
+      <div class="rank r1"><i class="n">1</i><div><b>住宅性能</b><em>断熱・気密・換気・耐震 など</em></div></div>
+      <div class="rank r2"><i class="n">2</i><div><b>見た目</b><em>意匠・露出させない</em></div></div>
+      <div class="rank r3"><i class="n">3</i><div><b>IoT化・便利機能</b><em>最後。上2つを犠牲にしない</em></div></div>
+      <div class="ladder-foot">
+        <b>IoTのために断熱・気密・換気性能を落とさない。</b><br>
+        センサー・配線・電源は可能な限り隠蔽する。<br>
+        IoT機器は<b>将来交換できる前提</b>で設計する。
+      </div>
+    </div>
+
+    <div class="ladder">
+      <div class="ladder-h">Power &amp; Cabling<span>電源・配線</span></div>
+      <div class="rank r1"><i class="n">1</i><div><b>PoE</b><em>有線通信が必要な機器</em></div></div>
+      <div class="rank r2"><i class="n">2</i><div><b>隠蔽弱電配線</b><em>接点・4芯など</em></div></div>
+      <div class="rank r3"><i class="n">3</i><div><b>AC / USB等の単独電源</b><em>隠蔽100V・USB給電</em></div></div>
+      <div class="rank r4"><i class="n">4</i><div><b>電池</b><em>最後の手段。交換運用が発生する</em></div></div>
+      <div class="ladder-foot">
+        特に新築時は、<b>機器そのものよりも Cat6A・空配管・電源経路を先に仕込む</b>ことを優先すると、後からかなり自由が利く。
+      </div>
+    </div>
+
+    <div class="ladder">
+      <div class="ladder-h">IoT Transport<span>IoT通信</span></div>
+      <div class="rank r1"><i class="n">1</i><div><b>PoE / Ethernet</b></div></div>
+      <div class="rank r2"><i class="n">2</i><div><b>Matter over Thread</b></div></div>
+      <div class="rank r3"><i class="n">3</i><div><b>Matter over Wi-Fi</b></div></div>
+      <div class="rank r4"><i class="n">4</i><div><b>Zigbee</b></div></div>
+      <div class="ladder-foot">
+        この順位でよい。ただし<b>PoEは「IoT規格」ではなく有線Ethernet＋給電方式</b>なので、厳密には下の対応表で考える方が分かりやすい。
+      </div>
+    </div>
+
+  </div>
+
+  <h3>／ 機器タイプ別の選び方</h3>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th style="width:340px">機器の条件</th><th style="width:60px"></th><th>採用する通信</th></tr></thead>
+    <tbody>
+      <tr><td>有線化できる固定設備</td><td class="mono" style="color:var(--print-blue)">→</td><td><b>PoE / Ethernet</b><span style="color:var(--ink-soft)">　AP・玄関カメラ・mmWave・HA</span></td></tr>
+      <tr><td>低消費電力センサー</td><td class="mono" style="color:var(--print-blue)">→</td><td><b>Matter over Thread</b><span style="color:var(--ink-soft)">　温湿度・開閉・トイレmmWave</span></td></tr>
+      <tr><td>帯域が必要・コンセント給電機器</td><td class="mono" style="color:var(--print-blue)">→</td><td><b>Matter over Wi-Fi</b><span style="color:var(--ink-soft)">　CO₂・HA Voice PE 等</span></td></tr>
+      <tr><td>Matter対応品がない場合</td><td class="mono" style="color:var(--print-blue)">→</td><td><b>Zigbee</b><span style="color:var(--ink-soft)">　代替がないときのみ</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="note"><b>この順位が §02 以降の表を決めている:</b> mmWaveにCat6Aを引くのは「有線化できる固定設備」だから。トイレ・子供部屋・脱衣室を無線に倒すのは「低消費電力センサー」だから。照明スイッチを深型BOX＋N線にするのは「電池を最後にする」＝<b>常時給電を壁側で確保しておく</b>ためである。</div>
+</section>
+
+<!-- ============ FINAL BUILD TABLE ============ -->
+<section>
+  <h2><span class="no">02</span>最終施工テーブル</h2>
+  <div class="h2sub">「施工時にやること」と「後付けでよいこと」の確定表。この表がそのまま電気図面への指示になる。</div>
+
+  <div class="facts">
+    <div><div class="n">11</div><div class="l">Cat6A 系統</div><div class="d">本設9 ＋ 予備2（§03）</div></div>
+    <div><div class="n">6</div><div class="l">PoE 給電（確定）</div><div class="d">AP×2・玄関カメラ・mmWave×3</div></div>
+    <div><div class="n">4</div><div class="l">隠蔽100V（新規）</div><div class="d">玄関Voice・CO₂×3</div></div>
+    <div><div class="n">2</div><div class="l">4芯弱電線</div><div class="d">書斎ドア・主要開閉窓</div></div>
+    <div><div class="n">1</div><div class="l">JEM-A 配線</div><div class="d">玄関 → 書斎収納</div></div>
+  </div>
+
+  <div class="legend">
+    <span><i class="tag must">先行必須</i> 施工時にやらないと後戻り不可</span>
+    <span><i class="tag pre">配線・電源だけ先行</i> 本体は後付け</span>
+    <span><i class="tag none">施工不要</i> 無線で後付け</span>
+    <span><i class="tag hold">保留</i> 要確認・現時点で追加なし</span>
+  </div>
+
+  <div class="tablewrap">
+  <table>
+    <thead><tr>
+      <th style="width:110px">場所</th>
+      <th style="width:190px">機器 / 目的</th>
+      <th style="width:130px">施工時にやる</th>
+      <th style="width:120px">後付け</th>
+      <th style="width:190px">配線・電源</th>
+      <th>備考</th>
+    </tr></thead>
+    <tbody>
+
+      <tr class="group"><td colspan="6">玄関 — 認証・認識・案内</td></tr>
+      <tr>
+        <td class="key">玄関</td><td class="key">スマートキー</td>
+        <td><span class="tag must">先行必須</span></td><td class="dash mono">△</td>
+        <td><span class="tag jema">JEM-A用配線</span> → 書斎収納</td>
+        <td>施錠/解錠・状態取得。制御用＋モニタ用の2系統。</td>
+      </tr>
+      <tr>
+        <td class="key">玄関</td><td class="key">顔・服装・入退室認識カメラ</td>
+        <td><span class="tag must">先行必須</span></td><td class="dash mono">△</td>
+        <td><span class="tag lan">Cat6A ×1</span> / PoE</td>
+        <td><b>外部カメラは玄関のみ。</b>他の屋外面には引かない。</td>
+      </tr>
+      <tr>
+        <td class="key">玄関</td><td class="key">HA Voice PE</td>
+        <td><span class="tag pre">電源だけ先行</span></td><td>本体は後付け</td>
+        <td>隠蔽100V</td>
+        <td>「いってらっしゃい」「雨」「服装」案内。LANは不要（Wi-Fi＋USB-C）。<b>Siri不採用のため、家の音声UIはHA Voiceが担う</b> — 他室の設置箇所は §06 で確定。</td>
+      </tr>
+
+      <tr class="group"><td colspan="6">Wi-Fi アクセスポイント</td></tr>
+      <tr>
+        <td class="key">1F天井</td><td class="key">U7 Lite</td>
+        <td><span class="tag must">先行必須</span></td><td>AP交換可</td>
+        <td><span class="tag lan">Cat6A ×1</span> / PoE</td>
+        <td>Wi-Fi AP。出口は平天井指定（吹抜上部NG）。</td>
+      </tr>
+      <tr>
+        <td class="key">2F天井</td><td class="key">U7 Lite</td>
+        <td><span class="tag must">先行必須</span></td><td>AP交換可</td>
+        <td><span class="tag lan">Cat6A ×1</span> / PoE</td>
+        <td>Wi-Fi AP。同上。</td>
+      </tr>
+
+      <tr class="group"><td colspan="6">在室検知（mmWave）</td></tr>
+      <tr>
+        <td class="key">LDK</td><td class="key">mmWave</td>
+        <td><span class="tag pre">配線先行</span></td><td>本体は後付け可</td>
+        <td><span class="tag lan">Cat6A ×1</span> / PoE推奨</td>
+        <td>配線を見せずに常時給電できる状態にしておく。</td>
+      </tr>
+      <tr>
+        <td class="key">書斎</td><td class="key">mmWave</td>
+        <td><span class="tag pre">配線先行</span></td><td>本体は後付け可</td>
+        <td><span class="tag lan">Cat6A ×1</span> / PoE推奨</td>
+        <td>在室判定。書斎ドアのCLOSEDと組み合わせて使う。</td>
+      </tr>
+      <tr>
+        <td class="key">主寝室</td><td class="key">mmWave</td>
+        <td><span class="tag pre">配線先行</span></td><td>本体後付け</td>
+        <td><span class="tag lan">Cat6A ×1</span> / PoE</td>
+        <td>就寝・在室。<b>本設へ格上げ</b>（LDK・書斎と同格）。</td>
+      </tr>
+      <tr>
+        <td class="key">トイレ ×2</td><td class="key">mmWave</td>
+        <td><span class="tag none">施工不要</span></td><td>無線で後付け</td>
+        <td class="dash">なし</td>
+        <td>Zigbee / Thread / Wi-Fi。</td>
+      </tr>
+
+      <tr class="group"><td colspan="6">開閉検知</td></tr>
+      <tr>
+        <td class="key">書斎ドア</td><td class="key">OPEN / CLOSED</td>
+        <td><span class="tag pre">先行推奨</span></td><td>無線後付け可能</td>
+        <td><span class="tag jema">4芯弱電線</span></td>
+        <td><b>在室＋CLOSED＝仕事中</b> の判定に使う。</td>
+      </tr>
+      <tr>
+        <td class="key">主要開閉窓</td><td class="key">OPEN / CLOSED</td>
+        <td><span class="tag pre">可能なら先行</span></td><td>無線後付け可能</td>
+        <td><span class="tag jema">4芯弱電線</span></td>
+        <td>積水が綺麗に隠蔽施工できる場合のみ。無理なら無線に倒す。</td>
+      </tr>
+
+      <tr class="group"><td colspan="6">空気質・温湿度</td></tr>
+      <tr>
+        <td class="key">LDK</td><td class="key">CO₂ ＋ 温湿度</td>
+        <td><span class="tag pre">電源だけ先行推奨</span></td><td>本体後付け</td>
+        <td>隠蔽100V / USB給電</td>
+        <td>壁面 1〜1.5m 程度の高さに。</td>
+      </tr>
+      <tr>
+        <td class="key">書斎</td><td class="key">CO₂ ＋ 温湿度</td>
+        <td><span class="tag pre">電源だけ先行推奨</span></td><td>本体後付け</td>
+        <td>隠蔽100V / USB給電</td>
+        <td>同上。</td>
+      </tr>
+      <tr>
+        <td class="key">主寝室</td><td class="key">CO₂ ＋ 温湿度</td>
+        <td><span class="tag pre">電源だけ先行推奨</span></td><td>本体後付け</td>
+        <td>隠蔽100V / USB給電</td>
+        <td>同上。</td>
+      </tr>
+      <tr>
+        <td class="key">子供部屋 ×2</td><td class="key">温湿度</td>
+        <td><span class="tag none">施工不要</span></td><td>無線で後付け</td>
+        <td class="dash">なし</td>
+        <td>Thread / Zigbee。</td>
+      </tr>
+      <tr>
+        <td class="key">脱衣室</td><td class="key">温湿度</td>
+        <td><span class="tag none">施工不要</span></td><td>無線で後付け</td>
+        <td class="dash">なし</td>
+        <td>Thread / Zigbee。</td>
+      </tr>
+
+      <tr class="group"><td colspan="6">設備機器（機種選定で決まる）</td></tr>
+      <tr>
+        <td class="key">おひさまエコキュート</td><td class="key">湯はり・残湯量・沸き上げ 等</td>
+        <td><span class="tag must">機種選定時に必須</span></td><td class="dash mono">—</td>
+        <td>ECHONET Lite対応 ＋ <b>200V専用回路・貯湯タンク置場</b></td>
+        <td>LAN必須とは限らない（Wi-Fi対応機なら配線不要）。<b>ガス給湯／EneFarmからの変更のため、タンク＋ヒートポンプの屋外置場・200V回路・配管は積水側の設計変更が要る。</b></td>
+      </tr>
+      <tr>
+        <td class="key">エアコン</td><td class="key">ON/OFF・温度 等</td>
+        <td><span class="tag must">対応機種選定</span></td><td class="dash mono">—</td>
+        <td>標準電源 ＋ ECHONET Lite等</td>
+        <td>電気工事は標準のまま。要件は「対応機種を選ぶ」だけ。</td>
+      </tr>
+
+      <tr class="group"><td colspan="6">照明・電力</td></tr>
+      <tr>
+        <td class="key">全照明スイッチ</td><td class="key">SwitchBot Relay Switch 1</td>
+        <td><span class="tag must">先行必須</span></td><td>本体交換可</td>
+        <td><b>全て深型BOX ＋ N線</b></td>
+        <td>リレー / スイッチのどちらでも載るようにしておく。将来交換しやすくすることが目的。</td>
+      </tr>
+      <tr>
+        <td class="key">人感照明</td><td class="key">PIR</td>
+        <td><span class="tag none">積水施工</span></td><td class="dash mono">—</td>
+        <td>通常照明配線</td>
+        <td>IoT用PIRは追加しない。</td>
+      </tr>
+      <tr>
+        <td class="key">電力計測</td><td class="key">使用電力 等</td>
+        <td><span class="tag must">Bルート対応</span></td><td>家全体・機器交換可</td>
+        <td><span class="tag wisun">Bルート</span></td>
+        <td>HA連携は後から。<b>太陽光専用Cat6Aは不要。</b></td>
+      </tr>
+      <tr>
+        <td class="key">火災警報</td><td class="key">将来IoT化検討</td>
+        <td><span class="tag hold">今は保留</span></td><td>後で確認</td>
+        <td class="dash">現時点追加なし</td>
+        <td>積水に後日確認。</td>
+      </tr>
+
+      <tr class="group"><td colspan="6">書斎収納（統合コア）</td></tr>
+      <tr>
+        <td class="key">Home Assistant</td><td class="key">IoT統合</td>
+        <td><span class="tag must">収納設備先行</span></td><td>本体交換可</td>
+        <td><span class="tag lan">Cat6A</span> ＋ 100V</td>
+        <td>書斎収納。</td>
+      </tr>
+      <tr>
+        <td class="key">PoE Switch</td><td class="key">AP・カメラ・mmWave給電</td>
+        <td><span class="tag must">収納設備先行</span></td><td>本体交換可</td>
+        <td>100V</td>
+        <td>書斎収納。</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="note"><b>読み方:</b> <span class="tag must">先行必須</span> の行だけが「着工前に図面へ落とす」対象。<span class="tag pre">配線・電源だけ先行</span> は壁の中を用意するところまでで、機器選定は入居後でよい。<span class="tag none">施工不要</span> は電気図面に一切登場しない。</div>
+</section>
+
+<!-- ============ LAN & CONDUIT ============ -->
+<section>
+  <h2><span class="no">03</span>LAN・空配管 最終版</h2>
+  <div class="h2sub">上の表からLANと空配管だけを抜き出した版。電気屋・弱電屋に渡すのはこの表でよい。</div>
+  <div class="tablewrap">
+  <table>
+    <thead><tr>
+      <th style="width:190px">場所</th>
+      <th style="width:100px">Cat6A</th>
+      <th style="width:150px">PoE利用</th>
+      <th style="width:190px">空配管</th>
+      <th>方針</th>
+    </tr></thead>
+    <tbody>
+      <tr class="group"><td colspan="5">本設 — 施工時に必ず引く（9系統）</td></tr>
+      <tr><td class="key">U7 Lite 1F</td><td class="mono">1本</td><td>する</td><td class="dash">不要</td><td><b>確定</b></td></tr>
+      <tr><td class="key">U7 Lite 2F</td><td class="mono">1本</td><td>する</td><td class="dash">不要</td><td><b>確定</b></td></tr>
+      <tr><td class="key">玄関カメラ</td><td class="mono">1本</td><td>する</td><td>任意</td><td><b>確定・本設</b>（予備扱いにしない。Day 1から使う）</td></tr>
+      <tr><td class="key">LDK mmWave</td><td class="mono">1本</td><td>する</td><td class="dash">不要</td><td>配線だけ先行</td></tr>
+      <tr><td class="key">書斎 mmWave</td><td class="mono">1本</td><td>する</td><td class="dash">不要</td><td>配線だけ先行</td></tr>
+      <tr><td class="key">主寝室 mmWave</td><td class="mono">1本</td><td>する</td><td class="dash">不要</td><td><b>予備から本設へ格上げ。</b>LDK・書斎と同格で施工する</td></tr>
+      <tr><td class="key">書斎デスク</td><td class="mono">2本</td><td>しない</td><td>任意</td><td>Dell / PC用（①仕事用 ②開発用）</td></tr>
+      <tr><td class="key">壁掛けSony TV裏</td><td class="mono">1本</td><td>しない</td><td class="dash">不要</td><td><b>Cat6A 1本のみ。</b>TV下にAV機器を置かない前提で空配管は取りやめ</td></tr>
+
+      <tr class="group"><td colspan="5">予備 — 着工時に配線だけ通す・当面未使用（2系統）</td></tr>
+      <tr><td class="key">玄関ドアホン</td><td class="mono">1本</td><td>する可能性あり</td><td class="dash">不要</td><td><span class="tag hold">予備</span> 呼出はJEM-A（ルートC）で成立するため当面未使用</td></tr>
+      <tr><td class="key">パワコン</td><td class="mono">1本</td><td>しない</td><td class="dash">不要</td><td><span class="tag hold">予備</span> ECHONET Lite監視用。Bルートで総量は取れるため必須ではない</td></tr>
+
+      <tr class="group"><td colspan="5">空配管のみ — Cat6Aは引かない</td></tr>
+      <tr><td class="key">子供部屋 ①</td><td class="dash mono">引かない</td><td class="dash">—</td><td><b>1本 ＋ 呼び線</b></td><td><b>LANはWi-Fi。</b>必要になった時に呼び線で自分で通す</td></tr>
+      <tr><td class="key">子供部屋 ②</td><td class="dash mono">引かない</td><td class="dash">—</td><td><b>1本 ＋ 呼び線</b></td><td>同上</td></tr>
+
+      <tr class="group"><td colspan="5">配線不要 — 壁内配線の対象外</td></tr>
+      <tr><td class="key">Home Assistant</td><td class="dash mono">壁内不要</td><td>しない</td><td class="dash">不要</td><td>書斎収納内。パッチコードでスイッチへ直結（<b>系統数に数えない</b>）</td></tr>
+      <tr><td class="key">JEM-A変換器</td><td class="dash mono">壁内不要</td><td>しない</td><td class="dash">不要</td><td>同上（ラック棚段）</td></tr>
+      <tr><td class="key">太陽光</td><td class="dash mono">不要</td><td class="dash mono">—</td><td class="dash mono">—</td><td>有線不要・<b>Bルート中心</b>／計測は後付け可</td></tr>
+      <tr><td class="key">HA Voice PE</td><td class="dash mono">不要</td><td>現状不可</td><td class="dash">不要</td><td><b>家の音声UIはこれに一本化（Siri不採用）。</b>Wi-Fi ＋ USB-C給電のため<b>要るのはLANではなくコンセント</b> — 設置室の確定が先（§06）</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="note"><b>TV裏について（空配管は取りやめ）:</b> 壁掛けTVなので<b>TVボード間のHDMI配管は不要</b>、Cat6A 1本で十分 — ここまでは従来どおり。加えて<b>TV裏の空配管そのものを取りやめる</b>。空配管の本来の価値は「将来のLAN」ではなく<b>壁掛けで露出させられないAV配線（AC・HDMI・光/eARC）を後から引き直せること</b>にあるが、<b>TV下にAV機器を置かない前提</b>（映像はBRAVIA内蔵アプリ＋LAN、サウンドバーなし）が確定したため、通す対象が無い。<span class="tag hold">再検討条件</span> 後からサウンドバー・Apple TV・ゲーム機をTV下に置く方針に変わった場合は、TV裏の深型BOXから<b>直下の床付近BOXへの短い縦配管（CD管 φ22〜28）</b>を追加する — これは長い横引きではなく短い縦引きが正解。</div>
+  <div class="note"><b>NW-01との突合せ（決着済み）:</b> 壁内Cat6Aは<b>合計11系統＝本設9＋予備2</b>。<b>玄関カメラは本設</b>（Day 1から使うため）、<b>主寝室mmWaveは予備から本設へ格上げ</b>（mmWave 3室すべてを同格のPoE施工にする）、<b>子供部屋×2はCat6Aを引かず空配管＋呼び線のみ</b>（LANはWi-Fi）。したがって<b>予備は玄関ドアホン・パワコンの2系統</b>。Home Assistant・JEM-A変換器は収納内パッチコードのため系統数から除外した。NW-01も本表に合わせて更新済み。パッチパネルは24口のため大幅に余裕あり。</div>
+</section>
+
+<!-- ============ STUDY CLOSET SPEC ============ -->
+<section>
+  <h2><span class="no">04</span>書斎収納 — 最終 電気・弱電仕様</h2>
+  <div class="h2sub">家中の弱電がここへ集まる。以下は「収納内に用意するもの」と「収納に対する要求」の全量。</div>
+
+  <h3>／ 電源</h3>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th style="width:220px">項目</th><th>推奨</th></tr></thead>
+    <tbody>
+      <tr><td class="key">専用回路</td><td>可能なら <b>20A ×1</b></td></tr>
+      <tr><td class="key">100Vコンセント</td><td><b>10〜12口程度</b>（ONU・ルータ・PoE SW・HA・UPS・変換器類・予備）</td></tr>
+      <tr><td class="key">収納内照明</td><td>推奨（作業・保守時の視認性）</td></tr>
+      <tr><td class="key">通気</td><td>上下通気等を確保（機器の連続稼働前提）</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>／ 収納内に置く機器</h3>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th style="width:220px">機器</th><th>備考</th></tr></thead>
+    <tbody>
+      <tr><td class="key">ONU</td><td>収納内</td></tr>
+      <tr><td class="key">Router / Firewall</td><td>収納内</td></tr>
+      <tr><td class="key">PoE Switch</td><td>収納内</td></tr>
+      <tr><td class="key">Home Assistant</td><td>収納内</td></tr>
+      <tr><td class="key">UPS</td><td>設置スペースを確保</td></tr>
+      <tr><td class="key">パッチパネル</td><td>Cat6A <b>16〜24ポート</b>対応スペース</td></tr>
+      <tr><td class="key">JEM-A Interface</td><td>収納内（玄関スマートキーのIP化点）</td></tr>
+      <tr><td class="key">Bルート受信用機器</td><td>必要なら収納内</td></tr>
+      <tr><td class="key">窓 / 書斎ドア I/O</td><td>収納内（4芯弱電線の受け）</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>／ 配線に対する要求</h3>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th style="width:220px">項目</th><th>要求</th></tr></thead>
+    <tbody>
+      <tr><td class="key">LAN</td><td><b>原則ここへホームラン</b></td></tr>
+      <tr><td class="key">弱電線</td><td><b>原則ここへホームラン</b></td></tr>
+      <tr><td class="key">空配管</td><td>子供部屋等の起点をここに置く</td></tr>
+      <tr><td class="key">ラベル</td><td><b>全LAN・弱電線の両端</b>に貼る</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="note"><b>ラベルは後回しにしない:</b> 両端ラベルが無いと、後付け工事のたびに導通試験からやり直しになる。成端と同じ工程で必須指定する。</div>
+</section>
+
+<!-- ============ CHANGES ============ -->
+<section>
+  <h2><span class="no">05</span>この版での変更点・判断メモ</h2>
+  <ul>
+    <li><b>太陽光用Cat6Aを削除。</b>Bルートで家全体の電力を計測する前提なら、「太陽光のためだけにLANを引く」必然性がない。パワコン側の計測が欲しくなっても後付けで足りる。<b>反映するとかなりシンプルになる。</b></li>
+    <li><b>TV裏は Cat6A 1本のみ・空配管なし。</b>壁掛けTVのためTVボード間のHDMI配管は不要。さらに<b>TV裏 → 弱電収納の「将来用」空配管も取りやめた</b> — 空配管が効くのは壁掛けで隠せないAV配線を引き直す時であって、TV下にAV機器を置かないなら通す物が無い。方針が変われば短い縦配管を足す（§03注記）。</li>
+    <li><b>主寝室 mmWave を予備から本設へ格上げ。</b>mmWave 3室（LDK・書斎・主寝室）をすべて同格のCat6A＋PoEで施工する。在室判定を無線に落とす部屋を作らない。</li>
+    <li><b>子供部屋のCat6Aを取りやめ、空配管＋呼び線のみに。</b>LANはWi-Fiで賄う。必要になった時点で呼び線で通せる状態は残すため、後戻り不可にはならない。<b>本設10＋予備3＝13系統 → 本設9＋予備2＝11系統</b>に減った。</li>
+    <li><b>照明スイッチは「深型BOX＋N線」を全数に。</b>スマートスイッチ側の製品選定を先送りしても、壁を触らずに載せ替えられる状態を作るのが目的。</li>
+    <li><b>IoT用PIRは追加しない。</b>人感照明は積水標準のまま。在室判定はmmWaveへ一本化し、センサーの二重系を作らない。</li>
+    <li><b>屋外カメラは玄関のみに凍結。</b>認識系（顔・服装・入退室）を1か所に集約する。</li>
+  </ul>
+</section>
+
+<!-- ============ OPEN ITEMS ============ -->
+<section>
+  <h2><span class="no">06</span>未確定事項 / 確認先</h2>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th style="width:200px">項目</th><th>状態</th><th style="width:130px">確認先</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="key">スマートスイッチの型番</td>
+        <td><span class="tag none">決着</span> <b>SwitchBot Relay Switch 1</b>で確定（旧記載の「SwitchBot P1」は誤り）。既存スイッチの裏に収めるリレーモジュールのため、施工要求は従来どおり<b>深型BOX＋N線</b>のままで変更なし。NW-01も更新済み。</td>
+        <td class="mono">— 反映済み</td>
+      </tr>
+      <tr>
+        <td class="key">Cat6A 系統数の突合せ</td>
+        <td><span class="tag none">決着</span> <b>本設9＋予備2＝11系統</b>で確定。玄関カメラ・主寝室mmWaveは本設、予備は玄関ドアホン・パワコンの2系統。子供部屋×2はCat6Aを引かず空配管＋呼び線のみ、TV裏は空配管なしのCat6A 1本。NW-01も更新済み。</td>
+        <td class="mono">— 反映済み</td>
+      </tr>
+      <tr>
+        <td class="key">PoEバジェット</td>
+        <td><span class="tag hold">要確認</span> <b>主寝室mmWaveの本設格上げにより、mmWave 3台のPoE給電が確定</b> — 給電は<b>6台</b>（AP×2・玄関カメラ・mmWave×3）。NW-01の「3台で凍結・USW Lite 16 PoE（45W）」という前提はこの決定で崩れたため、<b>mmWaveの実消費（802.3af必要か・PoE級か）を製品選定時に確認</b>し、45Wに収まらなければPoE余裕機へスイッチ交換（<b>配線は無変更</b>のため図面確定はブロックしない）。</td>
+        <td class="mono">機器選定時</td>
+      </tr>
+      <tr>
+        <td class="key">主要開閉窓の隠蔽施工可否</td>
+        <td><span class="tag hold">現場判断</span> 4芯弱電線を綺麗に隠蔽できるかで先行/無線後付けが分岐。</td>
+        <td class="mono">積水ハウス</td>
+      </tr>
+      <tr>
+        <td class="key">火災警報のIoT化</td>
+        <td><span class="tag hold">保留</span> 現時点で追加工事なし。将来の連携可否のみ確認しておく。</td>
+        <td class="mono">積水ハウス</td>
+      </tr>
+      <tr>
+        <td class="key">給湯方式</td>
+        <td><span class="tag none">決着</span> <b>おひさまエコキュート（昼間沸き上げ）で確定。</b>EneFarm／ガス給湯からの変更のため、<b>貯湯タンク＋ヒートポンプの屋外置場・200V専用回路・給排水配管</b>を積水ハウス側の図面へ反映する必要がある（弱電側の要求は変わらない）。SOLAR-01の既定構成も本決定に更新済み。</td>
+        <td class="mono">積水ハウス → 図面変更</td>
+      </tr>
+      <tr>
+        <td class="key">HA Voice PE の設置室</td>
+        <td><span class="tag hold">未確定</span> <b>Siriを使わない方針が確定したため、家の音声UIはHA Voice PEに一本化される</b>（LDK・キッチンのAlexaは音楽専用で連携なし）。玄関以外にどの部屋へ置くかが未定。<b>HA Voice PEはWi-Fi＋USB-C給電なのでLANは不要だが、設置室ごとにコンセント位置の指定が要る</b> — 壁掛け・棚上いずれでも「聞こえる高さに空きコンセント」が条件。<b>この確定だけが電気図面に影響する</b>（隠蔽100Vの本数が玄関Voice＋CO₂×3の4本から増える）。</td>
+        <td class="mono">施主 → 設置室の確定</td>
+      </tr>
+      <tr>
+        <td class="key">エアコンのECHONET Lite対応可否</td>
+        <td><span class="tag hold">機種選定</span> ECHONET Lite対応であることを要件化。LANポート有無で配線要否が変わる（無線アダプタのみならIoT SSID収容で成立）。</td>
+        <td class="mono">機種選定時</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="note"><b>締切:</b> <span class="tag must">先行必須</span> と §03 のLAN・空配管は着工前の図面確定が期限。それ以外は入居後でも取り返しがつく。</div>
+</section>
+
+<footer style="border-top:2px solid var(--ink);padding-top:14px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
+  <span>TWSX26060017 南荻窪 — ELECTRICAL &amp; SMART-HOME ROUGH-IN</span>
+  <span>REV A (FINAL) · 2026-08-12 · SHEET EL-01</span>
+</footer>
+
+</div>
+</body>
+</html>

@@ -135,9 +135,11 @@ li{margin-bottom:5px}
   <h2><span class="no">00</span>設計原則</h2>
   <div class="h2sub">この版で確定した役割分担。以降のすべての判断はこの表に従う。</div>
   <div class="principles">
-    <div><b>APPLE HOME / SIRI</b>日常のUIと音声操作。家族が触るのはここだけ。HomePodがHome hub。</div>
+    <div><b>APPLE HOME（画面UIのみ）</b>iPhone・Watchの日常UIと自動化。家族が触る画面はここだけ。HomePod（LDK）はHome hub・HKSV解析役として残すが<b>発話させない</b>。</div>
+    <div><b>SIRI 不採用</b>家の音声操作にSiriは使わない。HomePodは無人のハブとして置くだけで、音声UIは下のHA Voiceが担う。<b>この決定が「顔認識アナウンス」の実装ルートを変える</b>（§07）。</div>
+    <div><b>HA VOICE PE = 家の音声UI</b>音声はすべてHome Assistant側。ローカル完結でクラウド発話に依存しない。設置室の確定だけがEL-01のコンセント指定に効く。</div>
     <div><b>MINI PC / HOME ASSISTANT</b>統合コア。ECHONET Lite・Matter・JEM-A→IP・Bルートを束ね、HomeKit Bridgeで公開。ローカル完結・クラウド非依存。</div>
-    <div><b>ALEXA ×2</b>Amazon Music専用。スマートホーム連携は一切持たせない。</div>
+    <div><b>ALEXA ×2（LDK・キッチン）</b>Amazon Music専用。スマートホーム連携も音声アシスタント役も一切持たせない。</div>
     <div><b>ECHONET LITE</b>通常のLAN/Wi-Fiで十分。10GbE要件なし。</div>
     <div><b>1G基準・機器交換で昇格</b>全機器を1Gの最安現行品で構成。不変投資は壁の中（Cat6A＝10G対応）だけで、速度が必要になった日はスイッチ・ルータ・回線を交換するのみ。増築・再配線は永久に不要。</div>
     <div><b>VPN</b>思想は「仮想的なLAN参加」。主経路 WireGuard（IPv6待受）＋予備 Teleport の2段構え。Apple Home遠隔はApple経由でVPN不要。</div>
@@ -170,7 +172,7 @@ li{margin-bottom:5px}
       <text x="1132" y="194" text-anchor="end">ラック棚段（情報盤レス）</text>
 
       <rect x="16" y="460" width="1128" height="170" fill="var(--zone)" stroke="var(--zone-line)"/>
-      <text x="1132" y="478" text-anchor="end">有線端末 — Cat6A 7系統＋予備3（玄関カメラ・ドアホン・パワコン）</text>
+      <text x="1132" y="478" text-anchor="end">有線端末 — Cat6A 本設9＋予備2（ドアホン・パワコン）</text>
 
       <rect x="16" y="664" width="900" height="190" fill="var(--zone)" stroke="var(--zone-line)"/>
       <text x="904" y="682" text-anchor="end">無線端末 — Wi-Fi (U7 Lite ×2)</text>
@@ -274,10 +276,11 @@ li{margin-bottom:5px}
       <text x="410" y="526" text-anchor="middle">BRAVIA</text>
       <text x="615" y="526" text-anchor="middle">U7 Lite AP #1（1F廊下）</text>
       <text x="835" y="526" text-anchor="middle">U7 Lite AP #2（2F LDK）</text>
-      <text x="135" y="730" text-anchor="middle">HomePod</text>
+      <text x="135" y="730" text-anchor="middle">HomePod（LDK）</text>
       <text x="330" y="730" text-anchor="middle">Alexa ×2</text>
       <text x="580" y="714" text-anchor="middle">ECHONET Lite（AIF）</text>
-      <text x="825" y="730" text-anchor="middle">SwitchBot Relay 1</text>
+      <text x="825" y="722" text-anchor="middle">SwitchBot</text>
+      <text x="825" y="738" text-anchor="middle">Relay Switch 1</text>
       <text x="1042" y="730" text-anchor="middle">玄関スマートロック</text>
     </g>
     <g font-size="11.5" fill="var(--ink-soft)">
@@ -295,20 +298,20 @@ li{margin-bottom:5px}
       <text x="410" y="546" text-anchor="middle">2F LDK TV</text>
       <text x="615" y="546" text-anchor="middle">平天井付・PoE給電</text>
       <text x="835" y="546" text-anchor="middle">平天井付（吹抜上部NG）</text>
-      <text x="135" y="750" text-anchor="middle">日常UI / Siri</text>
-      <text x="135" y="768" text-anchor="middle">Home hub</text>
-      <text x="330" y="750" text-anchor="middle">Amazon Music 専用</text>
-      <text x="330" y="768" text-anchor="middle">連携なし</text>
-      <text x="825" y="750" text-anchor="middle">照明リレー</text>
-      <text x="825" y="768" text-anchor="middle">Matter over Wi-Fi</text>
-      <text x="825" y="786" text-anchor="middle">（Thread前提にしない）</text>
+      <text x="135" y="750" text-anchor="middle">Home hub / HKSV解析</text>
+      <text x="135" y="768" text-anchor="middle">Siri発話なし</text>
+      <text x="330" y="750" text-anchor="middle">Amazon Music 専用・連携なし</text>
+      <text x="330" y="768" text-anchor="middle">設置: LDK・キッチン</text>
+      <text x="825" y="756" text-anchor="middle">照明リレー</text>
+      <text x="825" y="774" text-anchor="middle">Matter over Wi-Fi</text>
+      <text x="825" y="792" text-anchor="middle">（Thread前提にしない）</text>
       <text x="1042" y="752" text-anchor="middle">AC100V有線</text>
       <text x="1042" y="770" text-anchor="middle">JEM-A端子（Plan A）</text>
       <text x="1042" y="788" text-anchor="middle">制御盤 → 情報盤へ配線</text>
     </g>
     <g font-size="11.5" fill="var(--ink)">
       <text x="580" y="746" text-anchor="middle">三菱エアコン ×4（AC-01計画）</text>
-      <text x="580" y="780" text-anchor="middle">給湯機（EneFarm/エコキュート・選定中）</text>
+      <text x="580" y="780" text-anchor="middle">おひさまエコキュート（昼間沸き上げ）</text>
       <text x="580" y="814" text-anchor="middle">風呂自動・給湯温度もECHONETで制御</text>
     </g>
     <text x="180" y="567" font-size="11" font-family="'IBM Plex Mono',monospace" fill="var(--ink-soft)" text-anchor="middle">USB: Wi-SUNドングル（Bルート）</text>
@@ -328,7 +331,7 @@ li{margin-bottom:5px}
 <!-- ============ LOGICAL / CONTROL PLANE ============ -->
 <section>
   <h2><span class="no">02</span>論理構成（コントロールプレーン）</h2>
-  <div class="h2sub">統合はすべてHome Assistantに集約し、Apple Homeにだけ公開する。Alexaは音楽専用で連携経路を持たない。</div>
+  <div class="h2sub">統合はすべてHome Assistantに集約し、Apple Homeには画面UIとして公開する。音声はHA Voiceに一本化しSiriは使わない。Alexaは音楽専用で連携経路を持たない。</div>
 
   <div class="figure">
   <svg viewBox="0 0 1160 600" xmlns="http://www.w3.org/2000/svg" font-family="'IBM Plex Sans JP',sans-serif">
@@ -370,8 +373,9 @@ li{margin-bottom:5px}
       <text x="56" y="419">スマートメーター 電力量</text>
     </g>
     <g font-size="12" fill="var(--ink-soft)">
-      <text x="56" y="98">エアコン×4 ／ 給湯機（風呂自動・湯温）／ 太陽光</text>
-      <text x="56" y="118">10GbE要件なし — 帯域はkbpsオーダー</text>
+      <text x="56" y="96">エアコン×4 ／ 太陽光パワコン</text>
+      <text x="56" y="114">おひさまエコキュート（風呂自動・湯温・沸き上げ）</text>
+      <text x="56" y="132">10GbE要件なし — 帯域はkbpsオーダー</text>
       <text x="56" y="236">Matter over Wi-Fi（Threadは前提にしない）</text>
       <text x="56" y="332">変換アダプタが直接IP化（ECHONET Lite対応品優先）</text>
       <text x="56" y="350">CPEV-S ×2 → 情報盤 → LAN（AiSEG2は不採用）</text>
@@ -397,11 +401,11 @@ li{margin-bottom:5px}
 
     <!-- Apple Home -->
     <rect x="830" y="80" width="290" height="150" fill="#fff" stroke="var(--ink)" stroke-width="2.5"/>
-    <text x="975" y="112" text-anchor="middle" font-size="15" font-weight="700">Apple Home / Siri</text>
+    <text x="975" y="112" text-anchor="middle" font-size="15" font-weight="700">Apple Home（画面UIのみ）</text>
     <g font-size="12" fill="var(--ink-soft)" text-anchor="middle">
-      <text x="975" y="136">日常のUIと音声操作</text>
-      <text x="975" y="156">HomePod = Home hub</text>
-      <text x="975" y="176">家族の操作面はここに一本化</text>
+      <text x="975" y="136">iPhone / Watch の日常UI・自動化</text>
+      <text x="975" y="156">HomePod = Home hub（発話させない）</text>
+      <text x="975" y="176">Siri不採用 — 音声はHA Voiceへ</text>
       <text x="975" y="200">遠隔操作はAppleリレー経由（VPN不要）</text>
     </g>
 
@@ -418,7 +422,7 @@ li{margin-bottom:5px}
     <rect x="430" y="450" width="310" height="100" fill="#fff" stroke="var(--ink-soft)" stroke-width="1.5" stroke-dasharray="6 4"/>
     <text x="585" y="482" text-anchor="middle" font-size="13.5" font-weight="700">Alexa ×2 — Amazon Music専用</text>
     <g font-size="12" fill="var(--ink-soft)" text-anchor="middle">
-      <text x="585" y="506">スマートホーム連携なし（意図的に非接続）</text>
+      <text x="585" y="506">設置: LDK・キッチン｜連携なし（意図的に非接続）</text>
       <text x="585" y="526">HA・Apple Homeへの経路を持たない</text>
     </g>
   </svg>
@@ -440,12 +444,12 @@ li{margin-bottom:5px}
       </tr>
       <tr>
         <td class="key"><span class="tag t1">1GbE Cat6A</span></td>
-        <td>Mini PC（HA）／ BRAVIA ／ U7 Lite AP ×2（PoE）／ JEM-A変換器（ラック棚段）— スター配線 7系統。<b>予備3系統を追加</b>: 玄関カメラ（PoE）／ 玄関ドアホン（PoE）／ パワコン・太陽光計測ユニット（ECHONET Lite監視用）。当面未使用でも着工時に配線。</td>
+        <td>スター配線 <b>本設9系統</b>: U7 Lite AP ×2（PoE）／ <b>玄関カメラ（PoE）</b>／ <b>LDK・書斎・主寝室 mmWave ×3（PoE）</b>／ 書斎デスク ×2 ／ BRAVIA（TV裏・空配管なし）。<b>予備2系統</b>: 玄関ドアホン（PoE）／ パワコン・太陽光計測ユニット（ECHONET Lite監視用）— 当面未使用でも着工時に配線。<b>子供部屋 ×2はCat6Aを引かず空配管＋呼び線のみ</b>（LANはWi-Fi）。Mini PC（HA）・JEM-A変換器はラック内パッチコードのため系統数外。詳細は EL-01 §03。</td>
         <td>安定性重視の有線。配線自体はCat6Aなので将来2.5/10Gへの引き直し不要。</td>
       </tr>
       <tr>
         <td class="key"><span class="tag tw">Wi-Fi</span></td>
-        <td>HomePod ／ Alexa ×2 ／ ECHONET Lite機器（エアコン×4・給湯機）／ SwitchBot Relay（<span class="tm">Matter over Wi-Fi</span>）</td>
+        <td>HomePod ／ Alexa ×2 ／ ECHONET Lite機器（エアコン×4・おひさまエコキュート）／ SwitchBot Relay Switch 1（<span class="tm">Matter over Wi-Fi</span>）</td>
         <td>IoTの実帯域はkbps〜Mbpsオーダー。通常LANで十分。Thread専用インフラは前提にしない。</td>
       </tr>
       <tr>
@@ -474,7 +478,7 @@ li{margin-bottom:5px}
       <tr><td class="key">玄関ドアホン（予備）</td><td class="mono">1G</td><td>要</td><td>ルートA/B移行時のみ使用。</td></tr>
       <tr><td class="key">パワコン / 太陽光計測</td><td class="mono">1G</td><td>—</td><td>ECHONET Liteはkbpsオーダー。</td></tr>
       <tr><td class="key">JEM-A変換（ラック内）</td><td class="mono">1G</td><td>—</td><td>ラック棚段設置・パッチコード直結。アダプタ側は100Mの場合も多いが1Gポートで収容。</td></tr>
-      <tr><td class="key">エコキュート/給湯機</td><td class="mono">1G（機種次第）</td><td>—</td><td><b>有線ポートを持つ機種は少数派</b> — 無線LANアダプタのみの機種はIoT SSID（2.4GHz）に収容。給湯機選定要件に「有線LAN可否」を追加。</td></tr>
+      <tr><td class="key">おひさまエコキュート</td><td class="mono">1G（機種次第）</td><td>—</td><td><b>有線ポートを持つ機種は少数派</b> — 無線LANアダプタのみの機種はIoT SSID（2.4GHz）に収容。<b>おひさまエコキュートは太陽光連携が前提のため無線アダプタ標準装備の機種が多い</b>。機種選定要件に「有線LAN可否」を残す。</td></tr>
     </tbody>
   </table>
   <div class="note"><b>速度割当の原則:</b> 全区間1G運用。2.5G対応NICを持つ機器（AP・Mini PC）はスイッチ交換の日に自動昇格する。<b>スイッチ適合:</b> Lite 16 PoE（16×1G・PoE 8口/45W）1台で全フェーズ収容 — 全消化でも10口で空き6口、増設不要。<b>PoE成立条件: 給電機器を「AP×2＋玄関カメラ」の3台で凍結</b>（実負荷 約25W/45W。ドアホンはルートC=JEM-A確定でPoE不要になったため成立）。凍結を破るイベント — AP3台目・ドアホンのルートA/B移行・カメラ2台目 — が起きた日がスイッチ交換日（Pro Max 16 PoE 180Wへ更新、在庫要確認）。全ポート2.5Gのため速度マップの1G表記は「2.5Gポートに1G機器を収容」の意。PoE実負荷 約40W — Flex 8 PoEの給電上限を購入前に要確認。<b>スイッチは買い替え前提</b>の消耗品扱いとし、10Gが必要になった時点で本体ごと更新（配線・他機器は無変更）。</div>
@@ -596,7 +600,7 @@ li{margin-bottom:5px}
       <tr><td class="key">経路</td><td>スプリットトンネル: AllowedIPsを<b>宅内LANサブネット＋VPNサブネットのみ</b>に限定し、宅内向けは全ポート素通し（＝LAN参加と同じ到達性）。その他トラフィックはトンネルに通さない（モバイル電池・速度のため）。</td></tr>
       <tr><td class="key">名前解決・発見</td><td>VPNクライアントのDNSはUCG（内部DNS）を指定し、<span class="mono">ha.home.arpa</span> 等の内部名を宅内外で同一に。WireGuardはL3ルーテッドのためmDNSは素では越えない — HomeKit/AirPlayの発見まで外から使いたい場合はHA上のmDNSリフレクタ（avahi）でWGサブネットへ反射。通常運用はHAダッシュボード＋Apple遠隔で足りるためリフレクタは任意。</td></tr>
       <tr><td class="key">用途</td><td>HAダッシュボード／履歴・エネルギー確認、UniFi Console、変換器等の管理画面、（将来）カメラ。</td></tr>
-      <tr><td class="key">Apple Home遠隔</td><td>VPN不要。HomePod（Home hub）がAppleの中継経由で遠隔操作を提供。家族はVPNを意識しない。</td></tr>
+      <tr><td class="key">Apple Home遠隔</td><td>VPN不要。HomePod（Home hub）がAppleの中継経由で遠隔操作を提供。家族はVPNを意識しない。<b>Siriを使わない決定はここには影響しない</b> — Home hubの役割は中継とHKSV解析であり、発話とは独立。</td></tr>
       <tr><td class="key">WAN側の到達性</td><td>第1候補の固定IP系ISP（§07）なら<b>固定IPv4でそのまま待受</b> — DDNS不要・ポートマップ制約なしで最も素直。IPoE系ISP（DS-Lite/MAP-E）を選んだ場合のみIPv6待受に切替（IPoEのIPv6はフィルタなしで直接到達可、モバイル各社IPv6対応済み）。</td></tr>
       <tr><td class="key">予備経路</td><td><b>UniFi Teleport</b>（標準機能・無料）。招待リンクだけで端末が宅内LANに参加するため家族用に最適。主経路は鍵管理が明示的なWireGuardとする。</td></tr>
       <tr><td class="key">コスト方針</td><td><b>追加サブスクリプション ゼロ。</b>WireGuard・Teleport・内部DNS・avahiはすべて無料/内蔵機能。Nabu Casa（月額）不採用、Tailscale/Headscale不採用。継続費用は回線・ISP料金＋既存iCloud+のみ。</td></tr>
@@ -617,10 +621,10 @@ li{margin-bottom:5px}
       <tr><td class="mono">3</td><td class="key">JEM-A → IP 変換</td><td><b>変換アダプタ → LAN → HA の直接構成（AiSEG2は挟まない）。</b>アダプタ選定の判断順序: ①<b>ECHONET Lite（電気錠クラス 0x026F）対応品</b> — HAの既存インテグレーションでそのまま認識、最優先。②文書化されたHTTP/UDP API品 — HAのRESTfulで直接統合（YAML数十行）。<b>自作（ATOM Lite/ESPHome）は不採用</b> — 保守を個人に依存させない。①②を満たす市販JEM-A変換アダプタ（Panasonic系エコシステム含む）で構成し、チャネル不足は同型アダプタの増設で対応。プロトコル非公開・専用アプリのみの製品は選ばない。</td></tr>
       <tr><td class="mono">4</td><td class="key">LAN</td><td>変換器はラック棚段設置、パッチコードでスイッチへ直結（DHCP固定割当）。</td></tr>
       <tr><td class="mono">5</td><td class="key">Home Assistant</td><td>lockエンティティ化（施錠/解錠＋状態）。開閉状態はオートメーション条件に使用（例: 全員外出＋解錠状態 → 通知）。</td></tr>
-      <tr><td class="mono">6</td><td class="key">Apple Home</td><td>HomeKit Bridge経由でロックアクセサリとして公開。Siri・自動化・遠隔（Appleリレー）はApple Home側で完結。</td></tr>
+      <tr><td class="mono">6</td><td class="key">Apple Home</td><td>HomeKit Bridge経由でロックアクセサリとして公開。<b>画面UI</b>・自動化・遠隔（Appleリレー）はApple Home側で完結。<b>音声での施解錠はHA Voice側で実装</b>（Siri不採用）— なおHA Voiceに解錠を握らせるかは別途判断（誤認識のリスクがあるため施錠のみ音声可、解錠は画面/物理鍵に限定する運用を推奨）。</td></tr>
     </tbody>
   </table>
-  <div class="note"><b>拡張:</b> 玄関以外のドア・窓センサーは同じパターンに載せる — 接点/センサー → （JEM-A変換 or Matter対応センサー） → HA → Apple Home。非IP機器のIP化ポイントはラックに集約し、分散させない。<br><br><b>お風呂もSiriで:</b> 給湯機（EneFarm/エコキュートいずれ採用でも）はECHONET Lite給湯器クラスで「ふろ自動」「給湯温度」「湯張り状態」を公開する。HA経由でHomeKitにスイッチ＋温度センサとして出せば「Hey Siri, お風呂入れて」や帰宅検知での自動湯張りが成立（HomeKitに給湯専用アクセサリ型は無いためスイッチ表現になる）。機種選定時はECHONET Lite AIF認証・風呂自動の遠隔操作対応・<b>有線LANポートの有無</b>（無ければIoT SSID収容）を要件に含めること。<br><br><b>AiSEG2は不採用:</b> エネルギー計測はBルート＋各機器のECHONET Liteで足り、JEM-A変換も直接アダプタで完結するため役割が残らない。唯一の再考条件は分岐回路別の詳細計測（専用計測ユニット併用）が欲しくなった場合のみ。</div>
+  <div class="note"><b>拡張:</b> 玄関以外のドア・窓センサーは同じパターンに載せる — 接点/センサー → （JEM-A変換 or Matter対応センサー） → HA → Apple Home。非IP機器のIP化ポイントはラックに集約し、分散させない。<br><br><b>給湯は おひさまエコキュートで確定:</b> ECHONET Lite給湯器クラスで「ふろ自動」「給湯温度」「湯張り状態」を公開する。HA経由でHomeKitにスイッチ＋温度センサとして出せば音声・帰宅検知での自動湯張りが成立（HomeKitに給湯専用アクセサリ型は無いためスイッチ表現になる）。機種選定時はECHONET Lite AIF認証・風呂自動の遠隔操作対応・<b>有線LANポートの有無</b>（無ければIoT SSID収容）を要件に含めること。<br><br><b>昼間沸き上げがHAに効く:</b> おひさまエコキュートは<b>深夜ではなく日中に太陽光の余剰で沸かす</b>のが前提。したがってHA側の監視対象は「湯温・残湯量」だけでなく<b>沸き上げ実行時間帯と、その時刻の太陽光発電量・売買電の突合せ</b>になる。Bルート（総量）＋パワコン（発電量）＋エコキュートのECHONET Liteを同一グラフに並べ、<b>曇天日に系統から沸かしてしまっていないか</b>を可視化する。機器側の学習制御を上書きする必要は無いが、実績が悪ければ沸き上げ時間帯の手動設定へ切り替える判断材料になる。<br><br><b>AiSEG2は不採用:</b> エネルギー計測はBルート＋各機器のECHONET Liteで足り、JEM-A変換も直接アダプタで完結するため役割が残らない。唯一の再考条件は分岐回路別の詳細計測（専用計測ユニット併用）が欲しくなった場合のみ。</div>
 </section>
 
 <!-- ============ OPERATIONS NOTES ============ -->
@@ -629,11 +633,11 @@ li{margin-bottom:5px}
   <ul>
     <li><b>L2設計はVLAN分離（§10）に移行。</b>ECHONET Liteのマルチキャストはルータを越えないため、HA（Mini PC）をトランク接続しIoT VLANにL2の足を持たせるのが前提条件。</li>
     <li><b>IoT用SSIDは2.4GHz対応で1本用意</b>（ECHONET Lite機器・SwitchBot向け）。HomePod/Alexa/端末はメインSSID。</li>
-    <li><b>DHCP固定割当リスト</b>を作る対象: Mini PC（HA）、JEM-A変換器、給湯機、エアコン×4、パワコン、BRAVIA、AP×2、Mac mini。</li>
+    <li><b>DHCP固定割当リスト</b>を作る対象: Mini PC（HA）、JEM-A変換器、おひさまエコキュート、エアコン×4、パワコン、BRAVIA、AP×2、Mac mini。</li>
     <li><b>Alexaのスマートホームスキルは登録しない。</b>誤って機器検出した場合は無効化。音楽以外の経路を作らないことが設計。</li>
     <li><b>停電復帰順序:</b> UCG → Switch → Mini PC の順に自動起動（Mini PCはBIOSでAC復帰ON）。HAが上がればロック・空調の状態は自動再取得。</li>
     <li><b>AP設置位置（P0で座標確定）:</b> 吹抜上部の高天井はNG（真下向き放射で全階に中途半端・メンテ不能）。2Fは吹抜のへりから1〜2m離れたLDK側の平天井（吹抜開口越しに1Fホールもカバー）、1Fは寝室群中心の廊下天井。天井Cat6Aの出口座標として電気図面に指定。</li>
-    <li><b>引き渡し前チェック:</b> ラック着のCPEV-S ×2 導通確認、Cat6A 全10系統のパッチパネル成端＋結線試験（Fluke等の成績書）、盤内コンセント通電。</li>
+    <li><b>引き渡し前チェック:</b> ラック着のCPEV-S ×2 導通確認、Cat6A 全11系統（本設9＋予備2）のパッチパネル成端＋結線試験（Fluke等の成績書）、盤内コンセント通電。</li>
   </ul>
 </section>
 
@@ -710,7 +714,7 @@ li{margin-bottom:5px}
       <tr><td class="mono">P1</td><td class="key">USW Lite 16 PoE</td><td class="mono">¥30,000</td><td>16×1G・PoE 45W・ファンレス。ドアホンPoE不要化（ルートC確定）により給電3台凍結（AP×2＋カメラ・実負荷約25W）で成立。凍結を破る日にPro Max 16 PoE等へ交換。Pro Max 16 PoEは在庫難のため本命から外し、上位互換として温存。</td></tr>
       <tr><td class="mono">P1</td><td class="key">U7 Lite ×2</td><td class="mono">¥16,000×2</td><td>Wi-Fi 7・天井付・2台運用で確定（1F廊下／2F LDK平天井・吹抜上部NG）。Lite 16 PoE配下では1Gリンク運用、スイッチ更新時に2.5Gへ自動昇格。</td></tr>
       <tr><td class="mono">P0末</td><td class="key">壁掛けオープンフレームラック: <b>Pekaro 9U（Amazon）で確定</b></td><td class="mono">¥10,000級</td><td>固定式・19インチ対応・W53.8×D45×H48cm・0.8mm冷間圧延鋼・<b>耐荷重35kg</b>・防錆塗装。全要件適合（オープンフレーム=通気は建具ガラリで担保・二重箱回避、9U=FIG.3割付そのまま、奥行45cmで配線余裕）。<b>購入時の同時確認3点</b>: ①本体自重を仕様欄で確認し機器込み合計で下地指定を最終化（20kg超なら30kg指定へ） ②ケージナット/M6ネジの付属確認（無ければ別途） ③純正棚板なしのため<b>汎用19インチ1Uパンチング棚×2（各¥2千前後）を同時購入</b>。取付・成端はセキスイ弱電業者へ材工依頼（施主支給: ラック・パネル・ジャック・棚板）。</td></tr>
-      <tr><td class="mono">P0末</td><td class="key">パッチパネル一式（施主支給・工事店成端）</td><td class="mono">¥10,000</td><td>ラックと同時に支給。24口キーストン式空パネル（約¥4千）＋Cat6Aキーストンジャック×10（約¥500/個）＋パッチコード＋1Uケーブルマネジメントバー＋<b>パンチング棚板×2（1U・耐荷重5kg以上・ラック同メーカー純正）＋強力面ファスナー（3Mデュアルロック等）</b> — スイッチはラックマウントネジ固定、UCG Ultra・ONU・WATCH BOOTは棚板＋面ファスナー底面固定が定石。壁内の単線Cat6AはRJ45直付けNG・キーストン成端が正式。予備3系統もパネルまで成端し「使う日はコード1本」に。</td></tr>
+      <tr><td class="mono">P0末</td><td class="key">パッチパネル一式（施主支給・工事店成端）</td><td class="mono">¥10,000</td><td>ラックと同時に支給。24口キーストン式空パネル（約¥4千）＋Cat6Aキーストンジャック×11（約¥500/個）＋パッチコード＋1Uケーブルマネジメントバー＋<b>パンチング棚板×2（1U・耐荷重5kg以上・ラック同メーカー純正）＋強力面ファスナー（3Mデュアルロック等）</b> — スイッチはラックマウントネジ固定、UCG Ultra・ONU・WATCH BOOTは棚板＋面ファスナー底面固定が定石。壁内の単線Cat6AはRJ45直付けNG・キーストン成端が正式。予備2系統もパネルまで成端し「使う日はコード1本」に。</td></tr>
       <tr><td class="mono">P1</td><td class="key">Mini PC（N100級）</td><td class="mono">¥30,000</td><td>UniFi外。HA用2.5G NIC標準機。BIOSで「AC復帰時自動起動」を必ず設定。</td></tr>
       <tr><td class="mono">P2</td><td class="key">UPS: APC BR550S-JP または オムロン BY50S</td><td class="mono">¥15,000</td><td><b>Day 1からP2へ後送り</b> — 停電復旧の無人化はBIOS自動起動＋WATCH BOOTで既に担保され、ロックは元々ラックUPS外（AC直結・停電時は物理鍵）のため。残余リスクは瞬断時のSSDのみで、P2の日次バックアップと同時に導入して閉じる。正弦波・復電時自動再起動対応、公式ストアで購入。床置き（壁掛けラック外・5〜6kg）、NUT連携で残量監視。</td></tr>
       <tr><td class="mono">P2</td><td class="key">（スイッチ増設なし）</td><td class="mono">¥0</td><td>Lite 16 PoEの空き口にMac mini・パワコンを収容するのみ。</td></tr>
@@ -780,7 +784,7 @@ li{margin-bottom:5px}
       <tr>
         <td class="key">20 — IoT</td>
         <td class="mono">192.168.20.0/24<br>SSID: IoT（2.4GHz固定・WPA2）</td>
-        <td>エアコン×4、給湯機、パワコン（有線）、JEM-A変換、SwitchBot Relay、Alexa ×2、ロボット掃除機×2（1F/2F）</td>
+        <td>エアコン×4、おひさまエコキュート、パワコン（有線）、JEM-A変換、SwitchBot Relay Switch 1、Alexa ×2、ロボット掃除機×2（1F/2F）</td>
         <td><b>インターネット遮断がデフォルト</b>（例外の許可リスト: Alexa=Amazon Music、ロボット掃除機=クラウド制御、SwitchBot=ファーム更新時のみ）。IoT→他VLANの発信は全拒否。到達できる相手はHAのみ。</td>
       </tr>
       <tr>
@@ -821,7 +825,7 @@ li{margin-bottom:5px}
     <tbody>
       <tr>
         <td class="key">A — HomeKit対応ドアホン</td>
-        <td>Aqara G4等のHomeKit対応ビデオドアベルを玄関に設置。呼出通知がiPhone・HomePod・Apple TVにネイティブ着信、顔スナップショット付き。</td>
+        <td>Aqara G4等のHomeKit対応ビデオドアベルを玄関に設置。呼出通知がiPhone・Apple TVにネイティブ着信、顔スナップショット付き。<b>HomePodでの音声アナウンスはSiri不採用のため使わない</b>（通知は画面側で受ける）。</td>
         <td>最も素直。注意: HomeKit Secure Videoでの<b>録画</b>はiCloud+契約が前提（既契約なら追加費ゼロ、未契約ならルートB）。通知・ライブ視聴は録画なしでも動作。</td>
       </tr>
       <tr>
@@ -831,8 +835,8 @@ li{margin-bottom:5px}
       </tr>
       <tr>
         <td class="key">C — 国内ドアホン＋接点連携</td>
-        <td>セキスイ標準のPanasonicドアホンを採用し、親機の呼出連動接点出力を<b>情報盤のJEM-A変換アダプタのモニタ入力</b>に収容（玄関ロックと同一アダプタ系統・自作なし）。HA側でbinary_sensor化 → iPhoneプッシュ＋HomePodアナウンス。映像はドアホン親機で見る。</td>
-        <td>「ピンポンが鳴ったらiPhoneに通知＋玄関ロック解錠をSiriで」までは実現。映像のApple Home統合は諦める折衷案。工務店調整が最少。</td>
+        <td>セキスイ標準のPanasonicドアホンを採用し、親機の呼出連動接点出力を<b>情報盤のJEM-A変換アダプタのモニタ入力</b>に収容（玄関ロックと同一アダプタ系統・自作なし）。HA側でbinary_sensor化 → iPhoneプッシュ＋<b>HA VoiceのTTSアナウンス</b>。映像はドアホン親機で見る。</td>
+        <td>「ピンポンが鳴ったらiPhoneに通知＋各室のHA Voiceが読み上げ」までは実現。映像のApple Home統合は諦める折衷案。工務店調整が最少。<b>Siri不採用でもこのルートは無傷</b> — 発話をHomePodではなくHA Voiceが担うだけで、経路（接点→JEM-A→HA）は変わらない。</td>
       </tr>
     </tbody>
   </table>
@@ -844,7 +848,7 @@ li{margin-bottom:5px}
         <td class="key">玄関カメラ（顔認識・本命）</td>
         <td><b>Aqara Camera Hub G5 Pro（PoE版）</b></td>
         <td>PoE有線 / Trusted-IoT側</td>
-        <td>HKSV対応・屋外IP65・4MP。Apple顔認識→Siriアナウンスの主役。PoE版を指定（Wi-Fi版と併売のため要注意）。エッジAI検知内蔵でHKSV外の通知も可。</td>
+        <td>HKSV対応・屋外IP65・4MP。PoE版を指定（Wi-Fi版と併売のため要注意）。<b>エッジAI検知内蔵でHKSV外の通知も可 — Siri不採用の本構成ではこのRTSP/検知出力の方が主役になる</b>（§11.2参照）。</td>
       </tr>
       <tr>
         <td class="key">玄関ドアホン（ルートA採用時）</td>
@@ -872,9 +876,9 @@ li{margin-bottom:5px}
       </tr>
     </tbody>
   </table>
-  <div class="note" style="margin-bottom:14px"><b>選定基準:</b> ①HKSV対応（Apple顔認識ルート）または ②ONVIF/RTSP対応（Frigateルート）のどちらかを必ず満たすこと。両方満たさない製品は買わない。屋外はPoE有線を必須要件とし（予備配線4系統に収容）、Wi-Fi屋外カメラは採用しない。製品の技適・国内版の有無と、G5 ProのHKSV対応状況は購入直前に最新ファーム情報を要確認。</div>
+  <div class="note" style="margin-bottom:14px"><b>選定基準:</b> ①HKSV対応（Apple顔認識ルート）または ②ONVIF/RTSP対応（Frigateルート）のどちらかを必ず満たすこと。両方満たさない製品は買わない。屋外はPoE有線を必須要件とし（<b>玄関カメラは本設1系統・Day 1から使用</b>。ドアホンは予備配線に収容）、Wi-Fi屋外カメラは採用しない。製品の技適・国内版の有無と、G5 ProのHKSV対応状況は購入直前に最新ファーム情報を要確認。</div>
   <div class="note"><b>推奨:</b> 着工前は「玄関Cat6A（PoE）1本＋ドアホン設置位置の背面ボックス」だけ確定しておき、機種決定はルートA/Bの製品状況を見て入居直前に。標準ドアホンを外す場合はセキスイ側の火災報知・電気錠連動仕様との干渉確認が必要。Frigate系カメラはVLAN 60（インターネット遮断・HAのみ到達）に収容し、クラウドカメラは採用しない。<br><br>
-  <b>来客の顔認識アナウンス（確定構成）:</b> iCloud+既契約のため<b>HomeKit Secure Video＋Apple顔認識を第1候補</b>とする。玄関にHKSV対応PoEカメラ（Aqara G5 Pro等）を設置し、写真ライブラリと連携 — 「（名前）さんが玄関にいます」を<b>Siriの声でHomePodが自動アナウンス</b>、iPhoneには顔サムネイル付きリッチ通知。解析はHomePod/Apple TV（Home hub）上でローカル実行、録画はiCloudにE2E暗号化保存（容量は50GB=1台/200GB=5台/2TB=無制限、映像はストレージ枠を消費しない）。呼出トリガーはJEM-A（ルートC）のまま併用し、「ピンポン→HA通知」と「顔認識→Siriアナウンス」の二層で動く。<b>注意:</b> HKSVカメラはHome hubとの疎通が必要なためVLAN 60ではなくTrusted/IoT側に収容（VLAN 60はFrigate等ローカル解析カメラ用）。Frigateルート（Mac mini・完全ローカル顔認識→HA→TTSアナウンス）は将来の代替として温存 — この場合の発話音声はSiri声ではなくTTSになる。</div>
+  <b>来客の顔認識アナウンス（Siri不採用により主従を入れ替え）:</b> 従来はHKSV＋Apple顔認識を第1候補とし「（名前）さんが玄関にいます」を<b>Siriの声でHomePodが読み上げる</b>構成だった。<b>Siriを使わない決定により、この読み上げは成立しない</b> — Appleの「よく知っている人」の認識結果はHome hub内で完結し、HAへは出てこないため、Apple側から名前を取り出して別のスピーカーに喋らせることができない。したがって:<br><br><b>① 音声アナウンスは Frigateルートが本命に昇格。</b>玄関PoEカメラのRTSPをMac mini上のFrigate（＋顔認識アドオン）で完全ローカル解析 → HA → <b>HA Voice PEがTTSで読み上げ</b>。サブスクゼロ・ローカル完結の原則とも整合する。構築の手間は最大だが、名前入りアナウンスが欲しいならこれしかない。<br><b>② HKSVは「無音の記録・通知層」として併用。</b>iCloud+は既契約のため追加費ゼロ。iPhoneへの顔サムネイル付きリッチ通知とE2E暗号化録画（映像はストレージ枠を消費しない）はそのまま価値がある。発話させないだけで、外す理由はない。<br><b>③ 呼出トリガーはJEM-A（ルートC）のまま。</b>「ピンポン→HA→HA Voice読み上げ」と「顔認識→HA Voice読み上げ」が同じ出口に揃うため、むしろ経路が単純になった。<br><br><b>要確認:</b> ①と②を併用する場合、玄関カメラは<b>Home hub（Trusted/IoT）とFrigate（VLAN 60）の両方から到達される</b>必要がある。カメラ本体はTrusted/IoT側に置き、<b>VLAN 60のFrigate → カメラのRTSPポートのみを許可する片方向ルール</b>で通すのが素直。機種によってはHKSV有効時にRTSPが止まる実装があるため、<b>G5 Proで「HKSV録画とRTSP出力の同時利用」が可能かを購入前に実機確認</b>すること。不可なら①優先（HKSVを諦める）で判断する。</div>
 </section>
 
 <!-- ============ ROADMAP ============ -->
@@ -886,12 +890,12 @@ li{margin-bottom:5px}
     <tbody>
       <tr>
         <td class="key">P0 — 着工前確定<br><span class="mono" style="font-weight:400">〜2027/01</span></td>
-        <td>Cat6A 7系統＋予備3（玄関カメラ・ドアホン・パワコン）／ <b>書斎デスクはCat6A×2本</b>（①仕事用=VLAN10 ②開発用Mac mini=VLAN30、壁ポート単位でVLAN割当）／ 空配管（ラック⇔情報盤・屋外）／ <b>情報盤は設けない（標準のまとめてねット等は削除依頼）</b>: 全弱電（Cat6A×10＋玄関CPEV-S×2）を書斎クローゼットの施主支給ラックへ直接集約し、JEM-A変換アダプタはラック棚段に設置／ ドアホン型番の呼出接点出力確認 ／ JEM-A変換アダプタ選定（ECHONET Lite対応可否）／ パワコンのECHONET Lite対応・有線LAN可否確認（非対応でもBルートで総量監視は成立）／ 成端仕様（A案確定）: <b>施主支給ラックを器具付け後〜引き渡し前に先行設置し、ラック搭載の24口パッチパネルへキーストン成端</b>・全10系統・<b>ケーブル余長1.5〜2m（サービスループ）指定</b>・Fluke成績書付き。余長があれば将来のラック交換はパネル載せ替え30分・再成端不要 ／ ラック設置条件（壁掛け）: <b>壁掛け荷重用合板下地（位置指定・耐荷重20kg以上）</b>・専用AC回路4口以上・配線引込口はラック取付位置の直上 ／ クローゼット三層構成の造作: 上=壁掛けラック・中=<b>可動造作棚（最上段の天板高さをラック底面に一致させ、壁固定＋棚受けの二重支持とする）</b>・下=<b>1Fロボット掃除機基地（床レベルAC 1口＋前方クリアランス50cm）</b> ／ <b>2F LDKロボット掃除機基地: タンク式ドック前提で確定（給排水配管は不要）</b> — ドック位置（パントリー脇等）にAC 1口＋設置スペース（幅50×奥行60cm級＋前方クリアランス）を図面指定 ／ 通気: 第一希望<b>ルーバー扉</b>、不可なら<b>扉アンダーカット20mm＋上部ガラリ</b>（下吸気・上排気の煙突効果。庫内発熱約45W→通気ありで室温＋2〜3℃見込み。P1でHA温度センサー設置・実測32℃超でP3ファン）／ <b>テレビ受信: 地デジUHF＋BS/110度CSアンテナで確定・CATVなし・テレビ端子はLDKの1箇所のみ</b>。屋外混合器→同軸1本→ラック経由（中継接続のみ）→LDK。<b>1端子・分配なしのためブースター・分配器は非搭載</b>（LNB給電はBRAVIA/レコーダーが直接担う）。入居後に受信レベルを実測し不足時のみU6へブースター追加。将来の多部屋化もU6に分配器を挿すだけで配線変更ゼロ。アンテナ設置位置は太陽光パネル（南面）との干渉を外構図で確認 ／ ラックは弱電業者に材工込み手配（仕様指定: 19インチ・6〜9U・耐荷重20kg以上・奥行30cm級）、<b>施主支給はパッチパネル・ジャックのみ（型番リスト早期提出）</b>、Cat6Aキーストン成端＋Fluke成績書の対応可否を事前確認</td>
+        <td><b>Cat6A 本設9＋予備2＝11系統</b>（本設に玄関カメラ・主寝室mmWaveを含む／予備＝ドアホン・パワコン／<b>子供部屋×2は空配管＋呼び線のみ・Cat6Aなし</b>／<b>TV裏は空配管なしのCat6A 1本</b>。内訳の正はEL-01 §03）／ <b>書斎デスクはCat6A×2本</b>（①仕事用=VLAN10 ②開発用Mac mini=VLAN30、壁ポート単位でVLAN割当）／ 空配管（ラック⇔屋外／<b>子供部屋×2は呼び線入り空配管1本ずつ</b>）／ <b>情報盤は設けない（標準のまとめてねット等は削除依頼）</b>: 全弱電（Cat6A×11＋玄関CPEV-S×2）を書斎クローゼットの施主支給ラックへ直接集約し、JEM-A変換アダプタはラック棚段に設置／ ドアホン型番の呼出接点出力確認 ／ JEM-A変換アダプタ選定（ECHONET Lite対応可否）／ パワコンのECHONET Lite対応・有線LAN可否確認（非対応でもBルートで総量監視は成立）／ 成端仕様（A案確定）: <b>施主支給ラックを器具付け後〜引き渡し前に先行設置し、ラック搭載の24口パッチパネルへキーストン成端</b>・全11系統・<b>ケーブル余長1.5〜2m（サービスループ）指定</b>・Fluke成績書付き。余長があれば将来のラック交換はパネル載せ替え30分・再成端不要 ／ ラック設置条件（壁掛け）: <b>壁掛け荷重用合板下地（位置指定・耐荷重20kg以上）</b>・専用AC回路4口以上・配線引込口はラック取付位置の直上 ／ クローゼット三層構成の造作: 上=壁掛けラック・中=<b>可動造作棚（最上段の天板高さをラック底面に一致させ、壁固定＋棚受けの二重支持とする）</b>・下=<b>1Fロボット掃除機基地（床レベルAC 1口＋前方クリアランス50cm）</b> ／ <b>2F LDKロボット掃除機基地: タンク式ドック前提で確定（給排水配管は不要）</b> — ドック位置（パントリー脇等）にAC 1口＋設置スペース（幅50×奥行60cm級＋前方クリアランス）を図面指定 ／ 通気: 第一希望<b>ルーバー扉</b>、不可なら<b>扉アンダーカット20mm＋上部ガラリ</b>（下吸気・上排気の煙突効果。庫内発熱約45W→通気ありで室温＋2〜3℃見込み。P1でHA温度センサー設置・実測32℃超でP3ファン）／ <b>テレビ受信: 地デジUHF＋BS/110度CSアンテナで確定・CATVなし・テレビ端子はLDKの1箇所のみ</b>。屋外混合器→同軸1本→ラック経由（中継接続のみ）→LDK。<b>1端子・分配なしのためブースター・分配器は非搭載</b>（LNB給電はBRAVIA/レコーダーが直接担う）。入居後に受信レベルを実測し不足時のみU6へブースター追加。将来の多部屋化もU6に分配器を挿すだけで配線変更ゼロ。アンテナ設置位置は太陽光パネル（南面）との干渉を外構図で確認 ／ ラックは弱電業者に材工込み手配（仕様指定: 19インチ・6〜9U・耐荷重20kg以上・奥行30cm級）、<b>施主支給はパッチパネル・ジャックのみ（型番リスト早期提出）</b>、Cat6Aキーストン成端＋Fluke成績書の対応可否を事前確認</td>
         <td><b>後からやると数十倍高い、または不可能</b>になるものだけ。ここが唯一の締切あり項目。</td>
       </tr>
       <tr>
         <td class="key">P1 — Day 1<br><span class="mono" style="font-weight:400">引渡し〜入居週</span></td>
-        <td>ONU＋UCG Ultra＋Lite 16 PoE＋AP×2で回線開通 ／ SSID 3面（家族・IoT・ゲスト）とVLAN 10/20/40 ／ Mini PC＋HA＋HomeKit Bridge（BIOS自動起動設定）／ エアコン×4・給湯機（風呂自動）のECHONET Lite接続 ／ 玄関ロック（JEM-A→IP→Apple Home）／ HomePod・Alexa設置 ／ SwitchBot Relay照明 ／ WireGuard VPN＋内部DNS</td>
+        <td>ONU＋UCG Ultra＋Lite 16 PoE＋AP×2で回線開通 ／ SSID 3面（家族・IoT・ゲスト）とVLAN 10/20/40 ／ Mini PC＋HA＋HomeKit Bridge（BIOS自動起動設定）／ エアコン×4・おひさまエコキュート（風呂自動・沸き上げ実績）のECHONET Lite接続 ／ 玄関ロック（JEM-A→IP→Apple Home）／ HomePod（LDK・Home hub／発話させない）・Alexa ×2（LDK・キッチン・音楽専用）設置 ／ <b>HA Voice PE 設置（家の音声UI・玄関＋確定した各室）</b>／ SwitchBot Relay Switch 1 照明 ／ WireGuard VPN＋内部DNS</td>
         <td><b>家族が初日から使う機能</b>＝ネット・照明・空調・風呂・鍵・音楽。IoT機器は最初からIoT SSIDに載せ、後のペアリングし直しを発生させない。VPNとUPSは安価かつ初日から効く保険。</td>
       </tr>
       <tr>
@@ -901,7 +905,7 @@ li{margin-bottom:5px}
       </tr>
       <tr>
         <td class="key">P3 — プロジェクト枠<br><span class="mono" style="font-weight:400">任意・順不同</span></td>
-        <td>玄関カメラ G5 Pro＋HKSV顔認識アナウンス（購入直前に対応状況再確認）／ ラック庫内温度連動ファン（HA温度センサー＋静音USBファン・32℃超で自動ON、夏場の実測次第）／ mDNSリフレクタ（VPN越しHomeKit発見）／ WAN・IPv6プレフィックス監視の自動化 ／ VLAN 60＋Frigateローカル解析（Appleルートの代替）／ 室内見守りカメラ ／ 2F LDK用ロボット掃除機（<b>Matter対応要件</b>・タンク式自動給水ドック機、Apple Home/Siriから直接操作）／ ドアホンのルートA/B移行検討</td>
+        <td>玄関カメラ G5 Pro（<b>HKSV録画とRTSP同時利用の可否を購入直前に実機確認</b>）／ <b>VLAN 60＋Frigateローカル解析＋HA VoiceのTTS読み上げ — Siri不採用により顔認識アナウンスの本命ルート</b>／ ラック庫内温度連動ファン（HA温度センサー＋静音USBファン・32℃超で自動ON、夏場の実測次第）／ mDNSリフレクタ（VPN越しHomeKit発見）／ WAN・IPv6プレフィックス監視の自動化 ／ 室内見守りカメラ ／ 2F LDK用ロボット掃除機（<b>Matter対応要件</b>・タンク式自動給水ドック機、Apple Homeの画面UI／HA Voiceから操作）／ ドアホンのルートA/B移行検討</td>
         <td><b>無くても困らないが、あると楽しい層。</b>それぞれ独立していて順序自由。子育て・仕事の隙間に1件ずつ。</td>
       </tr>
     </tbody>
@@ -916,7 +920,7 @@ li{margin-bottom:5px}
   <table>
     <thead><tr><th style="width:110px">区分</th><th>依頼内容</th><th style="width:110px">時期</th></tr></thead>
     <tbody>
-      <tr><td class="key">弱電配線</td><td>Cat6A 10系統（7＋予備3: 玄関カメラ・玄関ドアホン・パワコン）＋<b>書斎デスクは2口</b>。全系統を書斎クローゼットへスター配線、引込はラック取付位置の直上、<b>余長1.5〜2m</b>確保。</td><td class="mono">図面確定</td></tr>
+      <tr><td class="key">弱電配線</td><td>Cat6A <b>11系統（本設9＋予備2: 玄関ドアホン・パワコン）</b>。本設9＝AP×2・<b>玄関カメラ</b>・<b>LDK/書斎/主寝室 mmWave ×3</b>・書斎デスク×2・TV裏。<b>書斎デスクは2口</b>。<b>子供部屋×2は空配管＋呼び線のみ・Cat6Aなし</b>、<b>TV裏は空配管なし</b>。全系統を書斎クローゼットへスター配線、引込はラック取付位置の直上、<b>余長1.5〜2m</b>確保。内訳の正はEL-01 §03。</td><td class="mono">図面確定</td></tr>
       <tr><td class="key">弱電配線</td><td>玄関スマートロック制御ユニット → クローゼットへ <span class="mono">CPEV-S 0.9-2P ×2</span>（制御＋モニタ）。</td><td class="mono">図面確定</td></tr>
       <tr><td class="key">弱電配線</td><td><b>標準の情報盤（まとめてねット等）は削除。</b>全弱電はクローゼットの施主支給ラックへ集約。</td><td class="mono">図面確定</td></tr>
       <tr><td class="key">弱電配線</td><td>空配管（呼び22以上）: ラック⇔玄関まわり、ラック⇔屋外軒下 の2ルート。</td><td class="mono">図面確定</td></tr>
@@ -924,9 +928,9 @@ li{margin-bottom:5px}
       <tr><td class="key">電気</td><td>クローゼット: 専用回路コンセント4口以上（ラック脇）＋<b>床レベルAC 1口（1F掃除機基地）</b>。<b>2F LDKドック位置にAC 1口＋設置スペース（幅50×奥行60cm級）</b>。書斎デスク: AC 4口以上。光コンセント位置はラック脇に指定。</td><td class="mono">図面確定</td></tr>
       <tr><td class="key">建具・造作</td><td>クローゼット扉は<b>ルーバー扉（第一希望）</b>、不可ならアンダーカット20mm＋上部ガラリ。造作: 中段可動棚（<b>最上段天板をラック底面高さに一致</b>=二重支持）、下段ルンバスペース（前方50cm）。</td><td class="mono">図面確定</td></tr>
       <tr><td class="key">下地</td><td>ラック取付位置に<b>壁掛け荷重用合板下地</b>（位置図提出・耐荷重は機器込み合計で指定、20〜30kg）。AP×2の天井Cat6A出口は<b>平天井指定（吹抜上部NG）</b>: 2F=LDK側平天井（吹抜へり1〜2m離し）、1F=寝室群中心の廊下天井。</td><td class="mono">図面確定</td></tr>
-      <tr><td class="key">機器確認</td><td>①ドアホン標準機の<b>呼出連動接点出力</b>の有無（無ければ出力付き型番へ変更）②給湯機は<b>ECHONET Lite AIF＋風呂自動遠隔対応</b>を要件化 ③パワコンのECHONET Lite・有線LAN対応 ④JEM-A変換アダプタのECHONET Lite対応 — 各メーカー回答の取得。</td><td class="mono">図面確定</td></tr>
+      <tr><td class="key">機器確認</td><td>①ドアホン標準機の<b>呼出連動接点出力</b>の有無（無ければ出力付き型番へ変更）②<b>おひさまエコキュート</b>は<b>ECHONET Lite AIF＋風呂自動遠隔対応＋沸き上げ実績の取得可否</b>を要件化 ③パワコンのECHONET Lite・有線LAN対応 ④JEM-A変換アダプタのECHONET Lite対応 — 各メーカー回答の取得。</td><td class="mono">図面確定</td></tr>
       <tr><td class="key">施工</td><td>施主支給品の受入・取付: <b>Pekaro 9Uラック</b>（器具付け後の埃の少ない工程で壁面固定）＋パッチパネル・ジャック・棚板。<b>事前確認3段</b>: (a)支給品の現場受入可否 (b)壁面取付の実施可否（不可なら下地までを依頼し取付は施主） (c)搭載パネルへの成端可否 — 不可の場合はラックを積水側調達（日東工業等・仕様指定）へ切替。責任分界（支給品起因/施工起因）は書面化。</td><td class="mono">施工中</td></tr>
-      <tr><td class="key">成端・試験</td><td>ラック搭載パッチパネルへ<b>Cat6Aキーストン成端 全10系統＋Fluke等の成績書</b>提出。CPEV-S ×2はラック側端子台受け・導通確認。</td><td class="mono">引き渡し前</td></tr>
+      <tr><td class="key">成端・試験</td><td>ラック搭載パッチパネルへ<b>Cat6Aキーストン成端 全11系統＋Fluke等の成績書</b>提出。CPEV-S ×2はラック側端子台受け・導通確認。</td><td class="mono">引き渡し前</td></tr>
       <tr><td class="key">引き渡し</td><td>成績書・盤図・配線経路図の受領、専用回路・ルンバAC通電確認、ガラリ通気確認。</td><td class="mono">引き渡し前</td></tr>
     </tbody>
   </table>

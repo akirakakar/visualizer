@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=1180, initial-scale=1.0" />
+  <title>気密性能に関する相談・確認事項</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <script>
+    document.querySelector('meta[name="viewport"]')
+      ?.setAttribute("content", "width=1180, initial-scale=1.0");
+  </script>
+
+  <style>
+    :root {
+      --ink: #1f2a37;
+      --muted: #5c6878;
+      --line: #d9e0e8;
+      --paper: #ffffff;
+      --page: #eef2f6;
+      --navy: #173a5e;
+      --navy-soft: #eaf1f7;
+      --green: #157347;
+      --green-soft: #e9f6ef;
+      --amber: #9a6400;
+      --amber-soft: #fff6df;
+      --shadow: 0 14px 38px rgba(22, 48, 74, 0.10);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      min-width: 1180px;
+      max-width: none;
+      padding: 0;
+      color: var(--ink);
+      background: var(--page);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans JP",
+        "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, sans-serif;
+      font-size: 15px;
+      line-height: 1.75;
+    }
+
+    .document-toolbar {
+      position: sticky;
+      z-index: 30;
+      top: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      min-height: 58px;
+      padding: 10px max(18px, calc((100vw - 1060px) / 2));
+      color: #fff;
+      background: rgba(23, 58, 94, 0.97);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(8px);
+    }
+
+    .toolbar-title {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .toolbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .progress-label {
+      margin-right: 6px;
+      color: rgba(255, 255, 255, 0.82);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    button {
+      appearance: none;
+      min-height: 36px;
+      padding: 7px 12px;
+      color: #fff;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      border-radius: 8px;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 650;
+      cursor: pointer;
+    }
+
+    button:hover { background: rgba(255, 255, 255, 0.2); }
+
+    body > section.level1,
+    nav#TOC {
+      width: min(980px, calc(100% - 32px));
+      margin-right: auto;
+      margin-left: auto;
+      background: var(--paper);
+    }
+
+    nav#TOC {
+      margin-top: 28px;
+      padding: 22px 28px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+    }
+
+    nav#TOC::before {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--navy);
+      content: "目次";
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+    }
+
+    nav#TOC > ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    nav#TOC > ul > li > a { display: none; }
+
+    nav#TOC > ul > li > ul {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 4px 28px;
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    nav#TOC ul ul ul { display: none; }
+
+    nav#TOC a {
+      color: var(--navy);
+      text-decoration: none;
+    }
+
+    body > section.level1 {
+      margin-top: 18px;
+      margin-bottom: 48px;
+      padding: 56px 66px 68px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+    }
+
+    h1, h2, h3 { line-height: 1.4; }
+
+    h1 {
+      margin: 0 0 10px;
+      padding-bottom: 20px;
+      color: var(--navy);
+      border-bottom: 3px solid var(--navy);
+      font-size: clamp(27px, 4vw, 38px);
+      letter-spacing: 0.01em;
+    }
+
+    h1 + p {
+      margin: 14px 0 34px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    h2 {
+      margin: 52px 0 20px;
+      padding: 10px 14px;
+      color: var(--navy);
+      background: var(--navy-soft);
+      border-left: 5px solid var(--navy);
+      border-radius: 4px 9px 9px 4px;
+      font-size: 23px;
+    }
+
+    h3 {
+      margin: 32px 0 12px;
+      padding-bottom: 7px;
+      color: #294861;
+      border-bottom: 1px solid var(--line);
+      font-size: 18px;
+    }
+
+    p { margin: 10px 0; }
+
+    ul { padding-left: 24px; }
+
+    li { margin: 7px 0; }
+
+    ul.task-list > li {
+      list-style: none;
+      margin-left: -24px;
+      padding: 4px 0 4px 30px;
+      position: relative;
+    }
+
+    input[type="checkbox"] {
+      position: absolute;
+      left: 0;
+      top: 9px;
+      width: 17px;
+      height: 17px;
+      margin: 0;
+      accent-color: var(--green);
+      cursor: pointer;
+    }
+
+    ul.task-list > li:has(input:checked) {
+      color: #486354;
+      background: linear-gradient(90deg, var(--green-soft), transparent 70%);
+    }
+
+    blockquote {
+      margin: 22px 0;
+      padding: 18px 22px;
+      color: #2f4858;
+      background: var(--amber-soft);
+      border: 1px solid #eddcae;
+      border-left: 5px solid #d59a1a;
+      border-radius: 8px;
+    }
+
+    blockquote p:first-child { margin-top: 0; }
+    blockquote p:last-child { margin-bottom: 0; }
+
+    table {
+      width: 100%;
+      margin: 20px 0;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    th, td {
+      min-width: 62px;
+      padding: 9px 10px;
+      vertical-align: top;
+      border: 1px solid var(--line);
+    }
+
+    th {
+      color: #fff;
+      background: var(--navy);
+      font-weight: 700;
+      text-align: left;
+    }
+
+    tbody tr:nth-child(even) { background: #f7f9fb; }
+
+    a { color: #1769aa; overflow-wrap: anywhere; }
+
+    section[id$="希望する性能"] > ul:first-of-type {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      padding: 0;
+      list-style: none;
+    }
+
+    section[id$="希望する性能"] > ul:first-of-type > li {
+      margin: 0;
+      padding: 15px 17px;
+      background: #f5f8fb;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+    }
+
+    section[id$="希望する性能"] > ul:first-of-type > li:nth-child(1) {
+      color: var(--navy);
+      background: var(--navy-soft);
+      border-color: #bdd0e2;
+    }
+
+    section[id$="希望する性能"] > ul:first-of-type > li:nth-child(2) {
+      color: var(--green);
+      background: var(--green-soft);
+      border-color: #b9dfca;
+    }
+
+    @page { size: A4; margin: 14mm 13mm 16mm; }
+
+    @media print {
+      body { background: #fff; font-size: 10.2pt; line-height: 1.55; }
+      .document-toolbar, nav#TOC { display: none !important; }
+      body > section.level1 {
+        width: auto;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+      }
+      h1 { font-size: 24pt; }
+      h2 { margin-top: 10mm; font-size: 16pt; break-after: avoid; }
+      h3 { font-size: 12.5pt; break-after: avoid; }
+      p, li, blockquote, tr { break-inside: avoid; }
+      a { color: inherit; text-decoration: none; }
+      section[id$="希望する性能"] > ul:first-of-type { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const storageKey = "sekisui-airtightness-checklist-v2";
+      const boxes = [...document.querySelectorAll('input[type="checkbox"]')];
+      const progress = document.getElementById("progress-label");
+
+      let saved = [];
+      try { saved = JSON.parse(localStorage.getItem(storageKey) || "[]"); } catch (_) {}
+
+      boxes.forEach((box, index) => {
+        box.disabled = false;
+        box.checked = Boolean(saved[index]);
+        box.addEventListener("change", () => {
+          localStorage.setItem(storageKey, JSON.stringify(boxes.map(item => item.checked)));
+          updateProgress();
+        });
+      });
+
+      function updateProgress() {
+        const checked = boxes.filter(box => box.checked).length;
+        progress.textContent = `${checked} / ${boxes.length} 確認済み`;
+      }
+
+      document.getElementById("print-button").addEventListener("click", () => window.print());
+      document.getElementById("reset-button").addEventListener("click", () => {
+        if (!confirm("チェック状態をすべて解除しますか？")) return;
+        boxes.forEach(box => { box.checked = false; });
+        localStorage.removeItem(storageKey);
+        updateProgress();
+      });
+
+      updateProgress();
+    });
+  </script>
+</head>
+<body>
+<div class="document-toolbar" role="toolbar" aria-label="文書操作">
+  <div class="toolbar-title">気密性能に関する相談・確認事項</div>
+  <div class="toolbar-actions">
+    <span class="progress-label" id="progress-label">0 / 0 確認済み</span>
+    <button type="button" id="reset-button">チェック解除</button>
+    <button type="button" id="print-button">印刷・PDF保存</button>
+  </div>
+</div>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#気密性能に関する相談確認事項" id="toc-気密性能に関する相談確認事項">気密性能に関する相談・確認事項</a>
+<ul>
+<li><a href="#目的" id="toc-目的">目的</a></li>
+<li><a href="#1-希望する性能" id="toc-1-希望する性能">1. 希望する性能</a></li>
+<li><a href="#2-優先して相談したい事項" id="toc-2-優先して相談したい事項">2. 優先して相談したい事項</a></li>
+<li><a href="#3-部位別の確認事項" id="toc-3-部位別の確認事項">3. 部位別の確認事項</a></li>
+<li><a href="#4-使用材料施工方法" id="toc-4-使用材料施工方法">4. 使用材料・施工方法</a></li>
+<li><a href="#5-現場確認漏気箇所の探索" id="toc-5-現場確認漏気箇所の探索">5. 現場確認・漏気箇所の探索</a></li>
+<li><a href="#6-完成時に確認共有いただきたい資料" id="toc-6-完成時に確認共有いただきたい資料">6. 完成時に確認・共有いただきたい資料</a></li>
+<li><a href="#7-優先順位" id="toc-7-優先順位">7. 優先順位</a></li>
+<li><a href="#参考資料" id="toc-参考資料">参考資料</a></li>
+</ul></li>
+</ul>
+</nav>
+<section id="気密性能に関する相談確認事項" class="level1">
+<h1>気密性能に関する相談・確認事項</h1>
+<p>提出先：積水ハウス株式会社　ご担当者様<br />
+対象：積水ハウス シャーウッド／木造2階建て／延床約100㎡<br />
+打合せ日：________________　参加者：________________</p>
+<section id="目的" class="level2">
+<h2>目的</h2>
+<p>計画中の断熱・換気性能を十分に発揮させ、完成後も安定した室内環境を保つため、気密性能について設計段階からご相談させていただきたく、確認事項をまとめました。</p>
+<p>施工方法や納まりの詳細は貴社の標準仕様・施工要領を前提とし、対応可能な範囲や適切な進め方をご教示いただきながら、図面・工程・測定方法を擦り合わせたいと考えております。</p>
+</section>
+<section id="1-希望する性能" class="level2">
+<h2>1. 希望する性能</h2>
+<p>次の水準を希望しております。実現可能性を含めてご相談させてください。</p>
+<ul>
+<li>希望ライン：<strong>完成時のC値 1.0 cm²/m² 以下</strong></li>
+<li>目標ライン：<strong>完成時のC値 0.5 cm²/m² 以下</strong></li>
+<li>気密測定：可能であれば<strong>中間測定</strong>・<strong>完成測定</strong>の2回</li>
+<li>外皮貫通部：第一種換気・空調・給排水・電気・通信・太陽光・給湯設備等を設計段階で整理</li>
+</ul>
+</section>
+<section id="2-優先して相談したい事項" class="level2">
+<h2>2. 優先して相談したい事項</h2>
+<p>設計の前提や工程に関わるため、優先してご相談させていただきたい事項です。</p>
+<section id="2-1-c値の位置付けと測定後の対応" class="level3">
+<h3>2-1. C値の位置付けと測定後の対応</h3>
+<ul class="task-list">
+<li><label><input type="checkbox" />希望ライン（C値 1.0 cm²/m² 以下）・目標ライン（C値 0.5 cm²/m² 以下）に対する対応可能な範囲</label></li>
+<li><label><input type="checkbox" />数値の位置付け：施主希望／施工上の目標／参考測定値等</label></li>
+<li><label><input type="checkbox" />希望ラインに届かなかった場合の対応（漏気箇所の確認・可能な範囲での補修・再測定）の可否</label></li>
+<li><label><input type="checkbox" />補修・再測定を行う場合の時期と追加費用の考え方</label></li>
+<li><label><input type="checkbox" />合意内容の記載先：打合せ議事録／工程表／施工図等</label></li>
+</ul>
+</section>
+<section id="2-2-気密測定の方法と時期" class="level3">
+<h3>2-2. 気密測定の方法と時期</h3>
+<ul class="task-list">
+<li><label><input type="checkbox" /><strong>JIS A 2201:2017</strong>に準拠した測定の可否</label></li>
+<li><label><input type="checkbox" />測定者：貴社／測定専門会社／第三者等</label></li>
+<li><label><input type="checkbox" /><strong>中間測定</strong>の実施時期：窓・玄関ドア・気密層・主要な外皮貫通部の施工後、かつ内装ボード等で気密層が隠れる前</label></li>
+<li><label><input type="checkbox" /><strong>完成測定</strong>の実施時期：設備・電気・通信工事を含む外皮貫通部の施工完了後</label></li>
+<li><label><input type="checkbox" />中間測定後に追加・変更された貫通部を、完成測定の対象とすることの可否</label></li>
+<li><label><input type="checkbox" />測定時に閉鎖する換気口等について、測定条件と閉鎖箇所を報告書へ記録することの可否</label></li>
+<li><label><input type="checkbox" />報告書への記載項目：C値・総相当隙間面積・測定条件・外気条件等</label></li>
+</ul>
+</section>
+<section id="2-3-図面上の気密ライン" class="level3">
+<h3>2-3. 図面上の気密ライン</h3>
+<ul class="task-list">
+<li><label><input type="checkbox" />平面図・断面図への気密ラインの明示（室内側と室外側を色分け）の可否</label></li>
+<li><label><input type="checkbox" />基礎・床、外壁、最上階天井・屋根の気密層が連続する位置</label></li>
+<li><label><input type="checkbox" />1階と2階、吹抜け、階段、縦ダクト等の周辺における気密ラインの連続</label></li>
+<li><label><input type="checkbox" />吹抜け上部の外壁と天井・屋根の取り合い、および2階床梁周辺における気密層の連続</label></li>
+<li><label><input type="checkbox" />吹抜け上部に設置する照明・火災警報器等の配線経路と、気密層を貫通する箇所の有無</label></li>
+<li><label><input type="checkbox" />吹抜け上部の窓や高所の接合部を、中間測定時の漏気確認・施工写真の対象とすることの可否</label></li>
+<li><label><input type="checkbox" />外壁の入隅・出隅、梁・柱・土台周りの標準的な納まり</label></li>
+<li><label><input type="checkbox" />小屋裏・床下・設備スペースにおける気密区画の内外の区分</label></li>
+</ul>
+</section>
+<section id="2-4-外皮貫通部の整理" class="level3">
+<h3>2-4. 外皮貫通部の整理</h3>
+<ul class="task-list">
+<li><label><input type="checkbox" />外壁・屋根・床・基礎を貫通する設備・配線の一覧（図面または一覧表）</label></li>
+<li><label><input type="checkbox" />各貫通部の位置・用途・本数・径・担当工種・気密処理方法</label></li>
+<li><label><input type="checkbox" />可能な範囲での貫通位置の集約</label></li>
+<li><label><input type="checkbox" />施工中に貫通部の追加・変更が生じた場合の共有・確認方法</label></li>
+<li><label><input type="checkbox" />気密層が隠れる前の、主要な貫通部の施工写真の記録</label></li>
+</ul>
+</section>
+<section id="2-5-工種間の情報共有" class="level3">
+<h3>2-5. 工種間の情報共有</h3>
+<ul class="task-list">
+<li><label><input type="checkbox" />気密施工に関する現場での確認窓口</label></li>
+<li><label><input type="checkbox" />大工・電気・空調・換気・給排水・太陽光等の各工種への、気密上の注意事項の共有方法</label></li>
+<li><label><input type="checkbox" />後工程で貫通部を追加・変更した場合の気密処理と確認方法</label></li>
+<li><label><input type="checkbox" />内装ボード施工前に、現場監督と気密施工状況を確認する機会</label></li>
+</ul>
+</section>
+</section>
+<section id="3-部位別の確認事項" class="level2">
+<h2>3. 部位別の確認事項</h2>
+<p>部位ごとに、標準仕様・施工要領における気密層の考え方と、外皮貫通部の処理方法をご教示ください。</p>
+<section id="3-1-基礎床土台" class="level3">
+<h3>3-1. 基礎・床・土台</h3>
+<ul class="task-list">
+<li><label><input type="checkbox" />給水・給湯・排水・ガス・電気・通信・給湯設備等の基礎・床貫通位置</label></li>
+<li><label><input type="checkbox" />配管スリーブと配管周囲の標準的な気密処理</label></li>
+<li><label><input type="checkbox" />基礎・土台、床・外壁の取り合い</label></li>
+<li><label><input type="checkbox" />床下点検口の気密仕様</label></li>
+<li><label><input type="checkbox" />ユニットバス下・玄関土間周辺の気密ライン</label></li>
+<li><label><input type="checkbox" />将来の配管交換・追加時に、気密処理を復旧できる納まりの有無</label></li>
+</ul>
+</section>
+<section id="3-2-外壁窓玄関ドア" class="level3">
+<h3>3-2. 外壁・窓・玄関ドア</h3>
+<ul class="task-list">
+<li><label><input type="checkbox" />大開口サッシ・玄関ドアを含む開口部周囲における気密層の連続性と、特別な注意点の有無</label></li>
+<li><label><input type="checkbox" />防火窓・サッシ等の仕様変更が生じた場合の、気密上の扱いの変化</label></li>
+<li><label><input type="checkbox" />庇・外付け日射遮蔽等を採用する場合の固定部・配線貫通</label></li>
+<li><label><input type="checkbox" />外壁コンセント・屋外照明・インターホンのボックス・配線貫通</label></li>
+</ul>
+</section>
+<section id="3-3-天井屋根" class="level3">
+<h3>3-3. 天井・屋根</h3>
+<ul class="task-list">
+<li><label><input type="checkbox" />気密ラインとする面：最上階天井／屋根面</label></li>
+<li><label><input type="checkbox" />屋根・外壁の取り合い、軒、梁・金物周辺の納まり</label></li>
+<li><label><input type="checkbox" />太陽光・アンテナ・屋外設備の配線経路・貫通位置</label></li>
+<li><label><input type="checkbox" />ダウンライト・天井点検口等の気密上の配慮</label></li>
+<li><label><input type="checkbox" />天井裏へ通す配線・ダクトの貫通処理</label></li>
+</ul>
+</section>
+<section id="3-4-換気空調" class="level3">
+<h3>3-4. 換気・空調</h3>
+<ul class="task-list">
+<li><label><input type="checkbox" />第一種換気本体、給気・排気ダクトの貫通位置</label></li>
+<li><label><input type="checkbox" />ダクト外周と躯体の気密処理、断熱・結露対策</label></li>
+<li><label><input type="checkbox" />レンジフード・浴室乾燥換気・トイレ局所換気の貫通位置</label></li>
+<li><label><input type="checkbox" />各エアコンの冷媒管・ドレン・電源のスリーブ位置</label></li>
+<li><label><input type="checkbox" />将来用エアコン穴を先行スリーブ化する場合の、未使用時の処理</label></li>
+<li><label><input type="checkbox" />完成時における換気風量の測定・給排気バランス調整</label></li>
+</ul>
+</section>
+<section id="3-5-給排水住宅設備" class="level3">
+<h3>3-5. 給排水・住宅設備</h3>
+<ul class="task-list">
+<li><label><input type="checkbox" />キッチン・洗面・トイレ・浴室の給排水貫通</label></li>
+<li><label><input type="checkbox" />外水栓の配管貫通</label></li>
+<li><label><input type="checkbox" />採用する給湯設備・蓄電池・HEMS・分電盤等の配管・配線貫通</label></li>
+<li><label><input type="checkbox" />太陽光・自立運転用設備の配線経路</label></li>
+<li><label><input type="checkbox" />排水管・ドレン管周囲の標準的な工法と、使用する気密材</label></li>
+</ul>
+</section>
+<section id="3-6-電気通信スマートホーム" class="level3">
+<h3>3-6. 電気・通信・スマートホーム</h3>
+<ul class="task-list">
+<li><label><input type="checkbox" />外壁に面するコンセント・スイッチへの気密ボックスの使用有無と、使用しない場合の標準的な気密処理</label></li>
+<li><label><input type="checkbox" />Cat6A、1階・2階PoEアクセスポイント、屋外カメラの配線経路</label></li>
+<li><label><input type="checkbox" />mmWave在室センサー、温湿度・CO₂センサー、窓・扉センサー用配線の経路</label></li>
+<li><label><input type="checkbox" />弱電収納から外部へ出るケーブルの貫通の集約</label></li>
+<li><label><input type="checkbox" />予備配管の未使用時の閉鎖方法と、図面・現場での用途表示</label></li>
+<li><label><input type="checkbox" />引渡し後の配線・機器追加時に利用できるルートの確保</label></li>
+</ul>
+</section>
+</section>
+<section id="4-使用材料施工方法" class="level2">
+<h2>4. 使用材料・施工方法</h2>
+<p>標準仕様・施工要領で用いる気密材と、その施工方法についてご教示ください。</p>
+<ul class="task-list">
+<li><label><input type="checkbox" />部位ごとに使用する気密材</label></li>
+<li><label><input type="checkbox" />テープ・パッキン・シート・シーリング材等と下地の適合性</label></li>
+<li><label><input type="checkbox" />木材の乾燥・収縮や配管の動きに配慮した標準的な納まり</label></li>
+<li><label><input type="checkbox" />配管・配線貫通部に使用する材料と、その施工要領</label></li>
+<li><label><input type="checkbox" />入隅や複雑な接合部において、先行して施工する部材・工程の有無</label></li>
+</ul>
+</section>
+<section id="5-現場確認漏気箇所の探索" class="level2">
+<h2>5. 現場確認・漏気箇所の探索</h2>
+<p>施工中の記録の残し方と、漏気箇所を確認する進め方についてご相談させてください。</p>
+<ul class="task-list">
+<li><label><input type="checkbox" />気密層が隠れる前の、主要箇所の施工写真の撮影</label></li>
+<li><label><input type="checkbox" />吹抜け上部など完成後に確認しにくい箇所の、隠蔽・足場撤去前の施工写真での確認</label></li>
+<li><label><input type="checkbox" />中間測定時における、煙・フォグ等による漏気箇所の探索の可否</label></li>
+<li><label><input type="checkbox" />フォグ等の位置付け：漏気箇所を確認する補助手段（C値は送風機による測定で確認）</label></li>
+<li><label><input type="checkbox" />漏気箇所が確認された場合の、可能な範囲での補修と再確認</label></li>
+<li><label><input type="checkbox" />JISに基づく通常の閉鎖箇所と、漏気箇所を仮に塞ぐ処置との区別の記録</label></li>
+</ul>
+</section>
+<section id="6-完成時に確認共有いただきたい資料" class="level2">
+<h2>6. 完成時に確認・共有いただきたい資料</h2>
+<p>引渡しまでに、次の資料を共有いただけますと幸いです。</p>
+<ul class="task-list">
+<li><label><input type="checkbox" />中間測定・完成測定の気密測定報告書</label></li>
+<li><label><input type="checkbox" />測定時の閉鎖箇所・測定条件の記録</label></li>
+<li><label><input type="checkbox" />漏気箇所を補修した場合の内容</label></li>
+<li><label><input type="checkbox" />気密層・主要な外皮貫通部の施工写真</label></li>
+<li><label><input type="checkbox" />最終版の貫通部・配管配線図</label></li>
+<li><label><input type="checkbox" />第一種換気の風量測定・調整結果</label></li>
+<li><label><input type="checkbox" />将来用スリーブ・予備配管の位置図</label></li>
+</ul>
+</section>
+<section id="7-優先順位" class="level2">
+<h2>7. 優先順位</h2>
+<p>ご相談させていただきたい時期の目安です。</p>
+<section id="a今回の図面打合せで相談したい事項" class="level3">
+<h3>A：今回の図面打合せで相談したい事項</h3>
+<ul class="task-list">
+<li><label><input type="checkbox" />希望ライン（C値 1.0 cm²/m² 以下）・目標ライン（C値 0.5 cm²/m² 以下）の位置付け</label></li>
+<li><label><input type="checkbox" />中間測定・完成測定の2回実施の可否</label></li>
+<li><label><input type="checkbox" />図面上の気密ライン</label></li>
+<li><label><input type="checkbox" />主要な外皮貫通部と処理方法</label></li>
+<li><label><input type="checkbox" />工種間の共有方法、施工写真、追加貫通時の確認方法</label></li>
+</ul>
+</section>
+<section id="b着工前までに確認したい事項" class="level3">
+<h3>B：着工前までに確認したい事項</h3>
+<ul class="task-list">
+<li><label><input type="checkbox" />開口部（大開口サッシ・玄関ドアを含む）周囲の気密層の連続性と、特別な注意点の有無</label></li>
+<li><label><input type="checkbox" />換気・空調・給排水・電気・通信の施工図</label></li>
+<li><label><input type="checkbox" />先行スリーブ・予備配管</label></li>
+<li><label><input type="checkbox" />使用する気密材と施工要領</label></li>
+</ul>
+</section>
+<section id="c施工中完成時に確認したい事項" class="level3">
+<h3>C：施工中・完成時に確認したい事項</h3>
+<ul class="task-list">
+<li><label><input type="checkbox" />中間測定、漏気箇所の確認、必要に応じた補修・再測定</label></li>
+<li><label><input type="checkbox" />完成測定と換気風量の調整</label></li>
+<li><label><input type="checkbox" />測定報告書・施工写真・最終図面の共有</label></li>
+</ul>
+</section>
+</section>
+<section id="参考資料" class="level2">
+<h2>参考資料</h2>
+<ol type="1">
+<li><p><strong>国土交通省住宅局編集協力「省エネ性能に優れた断熱性の高い住宅の設計ガイド」（令和7年3月）</strong><br />
+JIS A 2201:2017による気密測定方法、総相当隙間面積とC値の関係等を確認するための資料。<br />
+<a href="https://www.mlit.go.jp/jutakukentiku/house/content/001884522.pdf">https://www.mlit.go.jp/jutakukentiku/house/content/001884522.pdf</a></p></li>
+<li><p><strong>日本規格協会「JIS A 2201:2017 送風機による住宅等の気密性能試験方法」</strong><br />
+本書で希望している送風機による気密測定の基準規格を確認するための資料。2022年11月25日に有効性が確認されている。<br />
+<a href="https://webdesk.jsa.or.jp/books/W11M0090/index/?bunsyo_id=JIS+A+2201%3A2017">https://webdesk.jsa.or.jp/books/W11M0090/index/?bunsyo_id=JIS+A+2201%3A2017</a></p></li>
+<li><p><strong>国土交通省「住宅の省エネルギー 設計と施工 2023」関連資料</strong><br />
+気密性能の目標設定、気密層の連続性、気密材および基礎・壁・天井等の施工上の考え方を確認するための資料。<br />
+気密性能・目標設定：<a href="https://www.mlit.go.jp/common/001977879.pdf">https://www.mlit.go.jp/common/001977879.pdf</a><br />
+各部の施工例：<a href="https://www.mlit.go.jp/common/001977881.pdf">https://www.mlit.go.jp/common/001977881.pdf</a></p></li>
+<li><p><strong>HEAT20「住宅シナリオと外皮性能水準」</strong><br />
+本計画で検討しているG2水準を含む、断熱・外皮性能の考え方を確認するための資料。HEAT20の外皮性能水準と、実測するC値は別の指標として整理している。<br />
+<a href="https://www.heat20.jp/grade/">https://www.heat20.jp/grade/</a></p></li>
+</ol>
+</section>
+</section>
+</body>
+</html>

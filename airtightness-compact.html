@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>気密性能 相談・確認シート（コンパクト版）</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <style>
+    :root {
+      --ink: #1f2a37;
+      --muted: #5c6878;
+      --line: #d9e0e8;
+      --paper: #ffffff;
+      --page: #eef2f6;
+      --navy: #173a5e;
+      --navy-soft: #eaf1f7;
+      --green: #157347;
+      --green-soft: #e9f6ef;
+      --amber: #9a6400;
+      --amber-soft: #fff6df;
+      --shadow: 0 14px 38px rgba(22, 48, 74, 0.10);
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
+
+    body {
+      margin: 0;
+      max-width: none;
+      padding: 0;
+      color: var(--ink);
+      background: var(--page);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans JP",
+        "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, sans-serif;
+      font-size: 15px;
+      line-height: 1.75;
+    }
+
+    .document-toolbar {
+      position: sticky;
+      z-index: 30;
+      top: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      min-height: 58px;
+      padding: 10px max(18px, calc((100vw - 1060px) / 2));
+      color: #fff;
+      background: rgba(23, 58, 94, 0.97);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(8px);
+    }
+
+    .toolbar-title {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .toolbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .progress-label {
+      margin-right: 6px;
+      color: rgba(255, 255, 255, 0.82);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    button {
+      appearance: none;
+      min-height: 36px;
+      padding: 7px 12px;
+      color: #fff;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      border-radius: 8px;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 650;
+      cursor: pointer;
+    }
+
+    button:hover { background: rgba(255, 255, 255, 0.2); }
+
+    .toolbar-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 36px;
+      padding: 7px 12px;
+      color: #fff;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 650;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .toolbar-link:hover { background: rgba(255, 255, 255, 0.2); }
+
+    .toolbar-variant {
+      margin-left: 8px;
+      padding: 2px 8px;
+      color: rgba(255, 255, 255, 0.92);
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+    }
+
+    body > section.level1,
+    nav#TOC {
+      width: min(980px, calc(100% - 32px));
+      margin-right: auto;
+      margin-left: auto;
+      background: var(--paper);
+    }
+
+    nav#TOC {
+      margin-top: 28px;
+      padding: 22px 28px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+    }
+
+    nav#TOC::before {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--navy);
+      content: "目次";
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+    }
+
+    nav#TOC > ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    nav#TOC > ul > li > a { display: none; }
+
+    nav#TOC > ul > li > ul {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 4px 28px;
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    nav#TOC ul ul ul { display: none; }
+
+    nav#TOC a {
+      color: var(--navy);
+      text-decoration: none;
+    }
+
+    body > section.level1 {
+      margin-top: 18px;
+      margin-bottom: 48px;
+      padding: 56px 66px 68px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+    }
+
+    h1, h2, h3 { line-height: 1.4; }
+
+    h1 {
+      margin: 0 0 10px;
+      padding-bottom: 20px;
+      color: var(--navy);
+      border-bottom: 3px solid var(--navy);
+      font-size: clamp(23px, 5vw, 38px);
+      letter-spacing: 0.01em;
+    }
+
+    h1 + p {
+      margin: 14px 0 34px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    h2 {
+      margin: 52px 0 20px;
+      padding: 10px 14px;
+      color: var(--navy);
+      background: var(--navy-soft);
+      border-left: 5px solid var(--navy);
+      border-radius: 4px 9px 9px 4px;
+      font-size: 23px;
+    }
+
+    h3 {
+      margin: 32px 0 12px;
+      padding-bottom: 7px;
+      color: #294861;
+      border-bottom: 1px solid var(--line);
+      font-size: 18px;
+    }
+
+    p { margin: 10px 0; }
+
+    section[id], h1, h2, h3 { scroll-margin-top: 74px; }
+
+    ul { padding-left: 24px; }
+
+    li { margin: 7px 0; }
+
+    ul.task-list > li {
+      list-style: none;
+      margin-left: -24px;
+      padding: 4px 0 4px 30px;
+      position: relative;
+    }
+
+    ul.task-list li input[type="checkbox"] {
+      position: absolute;
+      left: 0;
+      top: 9px;
+      width: 17px;
+      height: 17px;
+      margin: 0;
+      accent-color: var(--green);
+      cursor: pointer;
+    }
+
+    ul.task-list > li:has(input:checked) {
+      color: #486354;
+      background: linear-gradient(90deg, var(--green-soft), transparent 70%);
+    }
+
+    blockquote {
+      margin: 22px 0;
+      padding: 18px 22px;
+      color: #2f4858;
+      background: var(--amber-soft);
+      border: 1px solid #eddcae;
+      border-left: 5px solid #d59a1a;
+      border-radius: 8px;
+    }
+
+    blockquote p:first-child { margin-top: 0; }
+    blockquote p:last-child { margin-bottom: 0; }
+
+    table {
+      width: 100%;
+      margin: 20px 0;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    th, td {
+      min-width: 62px;
+      padding: 9px 10px;
+      vertical-align: top;
+      border: 1px solid var(--line);
+    }
+
+    th {
+      color: #fff;
+      background: var(--navy);
+      font-weight: 700;
+      text-align: left;
+    }
+
+    tbody tr:nth-child(even) { background: #f7f9fb; }
+
+    a { color: #1769aa; overflow-wrap: anywhere; }
+
+    section[id$="希望する性能"] > ul:first-of-type {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      padding: 0;
+      list-style: none;
+    }
+
+    section[id$="希望する性能"] > ul:first-of-type > li {
+      margin: 0;
+      padding: 15px 17px;
+      background: #f5f8fb;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+    }
+
+    section[id$="希望する性能"] > ul:first-of-type > li:nth-child(1) {
+      color: var(--navy);
+      background: var(--navy-soft);
+      border-color: #bdd0e2;
+    }
+
+    section[id$="希望する性能"] > ul:first-of-type > li:nth-child(2) {
+      color: var(--green);
+      background: var(--green-soft);
+      border-color: #b9dfca;
+    }
+
+    /* ---------- Responsive ---------- */
+
+    @media screen and (max-width: 1080px) {
+      body > section.level1,
+      nav#TOC { width: calc(100% - 28px); }
+
+      body > section.level1 { padding: 44px 42px 52px; }
+    }
+
+    @media screen and (max-width: 760px) {
+      body { line-height: 1.7; }
+
+      section[id], h1, h2, h3 { scroll-margin-top: 64px; }
+
+      .document-toolbar {
+        flex-wrap: wrap;
+        gap: 10px;
+        min-height: 52px;
+        padding: 8px 14px;
+      }
+
+      .toolbar-title {
+        flex: 1 1 auto;
+        min-width: 0;
+        overflow: hidden;
+        font-size: 13px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+
+      .toolbar-actions { flex-wrap: wrap; gap: 6px; }
+
+      .progress-label { margin-right: 2px; font-size: 12px; }
+
+      button {
+        min-height: 40px;
+        padding: 6px 11px;
+        font-size: 12.5px;
+      }
+
+      body > section.level1,
+      nav#TOC { width: calc(100% - 20px); }
+
+      nav#TOC {
+        margin-top: 14px;
+        padding: 16px 18px;
+        border-radius: 12px;
+      }
+
+      nav#TOC > ul > li > ul {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0;
+        padding-left: 2px;
+      }
+
+      nav#TOC li { margin: 0; }
+
+      nav#TOC a { display: block; padding: 7px 0; }
+
+      body > section.level1 {
+        margin-top: 12px;
+        margin-bottom: 26px;
+        padding: 26px 18px 34px;
+        border-radius: 12px;
+      }
+
+      h1 { padding-bottom: 14px; border-bottom-width: 2px; }
+
+      h1 + p { margin: 12px 0 26px; font-size: 13px; }
+
+      h2 {
+        margin: 34px 0 14px;
+        padding: 9px 11px;
+        font-size: 18px;
+      }
+
+      h3 { margin: 26px 0 10px; font-size: 16px; }
+
+      ul { padding-left: 20px; }
+
+      ul.task-list { padding-left: 0; }
+
+      ul.task-list > li {
+        margin-left: 0;
+        padding: 7px 0 7px 30px;
+      }
+
+      ul.task-list > li > label { display: block; }
+
+      ul.task-list li input[type="checkbox"] {
+        top: 10px;
+        width: 20px;
+        height: 20px;
+      }
+
+      blockquote { margin: 18px 0; padding: 14px 16px; }
+
+      section[id$="希望する性能"] > ul:first-of-type {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 10px;
+      }
+
+      section[id$="希望する性能"] > ul:first-of-type > li { padding: 13px 15px; }
+
+      table {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+    }
+
+    @media screen and (max-width: 560px) {
+      .toolbar-title {
+        flex: 0 0 auto;
+        font-size: 0;
+      }
+
+      .toolbar-variant { margin-left: 0; font-size: 11px; }
+
+      .toolbar-actions {
+        flex: 1 1 auto;
+        justify-content: space-between;
+      }
+    }
+
+    @media screen and (max-width: 360px) {
+      .document-toolbar { padding: 8px 10px; }
+
+      .progress-label { font-size: 11px; }
+
+      button { padding: 5px 8px; font-size: 12px; }
+
+      body > section.level1 { padding: 22px 14px 28px; }
+
+      nav#TOC { padding: 14px 15px; }
+    }
+
+    @page { size: A4; margin: 14mm 13mm 16mm; }
+
+    @media print {
+      body { background: #fff; font-size: 10.2pt; line-height: 1.55; }
+      .document-toolbar, nav#TOC { display: none !important; }
+      body > section.level1 {
+        width: auto;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+      }
+      h1 { font-size: 24pt; }
+      h2 { margin-top: 10mm; font-size: 16pt; break-after: avoid; }
+      h3 { font-size: 12.5pt; break-after: avoid; }
+      p, li, blockquote, tr { break-inside: avoid; }
+      a { color: inherit; text-decoration: none; }
+      section[id$="希望する性能"] > ul:first-of-type { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const storageKey = "sekisui-airtightness-checklist-v3";
+      const boxes = [...document.querySelectorAll('input[type="checkbox"]')];
+      const progress = document.getElementById("progress-label");
+
+      let saved = [];
+      try { saved = JSON.parse(localStorage.getItem(storageKey) || "[]"); } catch (_) {}
+
+      boxes.forEach((box, index) => {
+        box.disabled = false;
+        box.checked = Boolean(saved[index]);
+        box.addEventListener("change", () => {
+          localStorage.setItem(storageKey, JSON.stringify(boxes.map(item => item.checked)));
+          updateProgress();
+        });
+      });
+
+      function updateProgress() {
+        const checked = boxes.filter(box => box.checked).length;
+        progress.textContent = `${checked} / ${boxes.length} 確認済み`;
+      }
+
+      document.getElementById("print-button").addEventListener("click", () => window.print());
+      document.getElementById("reset-button").addEventListener("click", () => {
+        if (!confirm("チェック状態をすべて解除しますか？")) return;
+        boxes.forEach(box => { box.checked = false; });
+        localStorage.removeItem(storageKey);
+        updateProgress();
+      });
+
+      updateProgress();
+    });
+  </script>
+</head>
+<body>
+<div class="document-toolbar" role="toolbar" aria-label="文書操作">
+  <div class="toolbar-title">気密性能に関する相談・確認事項<span class="toolbar-variant">コンパクト版</span></div>
+  <div class="toolbar-actions">
+    <a class="toolbar-link" href="index.html">一覧</a>
+    <a class="toolbar-link" href="airtightness-detail.html">詳細版</a>
+    <span class="progress-label" id="progress-label">0 / 0 確認済み</span>
+    <button type="button" id="reset-button">チェック解除</button>
+    <button type="button" id="print-button">印刷・PDF保存</button>
+  </div>
+</div>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#気密性能に関する相談確認事項" id="toc-気密性能に関する相談確認事項">気密性能に関する相談・確認事項</a>
+<ul>
+<li><a href="#目的" id="toc-目的">目的</a></li>
+<li><a href="#1-希望する性能" id="toc-1-希望する性能">1. 希望する性能</a></li>
+<li><a href="#2-効果の大きい相談事項" id="toc-2-効果の大きい相談事項">2. 効果の大きい相談事項</a></li>
+<li><a href="#3-c値の位置付けと未達時の対応" id="toc-3-c値の位置付けと未達時の対応">3. C値の位置付けと未達時の対応</a></li>
+<li><a href="#4-完成時に共有いただきたい資料" id="toc-4-完成時に共有いただきたい資料">4. 完成時に共有いただきたい資料</a></li>
+<li><a href="#参考資料" id="toc-参考資料">参考資料</a></li>
+</ul></li>
+</ul>
+</nav>
+<section id="気密性能に関する相談確認事項" class="level1">
+<h1>気密性能に関する相談・確認事項</h1>
+<p>提出先：積水ハウス株式会社　ご担当者様<br />
+対象：積水ハウス シャーウッド／木造2階建て／延床約100㎡<br />
+打合せ日：________________　参加者：________________</p>
+<section id="目的" class="level2">
+<h2>目的</h2>
+<p>計画中の断熱・換気性能を十分に発揮させるため、気密性能について設計段階からご相談させていただきたく、確認事項をまとめました。施工方法や納まりの詳細は貴社の標準仕様・施工要領を前提とし、対応可能な範囲をご教示いただければ幸いです。</p>
+<blockquote>
+<p><strong>本書は、最終的なC値への影響が大きいと考えている事項に絞っています。</strong><br />
+①図面で気密ラインを決める　→　②外皮の貫通部を減らす・集約する　→　③気密層が隠れる前に測って直す<br />
+この3点を優先してご相談させていただき、細部の納まりは貴社の標準仕様に沿ってご対応いただく想定です。</p>
+</blockquote>
+</section>
+<section id="1-希望する性能" class="level2">
+<h2>1. 希望する性能</h2>
+<p>次の水準を希望しております。実現可能性を含めてご相談させてください。</p>
+<ul>
+<li>希望ライン：<strong>完成時のC値 1.0 cm²/m² 以下</strong></li>
+<li>目標ライン：<strong>完成時のC値 0.5 cm²/m² 以下</strong></li>
+<li>気密測定：<strong>中間測定</strong>・<strong>完成測定</strong>の2回（JIS A 2201:2017準拠）</li>
+<li>外皮貫通部：換気・空調・給排水・電気・通信・太陽光・給湯設備等を設計段階で整理</li>
+</ul>
+</section>
+<section id="2-効果の大きい相談事項" class="level2">
+<h2>2. 効果の大きい相談事項</h2>
+<section id="2-1-中間測定と漏気箇所の補修" class="level3">
+<h3>2-1. 中間測定と漏気箇所の補修（最も効果が大きい）</h3>
+<p>内装が仕上がった後では、漏気箇所が分かっても手を入れられません。気密層が隠れる前に測定し、その場で直せるかどうかが最終的なC値を最も大きく左右すると考えております。</p>
+<ul class="task-list">
+<li><label><input type="checkbox" /><strong>中間測定</strong>の実施：窓・玄関ドア・気密層・主要な外皮貫通部の施工後、かつ内装ボード等で気密層が隠れる前</label></li>
+<li><label><input type="checkbox" />中間測定時に、煙・フォグ等で<strong>漏気箇所を探索</strong>することの可否（C値は送風機による測定で確認し、フォグ等は補助手段として使用）</label></li>
+<li><label><input type="checkbox" />漏気箇所が確認された場合の、<strong>その場での補修と再確認</strong>の可否</label></li>
+<li><label><input type="checkbox" /><strong>完成測定</strong>の実施：設備・電気・通信工事を含む外皮貫通部の施工完了後</label></li>
+<li><label><input type="checkbox" />測定者（貴社／測定専門会社／第三者）と、JIS A 2201:2017に準拠した測定の可否</label></li>
+<li><label><input type="checkbox" />補修・再測定を行う場合の時期と追加費用の考え方</label></li>
+</ul>
+</section>
+<section id="2-2-図面上の気密ライン" class="level3">
+<h3>2-2. 図面上の気密ライン（着工前にしか決められない部分）</h3>
+<p>どの面を気密ラインとするかが図面で決まっているかどうかで、現場での判断のばらつきが大きく変わると理解しております。</p>
+<ul class="task-list">
+<li><label><input type="checkbox" />平面図・断面図への<strong>気密ラインの明示</strong>（室内側と室外側を色分け）の可否</label></li>
+<li><label><input type="checkbox" />気密ラインとする面：最上階天井とするか、屋根面とするか</label></li>
+<li><label><input type="checkbox" />基礎・床／外壁／天井・屋根の気密層が<strong>連続する位置</strong></label></li>
+<li><label><input type="checkbox" />吹抜け・階段・縦ダクト周辺、および2階床梁まわりの気密層の連続</label></li>
+<li><label><input type="checkbox" />小屋裏・床下・設備スペースにおける気密区画の内外の区分</label></li>
+<li><label><input type="checkbox" />吹抜け上部など完成後に手が届かない箇所を、足場撤去前に確認する方法</label></li>
+</ul>
+</section>
+<section id="2-3-外皮貫通部の削減集約" class="level3">
+<h3>2-3. 外皮貫通部の削減・集約（穴の数がC値に直結）</h3>
+<p>貫通部は数がそのまま隙間面積に効くため、設計段階で数を減らし位置を集約することが最も費用対効果が高いと考えております。</p>
+<ul class="task-list">
+<li><label><input type="checkbox" />外壁・屋根・床・基礎を貫通する設備・配線の<strong>一覧</strong>（位置・用途・本数・径・担当工種・気密処理方法）</label></li>
+<li><label><input type="checkbox" />可能な範囲での<strong>貫通位置の集約</strong>（弱電収納から外部へ出るケーブルを含む）</label></li>
+<li><label><input type="checkbox" />外壁に面するコンセント・スイッチ：<strong>気密ボックス</strong>の使用有無、または内壁側へ寄せる余地</label></li>
+<li><label><input type="checkbox" />ダウンライト・天井点検口・床下点検口の気密仕様（気密ラインを貫通しない納まりの可否）</label></li>
+<li><label><input type="checkbox" />将来用エアコンスリーブ・予備配管の、<strong>未使用時の閉塞方法</strong>と図面上の用途表示</label></li>
+<li><label><input type="checkbox" />第一種換気・レンジフード・浴室乾燥等のダクト貫通位置と、ダクト外周の気密・断熱処理</label></li>
+</ul>
+</section>
+<section id="2-4-漏気が集中しやすい取り合い部" class="level3">
+<h3>2-4. 漏気が集中しやすい取り合い部</h3>
+<p>漏気の多くは面ではなく取り合い部に集中すると理解しております。次の箇所について、標準仕様・施工要領における納まりをご教示ください。</p>
+<ul class="task-list">
+<li><label><input type="checkbox" />基礎・土台・床の取り合い、玄関土間まわり、ユニットバス下</label></li>
+<li><label><input type="checkbox" />サッシ（大開口を含む）・玄関ドア周囲の気密層の連続性と、特別な注意点の有無</label></li>
+<li><label><input type="checkbox" />屋根・外壁の取り合い、軒、梁・柱・金物まわり、外壁の入隅・出隅</label></li>
+<li><label><input type="checkbox" />配管・配線貫通部に使用する気密材（テープ・パッキン・シート・シーリング材等）と施工要領</label></li>
+<li><label><input type="checkbox" />木材の乾燥・収縮や配管の動きを見込んだ納まり（経年での性能低下への配慮）</label></li>
+</ul>
+</section>
+<section id="2-5-工種間の共有と後工程での貫通追加" class="level3">
+<h3>2-5. 工種間の共有と、後工程での貫通追加</h3>
+<p>中間測定で良い数値が出ても、その後の工事で穴が増えれば完成時の性能は下がります。後工程の扱いをあらかじめ決めておきたく存じます。</p>
+<ul class="task-list">
+<li><label><input type="checkbox" />気密施工に関する現場での確認窓口</label></li>
+<li><label><input type="checkbox" />大工・電気・空調・換気・給排水・太陽光等の各工種への、気密上の注意事項の共有方法</label></li>
+<li><label><input type="checkbox" />中間測定後に追加・変更された貫通部の気密処理と、完成測定への反映</label></li>
+<li><label><input type="checkbox" />気密層が隠れる前の、主要な貫通部の施工写真の記録</label></li>
+<li><label><input type="checkbox" />内装ボード施工前に、現場監督と気密施工状況を確認する機会</label></li>
+</ul>
+</section>
+</section>
+<section id="3-c値の位置付けと未達時の対応" class="level2">
+<h2>3. C値の位置付けと未達時の対応</h2>
+<ul class="task-list">
+<li><label><input type="checkbox" />希望ライン（1.0 cm²/m² 以下）・目標ライン（0.5 cm²/m² 以下）に対する対応可能な範囲</label></li>
+<li><label><input type="checkbox" />数値の位置付け：施主希望／施工上の目標／参考測定値等</label></li>
+<li><label><input type="checkbox" />希望ラインに届かなかった場合の対応（漏気箇所の確認・可能な範囲での補修・再測定）の可否</label></li>
+<li><label><input type="checkbox" />合意内容の記載先：打合せ議事録／工程表／施工図等</label></li>
+</ul>
+</section>
+<section id="4-完成時に共有いただきたい資料" class="level2">
+<h2>4. 完成時に共有いただきたい資料</h2>
+<ul class="task-list">
+<li><label><input type="checkbox" />中間測定・完成測定の報告書（C値・総相当隙間面積・測定条件・外気条件・測定時の閉鎖箇所）</label></li>
+<li><label><input type="checkbox" />漏気箇所を補修した場合の内容</label></li>
+<li><label><input type="checkbox" />気密層・主要な外皮貫通部の施工写真</label></li>
+<li><label><input type="checkbox" />最終版の貫通部・配管配線図（将来用スリーブ・予備配管の位置を含む）</label></li>
+<li><label><input type="checkbox" />第一種換気の風量測定・給排気バランス調整の結果</label></li>
+</ul>
+</section>
+<section id="参考資料" class="level2">
+<h2>参考資料</h2>
+<ol type="1">
+<li><p><strong>国土交通省住宅局編集協力「省エネ性能に優れた断熱性の高い住宅の設計ガイド」（令和7年3月）</strong><br />
+JIS A 2201:2017による気密測定方法、総相当隙間面積とC値の関係等を確認するための資料。<br />
+<a href="https://www.mlit.go.jp/jutakukentiku/house/content/001884522.pdf">https://www.mlit.go.jp/jutakukentiku/house/content/001884522.pdf</a></p></li>
+<li><p><strong>日本規格協会「JIS A 2201:2017 送風機による住宅等の気密性能試験方法」</strong><br />
+本書で希望している送風機による気密測定の基準規格。2022年11月25日に有効性が確認されている。<br />
+<a href="https://webdesk.jsa.or.jp/books/W11M0090/index/?bunsyo_id=JIS+A+2201%3A2017">https://webdesk.jsa.or.jp/books/W11M0090/index/?bunsyo_id=JIS+A+2201%3A2017</a></p></li>
+<li><p><strong>国土交通省「住宅の省エネルギー 設計と施工 2023」関連資料</strong><br />
+気密性能の目標設定、気密層の連続性、気密材および基礎・壁・天井等の施工上の考え方を確認するための資料。<br />
+気密性能・目標設定：<a href="https://www.mlit.go.jp/common/001977879.pdf">https://www.mlit.go.jp/common/001977879.pdf</a><br />
+各部の施工例：<a href="https://www.mlit.go.jp/common/001977881.pdf">https://www.mlit.go.jp/common/001977881.pdf</a></p></li>
+</ol>
+</section>
+</section>
+</body>
+</html>

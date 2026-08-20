@@ -81,6 +81,55 @@
     color: var(--accent);
     font-weight: 600;
   }
+  .card-wide { grid-column: 1 / -1; }
+  .doc-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px;
+    box-shadow: var(--shadow);
+  }
+  .doc-head { display: flex; align-items: flex-start; gap: 14px; }
+  .doc-head .icon { font-size: 1.8rem; line-height: 1.1; }
+  .doc-head h2 { font-size: 1.05rem; font-weight: 700; }
+  .doc-head p { font-size: .85rem; color: var(--muted); margin-top: 6px; }
+  .variants {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 12px;
+    margin-top: 18px;
+  }
+  .variant {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    padding: 15px 16px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 11px;
+    text-decoration: none;
+    color: inherit;
+    transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease;
+  }
+  .variant:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent);
+    box-shadow: var(--shadow);
+  }
+  .v-head { display: flex; align-items: center; gap: 8px; }
+  .v-name { font-size: .95rem; font-weight: 700; }
+  .v-scale {
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .04em;
+    color: var(--muted);
+    padding: 2px 8px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  .variant p { font-size: .8rem; color: var(--muted); flex-grow: 1; }
+  .variant .open { font-size: .8rem; color: var(--accent); font-weight: 600; }
   footer {
     margin-top: 48px;
     text-align: center;
@@ -124,12 +173,33 @@
             <span class="open">開く →</span>
           </a>
 
-          <a class="card" href="airtightness.html">
-            <span class="icon">💨</span>
-            <h2>気密性能 相談・確認シート</h2>
-            <p>積水ハウスとの打合せ用。C値の位置付け、中間・完成時の測定、部位別の外皮貫通部まで確認事項をチェックリスト化。</p>
-            <span class="open">開く →</span>
-          </a>
+          <div class="doc-card card-wide">
+            <div class="doc-head">
+              <span class="icon">💨</span>
+              <div>
+                <h2>気密性能 相談・確認シート</h2>
+                <p>積水ハウスとの打合せ用。C値の位置付け、中間・完成時の測定、外皮貫通部の扱いをチェックリスト化。用途に応じて2つの版があります。</p>
+              </div>
+            </div>
+            <div class="variants">
+              <a class="variant" href="airtightness-compact.html">
+                <span class="v-head">
+                  <span class="v-name">コンパクト版</span>
+                  <span class="v-scale">全4章・37項目</span>
+                </span>
+                <p>先方に渡す用。C値への影響が大きい論点に絞り、細部は積水ハウスからの提示を前提にした構成。</p>
+                <span class="open">開く →</span>
+              </a>
+              <a class="variant" href="airtightness-detail.html">
+                <span class="v-head">
+                  <span class="v-name">詳細版</span>
+                  <span class="v-scale">全7章・91項目</span>
+                </span>
+                <p>手元で使う用。部位別・材料別まで網羅した確認事項。回答の抜け漏れチェックに。</p>
+                <span class="open">開く →</span>
+              </a>
+            </div>
+          </div>
         </div>
       </section>
 

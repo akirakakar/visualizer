@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>気密性能に関する相談・確認事項</title>
+  <title>気密性能 相談・確認シート（詳細版）</title>
   <style>
     html {
       color: #1a1a1a;
@@ -249,6 +249,36 @@
     }
 
     button:hover { background: rgba(255, 255, 255, 0.2); }
+
+    .toolbar-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 36px;
+      padding: 7px 12px;
+      color: #fff;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 650;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .toolbar-link:hover { background: rgba(255, 255, 255, 0.2); }
+
+    .toolbar-variant {
+      margin-left: 8px;
+      padding: 2px 8px;
+      color: rgba(255, 255, 255, 0.92);
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+    }
 
     body > section.level1,
     nav#TOC {
@@ -552,7 +582,12 @@
     }
 
     @media screen and (max-width: 560px) {
-      .toolbar-title { display: none; }
+      .toolbar-title {
+        flex: 0 0 auto;
+        font-size: 0;
+      }
+
+      .toolbar-variant { margin-left: 0; font-size: 11px; }
 
       .toolbar-actions {
         flex: 1 1 auto;
@@ -631,8 +666,10 @@
 </head>
 <body>
 <div class="document-toolbar" role="toolbar" aria-label="文書操作">
-  <div class="toolbar-title">気密性能に関する相談・確認事項</div>
+  <div class="toolbar-title">気密性能に関する相談・確認事項<span class="toolbar-variant">詳細版</span></div>
   <div class="toolbar-actions">
+    <a class="toolbar-link" href="index.html">一覧</a>
+    <a class="toolbar-link" href="airtightness-compact.html">コンパクト版</a>
     <span class="progress-label" id="progress-label">0 / 0 確認済み</span>
     <button type="button" id="reset-button">チェック解除</button>
     <button type="button" id="print-button">印刷・PDF保存</button>

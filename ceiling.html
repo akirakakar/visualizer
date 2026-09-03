@@ -1,0 +1,1518 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>天井・吹抜スタディ｜2階LDK</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0e1116; --panel:#161a21; --panel2:#1d222b; --line:#2b323d;
+  --text:#e8ebf0; --muted:#9aa4b2; --accent:#f0b357; --accent2:#7db3ff;
+  --ok:#6ee7a8;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+  --sans:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:var(--sans); background:var(--bg); color:var(--text);
+  overflow:hidden; -webkit-font-smoothing:antialiased;
+  overscroll-behavior:none;
+}
+#app{display:flex;flex-direction:column;height:100%}
+
+/* ---------- top bar ---------- */
+#topbar{
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  padding:9px 14px;background:var(--panel);border-bottom:1px solid var(--line);
+  flex:0 0 auto;z-index:20;
+}
+#topbar .brand{display:flex;align-items:baseline;gap:9px;margin-right:2px}
+#topbar h1{font-size:.95rem;font-weight:700;letter-spacing:.03em;white-space:nowrap}
+#topbar .sub{font-size:.68rem;color:var(--muted);white-space:nowrap}
+.presets{display:flex;gap:6px;flex-wrap:wrap;flex:1 1 320px}
+.chip{
+  font-family:var(--sans);font-size:.72rem;font-weight:500;color:var(--muted);
+  background:var(--panel2);border:1px solid var(--line);border-radius:999px;
+  padding:5px 11px;cursor:pointer;white-space:nowrap;transition:.15s;
+}
+.chip:hover{color:var(--text);border-color:#3c4553}
+.chip.on{background:var(--accent);border-color:var(--accent);color:#1b1408;font-weight:700}
+.chip.alt.on{background:var(--accent2);border-color:var(--accent2);color:#08172b}
+#backlink{font-size:.72rem;color:var(--muted);text-decoration:none;white-space:nowrap;margin-left:auto}
+#backlink:hover{color:var(--accent2)}
+
+/* ---------- layout ---------- */
+#body{display:flex;flex:1 1 auto;min-height:0}
+#stage{position:relative;flex:1 1 auto;min-width:0;background:#0a0c10}
+#gl{display:block;width:100%;height:100%;touch-action:none;cursor:grab}
+#gl:active{cursor:grabbing}
+
+/* ---------- HUD ---------- */
+.hud{position:absolute;z-index:10;pointer-events:none}
+#readout{
+  top:12px;left:12px;background:rgba(14,17,22,.82);backdrop-filter:blur(8px);
+  border:1px solid var(--line);border-radius:11px;padding:11px 13px;min-width:196px;
+}
+#readout .r{display:flex;justify-content:space-between;align-items:baseline;gap:14px;font-size:.72rem;padding:2px 0}
+#readout .r span:first-child{color:var(--muted)}
+#readout .r b{font-family:var(--mono);font-size:.82rem;font-weight:600;letter-spacing:-.01em}
+#readout .big b{font-size:1.05rem;color:var(--accent)}
+#readout hr{border:0;border-top:1px solid var(--line);margin:7px 0}
+#openbar{height:5px;background:var(--panel2);border-radius:3px;overflow:hidden;margin-top:6px}
+#openbar i{display:block;height:100%;background:linear-gradient(90deg,#7db3ff,#f0b357);transition:width .25s}
+
+#viewbar{
+  bottom:12px;left:50%;transform:translateX(-50%);
+  display:flex;gap:5px;flex-wrap:wrap;justify-content:center;
+  background:rgba(14,17,22,.82);backdrop-filter:blur(8px);
+  border:1px solid var(--line);border-radius:999px;padding:5px;pointer-events:auto;
+  max-width:calc(100% - 24px);
+}
+#viewbar .chip{font-size:.71rem;padding:5px 12px}
+
+#planbox{
+  bottom:12px;right:12px;background:rgba(14,17,22,.86);backdrop-filter:blur(8px);
+  border:1px solid var(--line);border-radius:11px;padding:9px;pointer-events:auto;
+}
+#planbox .ptabs{display:flex;gap:4px;margin-bottom:7px}
+#planbox .ptabs .chip{font-size:.65rem;padding:3px 9px;flex:1;text-align:center}
+#planCanvas{display:block;border-radius:6px;cursor:crosshair;touch-action:none}
+#planhint{font-size:.6rem;color:var(--muted);margin-top:5px;text-align:center;line-height:1.4}
+
+#hint{
+  top:12px;left:50%;transform:translateX(-50%);
+  font-size:.68rem;color:var(--muted);background:rgba(14,17,22,.8);
+  border:1px solid var(--line);border-radius:999px;padding:5px 13px;
+  transition:opacity .5s;
+}
+
+/* ---------- panel ---------- */
+#panel{
+  flex:0 0 336px;background:var(--panel);border-left:1px solid var(--line);
+  overflow-y:auto;overscroll-behavior:contain;padding-bottom:32px;
+}
+#panel::-webkit-scrollbar{width:8px}
+#panel::-webkit-scrollbar-thumb{background:#2b323d;border-radius:4px}
+
+#sectionbox{padding:12px 14px 10px;border-bottom:1px solid var(--line);background:var(--panel2)}
+#sectionbox .lbl{font-size:.64rem;color:var(--muted);letter-spacing:.08em;margin-bottom:7px}
+#secCanvas{display:block;border-radius:7px;background:#11151b}
+
+.grp{border-bottom:1px solid var(--line)}
+.grp>summary{
+  list-style:none;cursor:pointer;padding:11px 14px;
+  font-size:.76rem;font-weight:700;letter-spacing:.05em;
+  display:flex;align-items:center;gap:8px;user-select:none;
+}
+.grp>summary::-webkit-details-marker{display:none}
+.grp>summary::before{content:"▸";color:var(--muted);font-size:.7rem;transition:transform .18s}
+.grp[open]>summary::before{transform:rotate(90deg)}
+.grp>summary:hover{background:var(--panel2)}
+.grp .inner{padding:2px 14px 15px}
+
+.row{margin-bottom:12px}
+.row:last-child{margin-bottom:2px}
+.rlab{display:flex;justify-content:space-between;align-items:baseline;font-size:.71rem;color:var(--muted);margin-bottom:5px}
+.rlab b{font-family:var(--mono);font-size:.76rem;color:var(--text);font-weight:600}
+.rlab .u{font-size:.62rem;color:var(--muted);font-weight:400;margin-left:1px}
+
+input[type=range]{
+  -webkit-appearance:none;appearance:none;width:100%;height:20px;background:transparent;cursor:pointer;
+}
+input[type=range]::-webkit-slider-runnable-track{height:3px;background:var(--line);border-radius:2px}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:15px;height:15px;border-radius:50%;
+  background:var(--accent);margin-top:-6px;border:2px solid var(--panel);
+  box-shadow:0 0 0 1px var(--accent);
+}
+input[type=range]::-moz-range-track{height:3px;background:var(--line);border-radius:2px}
+input[type=range]::-moz-range-thumb{width:13px;height:13px;border:2px solid var(--panel);border-radius:50%;background:var(--accent)}
+
+select{
+  width:100%;font-family:var(--sans);font-size:.75rem;color:var(--text);
+  background:var(--panel2);border:1px solid var(--line);border-radius:7px;
+  padding:7px 9px;cursor:pointer;appearance:none;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6'><path d='M0 0l5 6 5-6z' fill='%239aa4b2'/></svg>");
+  background-repeat:no-repeat;background-position:right 9px center;
+}
+select:focus{outline:none;border-color:var(--accent2)}
+
+.seg{display:flex;gap:4px}
+.seg button{
+  flex:1;font-family:var(--sans);font-size:.7rem;color:var(--muted);
+  background:var(--panel2);border:1px solid var(--line);border-radius:7px;
+  padding:6px 2px;cursor:pointer;transition:.14s;
+}
+.seg button:hover{color:var(--text)}
+.seg button.on{background:var(--accent2);border-color:var(--accent2);color:#08172b;font-weight:700}
+
+.tog{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:.75rem;padding:5px 0;cursor:pointer}
+.tog input{display:none}
+.tog .sw{flex:0 0 34px;height:19px;background:var(--line);border-radius:999px;position:relative;transition:.18s}
+.tog .sw::after{content:"";position:absolute;top:2px;left:2px;width:15px;height:15px;border-radius:50%;background:#8d97a5;transition:.18s}
+.tog input:checked + .sw{background:rgba(240,179,87,.3)}
+.tog input:checked + .sw::after{left:17px;background:var(--accent)}
+
+.note{font-size:.65rem;color:var(--muted);line-height:1.65;margin-top:9px;padding-top:9px;border-top:1px dashed var(--line)}
+.note code{font-family:var(--mono);font-size:.95em;color:var(--accent2)}
+
+#loading{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  background:var(--bg);z-index:50;font-size:.8rem;color:var(--muted);transition:opacity .4s
+}
+
+/* ---------- mobile ---------- */
+#panelToggle{display:none}
+@media (max-width:860px){
+  #topbar{padding:7px 10px;gap:8px}
+  #topbar h1{font-size:.85rem}
+  #topbar .sub,#backlink{display:none}
+  .presets{order:3;width:100%;overflow-x:auto;flex-wrap:nowrap;padding-bottom:2px;-webkit-overflow-scrolling:touch}
+  .presets::-webkit-scrollbar{display:none}
+  #body{flex-direction:column}
+  #panel{
+    flex:0 0 auto;position:fixed;left:0;right:0;bottom:0;top:auto;
+    max-height:62vh;border-left:0;border-top:1px solid var(--line);
+    border-radius:16px 16px 0 0;z-index:30;transform:translateY(calc(100% - 46px));
+    transition:transform .3s cubic-bezier(.4,0,.2,1);box-shadow:0 -8px 32px rgba(0,0,0,.5);
+  }
+  #panel.open{transform:translateY(0)}
+  #panelToggle{
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    height:46px;font-size:.78rem;font-weight:700;cursor:pointer;
+    border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--panel);
+    border-radius:16px 16px 0 0;z-index:2;
+  }
+  #panelToggle::before{content:"";width:32px;height:3px;border-radius:2px;background:var(--line);position:absolute;top:6px}
+  /* 下から：調整パネルの取っ手 → 視点バー（横スクロール1行）→ ミニ平面 */
+  #viewbar{
+    left:6px;right:6px;bottom:52px;transform:none;max-width:none;
+    border-radius:13px;padding:6px;justify-content:flex-start;
+    flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;
+  }
+  #viewbar::-webkit-scrollbar{display:none}
+  #viewbar .chip{flex:0 0 auto}
+  #pitchSlider{display:none!important}
+  #planbox{bottom:106px;right:8px;padding:6px;transform:scale(.78);transform-origin:bottom right}
+  #planbox .ptabs .chip{padding:4px 8px}
+  #readout{top:8px;left:8px;padding:7px 9px;min-width:0}
+  #readout .r{font-size:.63rem;padding:1px 0;gap:10px}
+  #readout .r b{font-size:.72rem}
+  #readout .big b{font-size:.9rem}
+  #hint{display:none}
+}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <header id="topbar">
+    <div class="brand">
+      <h1>天井・吹抜スタディ</h1>
+      <span class="sub">南荻窪の家／2階 LDK 33.12㎡（20.4帖）</span>
+    </div>
+    <div class="presets" id="presets"></div>
+    <a id="backlink" href="index.html">← 一覧へ</a>
+  </header>
+
+  <div id="body">
+    <div id="stage">
+      <canvas id="gl"></canvas>
+      <div id="loading">読み込み中…</div>
+
+      <div class="hud" id="readout">
+        <div class="r big"><span>最高天井高</span><b id="ro-max">3810</b></div>
+        <div class="r"><span>基準天井高</span><b id="ro-base">2410</b></div>
+        <div class="r"><span>平均天井高</span><b id="ro-avg">2711</b></div>
+        <hr>
+        <div class="r"><span>LDK 床面積</span><b id="ro-area">32.60</b></div>
+        <div class="r"><span>吹抜（勾配）</span><b id="ro-void">14.00</b></div>
+        <div class="r"><span>気積</span><b id="ro-vol">88.4</b></div>
+        <div class="r"><span>開放感</span><b id="ro-open">—</b></div>
+        <div class="r"><span>南の日射</span><b id="ro-sun">—</b></div>
+        <div id="openbar"><i style="width:40%"></i></div>
+      </div>
+
+      <div class="hud" id="hint">ドラッグで見まわす／ホイールで前後</div>
+
+      <div class="hud" id="viewbar"></div>
+
+      <div class="hud" id="planbox">
+        <div class="ptabs">
+          <button class="chip alt on" data-pmode="void">吹抜を編集</button>
+          <button class="chip alt" data-pmode="cam">立ち位置</button>
+        </div>
+        <canvas id="planCanvas" width="228" height="176"></canvas>
+        <div id="planhint">左右にドラッグで移動／東西の辺で幅</div>
+      </div>
+    </div>
+
+    <aside id="panel">
+      <div id="panelToggle">調整パネル</div>
+
+      <div id="sectionbox">
+        <div class="lbl">断面（東西で切る）</div>
+        <canvas id="secCanvas"></canvas>
+      </div>
+
+      <details class="grp" open><summary>天井のかたち</summary><div class="inner" id="g-shape"></div></details>
+      <details class="grp"><summary>仕上げ</summary><div class="inner" id="g-finish"></div></details>
+      <details class="grp"><summary>採光・開口</summary><div class="inner" id="g-light"></div></details>
+      <details class="grp"><summary>照明</summary><div class="inner" id="g-lamp"></div></details>
+      <details class="grp"><summary>時刻・その他</summary><div class="inner" id="g-env"></div></details>
+
+      <div class="inner" style="padding-top:14px">
+        <div class="note">
+          <b style="color:var(--text)">出典</b>：積水ハウス シャーウッド 図面番号 760612（2階平面図 1/50・断面図 1/100・小屋裏レベル平面図 1/50）。
+          <br>2階基準天井高 <code>2410</code>／階高 <code>2899</code>／22.吹抜は <code>3500×3150</code> の勾配天井、屋根勾配 <code>4/10</code>（西下がり）。最高の高さ <code>8000</code>／最高の軒の高さ <code>6288</code>。ホールへのハイドアは <code>H2250</code>。
+          <br>天井高は <code>2250</code>（ハイドアと同面）と <code>2410</code>（図面）の2つ。勾配天井はリビングの上だけで、高い側はいつも東・南北はリビングいっぱい。ダイニング・キッチンはフラットです。
+          <br>開口位置・家具・仕上げは検討用の概略です。寸法はすべて mm。
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* =========================================================================
+   天井・吹抜スタディ — 2階LDK
+   図面（積水ハウス 760612）から起こした簡易モデルで、天井の見え方を確かめる
+   ========================================================================= */
+(function(){
+'use strict';
+
+const MM = 0.001;                     // mm -> m
+const clamp = (v,a,b)=>Math.min(b,Math.max(a,v));
+const lerp  = (a,b,t)=>a+(b-a)*t;
+const D2R   = Math.PI/180;
+
+/* ---------------------------------------------------------------- 図面データ */
+// 2階LDK 外形（平面 mm、X=東, Y=北）— 図面の壁芯から起こした概略
+const LDK = [
+  [1000,2000],[8000,2000],[8000,7000],[7000,7000],
+  [7000,7500],[4600,7500],[4600,6000],[1000,6000]
+];
+// 壁ごとの開口 {a,b:辺の始点からの距離, sill, head}
+const OPENINGS = {
+  0:[ {k:'sash', a:700,  b:3300, sill:0,   head:2100} ], // 南：バルコニーへの大開口（ダイニング側の窓は無し）
+  1:[ {k:'win',  a:1200, b:2890, sill:900, head:2100} ], // 東：腰窓
+  6:[ {k:'door', a:0,    b:1600, sill:0,   head:2100} ], // 北：ホールへの引戸
+  7:[ {k:'door', a:3000, b:3900, sill:0,   head:2250} ]  // 西：ホールへのハイドア（H2250）
+};
+const WALLKEY = {0:'S',1:'E',2:'N',3:'E',4:'N',5:'E',6:'N',7:'W'};
+// 北の張り出し（y>KITCHEN_Y）はキッチン。吹抜はこの線までに収め、キッチン天井は常にフルフラット。
+const KITCHEN_Y = 6000;
+// 勾配（吹抜）はリビングの上だけ。図面の「22.吹抜 3500×3150」もこの範囲に収まっている。
+// 東の境 4600 は、キッチンの張り出しが始まる通り芯＝ダイニングとの境。
+// ダイニング・キッチン側は基準天井高でフラットのまま。
+const LIVING = {x0:1000, x1:4600, y0:2000, y1:KITCHEN_Y};
+
+const DEF = {
+  ceilH:2410, voidOn:true, voidX:1000, voidW:3500, pitch:4,
+  finSlope:'oak', finFlat:'cloth', beams:false, beamN:4, beamH:180, beamMat:'walnut',
+  wallS:'cloth', wallE:'cloth', wallN:'cloth', wallW:'cloth', wallV:'cloth', floor:'oak',
+  clerestory:false, clerH:600, skylight:0, sashW:2600, sashH:2100,
+  eave:false, eaveD:600, eaveUp:250,
+  lDown:true, lCove:false, lPend:true, lSpot:false, kelvin:2900, dim:0.55,
+  season:'equinox', hour:13.0, north:0, furniture:true, dims:true,
+  view:'sofa'
+};
+const S = Object.assign({}, DEF);
+
+/* ---------------------------------------------------------------- 幾何ヘルパ */
+function polyArea(p){ let a=0; for(let i=0;i<p.length;i++){const q=p[(i+1)%p.length]; a+=p[i][0]*q[1]-q[0]*p[i][1];} return Math.abs(a)/2; }
+// 多角形を縦線 x=X で切り、片側だけ残す（Sutherland–Hodgman）。連続する重複点は落とす
+function clipX(poly, keep, X){
+  const inside = p => keep==='E' ? p[0]>=X : p[0]<=X;
+  const out=[];
+  for(let i=0;i<poly.length;i++){
+    const A=poly[i], B=poly[(i+1)%poly.length];
+    if(inside(A)) out.push(A);
+    if(inside(A)!==inside(B)) out.push([X, A[1]+(B[1]-A[1])*(X-A[0])/(B[0]-A[0])]);
+  }
+  return out.filter((p,i)=>{
+    const q=out[(i+out.length-1)%out.length];
+    return Math.abs(p[0]-q[0])>0.5 || Math.abs(p[1]-q[1])>0.5;
+  });
+}
+function edgeOf(i){ const a=LDK[i], b=LDK[(i+1)%LDK.length];
+  const dx=b[0]-a[0], dy=b[1]-a[1], L=Math.hypot(dx,dy);
+  return {a,b,dx:dx/L,dy:dy/L,L,nx:-dy/L,ny:dx/L}; }   // n = 室内向き法線
+
+// 屋根勾配は西下がり＝高い側はいつも東。勾配は東西方向にしか掛からない。
+const VOID_D = LIVING.y1 - LIVING.y0;        // 吹抜の奥行はリビングの南北いっぱい
+const RUN = ()=> S.voidW;
+const RISE= ()=> RUN()*S.pitch/10;
+// 吹抜内の天井高（平面 mm）。西端が基準天井高で、東へ向かって上がる
+function hAt(px){
+  const t=(px-S.voidX)/S.voidW;
+  return S.ceilH + clamp(t,0,1)*RUN()*S.pitch/10;
+}
+const V = ()=>({x0:S.voidX, x1:S.voidX+S.voidW, y0:LIVING.y0, y1:LIVING.y1});
+
+/* ---------------------------------------------------------------- テクスチャ */
+const texCache = {};
+function cv(w,h){const c=document.createElement('canvas');c.width=w;c.height=h;return c;}
+function mixHex(a,b,t){
+  const pa=parseInt(a.slice(1),16), pb=parseInt(b.slice(1),16);
+  const r=Math.round(lerp((pa>>16)&255,(pb>>16)&255,t));
+  const g=Math.round(lerp((pa>>8)&255,(pb>>8)&255,t));
+  const bl=Math.round(lerp(pa&255,pb&255,t));
+  return `rgb(${r},${g},${bl})`;
+}
+function finish(tex,rep){
+  tex.wrapS=tex.wrapT=THREE.RepeatWrapping;
+  tex.repeat.set(rep,rep);
+  tex.encoding=THREE.sRGBEncoding;
+  tex.anisotropy=4;
+  return tex;
+}
+function woodTex(c1,c2,c3,plankH){
+  // 羽目板：板は幅いっぱいに通し、行ごとの色差と木目だけで表情を出す。
+  // 短い板をタイル内に並べると継ぎ目が格子状に見えてしまうため。
+  const N=512,c=cv(N,N),g=c.getContext('2d');
+  let seed=7; const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647;};
+  g.fillStyle=c1;g.fillRect(0,0,N,N);
+  const rows=Math.max(2,Math.round(N/plankH)), ph=N/rows;
+  for(let r=0;r<rows;r++){
+    const y=r*ph;
+    g.fillStyle=mixHex(c1,c2,rnd()*0.5);
+    g.fillRect(0,y,N,ph-1);
+    for(let k=0;k<26;k++){
+      g.globalAlpha=0.03+rnd()*0.075; g.strokeStyle=c3; g.lineWidth=0.5+rnd()*1.3;
+      const yy=y+rnd()*ph;
+      g.beginPath(); g.moveTo(-12,yy);
+      g.bezierCurveTo(N*0.3,yy+(rnd()-.5)*5, N*0.7,yy+(rnd()-.5)*5, N+12,yy);
+      g.stroke();
+    }
+    g.globalAlpha=1;
+    g.fillStyle='rgba(0,0,0,.13)';g.fillRect(0,y,N,1.1);
+  }
+  return new THREE.CanvasTexture(c);
+}
+function flatTex(base,grain,dots){
+  const N=256,c=cv(N,N),g=c.getContext('2d');
+  g.fillStyle=base;g.fillRect(0,0,N,N);
+  let seed=13; const rnd=()=>{seed=(seed*48271)%2147483647;return seed/2147483647;};
+  for(let i=0;i<dots;i++){
+    g.globalAlpha=0.015+rnd()*0.045;
+    g.fillStyle=rnd()>.5?'#ffffff':grain;
+    const r=0.6+rnd()*2.2;
+    g.beginPath();g.arc(rnd()*N,rnd()*N,r,0,6.284);g.fill();
+  }
+  g.globalAlpha=1;
+  return new THREE.CanvasTexture(c);
+}
+function slatTex(base,gap){
+  const N=256,c=cv(N,N),g=c.getContext('2d');
+  g.fillStyle=base;g.fillRect(0,0,N,N);
+  for(let y=0;y<N;y+=32){ g.fillStyle=gap; g.fillRect(0,y,N,7); }
+  return new THREE.CanvasTexture(c);
+}
+
+const MATDEF = {
+  cloth  :{n:'クロス（白）',      c:0xf3f1ec, r:0.94, tex:()=>flatTex('#f4f2ee','#d9d5cc',2600), rep:2.2},
+  offw   :{n:'クロス（オフ白）',  c:0xeae4d8, r:0.93, tex:()=>flatTex('#ece6da','#cfc6b4',2600), rep:2.2},
+  greige :{n:'グレージュ',        c:0xcdc4b6, r:0.92, tex:()=>flatTex('#cfc6b8','#a89c8b',2400), rep:2.2},
+  gray   :{n:'塗装（グレー）',    c:0x9aa0a6, r:0.88, tex:()=>flatTex('#9ba1a7','#767c83',2400), rep:2.2},
+  charcoal:{n:'濃色アクセント',   c:0x3a3f45, r:0.85, tex:()=>flatTex('#3b4046','#282c31',2200), rep:2.2},
+  sakan  :{n:'左官調（砂壁）',    c:0xded6c6, r:0.97, tex:()=>flatTex('#e0d8c8','#b3a892',5200), rep:1.6},
+  washi  :{n:'和紙調',            c:0xf0ead9, r:0.95, tex:()=>flatTex('#f1ebda','#d2c8ad',4200), rep:1.4},
+  oak    :{n:'木目（オーク）',    c:0xc79a63, r:0.62, tex:()=>woodTex('#c9a071','#a87f4f','#6d4b26',86), rep:0.62},
+  walnut :{n:'木目（ウォールナット）',c:0x6d4a30,r:0.55,tex:()=>woodTex('#6f4c33','#4d3220','#2b1a0d',86), rep:0.62},
+  maple  :{n:'木目（メープル）',  c:0xdfc49b, r:0.60, tex:()=>woodTex('#e3c9a4','#c9a878','#96774c',86), rep:0.62},
+  sugi   :{n:'板張り（杉・目透）',c:0xd8b98d, r:0.75, tex:()=>slatTex('#dabb90','#8e7452'), rep:0.5},
+  louver :{n:'木格子ルーバー',    c:0xb98a54, r:0.60, tex:()=>woodTex('#bd8f5c','#8d6539','#5a3c1d',110), rep:0.5},
+  tile   :{n:'タイル（石目）',    c:0xb9b4ad, r:0.35, tex:()=>flatTex('#bdb8b1','#8f8a83',3200), rep:1.1}
+};
+
+const matCache={};
+// 仕上げ材は (種類 × 面の向き) でキャッシュする。再生成するとGPUに溜まるため。
+function mat(key, side){
+  const sd = side||THREE.FrontSide;
+  const k = key+'|'+sd;
+  if(matCache[k]) return matCache[k];
+  const d=MATDEF[key]||MATDEF.cloth;
+  if(!texCache[key]) texCache[key]=d.tex();
+  const t=texCache[key].clone(); t.needsUpdate=true;
+  finish(t, d.rep);
+  const m=new THREE.MeshStandardMaterial({map:t,color:0xffffff,roughness:d.r,metalness:0.0,side:sd});
+  m.shadowSide=THREE.DoubleSide;
+  matCache[k]=m; return m;
+}
+const D_SIDE=THREE.DoubleSide;
+
+/* ---------------------------------------------------------------- three.js */
+const canvas=document.getElementById('gl');
+const renderer=new THREE.WebGLRenderer({canvas,antialias:true,powerPreference:'high-performance'});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.outputEncoding=THREE.sRGBEncoding;
+renderer.toneMapping=THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure=1.0;
+renderer.shadowMap.enabled=true;
+renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+
+const scene=new THREE.Scene();
+scene.background=new THREE.Color(0x0a0c10);
+const camera=new THREE.PerspectiveCamera(62,1,0.05,120);
+
+const gExt =new THREE.Group(); scene.add(gExt);
+const gRoom=new THREE.Group(); scene.add(gRoom);
+const gFurn=new THREE.Group(); scene.add(gFurn);
+const gLamp=new THREE.Group(); scene.add(gLamp);
+const gDim =new THREE.Group(); scene.add(gDim);
+
+function wipe(g){
+  for(let i=g.children.length-1;i>=0;i--){
+    const o=g.children[i];
+    o.traverse(n=>{
+      if(n.isSprite){                       // Sprite のジオメトリは全Sprite共有。捨てない
+        if(n.material.map) n.material.map.dispose();
+        n.material.dispose();
+        return;
+      }
+      if(n.geometry) n.geometry.dispose();
+    });
+    g.remove(o);
+  }
+}
+const P = (x,y,h)=> new THREE.Vector3(x*MM, h*MM, -y*MM);   // 平面mm+高さmm -> world
+
+// p1..p4 は「面を見る側から見て時計回り」で渡す。法線は室内側を向く。
+function quadMesh(p1,p2,p3,p4,material,uvScale){
+  const g=new THREE.BufferGeometry();
+  const pos=[],uv=[],idx=[0,2,1,0,3,2];
+  [p1,p2,p3,p4].forEach(p=>pos.push(p.x,p.y,p.z));
+  const w=p1.distanceTo(p2), h=p2.distanceTo(p3), s=uvScale||1;
+  uv.push(0,0, w*s,0, w*s,h*s, 0,h*s);
+  g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));
+  g.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));
+  g.setIndex(idx); g.computeVertexNormals();
+  const m=new THREE.Mesh(g,material); m.castShadow=true; m.receiveShadow=true;
+  return m;
+}
+function triMesh(p1,p2,p3,material){
+  const g=new THREE.BufferGeometry(),pos=[],uv=[];
+  [p1,p2,p3].forEach(p=>pos.push(p.x,p.y,p.z));
+  uv.push(0,0,1,0,0,1);
+  g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));
+  g.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));
+  g.computeVertexNormals();
+  const m=new THREE.Mesh(g,material); m.receiveShadow=true; return m;
+}
+
+/* ---------------------------------------------------------------- 部屋を組む */
+function buildRoom(){
+  wipe(gRoom); wipe(gDim);
+  const v=V(), rise=RISE(), topH=S.ceilH+rise;
+  // 勾配 0/10 では勾配天井を作らない。フラット天井もそのぶん抜かない
+  const sloped = S.voidOn && rise>1;
+
+  /* --- 床 --- */
+  {
+    const sh=new THREE.Shape();
+    LDK.forEach((p,i)=> i? sh.lineTo(p[0]*MM,p[1]*MM) : sh.moveTo(p[0]*MM,p[1]*MM));
+    const g=new THREE.ShapeGeometry(sh); g.rotateX(-Math.PI/2);
+    const mesh=new THREE.Mesh(g,mat(S.floor,D_SIDE)); mesh.receiveShadow=true; gRoom.add(mesh);
+    // 巾木
+    const skirt=new THREE.MeshStandardMaterial({color:0xf6f4f0,roughness:.8});
+    for(let i=0;i<LDK.length;i++){
+      const e=edgeOf(i);
+      const off=6;
+      const a=P(e.a[0]+e.nx*off,e.a[1]+e.ny*off,0), b=P(e.b[0]+e.nx*off,e.b[1]+e.ny*off,0);
+      const c=P(e.b[0]+e.nx*off,e.b[1]+e.ny*off,60), d=P(e.a[0]+e.nx*off,e.a[1]+e.ny*off,60);
+      gRoom.add(quadMesh(a,b,c,d,skirt,1));
+    }
+  }
+
+  /* --- 天井（フラット部：勾配の掛からない範囲） --- */
+  {
+    // 勾配は南北いっぱいに抜けるので、フラット天井は吹抜の西と東に分かれる。
+    // Shape の穴にすると穴が輪郭に接して三角形分割が壊れるため、多角形を切って作る。
+    const parts = sloped ? [clipX(LDK,'W',v.x0), clipX(LDK,'E',v.x1)] : [LDK];
+    parts.forEach(poly=>{
+      if(poly.length<3) return;
+      const sh=new THREE.Shape();
+      poly.forEach((p,i)=> i? sh.lineTo(p[0]*MM,p[1]*MM) : sh.moveTo(p[0]*MM,p[1]*MM));
+      const g=new THREE.ShapeGeometry(sh); g.rotateX(-Math.PI/2); g.translate(0,S.ceilH*MM,0);
+      const mesh=new THREE.Mesh(g,mat(S.finFlat,D_SIDE));
+      mesh.receiveShadow=true; mesh.castShadow=true; gRoom.add(mesh);
+    });
+  }
+
+  /* --- 勾配天井＋吹抜まわり --- */
+  if(sloped){
+    const slopeMat=mat(S.finSlope==='louver'?'cloth':S.finSlope, D_SIDE);
+    gRoom.add(rakedCeiling(slopeMat, skylightRects()));
+
+    // 高い側（東）の下がり壁。南北は吹抜が壁まで抜けているので壁側で立ち上げ、
+    // 西は低い側＝基準天井高なので、立ち上がる面はここだけになる。
+    {
+      const vm=mat(S.wallV, D_SIDE);
+      const hi=hAt(v.x1);
+      const A=[v.x1,v.y0], B=[v.x1,v.y1];
+      const p1=P(A[0],A[1],S.ceilH), p2=P(B[0],B[1],S.ceilH);
+      if(S.clerestory){
+        // ハイサイドライト：下がり壁の上部を抜く
+        const midH=hi-Math.min(S.clerH, hi-S.ceilH-100);
+        gRoom.add(quadMesh(p1,p2,P(B[0],B[1],midH),P(A[0],A[1],midH),vm,1));
+        addGlass(P(A[0],A[1],midH),P(B[0],B[1],midH),P(B[0],B[1],hi),P(A[0],A[1],hi));
+      }else{
+        gRoom.add(quadMesh(p1,p2,P(B[0],B[1],hi),P(A[0],A[1],hi),vm,1));
+      }
+    }
+
+    // ルーバー天井
+    if(S.finSlope==='louver'){
+      const lm=mat('louver');
+      const pitch=90, w=45, d=70;
+      const n=Math.floor(S.voidW/pitch);
+      const geo=new THREE.BoxGeometry(w*MM,d*MM,VOID_D*MM);
+      const inst=new THREE.InstancedMesh(geo,lm,n);
+      const dummy=new THREE.Object3D();
+      for(let i=0;i<n;i++){
+        const px=v.x0+(i+0.5)*pitch, py=(v.y0+v.y1)/2;
+        dummy.position.copy(P(px,py,hAt(px)-d/2-30));
+        dummy.updateMatrix(); inst.setMatrixAt(i,dummy.matrix);
+      }
+      inst.castShadow=true; gRoom.add(inst);
+    }
+
+    // 化粧梁
+    if(S.beams){
+      const bm=mat(S.beamMat);
+      const n=S.beamN, bw=105, bh=S.beamH;
+      const geo=new THREE.BoxGeometry(bw*MM,bh*MM,VOID_D*MM);
+      for(let i=0;i<n;i++){
+        const px=v.x0+S.voidW*(i+1)/(n+1), py=(v.y0+v.y1)/2;
+        const b=new THREE.Mesh(geo,bm);
+        b.position.copy(P(px,py,hAt(px)-bh/2-20));
+        b.castShadow=true; b.receiveShadow=true; gRoom.add(b);
+      }
+    }
+
+    // 天窓：屋根厚ぶんの見込み（窓台）を作ると開口らしく見える
+    skylightRects().forEach(r=>{
+      const t=260;
+      const corners=[[r.x0,r.y0],[r.x1,r.y0],[r.x1,r.y1],[r.x0,r.y1]];
+      for(let i=0;i<4;i++){
+        const A=corners[i], B=corners[(i+1)%4];
+        gRoom.add(quadMesh(P(A[0],A[1],hAt(A[0])),      P(B[0],B[1],hAt(B[0])),
+                           P(B[0],B[1],hAt(B[0])+t),    P(A[0],A[1],hAt(A[0])+t),
+                           revealMat,1));
+      }
+      const g=new THREE.BufferGeometry(),pos=[];
+      const q=corners.map(c=>P(c[0],c[1],hAt(c[0])+t));
+      [q[0],q[2],q[1],q[0],q[3],q[2]].forEach(v3=>pos.push(v3.x,v3.y,v3.z));
+      g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3)); g.computeVertexNormals();
+      gRoom.add(new THREE.Mesh(g,skyGlass));
+    });
+  }
+
+  /* --- 壁 --- */
+  for(let i=0;i<LDK.length;i++){
+    const e=edgeOf(i);
+    const key={S:'wallS',E:'wallE',N:'wallN',W:'wallW'}[WALLKEY[i]];
+    const wm=mat(S[key]);
+    // 開口は毎回コピーしてから南の大開口だけスライダーで上書きする
+    const ops=(OPENINGS[i]||[]).map(o=>Object.assign({},o));
+    if(i===0 && ops[0]){ ops[0].b = ops[0].a + S.sashW; ops[0].head = S.sashH; }
+    // 開口の端で壁を分割する
+    const cuts=[0, e.L];
+    ops.forEach(o=>{cuts.push(clamp(o.a,0,e.L),clamp(o.b,0,e.L));});
+    // 吹抜の際でも割る。勾配は東西に一次なので、この2本で割れば天井とぴったり合う
+    if(sloped && Math.abs(e.dx)>1e-6){
+      [v.x0,v.x1].forEach(X=>{ const t=(X-e.a[0])/e.dx; if(t>1 && t<e.L-1) cuts.push(t); });
+    }
+    cuts.sort((a,b)=>a-b);
+    // 壁面は「その位置の天井高」まで立ち上げる。際で割ってあるので、区間が吹抜の
+    // 内か外かは中点で決めてよい（際で天井高が飛ぶ＝下がり壁もこれで出る）
+    const seg=(ta,tb,h0,h1)=>{
+      const A=[e.a[0]+e.dx*ta, e.a[1]+e.dy*ta], B=[e.a[0]+e.dx*tb, e.a[1]+e.dy*tb];
+      const mx=e.a[0]+e.dx*(ta+tb)/2, my=e.a[1]+e.dy*(ta+tb)/2;
+      const inV = sloped && mx>=v.x0-2 && mx<=v.x1+2 && my>=v.y0-2 && my<=v.y1+2;
+      const top=x=> inV ? hAt(clamp(x,v.x0,v.x1)) : S.ceilH;
+      const hA1=(h1==='ceil')?top(A[0]):h1;
+      const hB1=(h1==='ceil')?top(B[0]):h1;
+      if(hA1-h0<2 && hB1-h0<2) return;
+      gRoom.add(quadMesh(P(A[0],A[1],h0),P(B[0],B[1],h0),
+                         P(B[0],B[1],Math.max(hB1,h0)),P(A[0],A[1],Math.max(hA1,h0)),wm,1));
+    };
+    // 建具そのものは開口ごとに1枚だけ作る。壁は吹抜の際で割れるが、そこでガラスや
+    // 枠まで割ると、開口の途中に見えない仕切りが立ってしまう。
+    // 上端は開口の範囲でいちばん低い天井に合わせる（天井高ちょうどなら垂れ壁なし）。
+    const pt=t=>[e.a[0]+e.dx*t, e.a[1]+e.dy*t];
+    ops.forEach(op=>{
+      op.hd = op.head;
+      for(let i=0;i<=24;i++){ const q=pt(op.a+(op.b-op.a)*i/24); op.hd=Math.min(op.hd, wallTop(q[0],q[1])); }
+      const A=pt(op.a), B=pt(op.b);
+      const q=[P(A[0],A[1],op.sill),P(B[0],B[1],op.sill),P(B[0],B[1],op.hd),P(A[0],A[1],op.hd)];
+      if(op.k!=='door'){ addGlass(q[0],q[1],q[2],q[3]); return; }
+      addFrame(q[0],q[1],q[2],q[3]);
+      // 開口の先が背景色に抜けないよう、隣室側に浅い箱（奥＋左右の返し）を置く。
+      // n は室内向きなので -n 側が隣室。開口幅ぴったりに作って、隣の部屋へ
+      // はみ出させない（北の引戸は室の入隅に接しているため）。奥だけの1枚だと
+      // 斜めから見たときに横を回り込んで外が見えてしまう。
+      const o=420, H=op.hd+150;
+      const A2=[A[0]-e.nx*o, A[1]-e.ny*o], B2=[B[0]-e.nx*o, B[1]-e.ny*o];
+      [[B2,A2],[A,A2],[B2,B]].forEach(([p1,p2])=>{
+        gRoom.add(quadMesh(P(p1[0],p1[1],0),P(p2[0],p2[1],0),
+                           P(p2[0],p2[1],H),P(p1[0],p1[1],H),nextRoomMat,1));
+      });
+    });
+    // 壁は区間ごと。開口のところは腰壁と垂れ壁だけを立てる
+    for(let k=0;k<cuts.length-1;k++){
+      const t0=cuts[k],t1=cuts[k+1];
+      if(t1-t0<1) continue;
+      const mid=(t0+t1)/2;
+      const op=ops.find(o=>mid>=o.a&&mid<=o.b);
+      if(!op){ seg(t0,t1,0,'ceil'); continue; }
+      if(op.sill>0) seg(t0,t1,0,op.sill);
+      seg(t0,t1,op.hd,'ceil');
+    }
+  }
+
+  /* --- 庇（南バルコニーの大開口の上） --- */
+  if(S.eave){
+    const e0=edgeOf(0), sx=e0.a[0]+700;          // 大開口は南辺の a=700 から
+    const x0=sx-150, x1=sx+S.sashW+150;          // 開口より左右 150 ずつ出す
+    const z=eaveH();
+    const em=new THREE.MeshStandardMaterial({color:0x8f949a,roughness:.55,metalness:.25});
+    const sl=box(x0, 2000-S.eaveD, x1, 2000, z, z+60, em);
+    sl.castShadow=true; sl.receiveShadow=true; gRoom.add(sl);
+  }
+
+  if(S.dims) buildDims();
+  buildLamps();
+  buildFurniture();
+}
+
+// 庇の下端高さ（mm）。窓上端より eaveUp だけ上、ただし天井は超えない。
+function eaveH(){ return Math.min(S.sashH+S.eaveUp, S.ceilH-60); }
+
+// 天窓の位置（平面 mm）。勾配の高いほうに寄せる。
+function skylightRects(){
+  if(!S.voidOn || S.skylight<=0) return [];
+  const v=V();
+  const along=1200, across=900;   // 長辺は勾配方向＝東西
+  const out=[];
+  for(let i=0;i<S.skylight;i++){
+    const f=(i+1)/(S.skylight+1);
+    const px=v.x0+S.voidW*0.66;            // 高いほう（東）へ寄せる
+    const py=v.y0+VOID_D*f;
+    const hw=along/2, hd=across/2;
+    const x0=clamp(px-hw, v.x0+150, v.x1-150-along), y0=clamp(py-hd, v.y0+150, v.y1-150-across);
+    if(v.x1-v.x0<along+400 || v.y1-v.y0<across+400) continue;
+    out.push({x0, y0, x1:x0+along, y1:y0+across});
+  }
+  return out;
+}
+// 勾配天井の面。天窓は穴として抜く（板を張ってから開けるのと同じ順序）。
+function rakedCeiling(material, holes){
+  const v=V();
+  const sh=new THREE.Shape();
+  sh.moveTo(v.x0,v.y0); sh.lineTo(v.x1,v.y0); sh.lineTo(v.x1,v.y1); sh.lineTo(v.x0,v.y1); sh.closePath();
+  holes.forEach(r=>{
+    const h=new THREE.Path();
+    h.moveTo(r.x0,r.y0); h.lineTo(r.x1,r.y0); h.lineTo(r.x1,r.y1); h.lineTo(r.x0,r.y1); h.closePath();
+    sh.holes.push(h);
+  });
+  const g=new THREE.ShapeGeometry(sh);           // まず平面mmで三角形分割
+  const pos=g.attributes.position, n=pos.count;
+  const xyz=new Float32Array(n*3), uv=new Float32Array(n*2);
+  for(let i=0;i<n;i++){
+    const px=pos.getX(i), py=pos.getY(i);
+    xyz[i*3]=px*MM; xyz[i*3+1]=hAt(px)*MM;    xyz[i*3+2]=-py*MM;   // 勾配に載せる
+    uv[i*2]=(px-v.x0)*MM; uv[i*2+1]=(py-v.y0)*MM;
+  }
+  g.setAttribute('position',new THREE.Float32BufferAttribute(xyz,3));
+  g.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));
+  g.computeVertexNormals();
+  const m=new THREE.Mesh(g,material); m.castShadow=true; m.receiveShadow=true;
+  return m;
+}
+// その位置での天井高（壁の頭）
+function wallTop(px,py){
+  if(!S.voidOn) return S.ceilH;
+  const v=V();
+  const on = px>=v.x0-2 && px<=v.x1+2 && py>=v.y0-2 && py<=v.y1+2;
+  return on ? hAt(clamp(px,v.x0,v.x1)) : S.ceilH;
+}
+
+const glassMat=new THREE.MeshPhysicalMaterial({
+  color:0xdfeaf5,transparent:true,opacity:0.14,roughness:0.05,metalness:0,
+  side:THREE.DoubleSide,depthWrite:false
+});
+const skyGlass=new THREE.MeshBasicMaterial({color:0xdcecff,side:THREE.DoubleSide});
+function addGlass(p1,p2,p3,p4){
+  const g=new THREE.BufferGeometry(),pos=[];
+  [p1,p2,p3,p1,p3,p4].forEach(p=>pos.push(p.x,p.y,p.z));
+  g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3)); g.computeVertexNormals();
+  gRoom.add(new THREE.Mesh(g,glassMat));
+  addFrame(p1,p2,p3,p4);
+}
+const frameMat=new THREE.MeshStandardMaterial({color:0x3c4148,roughness:.6,metalness:.3});
+const nextRoomMat=new THREE.MeshStandardMaterial({color:0x8e8b85,roughness:.95,side:THREE.DoubleSide});
+const revealMat  =new THREE.MeshStandardMaterial({color:0xf2efe9,roughness:.9,side:THREE.DoubleSide});
+function addFrame(p1,p2,p3,p4){
+  const pts=[[p1,p2],[p2,p3],[p3,p4],[p4,p1]];
+  pts.forEach(([a,b])=>{
+    const L=a.distanceTo(b); if(L<0.02) return;
+    const g=new THREE.BoxGeometry(0.045,0.045,L);
+    const m=new THREE.Mesh(g,frameMat);
+    m.position.copy(a).lerp(b,0.5); m.lookAt(b); gRoom.add(m);
+  });
+}
+
+/* --- 寸法スプライト --- */
+function label(text,sub){
+  const c=cv(320,120),g=c.getContext('2d');
+  g.fillStyle='rgba(12,15,20,.86)';
+  g.beginPath(); g.roundRect?g.roundRect(4,18,312,84,14):g.rect(4,18,312,84); g.fill();
+  g.strokeStyle='rgba(240,179,87,.7)';g.lineWidth=2;g.stroke();
+  g.fillStyle='#f0b357';g.font='700 54px "IBM Plex Mono",monospace';g.textAlign='center';
+  g.fillText(text,160,78);
+  if(sub){ g.fillStyle='#9aa4b2';g.font='500 22px sans-serif';g.fillText(sub,160,42); }
+  const t=new THREE.CanvasTexture(c); t.encoding=THREE.sRGBEncoding;
+  const s=new THREE.Sprite(new THREE.SpriteMaterial({map:t,depthTest:true,transparent:true}));
+  s.scale.set(0.62,0.235,1); return s;
+}
+function buildDims(){
+  const v=V();
+  if(S.voidOn && RISE()>1){
+    const yMid=(v.y0+v.y1)/2;
+    const s1=label(String(Math.round(S.ceilH)),'低い側（西）');
+    s1.position.copy(P(v.x0+260, yMid, S.ceilH-260));
+    gDim.add(s1);
+    const s2=label(String(Math.round(S.ceilH+RISE())),'最高（東）');
+    s2.position.copy(P(v.x1-320, yMid, S.ceilH+RISE()-300));
+    gDim.add(s2);
+  }else{
+    const s=label(String(Math.round(S.ceilH)),'天井高');
+    s.position.copy(P(4500,4000,S.ceilH-300)); gDim.add(s);
+  }
+}
+
+/* ---------------------------------------------------------------- 照明 */
+const sun=new THREE.DirectionalLight(0xfff2dd,0);
+sun.castShadow=true;
+sun.shadow.mapSize.set(2048,2048);
+sun.shadow.camera.near=1; sun.shadow.camera.far=45;
+sun.shadow.camera.left=-9; sun.shadow.camera.right=9;
+sun.shadow.camera.top=9;   sun.shadow.camera.bottom=-9;
+sun.shadow.bias=-0.0009; sun.shadow.normalBias=0.02;
+scene.add(sun); scene.add(sun.target);
+
+const hemi=new THREE.HemisphereLight(0xbfd6f2,0x6a6155,0.42); scene.add(hemi);
+const amb =new THREE.AmbientLight(0xffffff,0.08); scene.add(amb);
+
+function kelvinRGB(k,out){
+  const t=k/100; let r,g,b;
+  if(t<=66){ r=255; g=99.47*Math.log(t)-161.12; }
+  else{ r=329.7*Math.pow(t-60,-0.1332); g=288.12*Math.pow(t-60,-0.0755); }
+  if(t>=66) b=255; else if(t<=19) b=0; else b=138.52*Math.log(t-10)-305.04;
+  return (out||new THREE.Color()).setRGB(clamp(r,0,255)/255,clamp(g,0,255)/255,clamp(b,0,255)/255);
+}
+// 器具のマテリアルは使い回し、色温度だけ差し替える
+const emis =new THREE.MeshBasicMaterial({color:0xffffff});
+const shade=new THREE.MeshStandardMaterial({color:0x2c3138,roughness:.6,metalness:.3});
+function buildLamps(){
+  wipe(gLamp);
+  const col=kelvinRGB(S.kelvin, emis.color);
+  const v=V();
+  const inFlat=(x,y)=> !(S.voidOn && x>v.x0&&x<v.x1&&y>v.y0&&y<v.y1);
+
+  if(S.lDown){
+    const pts=[];
+    for(let x=1800;x<=7600;x+=1450) for(let y=2700;y<=6900;y+=1500){
+      if(!pointInLDK(x,y)) continue;
+      pts.push([x,y]);
+    }
+    const g=new THREE.CircleGeometry(0.055,18);
+    let lit=0;
+    pts.forEach(([x,y])=>{
+      if(!inFlat(x,y)) return;              // 勾配天井側はスポットで
+      const m=new THREE.Mesh(g,emis); m.position.copy(P(x,y,S.ceilH-8)); m.rotation.x=Math.PI/2;
+      gLamp.add(m);
+      if(lit<4){
+        const pl=new THREE.PointLight(col, 3.0*S.dim, 7, 2.0);
+        pl.position.copy(P(x,y,S.ceilH-160)); gLamp.add(pl); lit++;
+      }
+    });
+  }
+  if(S.lPend){
+    const dx=5900, dy=3900;
+    for(let i=-1;i<=1;i++){
+      const x=dx+i*520;
+      const cordH=S.ceilH; const lampH=1650;
+      const cord=new THREE.Mesh(new THREE.CylinderGeometry(0.006,0.006,(cordH-lampH)*MM,6),shade);
+      cord.position.copy(P(x,dy,(cordH+lampH)/2)); gLamp.add(cord);
+      const sh=new THREE.Mesh(new THREE.ConeGeometry(0.15,0.17,20,1,true),shade);
+      sh.material.side=THREE.DoubleSide;
+      sh.position.copy(P(x,dy,lampH+60)); gLamp.add(sh);
+      const bulb=new THREE.Mesh(new THREE.SphereGeometry(0.05,12,10),emis);
+      bulb.position.copy(P(x,dy,lampH-20)); gLamp.add(bulb);
+    }
+    const pl=new THREE.PointLight(col, 5.0*S.dim, 6, 2.0);
+    pl.position.copy(P(dx,dy,1600)); gLamp.add(pl);
+  }
+  if(S.lCove && S.voidOn){
+    const bar=emis;
+    const yMid=(v.y0+v.y1)/2;
+    const g1=new THREE.BoxGeometry(S.voidW*MM,0.03,0.05);
+    [v.y0+60,v.y1-60].forEach(y=>{
+      const m=new THREE.Mesh(g1,bar);
+      m.position.copy(P((v.x0+v.x1)/2,y,S.ceilH+70)); gLamp.add(m);
+    });
+    const pl=new THREE.PointLight(col, 4.5*S.dim, 8, 2.0);
+    pl.position.copy(P((v.x0+v.x1)/2,yMid,S.ceilH+180)); gLamp.add(pl);
+  }
+  if(S.lSpot && S.voidOn){
+    for(let i=0;i<3;i++){
+      const px=v.x0+S.voidW*(i+1)/4, py=(v.y0+v.y1)/2;
+      const h=hAt(px);
+      const b=new THREE.Mesh(new THREE.CylinderGeometry(0.05,0.06,0.13,14),shade);
+      b.position.copy(P(px,py,h-110)); b.rotation.z=0.35; gLamp.add(b);
+      const e=new THREE.Mesh(new THREE.CircleGeometry(0.045,14),emis);
+      e.position.copy(P(px,py,h-175)); e.rotation.x=Math.PI/2; gLamp.add(e);
+    }
+    const pl=new THREE.PointLight(col, 3.2*S.dim, 8, 2.0);
+    pl.position.copy(P((v.x0+v.x1)/2,(v.y0+v.y1)/2,S.ceilH+300)); gLamp.add(pl);
+  }
+}
+function pointInLDK(x,y){
+  let inside=false;
+  for(let i=0,j=LDK.length-1;i<LDK.length;j=i++){
+    const xi=LDK[i][0],yi=LDK[i][1],xj=LDK[j][0],yj=LDK[j][1];
+    if((yi>y)!==(yj>y) && x < (xj-xi)*(y-yi)/(yj-yi)+xi) inside=!inside;
+  }
+  return inside;
+}
+
+/* ---------------------------------------------------------------- 外の景色 */
+// 2階FL=0。設計GL は 階高2899＋床下 ≒ -3430。窓の外に地面と近景がないと
+// 開口が「空の穴」に見えてしまうため、簡単な外部だけ置く。
+const GL=-3430;
+function buildExterior(){
+  const ground=new THREE.Mesh(new THREE.PlaneGeometry(90,90),
+    new THREE.MeshStandardMaterial({color:0x6d7263,roughness:1}));
+  ground.rotation.x=-Math.PI/2; ground.position.set(4.5,GL*MM,-4.5);
+  ground.receiveShadow=true; gExt.add(ground);
+
+  // 南バルコニー（フルフラット・床19mmUP）＋手摺
+  const deck=new THREE.Mesh(new THREE.BoxGeometry(3.9,0.06,1.8),
+    new THREE.MeshStandardMaterial({color:0x9b8f7d,roughness:.9}));
+  deck.position.copy(P(2550,1100,-10)); deck.receiveShadow=true; gExt.add(deck);
+  const rail=new THREE.MeshStandardMaterial({color:0x8b8f93,roughness:.6,metalness:.2});
+  const rw=new THREE.Mesh(new THREE.BoxGeometry(3.9,1.1,0.06),rail);
+  rw.position.copy(P(2550,220,570)); gExt.add(rw);
+
+  // 近景（隣家・木）— 距離感のためだけの簡単なボリューム
+  const nb=new THREE.MeshStandardMaterial({color:0x8a8578,roughness:1});
+  [[-9,-16,6.5,7],[16,-2,7,6],[3,10,8,6.5],[-12,4,5.5,7.5],[20,-16,6,8]]
+    .forEach(([x,z,w,h])=>{
+      const b=new THREE.Mesh(new THREE.BoxGeometry(w,h,w*0.8),nb);
+      b.position.set(4.5+x, GL*MM+h/2, -4.5+z); gExt.add(b);
+    });
+  const grn=new THREE.MeshStandardMaterial({color:0x53663f,roughness:1});
+  [[-4,-11,2.2],[9,-13,1.8],[-7,-3,2.6]].forEach(([x,z,r])=>{
+    const t=new THREE.Mesh(new THREE.SphereGeometry(r,10,8),grn);
+    t.position.set(4.5+x, GL*MM+r*1.5, -4.5+z); t.scale.y=0.85; gExt.add(t);
+  });
+}
+
+/* ---------------------------------------------------------------- 家具 */
+function box(x0,y0,x1,y1,h0,h1,m){
+  const g=new THREE.BoxGeometry((x1-x0)*MM,(h1-h0)*MM,(y1-y0)*MM);
+  const mesh=new THREE.Mesh(g,m);
+  mesh.position.copy(P((x0+x1)/2,(y0+y1)/2,(h0+h1)/2));
+  mesh.castShadow=true; mesh.receiveShadow=true; return mesh;
+}
+const FM={
+  fab :new THREE.MeshStandardMaterial({color:0x8d8b84,roughness:.95}),
+  fab2:new THREE.MeshStandardMaterial({color:0x6d6a63,roughness:.95}),
+  wd  :new THREE.MeshStandardMaterial({color:0x8a6440,roughness:.6}),
+  wd2 :new THREE.MeshStandardMaterial({color:0xb98d5f,roughness:.6}),
+  wht :new THREE.MeshStandardMaterial({color:0xe8e6e1,roughness:.7}),
+  blk :new THREE.MeshStandardMaterial({color:0x1a1d21,roughness:.4,metalness:.3}),
+  stn :new THREE.MeshStandardMaterial({color:0xd6d2cb,roughness:.35}),
+  rug :new THREE.MeshStandardMaterial({color:0x9e968a,roughness:1})
+};
+function buildFurniture(){
+  wipe(gFurn);
+  if(!S.furniture) return;
+  const {fab,fab2,wd,wd2,wht,blk,stn,rug}=FM;
+
+  // ラグ
+  gFurn.add(box(1500,3000,4200,5400,2,16,rug));
+  // ソファ（西壁を向く）
+  gFurn.add(box(3650,3200,4550,5300,60,420,fab));
+  gFurn.add(box(4350,3200,4550,5300,420,760,fab2));
+  gFurn.add(box(3650,3200,4550,3400,420,620,fab2));
+  gFurn.add(box(3650,5100,4550,5300,420,620,fab2));
+  // ローテーブル
+  gFurn.add(box(2300,3800,3350,4800,320,360,wd2));
+  [[2360,3860],[3230,3860],[2360,4700],[3230,4700]].forEach(([x,y])=>gFurn.add(box(x,y,x+60,y+60,0,320,wd)));
+  // ダイニングテーブル
+  gFurn.add(box(5000,3450,6800,4350,690,730,wd2));
+  [[5060,3510],[6680,3510],[5060,4230],[6680,4230]].forEach(([x,y])=>gFurn.add(box(x,y,x+60,y+60,0,690,wd)));
+  // 椅子
+  for(let i=0;i<3;i++){
+    const x=5180+i*580;
+    gFurn.add(box(x,3050,x+440,3390,400,440,wht));
+    gFurn.add(box(x,3050,x+440,3100,440,840,wht));
+    gFurn.add(box(x,4410,x+440,4750,400,440,wht));
+    gFurn.add(box(x,4700,x+440,4750,440,840,wht));
+  }
+  // キッチン（フルフラット対面カウンター：立ち上がりの腰壁は無し）
+  gFurn.add(box(5300,5500,8000,6400,0,850,wht));
+  gFurn.add(box(5300,5500,8000,6400,850,900,stn));
+  // 背面カップボード・冷蔵庫
+  gFurn.add(box(5000,7050,7900,7500,0,2200,wht));
+  gFurn.add(box(4650,6900,5350,7500,0,1800,blk));
+}
+
+/* ---------------------------------------------------------------- 太陽 */
+const _cSun=new THREE.Color(), _cHemi=new THREE.Color(), _cGnd=new THREE.Color(),
+      _cBg=new THREE.Color(), _cSky=new THREE.Color();
+// 東京（北緯35.7°）の太陽。方位角は「真南から西回りを正」。正午に0、朝は負（東寄り）。
+function sunAngles(){
+  const decl={summer:23.44, equinox:0, winter:-23.44}[S.season]*D2R;
+  const lat=35.7*D2R;
+  const H=(S.hour-12)*15*D2R;
+  const sinAlt=Math.sin(lat)*Math.sin(decl)+Math.cos(lat)*Math.cos(decl)*Math.cos(H);
+  const alt=Math.asin(clamp(sinAlt,-1,1));
+  let az=Math.atan2(Math.cos(lat)*Math.cos(decl)*Math.sin(H),
+                    Math.sin(lat)*Math.sin(alt)-Math.sin(decl));
+  az += S.north*D2R;   // 図面の上方向と真北のずれ
+  return {alt,az};
+}
+// 南の大開口から直射が床に届く奥行（m）。庇があればその影のぶんだけ浅くなる。
+// プロファイル角 tanP = tan(高度)/cos(方位) で、鉛直 h の点は h/tanP だけ室内に届く。
+function sunReach(){
+  const {alt,az}=sunAngles();
+  if(alt<=0.01) return 0;                       // 日没
+  const ca=Math.cos(az);
+  if(ca<=0.05) return 0;                        // 南面に日が回らない
+  const tanP=Math.tan(alt)/ca;
+  // 開口の上端。天井 2250 では大開口も天井までで頭打ちになる（壁の作り方と同じ）
+  let top=Math.min(S.sashH, wallTop(1700+S.sashW/2, 2000));
+  if(S.eave) top=Math.min(top, eaveH()-S.eaveD*tanP);
+  return top<=0 ? 0 : top/tanP/1000;
+}
+function updateSun(){
+  const {alt,az}=sunAngles();
+  const ca=Math.cos(alt);
+  const dir=new THREE.Vector3(-ca*Math.sin(az), Math.sin(alt), ca*Math.cos(az));
+  const up=Math.max(0,Math.sin(alt));
+  sun.position.copy(dir).multiplyScalar(26).add(new THREE.Vector3(4.5,0,-4.5));
+  sun.target.position.set(4.5,1.0,-4.5);
+  sun.intensity = up<=0 ? 0 : 2.6*Math.pow(up,0.6);
+  sun.color.copy(kelvinRGB(lerp(2400,5800,clamp(up*2.2,0,1)),_cSun));
+
+  const dusk=clamp(up*3.2,0,1);
+  hemi.intensity=lerp(0.04,0.42,dusk);
+  hemi.color.copy(_cHemi.setHSL(0.58,0.45,lerp(0.30,0.72,dusk)));
+  hemi.groundColor.copy(_cGnd.setHSL(0.09,0.25,lerp(0.12,0.36,dusk)));
+  amb.intensity=lerp(0.04,0.10,dusk);
+  scene.background=_cBg.setHSL(0.60,lerp(0.35,0.25,dusk),lerp(0.05,0.55,dusk));
+  renderer.toneMappingExposure=lerp(1.35,1.06,dusk);
+  skyGlass.color.copy(_cSky.setHSL(0.58,0.35,lerp(0.18,0.85,dusk)));
+  glassMat.opacity=lerp(0.22,0.11,dusk);
+}
+
+/* ---------------------------------------------------------------- カメラ */
+const VIEWS={
+  lie   :{n:'寝ころぶ', p:[2900,4200], h:350,  yaw:  0, pitch: 72},
+  sofa  :{n:'ソファ',   p:[3900,4250], h:1050, yaw:-88, pitch: 26},
+  stand :{n:'立つ',     p:[2600,3100], h:1500, yaw: 34, pitch: 20},
+  dining:{n:'ダイニング',p:[6350,4150], h:1150, yaw:-74, pitch: 25},
+  kitchen:{n:'キッチン',p:[6550,6720], h:1550, yaw:212, pitch: 15},
+  entry :{n:'入口から', p:[4200,5700], h:1500, yaw:200, pitch: 16},
+  whole :{n:'部屋全体', p:[7650,2350], h:1620, yaw:-56, pitch:  9}
+};
+const cam={x:3900,y:4250,h:1050,yaw:-88,pitch:26};
+function applyView(k){
+  const v=VIEWS[k]; if(!v) return;
+  S.view=k; cam.x=v.p[0]; cam.y=v.p[1]; cam.h=v.h; cam.yaw=v.yaw; cam.pitch=v.pitch;
+  syncViewChips();
+}
+function updateCamera(){
+  camera.position.copy(P(cam.x,cam.y,cam.h));
+  const y=cam.yaw*D2R, p=cam.pitch*D2R;
+  const dir=new THREE.Vector3(Math.sin(y)*Math.cos(p), Math.sin(p), -Math.cos(y)*Math.cos(p));
+  camera.lookAt(camera.position.clone().add(dir));
+}
+
+/* 操作 */
+let drag=null;
+canvas.addEventListener('pointerdown',e=>{
+  drag={x:e.clientX,y:e.clientY}; canvas.setPointerCapture(e.pointerId);
+  const h=document.getElementById('hint'); if(h) h.style.opacity=0;
+});
+canvas.addEventListener('pointermove',e=>{
+  if(!drag) return;
+  cam.yaw   += (e.clientX-drag.x)*0.24;
+  cam.pitch  = clamp(cam.pitch - (e.clientY-drag.y)*0.22, -60, 89);
+  drag={x:e.clientX,y:e.clientY};
+  setPitchSlider(); needRender=true;
+});
+['pointerup','pointercancel','pointerleave'].forEach(ev=>canvas.addEventListener(ev,()=>drag=null));
+canvas.addEventListener('wheel',e=>{
+  e.preventDefault();
+  const y=cam.yaw*D2R, step=-Math.sign(e.deltaY)*180;
+  const nx=cam.x+Math.sin(y)*step, ny=cam.y+Math.cos(y)*step;
+  if(pointInLDK(nx,ny)){ cam.x=nx; cam.y=ny; drawPlan(); needRender=true; }
+},{passive:false});
+addEventListener('keydown',e=>{
+  const y=cam.yaw*D2R, s=220;
+  let nx=cam.x, ny=cam.y;
+  if(e.key==='ArrowUp'||e.key==='w'){ nx+=Math.sin(y)*s; ny+=Math.cos(y)*s; }
+  else if(e.key==='ArrowDown'||e.key==='s'){ nx-=Math.sin(y)*s; ny-=Math.cos(y)*s; }
+  else if(e.key==='ArrowLeft'||e.key==='a'){ nx-=Math.cos(y)*s; ny+=Math.sin(y)*s; }
+  else if(e.key==='ArrowRight'||e.key==='d'){ nx+=Math.cos(y)*s; ny-=Math.sin(y)*s; }
+  else return;
+  e.preventDefault();
+  if(pointInLDK(nx,ny)){ cam.x=nx; cam.y=ny; drawPlan(); needRender=true; }
+});
+
+/* ---------------------------------------------------------------- UI 部品 */
+function el(tag,cls,html){const e=document.createElement(tag); if(cls)e.className=cls; if(html!=null)e.innerHTML=html; return e;}
+function rowSlider(parent,label,key,min,max,step,unit,fmt){
+  const r=el('div','row');
+  const l=el('div','rlab',`<span>${label}</span><b><span data-v></span><span class="u">${unit||''}</span></b>`);
+  const i=el('input'); i.type='range'; i.min=min; i.max=max; i.step=step; i.value=S[key];
+  const out=l.querySelector('[data-v]');
+  const show=()=> out.textContent = fmt?fmt(S[key]):S[key];
+  show();
+  i.addEventListener('input',()=>{ S[key]=parseFloat(i.value); show(); onChange(key); });
+  r.appendChild(l); r.appendChild(i); parent.appendChild(r);
+  return {key,set:v=>{i.value=v;show();}};
+}
+function rowSelect(parent,label,key,opts){
+  const r=el('div','row');
+  r.appendChild(el('div','rlab',`<span>${label}</span>`));
+  const s=el('select');
+  opts.forEach(([v,n])=>{const o=el('option',null,n);o.value=v;s.appendChild(o);});
+  s.value=S[key];
+  s.addEventListener('change',()=>{S[key]=s.value;onChange(key);});
+  r.appendChild(s); parent.appendChild(r);
+  return {key,set:v=>s.value=v};
+}
+function rowSeg(parent,label,key,opts){
+  const r=el('div','row');
+  if(label) r.appendChild(el('div','rlab',`<span>${label}</span>`));
+  const w=el('div','seg');
+  opts.forEach(([v,n])=>{
+    const b=el('button',null,n); b.dataset.v=v;
+    b.addEventListener('click',()=>{S[key]=v;
+      [...w.children].forEach(c=>c.classList.toggle('on',c.dataset.v===String(v)));
+      onChange(key);});
+    if(String(S[key])===String(v)) b.classList.add('on');
+    w.appendChild(b);
+  });
+  r.appendChild(w); parent.appendChild(r);
+  return {key,set:v=>[...w.children].forEach(c=>c.classList.toggle('on',c.dataset.v===String(v)))};
+}
+function rowTog(parent,label,key){
+  const l=el('label','tog',`<span>${label}</span>`);
+  const i=el('input'); i.type='checkbox'; i.checked=!!S[key];
+  const sw=el('span','sw');
+  i.addEventListener('change',()=>{S[key]=i.checked;onChange(key);});
+  l.appendChild(i); l.appendChild(sw); parent.appendChild(l);
+  return {key,set:v=>i.checked=!!v};
+}
+
+const CTRL={};
+function buildUI(){
+  const g1=document.getElementById('g-shape');
+  // 高さは実際に選べる2つだけ。2250＝ハイドアと同じ高さ／2410＝図面の基準天井高。
+  // 2250 は窓の上端も下がるので夏の日射が奥まで入る。庇をセットで既定にする。
+  CTRL.ceilH = rowSeg(g1,'基準天井高','ceilH',
+    [[2250,'2250（ハイドア）'],[2410,'2410（図面）']]);
+  CTRL.voidOn= rowTog(g1,'吹抜（勾配天井）をつくる','voidOn');
+  CTRL.pitch = rowSlider(g1,'屋根勾配','pitch',0,7,0.5,' /10',v=>v.toFixed(1));
+  CTRL.voidW = rowSlider(g1,'勾配の幅（東西）','voidW',1500,LIVING.x1-LIVING.x0,50,' mm');
+  CTRL.voidX = rowSlider(g1,'勾配の始まり（西端から）','voidX',LIVING.x0,LIVING.x1-1500,50,' mm');
+  g1.appendChild(el('div','note','屋根は <code>4/10</code> の西下がり。<b>高い側はいつも東</b>で、低い側＝<code>基準天井高</code>。<br><b>勾配はリビングの上だけ</b>（東西 <code>1000〜4600</code>）で、<b>南北はいっぱい</b>（<code>2000〜6000</code>）に通します。ダイニングとキッチンは基準天井高のフラットのままです。'));
+
+  const g2=document.getElementById('g-finish');
+  const finList=['cloth','offw','washi','sakan','greige','gray','charcoal','oak','walnut','maple','sugi','louver']
+    .map(k=>[k,MATDEF[k].n]);
+  const wallList=['cloth','offw','greige','sakan','gray','charcoal','oak','walnut','sugi'].map(k=>[k,MATDEF[k].n]);
+  CTRL.finSlope=rowSelect(g2,'勾配天井（吹抜）','finSlope',finList);
+  CTRL.finFlat =rowSelect(g2,'フラット天井','finFlat',finList);
+  CTRL.beams   =rowTog(g2,'化粧梁を見せる','beams');
+  CTRL.beamN   =rowSlider(g2,'梁の本数','beamN',1,6,1,' 本');
+  CTRL.beamH   =rowSlider(g2,'梁せい','beamH',105,300,5,' mm');
+  CTRL.beamMat =rowSelect(g2,'梁の樹種','beamMat',[['walnut',MATDEF.walnut.n],['oak',MATDEF.oak.n],['maple',MATDEF.maple.n],['charcoal','黒塗装']]);
+  CTRL.wallS=rowSelect(g2,'壁：南（バルコニー側）','wallS',wallList);
+  CTRL.wallW=rowSelect(g2,'壁：西（ホール側）','wallW',wallList);
+  CTRL.wallE=rowSelect(g2,'壁：東','wallE',wallList);
+  CTRL.wallN=rowSelect(g2,'壁：北（キッチン側）','wallN',wallList);
+  CTRL.wallV=rowSelect(g2,'吹抜まわりの壁','wallV',wallList);
+  CTRL.floor=rowSelect(g2,'床','floor',[['oak',MATDEF.oak.n],['walnut',MATDEF.walnut.n],['maple',MATDEF.maple.n],['tile',MATDEF.tile.n]]);
+
+  const g3=document.getElementById('g-light');
+  CTRL.clerestory=rowTog(g3,'ハイサイドライト（高い側の下がり壁）','clerestory');
+  CTRL.clerH=rowSlider(g3,'高窓の高さ','clerH',300,1200,50,' mm');
+  CTRL.skylight=rowSeg(g3,'天窓','skylight',[[0,'なし'],[1,'1か所'],[2,'2か所']]);
+  CTRL.sashW=rowSlider(g3,'南の大開口 幅','sashW',1600,4200,100,' mm');
+  CTRL.sashH=rowSlider(g3,'南の大開口 高さ','sashH',1800,2400,50,' mm');
+  CTRL.eave =rowTog(g3,'庇（南バルコニー）','eave');
+  CTRL.eaveD=rowSlider(g3,'庇の出','eaveD',300,1500,50,' mm');
+  g3.appendChild(el('div','note','図面では下がり壁は塞がっています。高窓を入れると勾配天井を光がなめる見え方になります。<br>庇は天井 <code>2250</code> を選ぶと既定で付きます（<code>2410</code> では任意）。季節と時刻を動かすと、左上の「南の日射」に直射が床へ届く奥行が出ます。'));
+
+  const g4=document.getElementById('g-lamp');
+  CTRL.lDown=rowTog(g4,'ダウンライト','lDown');
+  CTRL.lCove=rowTog(g4,'コーブ（吹抜の間接照明）','lCove');
+  CTRL.lPend=rowTog(g4,'ペンダント（ダイニング）','lPend');
+  CTRL.lSpot=rowTog(g4,'スポット（勾配天井）','lSpot');
+  CTRL.kelvin=rowSlider(g4,'色温度','kelvin',2200,5000,100,' K');
+  CTRL.dim   =rowSlider(g4,'明るさ','dim',0,1.4,0.05,'',v=>Math.round(v*100)+'%');
+
+  const g5=document.getElementById('g-env');
+  CTRL.season=rowSeg(g5,'季節','season',[['winter','冬至'],['equinox','春秋分'],['summer','夏至']]);
+  CTRL.hour=rowSlider(g5,'時刻','hour',5,20,0.25,'',v=>{
+    const h=Math.floor(v), m=Math.round((v-h)*60);
+    return `${h}:${String(m).padStart(2,'0')}`;
+  });
+  CTRL.north=rowSlider(g5,'真北のふり','north',-45,45,1,' °');
+  CTRL.furniture=rowTog(g5,'家具を置く','furniture');
+  CTRL.dims=rowTog(g5,'天井高の寸法を出す','dims');
+  g5.appendChild(el('div','note','図面の上方向を北としています。配置図の真北に合わせて微調整できます。'));
+
+  // ビュー
+  const vb=document.getElementById('viewbar');
+  Object.entries(VIEWS).forEach(([k,v])=>{
+    const b=el('button','chip',v.n); b.dataset.view=k;
+    b.addEventListener('click',()=>{applyView(k);drawPlan();needRender=true;});
+    vb.appendChild(b);
+  });
+  const pit=el('input'); pit.type='range'; pit.min=-40;pit.max=89;pit.step=1;pit.value=cam.pitch;
+  pit.id='pitchSlider'; pit.style.cssText='width:110px;margin:0 8px;align-self:center';
+  pit.title='見上げる角度';
+  pit.addEventListener('input',()=>{cam.pitch=parseFloat(pit.value);needRender=true;});
+  vb.appendChild(pit);
+  syncViewChips();
+
+  // プリセット
+  // プリセットは「その違いが見える視点」もセットで持たせる
+  const PRE=[
+    ['図面どおり','sofa',{ceilH:2410,voidOn:true,voidX:1000,voidW:3500,pitch:4,finSlope:'oak',finFlat:'cloth',beams:false,clerestory:false,skylight:0}],
+    ['フラット天井だけ','sofa',{voidOn:false,ceilH:2410,finFlat:'cloth',beams:false}],
+    ['勾配を強く 6/10','lie',{voidOn:true,pitch:6,voidW:3600,voidX:1000}],
+    ['リビングいっぱいに','lie',{voidOn:true,voidX:1000,voidW:3600,pitch:4}],
+    ['木の天井＋化粧梁','stand',{voidOn:true,finSlope:'sugi',finFlat:'offw',beams:true,beamN:4,beamMat:'walnut',wallV:'offw'}],
+    ['ルーバー天井','whole',{voidOn:true,finSlope:'louver',finFlat:'cloth',beams:false,lCove:true}],
+    ['高窓を入れる','stand',{voidOn:true,clerestory:true,clerH:700,pitch:4.5,finSlope:'sugi'}],
+    ['天窓を開ける','lie',{voidOn:true,skylight:2,pitch:4,finSlope:'oak'}],
+    ['夜／間接照明','sofa',{hour:19,lCove:true,lDown:true,lPend:true,kelvin:2600,dim:0.75}],
+    ['冬の朝','dining',{season:'winter',hour:8.5,dim:0.2}],
+    ['低い側 2250＋庇','sofa',{ceilH:2250,voidOn:true,pitch:4,eave:true,eaveD:600}],
+    ['2250 フラット','dining',{ceilH:2250,voidOn:false,eave:true,eaveD:600}],
+    ['夏至 南中','dining',{season:'summer',hour:12,dim:0.1}],
+    ['冬至 南中','dining',{season:'winter',hour:12,dim:0.1}]
+  ];
+  const pw=document.getElementById('presets');
+  PRE.forEach(([n,view,patch])=>{
+    const b=el('button','chip',n);
+    b.addEventListener('click',()=>{
+      Object.assign(S,patch); if(view) applyView(view);
+      syncAll(); onChange('*');
+    });
+    pw.appendChild(b);
+  });
+  const rb=el('button','chip','リセット');
+  rb.addEventListener('click',()=>{Object.assign(S,DEF);syncAll();applyView('sofa');onChange('*');});
+  pw.appendChild(rb);
+}
+function syncViewChips(){
+  document.querySelectorAll('#viewbar .chip').forEach(c=>c.classList.toggle('on',c.dataset.view===S.view));
+}
+function setPitchSlider(){ const p=document.getElementById('pitchSlider'); if(p) p.value=cam.pitch; }
+function syncAll(){ Object.entries(CTRL).forEach(([k,c])=>c.set && c.set(S[c.key||k])); }
+
+/* ---------------------------------------------------------------- 変更反映 */
+let needRebuild=false, needRender=true, envDirty=true;
+// 天井 2250 は窓の上端も下がるぶん、夏の日射が奥まで入る。2250 を選んだら庇を
+// 既定で付け、2410 に戻したら既定では外す。切り替えたときだけ触るので、
+// そのあとチェックで付け外ししても上書きしない。
+const LOW_CEIL = 2250;
+let wasLowCeil = DEF.ceilH<=LOW_CEIL;
+function applyEaveDefault(){
+  const low = S.ceilH<=LOW_CEIL;
+  if(low!==wasLowCeil){ S.eave = low; wasLowCeil = low; }
+}
+function onChange(key){
+  // 勾配はリビングの東西の中に収める（東はダイニング、北はキッチン。どちらもフラットのまま）
+  S.voidW=clamp(S.voidW,1500,LIVING.x1-LIVING.x0);
+  S.voidX=clamp(S.voidX,LIVING.x0,LIVING.x1-S.voidW);
+  if(key==='ceilH'||key==='*'){ applyEaveDefault(); syncAll(); }
+  needRebuild=true; envDirty=true; needRender=true;
+}
+
+/* ---------------------------------------------------------------- 数値表示 */
+function updateReadout(){
+  const area=polyArea(LDK)/1e6;
+  const vArea=S.voidOn? (S.voidW*VOID_D)/1e6 : 0;
+  const rise=S.voidOn?RISE():0;
+  const vol = area*S.ceilH/1000 + vArea*rise/2000;
+  const avg = vol/area*1000;
+  const maxH= S.ceilH+rise;
+  const set=(id,v)=>document.getElementById(id).textContent=v;
+  set('ro-max', Math.round(maxH)+' mm');
+  set('ro-base',Math.round(S.ceilH)+' mm');
+  set('ro-avg', Math.round(avg)+' mm');
+  set('ro-area',area.toFixed(2)+' ㎡');
+  set('ro-void',vArea?vArea.toFixed(2)+' ㎡':'—');
+  set('ro-vol', vol.toFixed(1)+' m³');
+  // 一般的な住宅の天井高 2400 前後を「標準」に置いた目盛り
+  set('ro-open', avg<2400?'こもる': avg<2560?'標準': avg<2760?'ゆとり': avg<3000?'ひろい':'抜ける');
+  // 直射が床のどこまで来るか。庇の効きは夏（浅く）と冬（深いまま）の差で見る。
+  const reach=sunReach();
+  set('ro-sun', reach<=0.05 ? '入らない' : reach.toFixed(1)+' m'+(S.eave?'（庇あり）':''));
+  const idx=clamp((avg-2250)/(3300-2250),0,1);
+  document.querySelector('#openbar i').style.width=(idx*100).toFixed(0)+'%';
+}
+
+/* ---------------------------------------------------------------- ミニ平面 */
+// 2Dキャンバスは論理pxで描き、Retina対応は transform で吸収する
+function hidpi(c,w,h){
+  const dpr=Math.min(window.devicePixelRatio||1,2);
+  c.style.width=w+'px'; c.style.height=h+'px';
+  c.width=Math.round(w*dpr); c.height=Math.round(h*dpr);
+  const g=c.getContext('2d'); g.setTransform(dpr,0,0,dpr,0,0);
+  return g;
+}
+const pc=document.getElementById('planCanvas');
+const PW=228, PH=176;
+let pg=hidpi(pc,PW,PH);
+let pmode='void';
+const PB={x0:400,y0:1600,x1:8600,y1:7900};
+function pscale(){ return Math.min(PW/(PB.x1-PB.x0), PH/(PB.y1-PB.y0)); }
+function p2c(x,y){
+  const s=pscale();
+  return [ (x-PB.x0)*s + (PW-(PB.x1-PB.x0)*s)/2,
+           PH - ((y-PB.y0)*s + (PH-(PB.y1-PB.y0)*s)/2) ];
+}
+function c2p(cx,cy){
+  const s=pscale();
+  return [ (cx-(PW-(PB.x1-PB.x0)*s)/2)/s + PB.x0,
+           ((PH-cy)-(PH-(PB.y1-PB.y0)*s)/2)/s + PB.y0 ];
+}
+function drawPlan(){
+  pg.clearRect(0,0,PW,PH);
+  pg.fillStyle='#11151b'; pg.fillRect(0,0,PW,PH);
+  // LDK
+  pg.beginPath();
+  LDK.forEach((p,i)=>{const c=p2c(p[0],p[1]); i?pg.lineTo(c[0],c[1]):pg.moveTo(c[0],c[1]);});
+  pg.closePath();
+  pg.fillStyle='#1e242d'; pg.fill();
+  pg.strokeStyle='#4a5462'; pg.lineWidth=1.5; pg.stroke();
+  // 勾配を置ける範囲＝リビング。ここから東はダイニング、北はキッチンでフラットのまま
+  const la=p2c(LIVING.x0,LIVING.y1), lb=p2c(LIVING.x1,LIVING.y0);
+  pg.save();
+  pg.setLineDash([3,3]); pg.strokeStyle='#5c6a7d'; pg.lineWidth=1;
+  pg.strokeRect(la[0],la[1],lb[0]-la[0],lb[1]-la[1]);
+  pg.restore();
+  // 吹抜
+  if(S.voidOn){
+    const v=V(), a=p2c(v.x0,v.y1), b=p2c(v.x1,v.y0);
+    pg.fillStyle='rgba(240,179,87,.20)'; pg.fillRect(a[0],a[1],b[0]-a[0],b[1]-a[1]);
+    pg.strokeStyle='#f0b357'; pg.lineWidth=1.6; pg.strokeRect(a[0],a[1],b[0]-a[0],b[1]-a[1]);
+    // 勾配の矢印（低→高）
+    // 勾配の矢印（低→高）。高い側はいつも東
+    const cx=(a[0]+b[0])/2, cy=(a[1]+b[1])/2, L=(b[0]-a[0])*0.28;
+    pg.strokeStyle='#f0b357'; pg.lineWidth=1.4; pg.beginPath();
+    pg.moveTo(cx-L,cy); pg.lineTo(cx+L,cy); pg.stroke();
+    pg.beginPath();
+    pg.moveTo(cx+L,cy); pg.lineTo(cx+L-5,cy-4); pg.lineTo(cx+L-5,cy+4);
+    pg.closePath(); pg.fillStyle='#f0b357'; pg.fill();
+    // 東西のハンドルだけ（南北は常にいっぱい）
+    if(pmode==='void'){
+      pg.fillStyle='#f0b357';
+      const my=(a[1]+b[1])/2;
+      [[a[0],my],[b[0],my]].forEach(([x,y])=>pg.fillRect(x-3.5,y-3.5,7,7));
+    }
+  }
+  // 範囲の名前は吹抜の塗りの上に置く
+  pg.font='8px sans-serif'; pg.fillStyle='#8d99ab';
+  pg.fillText('リビング（勾配可）', la[0]+3, la[1]+10);
+  pg.fillText('ダイニング', lb[0]+4, la[1]+10);
+  // カメラ
+  const c=p2c(cam.x,cam.y);
+  const y=cam.yaw*D2R;
+  pg.fillStyle='rgba(125,179,255,.22)';
+  pg.beginPath(); pg.moveTo(c[0],c[1]);
+  pg.arc(c[0],c[1],26, -y-Math.PI/2-0.5, -y-Math.PI/2+0.5);
+  pg.closePath(); pg.fill();
+  pg.fillStyle='#7db3ff'; pg.beginPath(); pg.arc(c[0],c[1],4,0,6.284); pg.fill();
+  // 方位
+  pg.save();
+  pg.translate(PW-16,15); pg.rotate(-S.north*D2R);
+  pg.strokeStyle='#9aa4b2';pg.lineWidth=1;pg.beginPath();pg.moveTo(0,7);pg.lineTo(0,-8);pg.stroke();
+  pg.fillStyle='#9aa4b2';pg.beginPath();pg.moveTo(0,-10);pg.lineTo(-3,-4);pg.lineTo(3,-4);pg.closePath();pg.fill();
+  pg.restore();
+  pg.fillStyle='#9aa4b2';pg.font='9px sans-serif';pg.fillText('N',PW-13,13);
+}
+let pdrag=null;
+pc.addEventListener('pointerdown',e=>{
+  const r=pc.getBoundingClientRect();
+  const [px,py]=c2p(e.clientX-r.left, e.clientY-r.top);
+  if(pmode==='cam'){
+    if(pointInLDK(px,py)){cam.x=px;cam.y=py;drawPlan();needRender=true;}
+    pdrag={mode:'cam'};
+  }else if(S.voidOn){
+    // つかみしろは画面上14px相当。辺だけでもリサイズできるようにする
+    const v=V(), tol=14/pscale();
+    const nearX = Math.abs(px-v.x0)<tol ? 'x0' : Math.abs(px-v.x1)<tol ? 'x1' : null;
+    const near  = px>v.x0-tol && px<v.x1+tol && py>v.y0-tol && py<v.y1+tol;
+    if(near && nearX) pdrag={mode:'resize',ex:nearX};
+    else if(px>v.x0&&px<v.x1&&py>v.y0&&py<v.y1) pdrag={mode:'move',ox:px-v.x0};
+  }
+  pc.setPointerCapture(e.pointerId);
+});
+pc.addEventListener('pointermove',e=>{
+  if(!pdrag) return;
+  const r=pc.getBoundingClientRect();
+  const [px,py]=c2p(e.clientX-r.left, e.clientY-r.top);
+  if(pdrag.mode==='cam'){ if(pointInLDK(px,py)){cam.x=px;cam.y=py;drawPlan();needRender=true;} return; }
+  const v=V();
+  if(pdrag.mode==='move'){
+    S.voidX=Math.round((px-pdrag.ox)/50)*50;
+  }else{
+    let x0=v.x0,x1=v.x1;
+    if(pdrag.ex==='x0') x0=px; else x1=px;
+    S.voidX=Math.round(Math.min(x0,x1)/50)*50; S.voidW=Math.round(Math.abs(x1-x0)/50)*50;
+  }
+  onChange('void'); syncAll();
+});
+['pointerup','pointercancel'].forEach(ev=>pc.addEventListener(ev,()=>pdrag=null));
+document.querySelectorAll('#planbox .ptabs .chip').forEach(b=>{
+  b.addEventListener('click',()=>{
+    pmode=b.dataset.pmode;
+    document.querySelectorAll('#planbox .ptabs .chip').forEach(c=>c.classList.toggle('on',c===b));
+    document.getElementById('planhint').textContent =
+      pmode==='void'?'左右にドラッグで移動／東西の辺で幅':'クリック（ドラッグ）で立ち位置を移動';
+    drawPlan();
+  });
+});
+
+/* ---------------------------------------------------------------- 断面図 */
+const sc=document.getElementById('secCanvas');
+let sg=sc.getContext('2d'), SW=300, SH=100;
+function fitSection(){
+  const box=sc.parentNode || sc;
+  const w=Math.max(140, (box.clientWidth||320)-28);
+  SW=w; SH=Math.round(w*0.34); sg=hidpi(sc,SW,SH);
+}
+function drawSection(){
+  const W=SW,H=SH;
+  sg.clearRect(0,0,W,H); sg.fillStyle='#11151b'; sg.fillRect(0,0,W,H);
+  const span = [1000,8000];                     // 勾配は東西なので断面もいつも東西
+  const L=span[1]-span[0], maxH=Math.max(3200,S.ceilH+(S.voidOn?RISE():0)+400);
+  const padL=42,padR=28,padT=16,padB=22;
+  const sx=(W-padL-padR)/L, sy=(H-padT-padB)/maxH;
+  const X=u=>padL+(u-span[0])*sx;
+  const Y=h=>H-padB-h*sy;
+
+  // 床
+  sg.strokeStyle='#4a5462';sg.lineWidth=1.5;
+  sg.beginPath();sg.moveTo(X(span[0]),Y(0));sg.lineTo(X(span[1]),Y(0));sg.stroke();
+  // 天井ライン
+  sg.strokeStyle='#f0b357';sg.lineWidth=2;sg.beginPath();
+  const v=V();
+  const pts=[];
+  const N=160;
+  for(let i=0;i<=N;i++){
+    const u=span[0]+L*i/N;
+    let h=S.ceilH;
+    if(S.voidOn){
+      if(u>=v.x0 && u<=v.x1) h = hAt(u);
+    }
+    pts.push([X(u),Y(h)]);
+  }
+  pts.forEach((p,i)=>i?sg.lineTo(p[0],p[1]):sg.moveTo(p[0],p[1]));
+  sg.stroke();
+  // 塗り
+  sg.lineTo(X(span[1]),Y(0));sg.lineTo(X(span[0]),Y(0));sg.closePath();
+  sg.fillStyle='rgba(240,179,87,.07)';sg.fill();
+
+  // 壁
+  sg.strokeStyle='#4a5462';sg.lineWidth=1.5;
+  [span[0],span[1]].forEach(u=>{sg.beginPath();sg.moveTo(X(u),Y(0));sg.lineTo(X(u),Y(S.ceilH));sg.stroke();});
+
+  // 人（1500mm）
+  const hx = clamp(cam.x,span[0]+300,span[1]-300);
+  sg.strokeStyle='#7db3ff';sg.lineWidth=1.6;
+  sg.beginPath();sg.moveTo(X(hx),Y(0));sg.lineTo(X(hx),Y(1420));sg.stroke();
+  sg.fillStyle='#7db3ff';sg.beginPath();sg.arc(X(hx),Y(1530),Y(0)-Y(110),0,6.284);sg.fill();
+
+  // 寸法
+  sg.font='11px "IBM Plex Mono",monospace';sg.fillStyle='#9aa4b2';sg.textAlign='right';
+  sg.fillText(Math.round(S.ceilH), padL-6, Y(S.ceilH)+4);
+  sg.strokeStyle='rgba(154,164,178,.3)';sg.lineWidth=1;sg.setLineDash([3,3]);
+  sg.beginPath();sg.moveTo(padL-2,Y(S.ceilH));sg.lineTo(W-padR,Y(S.ceilH));sg.stroke();
+  if(S.voidOn&&RISE()>1){
+    const mh=S.ceilH+RISE();
+    sg.fillStyle='#f0b357';sg.fillText(Math.round(mh),padL-6,Y(mh)+4);
+    sg.strokeStyle='rgba(240,179,87,.3)';
+    sg.beginPath();sg.moveTo(padL-2,Y(mh));sg.lineTo(W-padR,Y(mh));sg.stroke();
+  }
+  sg.setLineDash([]);
+  sg.textAlign='left';sg.fillStyle='#6b7480';sg.font='10px sans-serif';
+  sg.fillText('西',padL,H-6);
+  sg.textAlign='right';sg.fillText('東',W-padR,H-6);
+  sg.textAlign='center';
+  if(S.voidOn&&RISE()>1){
+    const cU=(v.x0+v.x1)/2;
+    sg.fillStyle='#f0b357';sg.font='10px sans-serif';
+    sg.fillText(`勾配 ${S.pitch.toFixed(1)}/10`,X(cU),Y(S.ceilH+RISE()/2)-8);
+  }
+}
+
+/* ---------------------------------------------------------------- ループ */
+function resize(){
+  const r=document.getElementById('stage').getBoundingClientRect();
+  renderer.setSize(r.width,r.height,false);
+  camera.aspect=r.width/r.height; camera.updateProjectionMatrix();
+  fitSection(); drawSection();
+  needRender=true;
+}
+addEventListener('resize',resize);
+
+function tick(){
+  requestAnimationFrame(tick);
+  if(needRebuild){ needRebuild=false; buildRoom(); updateReadout(); drawPlan(); drawSection(); needRender=true; }
+  if(envDirty){ envDirty=false; updateSun(); updateReadout(); needRender=true; }
+  if(!needRender) return;             // 変化がないフレームは描かない
+  needRender=false;
+  updateCamera();
+  renderer.render(scene,camera);
+}
+
+/* ---------------------------------------------------------------- 起動 */
+buildUI();
+buildExterior();
+fitSection();
+applyView('sofa');
+resize();
+buildRoom(); updateReadout(); drawPlan(); drawSection();
+tick();
+setTimeout(()=>{ const l=document.getElementById('loading'); l.style.opacity=0; setTimeout(()=>l.remove(),450); },120);
+setTimeout(()=>{ const h=document.getElementById('hint'); if(h)h.style.opacity=0; },6000);
+
+document.getElementById('panelToggle').addEventListener('click',()=>{
+  document.getElementById('panel').classList.toggle('open');
+});
+
+})();
+</script>
+</body>
+</html>

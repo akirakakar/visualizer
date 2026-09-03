@@ -1,0 +1,402 @@
+{
+  "schema": 2,
+  "savedAt": "2026-08-31T22:38:24.493Z",
+  "rooms": [
+    {
+      "name": "キッチン",
+      "priority": "高",
+      "fields": [
+        {
+          "label": "金額",
+          "type": "money",
+          "priority": "高"
+        },
+        {
+          "label": "L字",
+          "type": "tri",
+          "priority": "高"
+        },
+        {
+          "label": "デッド収納が使えるか",
+          "type": "tri",
+          "priority": "高"
+        },
+        {
+          "label": "積水オリジナルの有無",
+          "type": "tri",
+          "priority": "高"
+        },
+        {
+          "label": "シンクの横幅",
+          "type": "text",
+          "priority": "中",
+          "hint": "mm"
+        },
+        {
+          "label": "シンク下ゴミ箱",
+          "type": "tri",
+          "priority": "高"
+        },
+        {
+          "label": "水栓のオプション",
+          "type": "text",
+          "priority": "中",
+          "hint": "タッチレス・浄水など"
+        },
+        {
+          "label": "天板勝ち",
+          "type": "tri",
+          "priority": "高"
+        },
+        {
+          "label": "食洗機",
+          "type": "text",
+          "priority": "高",
+          "hint": "深型 / 浅型 / ミーレ"
+        },
+        {
+          "label": "グリルなし",
+          "type": "tri",
+          "priority": "中"
+        },
+        {
+          "label": "特色",
+          "type": "long",
+          "priority": "中",
+          "hint": "素材・仕上げ・気になった点"
+        },
+        {
+          "label": "Akira コメント",
+          "type": "long",
+          "priority": "中"
+        },
+        {
+          "label": "Madoka コメント",
+          "type": "long",
+          "priority": "中"
+        },
+        {
+          "label": "評価",
+          "type": "rating",
+          "priority": "中"
+        }
+      ],
+      "candidates": [
+        {
+          "name": "トクラス",
+          "values": {}
+        },
+        {
+          "name": "パナソニック S",
+          "values": {}
+        },
+        {
+          "name": "パナソニック L",
+          "values": {}
+        },
+        {
+          "name": "グラフテクト",
+          "values": {}
+        },
+        {
+          "name": "キッチンハウス",
+          "values": {}
+        }
+      ]
+    },
+    {
+      "name": "1階 洗面台",
+      "priority": "中",
+      "fields": [
+        {
+          "label": "金額",
+          "type": "money",
+          "priority": "高"
+        },
+        {
+          "label": "間口サイズ",
+          "type": "text",
+          "priority": "高",
+          "hint": "750 / 900 / 1200mm"
+        },
+        {
+          "label": "収納の使い方",
+          "type": "long",
+          "priority": "高",
+          "hint": "タオル・掃除用具・ストックの居場所。引出しの仕切り"
+        },
+        {
+          "label": "デッド収納が使えるか",
+          "type": "tri",
+          "priority": "低"
+        },
+        {
+          "label": "積水オリジナルの有無",
+          "type": "tri",
+          "priority": "高"
+        },
+        {
+          "label": "ボウルの大きさ・形状",
+          "type": "text",
+          "priority": "中",
+          "hint": "一体成形 / 陶器"
+        },
+        {
+          "label": "水栓のオプション",
+          "type": "text",
+          "priority": "中",
+          "hint": "タッチレス・シャワー水栓"
+        },
+        {
+          "label": "天板勝ち",
+          "type": "tri",
+          "priority": "中"
+        },
+        {
+          "label": "カウンター素材",
+          "type": "text",
+          "priority": "中",
+          "hint": "人大 / セラミック"
+        },
+        {
+          "label": "ミラー",
+          "type": "text",
+          "priority": "中",
+          "hint": "三面鏡 / 一面 / 収納付"
+        },
+        {
+          "label": "コンセント",
+          "type": "tri",
+          "priority": "中"
+        },
+        {
+          "label": "特色",
+          "type": "long",
+          "priority": "中"
+        },
+        {
+          "label": "Akira コメント",
+          "type": "long",
+          "priority": "中"
+        },
+        {
+          "label": "Madoka コメント",
+          "type": "long",
+          "priority": "中"
+        },
+        {
+          "label": "評価",
+          "type": "rating",
+          "priority": "中"
+        }
+      ],
+      "candidates": [
+        {
+          "name": "LIXIL",
+          "values": {}
+        },
+        {
+          "name": "TOTO",
+          "values": {}
+        },
+        {
+          "name": "パナソニック",
+          "values": {}
+        }
+      ]
+    },
+    {
+      "name": "2階 洗面台",
+      "priority": "低",
+      "fields": [
+        {
+          "label": "金額",
+          "type": "money",
+          "priority": "高"
+        },
+        {
+          "label": "間口サイズ",
+          "type": "text",
+          "priority": "高",
+          "hint": "750 / 900 / 1200mm"
+        },
+        {
+          "label": "収納の使い方",
+          "type": "long",
+          "priority": "高",
+          "hint": "タオル・掃除用具・ストックの居場所。引出しの仕切り"
+        },
+        {
+          "label": "デッド収納が使えるか",
+          "type": "tri",
+          "priority": "低"
+        },
+        {
+          "label": "積水オリジナルの有無",
+          "type": "tri",
+          "priority": "高"
+        },
+        {
+          "label": "ボウルの大きさ・形状",
+          "type": "text",
+          "priority": "中",
+          "hint": "一体成形 / 陶器"
+        },
+        {
+          "label": "水栓のオプション",
+          "type": "text",
+          "priority": "中",
+          "hint": "タッチレス・シャワー水栓"
+        },
+        {
+          "label": "天板勝ち",
+          "type": "tri",
+          "priority": "中"
+        },
+        {
+          "label": "カウンター素材",
+          "type": "text",
+          "priority": "中",
+          "hint": "人大 / セラミック"
+        },
+        {
+          "label": "ミラー",
+          "type": "text",
+          "priority": "中",
+          "hint": "三面鏡 / 一面 / 収納付"
+        },
+        {
+          "label": "コンセント",
+          "type": "tri",
+          "priority": "中"
+        },
+        {
+          "label": "特色",
+          "type": "long",
+          "priority": "中"
+        },
+        {
+          "label": "Akira コメント",
+          "type": "long",
+          "priority": "中"
+        },
+        {
+          "label": "Madoka コメント",
+          "type": "long",
+          "priority": "中"
+        },
+        {
+          "label": "評価",
+          "type": "rating",
+          "priority": "中"
+        }
+      ],
+      "candidates": [
+        {
+          "name": "LIXIL",
+          "values": {}
+        },
+        {
+          "name": "TOTO",
+          "values": {}
+        }
+      ]
+    },
+    {
+      "name": "お風呂",
+      "priority": "中",
+      "fields": [
+        {
+          "label": "金額",
+          "type": "money",
+          "priority": "高"
+        },
+        {
+          "label": "サイズ",
+          "type": "text",
+          "priority": "高",
+          "hint": "1616 / 1620 / 1621"
+        },
+        {
+          "label": "収納・棚の使い方",
+          "type": "long",
+          "priority": "高",
+          "hint": "カウンター有無・棚の位置・ボトルの置き方"
+        },
+        {
+          "label": "積水オリジナルの有無",
+          "type": "tri",
+          "priority": "高"
+        },
+        {
+          "label": "浴槽の形状・素材",
+          "type": "text",
+          "priority": "中",
+          "hint": "ストレート / ワイド・FRP / 人大"
+        },
+        {
+          "label": "水栓・シャワーのオプション",
+          "type": "text",
+          "priority": "中",
+          "hint": "オーバーヘッド・調光など"
+        },
+        {
+          "label": "床・壁の素材",
+          "type": "text",
+          "priority": "中",
+          "hint": "ほっカラリ床 / キレイサーモフロア"
+        },
+        {
+          "label": "保温浴槽",
+          "type": "tri",
+          "priority": "中"
+        },
+        {
+          "label": "浴室暖房乾燥機",
+          "type": "tri",
+          "priority": "高"
+        },
+        {
+          "label": "掃除のしやすさ",
+          "type": "text",
+          "priority": "高",
+          "hint": "排水口・カウンター有無・目地"
+        },
+        {
+          "label": "特色",
+          "type": "long",
+          "priority": "中"
+        },
+        {
+          "label": "Akira コメント",
+          "type": "long",
+          "priority": "中"
+        },
+        {
+          "label": "Madoka コメント",
+          "type": "long",
+          "priority": "中"
+        },
+        {
+          "label": "評価",
+          "type": "rating",
+          "priority": "中"
+        }
+      ],
+      "candidates": [
+        {
+          "name": "TOTO",
+          "values": {}
+        },
+        {
+          "name": "LIXIL",
+          "values": {}
+        },
+        {
+          "name": "パナソニック",
+          "values": {}
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>設備仕様くらべ｜南荻窪 Shawood</title>
+<style>
+:root{
+  --paper:#EDEEE9;
+  --card:#FFFFFF;
+  --ink:#18201D;
+  --ink2:#4A544F;
+  --muted:#8D958F;
+  --line:#D7DAD3;
+  --line2:#C3C8BF;
+  --ai:#2C4A63;
+  --ai-soft:#E4EBF1;
+  --amber:#9A7A25;
+  --radius:3px;
+  --jp-gothic:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic","Noto Sans JP","Meiryo",system-ui,sans-serif;
+  --jp-mincho:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP","MS PMincho",serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--jp-gothic);
+  font-size:14px;
+  line-height:1.7;
+  -webkit-text-size-adjust:100%;
+}
+button{font-family:inherit;font-size:inherit;color:inherit;cursor:pointer}
+
+/* ---------- header ---------- */
+header{
+  padding:22px 20px 0;
+  max-width:1400px;margin:0 auto;
+}
+.title{
+  font-family:var(--jp-mincho);
+  font-size:29px;
+  letter-spacing:.14em;
+  font-weight:500;
+  margin:0;
+  line-height:1.3;
+}
+.subtitle{
+  color:var(--ink2);
+  font-size:12.5px;
+  letter-spacing:.06em;
+  margin:4px 0 0;
+}
+.toolbar{
+  display:flex;flex-wrap:wrap;gap:8px;align-items:center;
+  margin-top:16px;
+}
+.tool{
+  background:transparent;
+  border:1px solid var(--line2);
+  border-radius:var(--radius);
+  padding:5px 12px;
+  font-size:12.5px;
+  color:var(--ink2);
+}
+.tool:hover{border-color:var(--ink2);color:var(--ink)}
+.tool.save-state{border:none;color:var(--muted);font-size:12px;pointer-events:none}
+
+/* ---------- room tabs ---------- */
+nav{
+  max-width:1400px;margin:18px auto 0;padding:0 20px;
+  border-bottom:1px solid var(--line2);
+  display:flex;gap:2px;overflow-x:auto;
+}
+nav button{
+  background:transparent;border:none;
+  padding:9px 16px 10px;
+  font-size:14px;
+  color:var(--ink2);
+  border-bottom:2px solid transparent;
+  white-space:nowrap;
+  letter-spacing:.04em;
+}
+nav button:hover{color:var(--ink)}
+nav button[aria-selected="true"]{
+  color:var(--ai);
+  border-bottom-color:var(--ai);
+  font-weight:600;
+}
+nav .addroom{color:var(--muted);font-size:13px}
+
+/* ---------- room head ---------- */
+main{max-width:1400px;margin:0 auto;padding:0 20px 80px}
+.roomhead{
+  display:flex;flex-wrap:wrap;gap:14px 22px;align-items:baseline;
+  padding:18px 0 12px;
+}
+.roomname{
+  font-family:var(--jp-mincho);font-size:21px;letter-spacing:.1em;margin:0;font-weight:500;
+}
+.roommeta{color:var(--ink2);font-size:12.5px}
+.roommeta b{font-weight:600;font-variant-numeric:tabular-nums;color:var(--ink)}
+.roomacts{margin-left:auto;display:flex;gap:8px}
+
+/* ---------- table ---------- */
+.scroller{
+  overflow-x:auto;
+  background:var(--card);
+  border:1px solid var(--line2);
+  border-radius:var(--radius);
+}
+table{border-collapse:separate;border-spacing:0;width:100%}
+th,td{
+  border-bottom:1px solid var(--line);
+  border-right:1px solid var(--line);
+  vertical-align:top;
+  padding:0;
+}
+tr:last-child th,tr:last-child td{border-bottom:none}
+th.prop{
+  position:sticky;left:0;z-index:3;
+  background:#F6F7F3;
+  border-right:1px solid var(--line2);
+  width:132px;min-width:132px;max-width:132px;
+  text-align:left;
+  font-weight:500;
+  font-size:12.5px;
+  color:var(--ink2);
+  padding:9px 10px;
+  letter-spacing:.02em;
+}
+th.prop .del-field{
+  float:right;border:none;background:none;color:transparent;padding:0 0 0 4px;line-height:1.4;font-size:13px;
+}
+tr:hover th.prop .del-field{color:var(--muted)}
+th.prop .del-field:hover{color:#8E3B2A}
+thead th.prop{background:#EFF1EC;z-index:5;vertical-align:bottom}
+thead th{
+  position:sticky;top:0;z-index:4;
+  background:#EFF1EC;
+  border-bottom:1px solid var(--line2);
+  text-align:left;
+  padding:8px 10px;
+  min-width:190px;
+  font-weight:500;
+}
+thead th.cand.adopted{background:var(--ai-soft)}
+td.cand.adopted,th.cand.adopted{background:#F4F8FB}
+.cand-name{
+  display:block;width:100%;border:none;background:transparent;
+  font-family:var(--jp-gothic);font-size:15px;font-weight:600;color:var(--ink);
+  padding:2px 0;letter-spacing:.03em;
+}
+.cand-name:focus{outline:2px solid var(--ai);outline-offset:2px;border-radius:2px}
+.cand-sub{display:flex;align-items:center;gap:10px;margin-top:3px}
+.adopt{
+  border:1px solid var(--line2);background:#fff;border-radius:100px;
+  padding:1px 10px;font-size:11.5px;color:var(--muted);letter-spacing:.05em;
+}
+.adopt.on{background:var(--ai);border-color:var(--ai);color:#fff}
+.killcand{border:none;background:none;color:var(--muted);font-size:12px;padding:0 2px}
+.killcand:hover{color:#8E3B2A}
+.addcand{
+  min-width:52px;width:52px;background:#F6F7F3;
+  border-right:none;
+}
+.addcand button{
+  border:none;background:none;color:var(--muted);font-size:20px;width:100%;padding:10px 0;line-height:1;
+}
+.addcand button:hover{color:var(--ai)}
+
+/* cell editors */
+.cell{
+  padding:7px 10px;min-height:38px;
+  font-size:13.5px;line-height:1.65;
+  white-space:pre-wrap;word-break:break-word;
+  outline:none;
+}
+.cell:focus{background:#FFFDF2;box-shadow:inset 0 0 0 2px var(--ai)}
+.cell:empty::before{content:attr(data-ph);color:#BDC3BC}
+.money{
+  padding:7px 10px;min-height:38px;font-size:15px;
+  font-variant-numeric:tabular-nums;letter-spacing:.02em;
+  outline:none;
+}
+.money:focus{background:#FFFDF2;box-shadow:inset 0 0 0 2px var(--ai)}
+.money.zero{color:#BDC3BC}
+.tri{
+  display:flex;gap:0;padding:5px 6px;
+}
+.tri button{
+  border:1px solid transparent;background:none;border-radius:2px;
+  width:32px;height:28px;font-size:14px;color:#C6CBC4;line-height:1;
+}
+.tri button:hover{border-color:var(--line2)}
+.tri button.on[data-v="○"]{color:var(--ai);border-color:var(--ai);font-weight:700}
+.tri button.on[data-v="✕"]{color:var(--ink2);border-color:var(--line2);font-weight:700}
+.tri button.on[data-v="？"]{color:var(--ink2);border-color:var(--ink2);border-style:dashed;font-weight:700}
+.stars{padding:6px 8px;display:flex;gap:2px;align-items:center}
+.stars button{border:none;background:none;font-size:17px;color:#D3D7D0;padding:0 1px;line-height:1}
+.stars button.on{color:var(--amber)}
+.stars .clr{font-size:11px;color:#C6CBC4;margin-left:6px}
+tr.row-money td,tr.row-rating td{background:#FCFCFA}
+tr.row-money td.adopted,tr.row-rating td.adopted{background:#F4F8FB}
+
+/* 保存先バー */
+#filebar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-right:4px}
+.fname{
+  font-size:12.5px;color:var(--ink2);border:1px solid transparent;padding:5px 0;
+  display:inline-flex;align-items:center;gap:6px;
+}
+.fname b{font-weight:600;color:var(--ink)}
+.dot{width:7px;height:7px;border-radius:50%;background:#C6CBC4;display:inline-block}
+.dot.live{background:var(--ai)}
+.grant{
+  max-width:1400px;margin:12px auto 0;
+  background:var(--ai-soft);border:1px solid #C3D3E0;border-radius:var(--radius);
+  padding:10px 14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-size:13px;color:var(--ai);
+}
+.grant-btn{background:var(--ai);border-color:var(--ai);color:#fff}
+.dirty{
+  position:sticky;top:0;z-index:20;
+  max-width:1400px;margin:12px auto 0;
+  background:#FBF3DC;border:1px solid #E0CE96;border-radius:var(--radius);
+  padding:10px 14px;display:flex;align-items:center;gap:10px 16px;flex-wrap:wrap;
+  font-size:13px;color:#6B5414;
+}
+.dirty::before{
+  content:'';width:8px;height:8px;border-radius:50%;background:#B8891C;flex:none;
+}
+.dirty.handoff{background:#EEF3E9;border-color:#C6D4BB;color:#3F5533}
+.dirty.handoff::before{background:#5E7A4B}
+.dirty .dirty-acts{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.tool.warn{background:#fff;border-color:#D3BE85;color:#6B5414}
+.tool.warn:hover{border-color:#B8891C;color:#4A390C}
+.grant-btn:hover{color:#fff;border-color:var(--ai)}
+
+/* 優先度 */
+.pri{
+  display:inline-block;border:1px solid var(--line2);background:#fff;border-radius:2px;
+  width:21px;height:19px;font-size:10.5px;line-height:1;padding:0;color:var(--muted);
+  margin-right:6px;vertical-align:1px;
+}
+.pri.hi{background:var(--ai);border-color:var(--ai);color:#fff;font-weight:700}
+.pri.lo{color:#C9CEC7;border-color:#E6E9E3}
+tr.hi th.prop{box-shadow:inset 4px 0 0 var(--ai);background:#EAEFF3}
+tr.hi th.prop .lab{color:var(--ink);font-weight:700}
+tr.mid th.prop{box-shadow:inset 4px 0 0 #CBD2C8}
+tr.lo th.prop{background:#FAFBF8}
+tr.lo th.prop .lab{color:#A6ADA6}
+tr.lo td{opacity:.55}
+.tool.on{background:var(--ai);border-color:var(--ai);color:#fff}
+.ro-tag{
+  font-size:11.5px;letter-spacing:.08em;border:1px solid var(--line2);border-radius:100px;
+  padding:2px 11px;color:var(--ink2);background:#fff;
+}
+body.ro .cell:focus,body.ro .money:focus{background:transparent;box-shadow:none}
+body.ro .tri button,body.ro .stars button{cursor:default}
+body.ro .tri button:hover{border-color:transparent}
+body.ro .pri{cursor:default}
+body.ro .cand-name{cursor:default}
+body.ro .adopt{cursor:default}
+.legend{
+  display:flex;gap:14px;align-items:center;font-size:11.5px;color:var(--muted);
+  margin:10px 0 0;flex-wrap:wrap;
+}
+.legend i{width:16px;height:4px;display:inline-block;vertical-align:middle;margin-right:5px}
+.roompri{
+  font-family:inherit;font-size:12.5px;border:1px solid var(--line2);border-radius:var(--radius);
+  padding:4px 7px;background:#fff;color:var(--ink);
+}
+.pri-tag{font-size:11.5px;border:1px solid var(--line2);border-radius:100px;padding:1px 9px;color:var(--muted)}
+.pri-tag.hi{background:var(--ai);border-color:var(--ai);color:#fff}
+
+.addfield{margin:12px 0 0;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.addfield input,.addfield select{
+  font-family:inherit;font-size:13px;padding:5px 8px;
+  border:1px solid var(--line2);border-radius:var(--radius);background:#fff;color:var(--ink);
+}
+
+/* ---------- summary ---------- */
+.sum-grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));margin-top:6px}
+.sum-card{background:var(--card);border:1px solid var(--line2);border-radius:var(--radius);padding:14px 16px}
+.sum-card h3{font-family:var(--jp-mincho);font-size:16px;letter-spacing:.08em;margin:0 0 2px;font-weight:500}
+.sum-pick{font-size:19px;font-weight:600;margin:6px 0 0;letter-spacing:.02em}
+.sum-pick.none{color:#BDC3BC;font-weight:400;font-size:15px}
+.sum-price{font-size:15px;font-variant-numeric:tabular-nums;color:var(--ink2);margin-top:2px}
+.sum-note{border-top:1px solid var(--line);margin-top:10px;padding-top:8px;font-size:12.5px;color:var(--ink2);white-space:pre-wrap}
+.sum-note span{color:var(--muted)}
+.total{
+  background:var(--ink);color:#F2F3EF;border-radius:var(--radius);
+  padding:18px 20px;margin-top:18px;display:flex;flex-wrap:wrap;gap:8px 28px;align-items:baseline;
+}
+.total .lbl{font-family:var(--jp-mincho);letter-spacing:.14em;font-size:14px;opacity:.8}
+.total .amt{font-size:32px;font-variant-numeric:tabular-nums;letter-spacing:.02em}
+.total .side{font-size:12.5px;opacity:.72;margin-left:auto}
+.rank{margin-top:26px}
+.rank h3{font-family:var(--jp-mincho);font-size:15px;letter-spacing:.1em;font-weight:500;margin:0 0 8px}
+.rank table{background:var(--card);border:1px solid var(--line2);border-radius:var(--radius);width:100%}
+.rank td,.rank th{padding:7px 12px;font-size:13px;border-right:none}
+.rank th{background:#F6F7F3;font-weight:500;color:var(--ink2);font-size:12px;text-align:left;position:static}
+.rank td.n{font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+
+.hint{color:var(--muted);font-size:12px;margin-top:14px;line-height:1.8}
+dialog{border:1px solid var(--line2);border-radius:var(--radius);padding:20px;max-width:560px;width:92%;background:var(--card);color:var(--ink)}
+dialog textarea{width:100%;height:220px;font-family:ui-monospace,monospace;font-size:11.5px;border:1px solid var(--line2);border-radius:2px;padding:8px}
+dialog::backdrop{background:rgba(24,32,29,.4)}
+
+@media (max-width:620px){
+  .title{font-size:23px}
+  th.prop{width:104px;min-width:104px;max-width:104px;font-size:11.5px;padding:8px 7px}
+  thead th{min-width:170px}
+  main,header,nav{padding-left:12px;padding-right:12px}
+}
+@media (prefers-reduced-motion:no-preference){
+  .adopt,.tri button,.stars button{transition:background-color .12s,color .12s,border-color .12s}
+}
+@media print{
+  body{background:#fff}
+  nav,.toolbar,.roomacts,.addfield,.addcand,.killcand,.hint,.stars .clr,.dirty,.grant{display:none !important}
+  .scroller{overflow:visible;border-color:#999}
+  .room{page-break-after:always}
+  thead th{position:static}
+  th.prop{position:static}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1 class="title">設備仕様くらべ</h1>
+  <p class="subtitle">南荻窪3丁目 / Shawood — キッチン・洗面・浴室の候補比較</p>
+  <div class="toolbar">
+    <span id="filebar"></span>
+    <button class="tool" id="btn-print">印刷 / PDF</button>
+    <button class="tool" id="btn-export">バックアップを書き出す</button>
+    <button class="tool" id="btn-reset">初期状態に戻す</button>
+    <span class="tool save-state" id="savestate"></span>
+  </div>
+  <div id="dirty" class="dirty" hidden></div>
+  <div id="grant" class="grant" hidden>
+    <span id="grant-msg"></span>
+    <button class="tool grant-btn" id="grant-btn">ファイルを開く</button>
+  </div>
+</header>
+
+<nav id="tabs"></nav>
+<main id="view"></main>
+
+<dialog id="io">
+  <p style="margin:0 0 8px;font-size:13px" id="io-msg"></p>
+  <textarea id="io-text" spellcheck="false"></textarea>
+  <div style="margin-top:10px;display:flex;gap:8px;justify-content:flex-end">
+    <button class="tool" id="io-ok">読み込む</button>
+    <button class="tool" id="io-close">閉じる</button>
+  </div>
+</dialog>
+
+<script>
+/* ============================================================
+   保存先: window.storage → localStorage → メモリのみ
+   ============================================================ */
+/* ============================================================
+   Git で差分が読める形に整えてから書き出す
+   値は項目IDではなく「項目名」をキーにする → git diff がそのまま読める
+   ============================================================ */
+const SCHEMA = 2;
+
+function serialize(){
+  return {
+    schema: SCHEMA,
+    savedAt: new Date().toISOString(),
+    rooms: state.rooms.map(r=>({
+      name: r.name,
+      priority: r.pri || '中',
+      fields: r.fields.map(f=>{
+        const o = {label:f.label, type:f.type, priority:f.p||'中'};
+        if(f.ph) o.hint = f.ph;
+        return o;
+      }),
+      candidates: r.cands.map(c=>{
+        const values = {};
+        r.fields.forEach(f=>{                    // 項目の順で書く＝行の入れ替わりが起きない
+          const x = c.v[f.id];
+          if(x === undefined || x === '' || x === 0) return;
+          values[f.label] = x;
+        });
+        const o = {name:c.name};
+        if(c.adopted) o.adopted = true;
+        o.values = values;
+        return o;
+      })
+    }))
+  };
+}
+const jsonText = () => JSON.stringify(serialize(), null, 2) + '\n';
+
+function deserialize(o){
+  if(!o || !o.rooms) return null;
+  const isV2 = o.schema >= 2 || (o.rooms[0] && o.rooms[0].candidates);
+  if(!isV2) return {savedAt:o.savedAt||'', rooms:o.rooms};   // 旧形式はそのまま
+  return {
+    savedAt: o.savedAt || '',
+    rooms: o.rooms.map(r=>{
+      const fields = (r.fields||[]).map(f=>({
+        id:uid(), label:f.label, type:f.type||'text', ph:f.hint||'', p:f.priority||'中'
+      }));
+      const byLabel = {};
+      fields.forEach(f=>{ byLabel[f.label] = f; });
+      return {
+        id:uid(), name:r.name||'', pri:r.priority||'中', fields,
+        cands:(r.candidates||[]).map(c=>{
+          const v = {};
+          Object.entries(c.values||{}).forEach(([lab,val])=>{
+            const f = byLabel[lab];
+            if(f) v[f.id] = val;
+          });
+          return {id:uid(), name:c.name||'', adopted:!!c.adopted, v};
+        })
+      };
+    })
+  };
+}
+
+/* ============================================================
+   保存: 指定したJSONファイルに直接読み書き（File System Access API）
+   使えない環境ではブラウザ内保存にフォールバック
+   ============================================================ */
+const KEY = 'setsubi-hikaku:v1';
+const FS_OK = typeof window !== 'undefined' && 'showSaveFilePicker' in window;
+let fileHandle = null;
+let needsGrant = false;
+let source = 'seed';        // file / repo / local / seed
+let repoRaw = null;         // リポジトリ側の data.json
+
+const QS = new URLSearchParams(typeof location!=='undefined' ? location.search : '');
+const DATA_PATH = QS.get('data') || 'data.json';
+
+/* 手元では編集でき、公開先（GitHub Pages など）では閲覧だけにする。
+   ?edit=1 を付けたときだけ、公開先でも一時的に編集できる（保存はブラウザ内のみ）。 */
+const IS_LOCAL = typeof location==='undefined' || location.protocol==='file:' ||
+  ['localhost','127.0.0.1','::1','0.0.0.0'].includes(location.hostname) ||
+  /\.local$/.test(location.hostname||'');
+const READONLY = !IS_LOCAL && QS.get('edit') !== '1';
+
+/* リポジトリ内の JSON を読む（GitHub Pages / ローカルサーバー） */
+async function fetchRepo(){
+  if(typeof location==='undefined' || location.protocol==='file:') return null;
+  try{
+    const res = await fetch(DATA_PATH, {cache:'no-store'});
+    if(!res.ok) return null;
+    const o = await res.json();
+    return o && o.rooms ? o : null;
+  }catch(e){ return null; }
+}
+
+/* GitHub の編集画面をあてる */
+function ghTarget(){
+  if(QS.get('repo')) return {slug:QS.get('repo'), branch:QS.get('branch')||'main', path:QS.get('path')||DATA_PATH};
+  if(typeof location==='undefined') return null;
+  const m = location.hostname.match(/^([\w-]+)\.github\.io$/);
+  if(!m) return null;
+  const owner = m[1];
+  const dir = location.pathname.replace(/[^/]*$/,'');            // /repo/tools/
+  const seg = dir.split('/').filter(Boolean);
+  const project = seg.length ? seg[0] : owner + '.github.io';
+  const inRepo = seg.length ? seg.slice(1).join('/') : '';
+  return {
+    slug: owner + '/' + project,
+    branch: 'main',
+    path: (inRepo ? inRepo + '/' : '') + DATA_PATH
+  };
+}
+const GH = ghTarget();
+
+/* ファイルハンドルを次回のために憶えておく */
+const IDB = (()=>{
+  let p = null;
+  function db(){
+    if(!p) p = new Promise((res,rej)=>{
+      const q = indexedDB.open('setsubi-fs', 1);
+      q.onupgradeneeded = ()=>q.result.createObjectStore('h');
+      q.onsuccess = ()=>res(q.result);
+      q.onerror  = ()=>rej(q.error);
+    });
+    return p;
+  }
+  return {
+    async get(k){
+      try{ const d=await db(); return await new Promise((res,rej)=>{ const t=d.transaction('h').objectStore('h').get(k); t.onsuccess=()=>res(t.result); t.onerror=()=>rej(t.error); }); }
+      catch(e){ return null; }
+    },
+    async set(k,v){
+      try{ const d=await db(); await new Promise((res,rej)=>{ const t=d.transaction('h','readwrite').objectStore('h').put(v,k); t.onsuccess=()=>res(); t.onerror=()=>rej(t.error); }); }catch(e){}
+    }
+  };
+})();
+
+const Local = {
+  get(){
+    try{ const v = localStorage.getItem(KEY); if(v) return JSON.parse(v); }catch(e){}
+    return null;
+  },
+  set(s){ try{ localStorage.setItem(KEY, s); return true; }catch(e){ return false; } }
+};
+
+async function perm(h, req){
+  if(!h) return 'denied';
+  try{ return req ? await h.requestPermission({mode:'readwrite'}) : await h.queryPermission({mode:'readwrite'}); }
+  catch(e){ return 'denied'; }
+}
+async function readHandle(h){
+  const f = await h.getFile();
+  const txt = (await f.text()).trim();
+  if(!txt) return null;
+  const o = JSON.parse(txt);
+  return o && o.rooms ? o : null;
+}
+async function writeHandle(text){
+  if(!fileHandle) return false;
+  if(await perm(fileHandle) !== 'granted') return false;
+  const w = await fileHandle.createWritable();
+  await w.write(text);
+  await w.close();
+  return true;
+}
+
+async function persist(){
+  const s = jsonText();
+  Local.set(s);                                   // 常に控えを残す
+  if(fileHandle){
+    try{
+      if(await writeHandle(s)){
+        source='file'; unsaved=0; handoff=false;
+        renderDirty(); renderFileBar();
+        flash(fileHandle.name + ' に保存しました');
+        return;
+      }
+      needsGrant = true; unsaved++; renderDirty(); renderFileBar();
+      flash('ファイルに書けませんでした。上のボタンで開き直してください');
+      return;
+    }catch(e){ unsaved++; renderDirty(); flash('ファイル保存に失敗：' + e.message); return; }
+  }
+  try{ if(window.storage){ await window.storage.set(KEY, s); } }catch(e){}
+  source = 'local'; renderFileBar();
+  flash(GH ? 'ブラウザ内に保存（コミットは「GitHubで更新」から）' : 'ブラウザ内に保存しました');
+}
+
+let flashTimer;
+function flash(msg){
+  const el = document.getElementById('savestate');
+  el.textContent = msg;
+  clearTimeout(flashTimer);
+  flashTimer = setTimeout(()=>{ el.textContent=''; }, 2600);
+}
+
+/* まだ data.json に入っていないことを、隠れないところに出す */
+function renderDirty(){
+  const el = document.getElementById('dirty');
+  if(!el) return;
+  if(READONLY || unsaved === 0){
+    el.hidden = true;
+    document.title = BASE_TITLE;
+    return;
+  }
+  el.hidden = false;
+  el.className = 'dirty' + (handoff ? ' handoff' : '');
+  document.title = (handoff ? '' : '● 未保存 ') + BASE_TITLE;
+  el.innerHTML = '';
+
+  const msg = document.createElement('span');
+  msg.innerHTML = handoff
+    ? `コピーしました。GitHub に貼り付けてコミットするまで <b>${esc(DATA_PATH)}</b> には入りません。`
+    : `${unsaved}件の編集が <b>${esc(DATA_PATH)}</b> に入っていません。いまはこのブラウザの中だけです。`;
+  el.appendChild(msg);
+
+  const acts = document.createElement('span'); acts.className='dirty-acts';
+  if(GH)             acts.appendChild(mkBtn('GitHubで更新','tool warn', pushToGitHub));
+  else if(FS_OK)     acts.appendChild(mkBtn('JSONファイルに保存','tool warn', pickSaveFile));
+  acts.appendChild(mkBtn('ダウンロード','tool warn', downloadJson));
+  el.appendChild(acts);
+}
+
+/* 保存先の表示と操作 */
+const SRC_LABEL = {
+  file: ()=>`保存先 <b>${esc(fileHandle?fileHandle.name:'')}</b>`,
+  repo: ()=>`リポジトリの <b>${esc(DATA_PATH)}</b>`,
+  local:()=>'ブラウザ内の下書き',
+  seed: ()=> READONLY ? `<b>${esc(DATA_PATH)}</b> が読み込めませんでした` : '新規（未保存）'
+};
+function renderFileBar(){
+  const bar = document.getElementById('filebar');
+  bar.innerHTML = '';
+  const g = document.getElementById('grant');
+
+  const s = document.createElement('span'); s.className='fname';
+  const live = (source==='file' && !needsGrant) || source==='repo';
+  s.innerHTML = `<span class="dot${live?' live':''}"></span>` + SRC_LABEL[source]();
+  bar.appendChild(s);
+
+  if(READONLY){
+    const ro = document.createElement('span');
+    ro.className='ro-tag'; ro.textContent='閲覧モード';
+    ro.title='公開先では編集できません。手元のリポジトリで開いて編集してください。';
+    bar.appendChild(ro);
+    g.hidden = true;
+    return;
+  }
+  if(FS_OK) bar.appendChild(mkBtn(fileHandle?'保存先を変える':'JSONファイルに保存','tool', pickSaveFile));
+  if(FS_OK) bar.appendChild(mkBtn('別のJSONを開く','tool', pickOpenFile));
+  if(!FS_OK) bar.appendChild(mkBtn('JSONを貼り付けて読み込む','tool', openPaste));
+  if(GH)     bar.appendChild(mkBtn('GitHubで更新','tool', pushToGitHub));
+  if(repoRaw && source!=='repo') bar.appendChild(mkBtn('リポジトリ版に戻す','tool', useRepo));
+
+  g.hidden = !needsGrant;
+  if(needsGrant){
+    document.getElementById('grant-msg').textContent =
+      `前回の保存先「${fileHandle ? fileHandle.name : ''}」に接続するには、ブラウザの都合で一度クリックが必要です。`;
+  }
+}
+
+async function pickSaveFile(){
+  try{
+    const h = await window.showSaveFilePicker({
+      suggestedName: DATA_PATH,
+      types:[{description:'JSON', accept:{'application/json':['.json']}}]
+    });
+    fileHandle = h; needsGrant = false; source = 'file';
+    await IDB.set('handle', h);
+    await writeHandle(jsonText());
+    unsaved = 0; handoff = false;
+    renderDirty(); renderFileBar(); flash(h.name + ' に保存しました');
+  }catch(e){ if(e.name!=='AbortError') flash('保存先を設定できませんでした：'+e.message); }
+}
+async function pickOpenFile(){
+  try{
+    const [h] = await window.showOpenFilePicker({
+      types:[{description:'JSON', accept:{'application/json':['.json']}}]
+    });
+    if(await perm(h,true) !== 'granted'){ flash('読み書きの許可が必要です'); return; }
+    const o = await readHandle(h);
+    fileHandle = h; needsGrant = false; source = 'file';
+    await IDB.set('handle', h);
+    if(o){ state = migrate(deserialize(o)); active = 0; }
+    renderFileBar(); render(); flash(h.name + ' を読み込みました');
+  }catch(e){ if(e.name!=='AbortError') flash('読み込めませんでした：'+e.message); }
+}
+async function grantAndLoad(){
+  if(await perm(fileHandle,true) !== 'granted'){ flash('許可されませんでした'); return; }
+  try{
+    const o = await readHandle(fileHandle);
+    if(o){ state = migrate(deserialize(o)); active = 0; }
+    needsGrant = false; source = 'file';
+    renderFileBar(); render(); flash(fileHandle.name + ' から読み込みました');
+  }catch(e){ flash('読み込めませんでした：'+e.message); }
+}
+function useRepo(){
+  if(!repoRaw) return;
+  if(!confirm(`リポジトリの ${DATA_PATH} を読み直します。この画面の変更は失われます。`)) return;
+  state = migrate(deserialize(repoRaw)); active = 0; source='repo';
+  renderFileBar(); render(); flash('リポジトリ版を読み込みました');
+}
+
+/* GitHub の編集画面を開き、JSON はクリップボードへ */
+async function pushToGitHub(){
+  const text = jsonText();
+  let copied = false;
+  try{ await navigator.clipboard.writeText(text); copied = true; }catch(e){}
+  const url = `https://github.com/${GH.slug}/edit/${GH.branch}/${GH.path}`;
+  if(copied){
+    window.open(url, '_blank', 'noopener');
+    handoff = true; renderDirty();
+    flash('JSONをコピーしました。GitHubの編集画面に貼り付けてコミットしてください');
+  }else{
+    handoff = true; renderDirty();
+    document.getElementById('io-msg').innerHTML =
+      `下のJSONをコピーして、<a href="${url}" target="_blank" rel="noopener">GitHubの編集画面</a> に貼り付けてコミットしてください。`;
+    document.getElementById('io-text').value = text;
+    document.getElementById('io-ok').style.display='none';
+    dlg.showModal();
+  }
+}
+
+/* ============================================================
+   初期データ
+   ============================================================ */
+const uid = () => Math.random().toString(36).slice(2,9);
+const F = (label,type,ph,p) => ({id:uid(), label, type, ph:ph||'', p:p||'中'});
+
+function kitchenFields(){return [
+  F('金額','money','','高'),
+  F('L字','tri','','高'),
+  F('デッド収納が使えるか','tri','','高'),
+  F('積水オリジナルの有無','tri','','高'),
+  F('シンクの横幅','text','mm'),
+  F('シンク下ゴミ箱','tri','','高'),
+  F('水栓のオプション','text','タッチレス・浄水など'),
+  F('天板勝ち','tri','','高'),
+  F('食洗機','text','深型 / 浅型 / ミーレ','高'),
+  F('グリルなし','tri'),
+  F('特色','long','素材・仕上げ・気になった点'),
+  F('Akira コメント','long'),
+  F('Madoka コメント','long'),
+  F('評価','rating'),
+];}
+function vanityFields(){return [
+  F('金額','money','','高'),
+  F('間口サイズ','text','750 / 900 / 1200mm','高'),
+  F('収納の使い方','long','タオル・掃除用具・ストックの居場所。引出しの仕切り','高'),
+  F('デッド収納が使えるか','tri','','低'),
+  F('積水オリジナルの有無','tri','','高'),
+  F('ボウルの大きさ・形状','text','一体成形 / 陶器'),
+  F('水栓のオプション','text','タッチレス・シャワー水栓'),
+  F('天板勝ち','tri'),
+  F('カウンター素材','text','人大 / セラミック'),
+  F('ミラー','text','三面鏡 / 一面 / 収納付'),
+  F('コンセント','tri'),
+  F('特色','long'),
+  F('Akira コメント','long'),
+  F('Madoka コメント','long'),
+  F('評価','rating'),
+];}
+function bathFields(){return [
+  F('金額','money','','高'),
+  F('サイズ','text','1616 / 1620 / 1621','高'),
+  F('収納・棚の使い方','long','カウンター有無・棚の位置・ボトルの置き方','高'),
+  F('積水オリジナルの有無','tri','','高'),
+  F('浴槽の形状・素材','text','ストレート / ワイド・FRP / 人大'),
+  F('水栓・シャワーのオプション','text','オーバーヘッド・調光など'),
+  F('床・壁の素材','text','ほっカラリ床 / キレイサーモフロア'),
+  F('保温浴槽','tri'),
+  F('浴室暖房乾燥機','tri','','高'),
+  F('掃除のしやすさ','text','排水口・カウンター有無・目地','高'),
+  F('特色','long'),
+  F('Akira コメント','long'),
+  F('Madoka コメント','long'),
+  F('評価','rating'),
+];}
+function cand(name){ return {id:uid(), name, adopted:false, v:{}}; }
+function room(name, fields, names, pri){
+  return {id:uid(), name, fields, cands:names.map(cand), pri:pri||'中'};
+}
+const KITCHEN_BRANDS = ['トクラス','パナソニック S','パナソニック L','グラフテクト','キッチンハウス'];
+function seed(){
+  return {rooms:[
+    room('キッチン', kitchenFields(), KITCHEN_BRANDS, '高'),
+    room('1階 洗面台', vanityFields(), ['LIXIL','TOTO','パナソニック'], '中'),
+    room('2階 洗面台', vanityFields(), ['LIXIL','TOTO'], '低'),
+    room('お風呂', bathFields(), ['TOTO','LIXIL','パナソニック'], '中'),
+  ]};
+}
+
+/* 以前の保存データに、あとから足した項目・候補を補う */
+function migrate(s){
+  (s.rooms||[]).forEach(r=>{
+    if(!r.pri) r.pri = '中';
+    r.fields.forEach(f=>{
+      if(!f.p) f.p='中';
+      if(f.label==='積水オリジナル'){ f.label='積水オリジナルの有無'; f.type='tri'; f.p='高'; }
+      if(f.label==='シンクの大きさ'){ f.label='シンクの横幅'; f.ph='mm'; }
+    });
+    /* △ は使わないことにしたので ？ に寄せる */
+    const triIds = new Set(r.fields.filter(f=>f.type==='tri').map(f=>f.id));
+    r.cands.forEach(c=>Object.keys(c.v).forEach(k=>{ if(triIds.has(k) && c.v[k]==='△') c.v[k]='？'; }));
+    /* デッド収納は ○✕？ で足りる。書き込みがなければ切り替える */
+    const dead = r.fields.find(f=>/^デッド収納/.test(f.label));
+    if(dead && dead.type==='long' && !r.cands.some(c=>c.v[dead.id])){
+      dead.type='tri'; dead.ph=''; dead.label='デッド収納が使えるか';
+    }
+    /* 積水オリジナルは各ブランドごとの有無なので、候補の列としては置かない */
+    r.cands = r.cands.filter(c => !(/^積水オリジナル/.test(c.name||'') && Object.keys(c.v).length===0));
+    const has = lab => r.fields.some(f=>f.label===lab);
+    const after = (lab, fld)=>{
+      const i = r.fields.findIndex(f=>f.label===lab);
+      if(i<0) r.fields.splice(Math.max(0,r.fields.length-4),0,fld); else r.fields.splice(i+1,0,fld);
+    };
+    if(/キッチン/.test(r.name)){
+      if(!has('デッド収納が使えるか') && !has('デッド収納の使い方')) after('L字', F('デッド収納が使えるか','tri','','高'));
+      if(!has('シンク下ゴミ箱'))     after('シンクの横幅', F('シンク下ゴミ箱','tri','','高'));
+      /* キッチンの「収納の使い方」は デッド収納 と シンク下ゴミ箱 に分かれたので、空なら外す */
+      const su = r.fields.find(f=>f.label==='収納の使い方');
+      if(su && !r.cands.some(c=>c.v[su.id])) r.fields = r.fields.filter(f=>f!==su);
+      KITCHEN_BRANDS.forEach(n=>{ if(!r.cands.some(c=>c.name===n)) r.cands.push(cand(n)); });
+      r.cands = r.cands.filter(c => !(['LIXIL','タカラスタンダード','TOTO'].includes(c.name) && Object.keys(c.v).length===0));
+    }
+    if(/洗面/.test(r.name)){
+      const old = r.fields.find(f=>f.label==='収納');
+      if(old){ old.label='収納の使い方'; old.type='long'; old.ph='タオル・掃除用具・ストックの居場所。引出しの仕切り'; old.p='高'; }
+      else if(!has('収納の使い方')) after('間口サイズ', F('収納の使い方','long','タオル・掃除用具・ストックの居場所','高'));
+    }
+    if(/風呂|浴室/.test(r.name) && !has('収納・棚の使い方')){
+      after('サイズ', F('収納・棚の使い方','long','カウンター有無・棚の位置・ボトルの置き方','高'));
+    }
+  });
+  /* 床材は表から外した。以前の保存データに空のまま残っていたら消す（書き込みがあれば残す） */
+  s.rooms = (s.rooms||[]).filter(r =>
+    !(/^床材/.test(r.name||'') && !(r.cands||[]).some(c=>Object.keys(c.v||{}).length))
+  );
+  return s;
+}
+
+let state = seed();
+let active = 0;           // index of room, or 'sum'
+let unsaved = 0;          // まだ data.json に入っていない編集の数
+let handoff = false;      // コピー/DL 済みだが、まだコミットされていない
+const BASE_TITLE = typeof document!=='undefined' ? document.title : '';
+let filterHi = false;     // 重要項目のみ表示
+let sortPri  = false;     // 優先度順に並べる
+let saveTimer;
+
+function save(){
+  if(READONLY) return;
+  if(!fileHandle){ unsaved++; handoff = false; renderDirty(); }
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(persist, 700);
+}
+
+/* ============================================================
+   値のヘルパ
+   ============================================================ */
+const yen = n => '¥' + (n||0).toLocaleString('ja-JP');
+const num = s => { const n = parseInt(String(s).replace(/[^\d-]/g,''),10); return isNaN(n)?0:n; };
+const get = (c,f) => c.v[f.id];
+const roomTotal = r => { const a = r.cands.find(c=>c.adopted); const mf = r.fields.find(f=>f.type==='money'); return a&&mf ? num(get(a,mf)) : 0; };
+
+/* ============================================================
+   行き先（#部屋名）
+   index.html から部屋を名指しで開けるように、開いているタブを
+   URL のハッシュに出す。#キッチン / #お風呂 / #総括。
+   タブの切り替えは replaceState なので、戻るボタンは呼び出し元に返る
+   ============================================================ */
+const SUM_HASH = '総括';
+function hashTarget(){
+  let h = '';
+  try{ h = decodeURIComponent((location.hash||'').replace(/^#/,'')).trim(); }catch(e){ return null; }
+  if(!h) return null;
+  if(h===SUM_HASH || /^(sum|summary)$/i.test(h)) return 'sum';
+  const norm = x => String(x||'').replace(/\s+/g,'');
+  const rooms = state.rooms || [];
+  let i = rooms.findIndex(r => norm(r.name)===norm(h));
+  if(i<0) i = rooms.findIndex(r => norm(r.name).includes(norm(h)));   // 「洗面」だけでも拾う
+  return i<0 ? null : i;
+}
+/* ハッシュで指定があればそこを開く。無効な指定は無視する */
+function applyHash(){
+  const t = hashTarget();
+  if(t===null) return false;
+  active = t;
+  return true;
+}
+function syncHash(){
+  const name = active==='sum' ? SUM_HASH : (state.rooms[active]||{}).name;
+  if(!name) return;
+  try{ history.replaceState(null, '', '#' + encodeURIComponent(name)); }catch(e){}   // file:// では失敗することがある
+}
+
+/* ============================================================
+   描画
+   ============================================================ */
+function renderTabs(){
+  const nav = document.getElementById('tabs');
+  nav.innerHTML = '';
+  state.rooms.forEach((r,i)=>{
+    const b = document.createElement('button');
+    b.textContent = r.name;
+    b.setAttribute('aria-selected', active===i);
+    b.onclick = ()=>{ active=i; render(); };
+    nav.appendChild(b);
+  });
+  const s = document.createElement('button');
+  s.textContent = '総括';
+  s.setAttribute('aria-selected', active==='sum');
+  s.onclick = ()=>{ active='sum'; render(); };
+  nav.appendChild(s);
+
+  if(!READONLY){
+    const a = document.createElement('button');
+    a.className='addroom'; a.textContent='＋ 部屋';
+    a.onclick = ()=>{
+      const name = prompt('部屋・設備の名前', 'トイレ');
+      if(!name) return;
+      state.rooms.push(room(name, vanityFields(), ['候補 1','候補 2']));
+      active = state.rooms.length-1; save(); render();
+    };
+    nav.appendChild(a);
+  }
+}
+
+function render(){
+  if(active!=='sum' && !state.rooms[active]) active = 0;
+  syncHash();
+  renderTabs();
+  const view = document.getElementById('view');
+  view.innerHTML = '';
+  if(active==='sum'){ view.appendChild(renderSummary()); return; }
+  view.appendChild(renderRoom(state.rooms[active]));
+}
+
+/* 開いたまま #… を書き換えられたとき（index.html の別リンクを踏んだときなど） */
+window.addEventListener('hashchange', ()=>{ if(applyHash()) render(); });
+
+function renderRoom(r){
+  const wrap = document.createElement('div');
+  wrap.className = 'room';
+
+  /* head */
+  const head = document.createElement('div');
+  head.className = 'roomhead';
+  const h = document.createElement('h2');
+  h.className='roomname'; h.textContent = r.name;
+  h.contentEditable = String(!READONLY);
+  if(!READONLY){
+    h.oninput = ()=>{ r.name = h.textContent.trim(); save(); };
+    h.onblur = renderTabs;
+  }
+  const meta = document.createElement('p');
+  meta.className='roommeta';
+  const adopted = r.cands.find(c=>c.adopted);
+  meta.innerHTML = adopted
+    ? `採用：<b>${esc(adopted.name)}</b>　${roomTotal(r)?yen(roomTotal(r)):'金額未入力'}`
+    : `候補 ${r.cands.length} 件　<span style="color:var(--muted)">まだ採用を決めていません</span>`;
+  const acts = document.createElement('div');
+  acts.className='roomacts';
+
+  const priWrap = document.createElement('label');
+  priWrap.className='roommeta';
+  priWrap.style.cssText='display:flex;align-items:center;gap:6px';
+  priWrap.append('お金をかける優先度');
+  const priSel = document.createElement('select');
+  priSel.className='roompri';
+  ['高','中','低'].forEach(v=>{ const o=document.createElement('option'); o.value=v; o.textContent=v; if((r.pri||'中')===v) o.selected=true; priSel.appendChild(o); });
+  priSel.disabled = READONLY;
+  priSel.onchange = ()=>{ r.pri = priSel.value; save(); };
+  priWrap.appendChild(priSel);
+  acts.appendChild(priWrap);
+
+  acts.appendChild(mkBtn('優先度順に並べる','tool'+(sortPri?' on':''), ()=>{ sortPri=!sortPri; render(); }));
+  acts.appendChild(mkBtn('重要項目のみ','tool'+(filterHi?' on':''), ()=>{ filterHi=!filterHi; render(); }));
+
+  if(!READONLY){
+    acts.appendChild(mkBtn('この部屋を削除','tool', ()=>{
+      if(state.rooms.length<=1) return;
+      if(!confirm(`「${r.name}」を削除しますか？`)) return;
+      state.rooms = state.rooms.filter(x=>x!==r);
+      active = 0; save(); render();
+    }));
+  }
+  head.append(h, meta, acts);
+  wrap.appendChild(head);
+
+  /* table */
+  const sc = document.createElement('div'); sc.className='scroller';
+  const t = document.createElement('table');
+
+  const thead = document.createElement('thead');
+  const hr = document.createElement('tr');
+  const corner = document.createElement('th');
+  corner.className='prop'; corner.textContent='項目';
+  hr.appendChild(corner);
+  r.cands.forEach(c=>{
+    const th = document.createElement('th');
+    th.className = 'cand' + (c.adopted?' adopted':'');
+    const nm = document.createElement('input');
+    nm.className='cand-name'; nm.value = c.name; nm.placeholder='メーカー / 品番';
+    nm.readOnly = READONLY;
+    nm.oninput = ()=>{ c.name = nm.value; save(); };
+    const sub = document.createElement('div'); sub.className='cand-sub';
+    const ad = mkBtn(c.adopted?'採用':'採用にする','adopt'+(c.adopted?' on':''), ()=>{
+      const was = c.adopted;
+      r.cands.forEach(x=>x.adopted=false);
+      c.adopted = !was; save(); render();
+    });
+    const kill = mkBtn('削除','killcand', ()=>{
+      if(!confirm(`「${c.name||'この候補'}」を削除しますか？`)) return;
+      r.cands = r.cands.filter(x=>x!==c); save(); render();
+    });
+    if(READONLY){ ad.disabled = true; if(!c.adopted) ad.style.visibility='hidden'; }
+    sub.appendChild(ad);
+    if(!READONLY) sub.appendChild(kill);
+    th.append(nm, sub);
+    hr.appendChild(th);
+  });
+  if(!READONLY){
+    const add = document.createElement('th');
+    add.className='addcand';
+    add.appendChild(mkBtn('＋','', ()=>{ r.cands.push(cand('')); save(); render(); }));
+    add.title = '候補を追加';
+    hr.appendChild(add);
+  }
+  thead.appendChild(hr);
+  t.appendChild(thead);
+
+  const tb = document.createElement('tbody');
+  const PO = {'高':0,'中':1,'低':2};
+  let shown = r.fields.filter(f => !filterHi || f.p==='高' || f.type==='rating');
+  if(sortPri) shown = shown.slice().sort((a,b)=>(PO[a.p]??1)-(PO[b.p]??1));
+  shown.forEach(f=>{
+    const tr = document.createElement('tr');
+    const cls = [];
+    if(f.type==='money') cls.push('row-money');
+    if(f.type==='rating') cls.push('row-rating');
+    if(f.type!=='rating'){
+      if(f.p==='高') cls.push('hi');
+      else if(f.p==='低') cls.push('lo');
+      else cls.push('mid');
+    }
+    tr.className = cls.join(' ');
+    const th = document.createElement('th');
+    th.className='prop';
+    const lab = document.createElement('span');
+    lab.className='lab';
+    lab.textContent = f.label;
+    lab.contentEditable=String(!READONLY);
+    if(!READONLY) lab.oninput = ()=>{ f.label = lab.textContent.trim(); save(); };
+    const x = mkBtn('×','del-field', ()=>{
+      if(!confirm(`項目「${f.label}」を削除しますか？`)) return;
+      r.fields = r.fields.filter(y=>y!==f); save(); render();
+    });
+    if(!READONLY) th.append(x);
+    if(f.type!=='rating'){
+      const p = f.p||'中';
+      const chip = mkBtn(p, 'pri'+(p==='高'?' hi':p==='低'?' lo':''), ()=>{
+        f.p = p==='高'?'中' : p==='中'?'低' : '高';
+        save(); render();
+      });
+      chip.title = 'この項目の優先度（高 / 中 / 低）';
+      if(READONLY){ chip.disabled = true; chip.onclick = null; }
+      th.appendChild(chip);
+    }
+    th.appendChild(lab);
+    tr.appendChild(th);
+    r.cands.forEach(c=>{
+      const td = document.createElement('td');
+      td.className='cand'+(c.adopted?' adopted':'');
+      td.appendChild(editor(f,c,r));
+      tr.appendChild(td);
+    });
+    if(!READONLY){
+      const pad = document.createElement('td'); pad.className='addcand'; pad.style.borderRight='none';
+      tr.appendChild(pad);
+    }
+    tb.appendChild(tr);
+  });
+  t.appendChild(tb);
+  sc.appendChild(t);
+  wrap.appendChild(sc);
+
+  /* add field */
+  const af = document.createElement('div'); af.className='addfield';
+  const inp = document.createElement('input'); inp.placeholder='項目を追加（例：引出しの数）';
+  const sel = document.createElement('select');
+  [['text','短いテキスト'],['long','長いテキスト'],['money','金額'],['tri','○△✕'],['rating','評価（★）']]
+    .forEach(([v,l])=>{ const o=document.createElement('option'); o.value=v; o.textContent=l; sel.appendChild(o); });
+  const go = mkBtn('追加','tool', ()=>{
+    const v = inp.value.trim(); if(!v) return;
+    r.fields.push(F(v, sel.value)); inp.value=''; save(); render();
+  });
+  inp.onkeydown = e => { if(e.key==='Enter') go.click(); };
+  af.append(inp, sel, go);
+  if(!READONLY) wrap.appendChild(af);
+
+  const leg = document.createElement('p');
+  leg.className='legend';
+  leg.innerHTML = `<span><i style="background:var(--ai)"></i>高：ここで決める</span>
+    <span><i style="background:#CBD2C8"></i>中：気にはなる</span>
+    <span><i style="background:#E6E9E3"></i>低：どちらでもいい</span>
+    <span style="color:#A6ADA6">項目名の左のバッジを押すと切り替わります</span>
+    <span style="color:#A6ADA6">○ ✕ ？（未確認）の3つ。もう一度押すと空に戻ります</span>`;
+  wrap.appendChild(leg);
+
+  const hint = document.createElement('p');
+  hint.className='hint';
+  hint.textContent = (READONLY ? '公開先なので閲覧のみです。編集は手元のリポジトリで index.html を開いて行い、data.json をコミットしてください。' : 'セルをタップすると直接書き込めます。「積水オリジナルの有無」は各ブランドにオリジナル仕様があるかどうかを入れる行です。「採用にする」を押した候補が総括タブと合計金額に反映されます。');
+  wrap.appendChild(hint);
+  return wrap;
+}
+
+/* ---- cell editors ---- */
+function editor(f,c,r){
+  const val = get(c,f);
+  if(f.type==='tri'){
+    const d = document.createElement('div'); d.className='tri';
+    ['○','✕','？'].forEach(v=>{
+      const b = document.createElement('button');
+      b.textContent=v; b.dataset.v=v;
+      if(val===v) b.classList.add('on');
+      b.disabled = READONLY;
+      b.onclick = ()=>{
+        c.v[f.id] = (val===v ? '' : v);
+        save();
+        const parent = d.parentElement;
+        parent.replaceChild(editor(f,c,r), d);
+      };
+      d.appendChild(b);
+    });
+    return d;
+  }
+  if(f.type==='rating'){
+    const d = document.createElement('div'); d.className='stars';
+    const n = parseInt(val||0,10)||0;
+    for(let i=1;i<=5;i++){
+      const b=document.createElement('button');
+      b.textContent = i<=n ? '★':'☆';
+      if(i<=n) b.classList.add('on');
+      b.setAttribute('aria-label', i+'点');
+      b.disabled = READONLY;
+      b.onclick = ()=>{ c.v[f.id] = (n===i?0:i); save(); d.parentElement.replaceChild(editor(f,c,r), d); };
+      d.appendChild(b);
+    }
+    if(n){ const s=document.createElement('span'); s.className='clr'; s.textContent=n+'/5'; d.appendChild(s); }
+    return d;
+  }
+  if(f.type==='money'){
+    const d = document.createElement('div');
+    d.className='money'+(num(val)?'':' zero');
+    d.contentEditable=String(!READONLY); d.inputMode='numeric';
+    d.textContent = num(val)?yen(num(val)):'';
+    d.dataset.ph='¥';
+    d.onfocus = ()=>{ d.textContent = num(val)? String(num(val)) : ''; };
+    d.onblur = ()=>{ const n=num(d.textContent); c.v[f.id]=n; save(); d.className='money'+(n?'':' zero'); d.textContent = n?yen(n):''; refreshMeta(r); };
+    d.onkeydown = e => { if(e.key==='Enter'){ e.preventDefault(); d.blur(); } };
+    return d;
+  }
+  const d = document.createElement('div');
+  d.className='cell'; d.contentEditable=String(!READONLY);
+  d.dataset.ph = f.ph || '';
+  d.textContent = val||'';
+  d.oninput = ()=>{ c.v[f.id] = d.textContent; save(); };
+  if(f.type==='text') d.onkeydown = e => { if(e.key==='Enter'){ e.preventDefault(); d.blur(); } };
+  return d;
+}
+function refreshMeta(r){
+  const el = document.querySelector('.roommeta'); if(!el) return;
+  const a = r.cands.find(c=>c.adopted);
+  el.innerHTML = a ? `採用：<b>${esc(a.name)}</b>　${roomTotal(r)?yen(roomTotal(r)):'金額未入力'}`
+                   : `候補 ${r.cands.length} 件　<span style="color:var(--muted)">まだ採用を決めていません</span>`;
+}
+
+/* ---- summary ---- */
+function renderSummary(){
+  const wrap = document.createElement('div');
+  const head = document.createElement('div'); head.className='roomhead';
+  const h = document.createElement('h2'); h.className='roomname'; h.textContent='総括';
+  const p = document.createElement('p'); p.className='roommeta';
+  const decided = state.rooms.filter(r=>r.cands.some(c=>c.adopted)).length;
+  p.textContent = `${decided} / ${state.rooms.length} か所 決定済み`;
+  head.append(h,p);
+  wrap.appendChild(head);
+
+  const grid = document.createElement('div'); grid.className='sum-grid';
+  const ord = {'高':0,'中':1,'低':2};
+  state.rooms.slice().sort((a,b)=>ord[a.pri||'中']-ord[b.pri||'中']).forEach(r=>{
+    const c = document.createElement('div'); c.className='sum-card';
+    const a = r.cands.find(x=>x.adopted);
+    const t = document.createElement('h3');
+    t.style.cssText='display:flex;align-items:center;justify-content:space-between;gap:10px';
+    t.innerHTML = `<span>${esc(r.name)}</span><span class="pri-tag${(r.pri||'中')==='高'?' hi':''}">優先度 ${r.pri||'中'}</span>`;
+    const pick = document.createElement('p');
+    pick.className = 'sum-pick'+(a?'':' none');
+    pick.textContent = a ? (a.name||'（名称未入力）') : '未決定';
+    c.append(t, pick);
+    if(a){
+      const pr = document.createElement('p'); pr.className='sum-price';
+      const rf = r.fields.find(f=>f.type==='rating');
+      const stars = rf ? ' ・ ' + '★'.repeat(parseInt(get(a,rf)||0,10)) : '';
+      pr.textContent = (roomTotal(r)?yen(roomTotal(r)):'金額未入力') + stars;
+      c.appendChild(pr);
+      ['Akira','Madoka'].forEach(who=>{
+        const f = r.fields.find(x=>x.label.includes(who));
+        const v = f ? (get(a,f)||'').trim() : '';
+        if(v){
+          const n = document.createElement('div'); n.className='sum-note';
+          n.innerHTML = `<span>${who}</span> ${esc(v)}`;
+          c.appendChild(n);
+        }
+      });
+    }
+    grid.appendChild(c);
+  });
+  wrap.appendChild(grid);
+
+  const sum = state.rooms.reduce((s,r)=>s+roomTotal(r),0);
+  const tot = document.createElement('div'); tot.className='total';
+  tot.innerHTML = `<span class="lbl">採用分の合計</span><span class="amt">${yen(sum)}</span>
+    <span class="side">未決定の部屋は含みません</span>`;
+  wrap.appendChild(tot);
+
+  /* ranking per room */
+  const rk = document.createElement('div'); rk.className='rank';
+  const rh = document.createElement('h3'); rh.textContent='候補の一覧（評価順）';
+  rk.appendChild(rh);
+  const t = document.createElement('table');
+  t.innerHTML = '<thead><tr><th>部屋</th><th>候補</th><th style="text-align:right">評価</th><th style="text-align:right">金額</th></tr></thead>';
+  const tb = document.createElement('tbody');
+  state.rooms.forEach(r=>{
+    const rf = r.fields.find(f=>f.type==='rating');
+    const mf = r.fields.find(f=>f.type==='money');
+    const rows = r.cands.slice().sort((a,b)=>(parseInt(get(b,rf)||0,10))-(parseInt(get(a,rf)||0,10)));
+    rows.forEach((c,i)=>{
+      const tr = document.createElement('tr');
+      const stars = rf ? parseInt(get(c,rf)||0,10) : 0;
+      const price = mf ? num(get(c,mf)) : 0;
+      tr.innerHTML = `<td style="color:var(--muted)">${i===0?esc(r.name):''}</td>
+        <td>${c.adopted?'● ':''}${esc(c.name||'—')}</td>
+        <td class="n" style="color:var(--amber)">${stars?'★'.repeat(stars):'—'}</td>
+        <td class="n">${price?yen(price):'—'}</td>`;
+      if(i===0) tr.style.borderTop = '1px solid var(--line2)';
+      tb.appendChild(tr);
+    });
+  });
+  t.appendChild(tb);
+  rk.appendChild(t);
+  wrap.appendChild(rk);
+  return wrap;
+}
+
+/* ============================================================
+   小物
+   ============================================================ */
+function mkBtn(text, cls, fn){
+  const b = document.createElement('button');
+  if(cls) b.className = cls;
+  b.textContent = text; b.onclick = fn;
+  return b;
+}
+function esc(s){ return String(s||'').replace(/[&<>"]/g, ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch])); }
+
+/* toolbar */
+const dlg = document.getElementById('io');
+function openPaste(){
+  document.getElementById('io-msg').textContent = '書き出したJSONを貼り付けてください。今の内容は置き換わります。';
+  document.getElementById('io-text').value = '';
+  document.getElementById('io-ok').style.display='';
+  dlg.showModal();
+}
+function downloadJson(){
+  const json = jsonText();
+  const blob = new Blob([json], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = DATA_PATH.split('/').pop() || 'data.json';
+  a.click();
+  if(unsaved){ handoff = true; renderDirty(); }
+  return json;
+}
+document.getElementById('btn-export').onclick = ()=>{
+  const json = downloadJson();
+  document.getElementById('io-msg').textContent = 'ダウンロードしました。リポジトリの ' + DATA_PATH + ' に置き換えてコミットしてください。';
+  document.getElementById('io-text').value = json;
+  document.getElementById('io-ok').style.display='none';
+  dlg.showModal();
+};
+document.getElementById('grant-btn').onclick = grantAndLoad;
+document.getElementById('io-ok').onclick = ()=>{
+  try{
+    const o = JSON.parse(document.getElementById('io-text').value);
+    if(!o.rooms) throw new Error('rooms がありません');
+    state = migrate(deserialize(o)); active = 0; save(); render(); dlg.close();
+    flash('読み込みました');
+  }catch(e){
+    document.getElementById('io-msg').textContent = '読み込めませんでした：' + e.message + '　JSON全体を貼り付けているか確認してください。';
+  }
+};
+document.getElementById('io-close').onclick = ()=>dlg.close();
+document.getElementById('btn-print').onclick = ()=>window.print();
+document.getElementById('btn-reset').onclick = ()=>{
+  if(!confirm('入力した内容をすべて消して、最初の状態に戻します。よろしいですか？')) return;
+  state = migrate(seed()); active = 0; save(); render();
+};
+
+window.addEventListener('beforeunload', e=>{
+  if(unsaved > 0){ e.preventDefault(); e.returnValue = ''; }
+});
+
+/* boot */
+(async ()=>{
+  if(READONLY){
+    document.getElementById('btn-reset').hidden = true;
+    document.body.classList.add('ro');
+    repoRaw = await fetchRepo();
+    source = repoRaw ? 'repo' : 'seed';
+    state  = migrate(repoRaw ? deserialize(repoRaw) : seed());
+    applyHash();
+    renderFileBar(); render();
+    return;
+  }
+  repoRaw = await fetchRepo();
+  const localRaw = Local.get();
+  let fileRaw = null;
+
+  if(FS_OK){
+    const h = await IDB.get('handle');
+    if(h){
+      fileHandle = h;
+      if(await perm(h) === 'granted'){ try{ fileRaw = await readHandle(h); }catch(e){} }
+      else needsGrant = true;          // クリックが要る（ブラウザの仕様）
+    }
+  }
+  if(!localRaw && !fileRaw && !repoRaw){
+    try{ if(window.storage){ const r = await window.storage.get(KEY); if(r&&r.value) var wsRaw = JSON.parse(r.value); } }catch(e){}
+  }
+
+  /* 一番新しい savedAt を採用。同着なら ファイル > リポジトリ > 下書き */
+  const opts = [
+    fileRaw  && {src:'file',  o:fileRaw},
+    repoRaw  && {src:'repo',  o:repoRaw},
+    localRaw && {src:'local', o:localRaw},
+    (typeof wsRaw!=='undefined' && wsRaw) && {src:'local', o:wsRaw}
+  ].filter(Boolean);
+  opts.sort((a,b)=>String(b.o.savedAt||'').localeCompare(String(a.o.savedAt||'')));
+
+  if(opts.length){
+    source = opts[0].src;
+    state  = migrate(deserialize(opts[0].o) || seed());
+  }else{
+    source = 'seed';
+    state  = migrate(seed());
+  }
+  if(source==='local' && !fileHandle){ unsaved = 1; }   // 前回の下書きも「未反映」として扱う
+  applyHash();                                          // #部屋名 で開かれていればそこを出す
+  renderFileBar();
+  renderDirty();
+  render();
+  if(source==='local' && repoRaw) flash('ブラウザ内の下書きの方が新しいので、そちらを表示しています');
+})();
+</script>
+</body>
+</html>

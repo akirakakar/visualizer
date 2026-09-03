@@ -227,6 +227,7 @@ select:focus{outline:none;border-color:var(--accent2)}
       <div class="hud" id="readout">
         <div class="r big"><span>最高天井高</span><b id="ro-max">3810</b></div>
         <div class="r"><span>基準天井高</span><b id="ro-base">2410</b></div>
+        <div class="r" id="ro-kit-row" style="display:none"><span>キッチン天井</span><b id="ro-kit">—</b></div>
         <div class="r"><span>平均天井高</span><b id="ro-avg">2711</b></div>
         <hr>
         <div class="r"><span>LDK 床面積</span><b id="ro-area">32.60</b></div>
@@ -247,7 +248,7 @@ select:focus{outline:none;border-color:var(--accent2)}
           <button class="chip alt" data-pmode="cam">立ち位置</button>
         </div>
         <canvas id="planCanvas" width="228" height="176"></canvas>
-        <div id="planhint">左右にドラッグで移動／東西の辺で幅</div>
+        <div id="planhint">左右にドラッグで移動／東西の辺で幅／キッチンの境は上下</div>
       </div>
     </div>
 
@@ -269,7 +270,8 @@ select:focus{outline:none;border-color:var(--accent2)}
         <div class="note">
           <b style="color:var(--text)">出典</b>：積水ハウス シャーウッド 図面番号 760612（2階平面図 1/50・断面図 1/100・小屋裏レベル平面図 1/50）。
           <br>2階基準天井高 <code>2410</code>／階高 <code>2899</code>／22.吹抜は <code>3500×3150</code> の勾配天井、屋根勾配 <code>4/10</code>（西下がり）。最高の高さ <code>8000</code>／最高の軒の高さ <code>6288</code>。ホールへのハイドアは <code>H2250</code>。
-          <br>天井高は <code>2250</code>（ハイドアと同面）と <code>2410</code>（図面）の2つ。勾配天井はリビングの上だけで、高い側はいつも東・南北はリビングいっぱい。ダイニング・キッチンはフラットです。
+          <br>天井高は <code>2250</code>（ハイドアと同面）と <code>2410</code>（図面）の2つ。勾配天井はリビングの上だけで、高い側はいつも東・南北はリビングいっぱい。ダイニング・キッチンはフラットで、キッチンだけ下がり天井にして分けられます。
+          <br>キッチンは<b>L字</b>で置いています。壁側（東）に IH とレンジフード、対面カウンター側の<b>リビング寄りの角にシンク</b>。背面はカップボードと冷蔵庫。
           <br>開口位置・家具・仕上げは検討用の概略です。寸法はすべて mm。
         </div>
       </div>
@@ -305,15 +307,23 @@ const OPENINGS = {
   7:[ {k:'door', a:3000, b:3900, sill:0,   head:2250} ]  // 西：ホールへのハイドア（H2250）
 };
 const WALLKEY = {0:'S',1:'E',2:'N',3:'E',4:'N',5:'E',6:'N',7:'W'};
-// 北の張り出し（y>KITCHEN_Y）はキッチン。吹抜はこの線までに収め、キッチン天井は常にフルフラット。
+// 北の張り出し（y>KITCHEN_Y）はキッチン。吹抜はこの線までに収める。
 const KITCHEN_Y = 6000;
 // 勾配（吹抜）はリビングの上だけ。図面の「22.吹抜 3500×3150」もこの範囲に収まっている。
 // 東の境 4600 は、キッチンの張り出しが始まる通り芯＝ダイニングとの境。
-// ダイニング・キッチン側は基準天井高でフラットのまま。
 const LIVING = {x0:1000, x1:4600, y0:2000, y1:KITCHEN_Y};
+// キッチンの天井を分けるときの境。東西はこの通り芯（4600）より東、南北は kitY より北。
+// 対面カウンターは y=5500〜6400 なので、境は 6000 の芯より南へも出せるようにする。
+const KIT_X = LIVING.x1;
+const KIT_Y_MIN = 5300, KIT_Y_MAX = 6600;
+// 下げ幅。0 だとトグルを入れても何も起きないので、キッチンの天井高は
+// つねに基準天井高より KIT_DROP_MIN 以上低いところに丸めておく。
+const KIT_H_MIN = 1900, KIT_DROP_MIN = 100;
 
 const DEF = {
   ceilH:2410, voidOn:true, voidX:1000, voidW:3500, pitch:4,
+  kitSplit:false, kitH:2250, kitY:KITCHEN_Y, finKit:'cloth',
+  balcFloor:'wpc',
   finSlope:'oak', finFlat:'cloth', beams:false, beamN:4, beamH:180, beamMat:'walnut',
   wallS:'cloth', wallE:'cloth', wallN:'cloth', wallW:'cloth', wallV:'cloth', floor:'oak',
   clerestory:false, clerH:600, skylight:0, sashW:2600, sashH:2100,
@@ -326,20 +336,26 @@ const S = Object.assign({}, DEF);
 
 /* ---------------------------------------------------------------- 幾何ヘルパ */
 function polyArea(p){ let a=0; for(let i=0;i<p.length;i++){const q=p[(i+1)%p.length]; a+=p[i][0]*q[1]-q[0]*p[i][1];} return Math.abs(a)/2; }
-// 多角形を縦線 x=X で切り、片側だけ残す（Sutherland–Hodgman）。連続する重複点は落とす
-function clipX(poly, keep, X){
-  const inside = p => keep==='E' ? p[0]>=X : p[0]<=X;
+// 多角形を軸に平行な線で切り、片側だけ残す（Sutherland–Hodgman）。連続する重複点は落とす。
+// ax=0 は縦線 x=C、ax=1 は横線 y=C。side>0 でその値以上の側を残す。
+function clipHalf(poly, ax, side, C){
+  const inside = p => side>0 ? p[ax]>=C : p[ax]<=C;
   const out=[];
   for(let i=0;i<poly.length;i++){
     const A=poly[i], B=poly[(i+1)%poly.length];
     if(inside(A)) out.push(A);
-    if(inside(A)!==inside(B)) out.push([X, A[1]+(B[1]-A[1])*(X-A[0])/(B[0]-A[0])]);
+    if(inside(A)!==inside(B)){
+      const t=(C-A[ax])/(B[ax]-A[ax]);
+      out.push(ax ? [A[0]+(B[0]-A[0])*t, C] : [C, A[1]+(B[1]-A[1])*t]);
+    }
   }
   return out.filter((p,i)=>{
     const q=out[(i+out.length-1)%out.length];
     return Math.abs(p[0]-q[0])>0.5 || Math.abs(p[1]-q[1])>0.5;
   });
 }
+const clipX=(poly,keep,X)=>clipHalf(poly,0,keep==='E'? 1:-1,X);
+const clipY=(poly,keep,Y)=>clipHalf(poly,1,keep==='N'? 1:-1,Y);
 function edgeOf(i){ const a=LDK[i], b=LDK[(i+1)%LDK.length];
   const dx=b[0]-a[0], dy=b[1]-a[1], L=Math.hypot(dx,dy);
   return {a,b,dx:dx/L,dy:dy/L,L,nx:-dy/L,ny:dx/L}; }   // n = 室内向き法線
@@ -354,6 +370,34 @@ function hAt(px){
   return S.ceilH + clamp(t,0,1)*RUN()*S.pitch/10;
 }
 const V = ()=>({x0:S.voidX, x1:S.voidX+S.voidW, y0:LIVING.y0, y1:LIVING.y1});
+
+/* ------------------------------------------------- ダイニングとキッチンの境 */
+// キッチン＝通り芯 KIT_X より東、かつ境 kitY より北。
+// 下げ幅は onChange のクランプで必ず残るので、ここはトグルだけを見る。
+const kitOn = ()=> S.kitSplit;
+function inKitchen(px,py){ return kitOn() && px>=KIT_X-0.5 && py>=S.kitY-0.5; }
+// キッチンだけを切り出した多角形（平面 mm）
+function kitPoly(){ return clipY(clipX(LDK,'E',KIT_X),'N',S.kitY); }
+// その位置の天井高。勾配（吹抜）とキッチンの下がり天井をここでまとめて見る。
+function ceilAt(px,py){
+  if(inKitchen(px,py)) return S.kitH;
+  if(S.voidOn){
+    const v=V();
+    if(px>=v.x0-2 && px<=v.x1+2 && py>=v.y0-2 && py<=v.y1+2) return hAt(clamp(px,v.x0,v.x1));
+  }
+  return S.ceilH;
+}
+// y で東西に切ったときの室の x 範囲。断面と段差の見付けの長さに使う。
+function xSpanAt(y){
+  let lo=Infinity, hi=-Infinity;
+  for(let i=0;i<LDK.length;i++){
+    const A=LDK[i], B=LDK[(i+1)%LDK.length];
+    if((A[1]>y)===(B[1]>y)) continue;
+    const x=A[0]+(B[0]-A[0])*(y-A[1])/(B[1]-A[1]);
+    lo=Math.min(lo,x); hi=Math.max(hi,x);
+  }
+  return hi>lo ? [lo,hi] : null;
+}
 
 /* ---------------------------------------------------------------- テクスチャ */
 const texCache = {};
@@ -408,6 +452,14 @@ function flatTex(base,grain,dots){
   g.globalAlpha=1;
   return new THREE.CanvasTexture(c);
 }
+// 屋外の床（デッキタイル）用。目地を格子に入れる
+function gridTex(base,line,cell){
+  const N=256,c=cv(N,N),g=c.getContext('2d');
+  g.fillStyle=base;g.fillRect(0,0,N,N);
+  g.fillStyle=line;
+  for(let p=0;p<N;p+=cell){ g.fillRect(0,p,N,3); g.fillRect(p,0,3,N); }
+  return new THREE.CanvasTexture(c);
+}
 function slatTex(base,gap){
   const N=256,c=cv(N,N),g=c.getContext('2d');
   g.fillStyle=base;g.fillRect(0,0,N,N);
@@ -428,7 +480,13 @@ const MATDEF = {
   maple  :{n:'木目（メープル）',  c:0xdfc49b, r:0.60, tex:()=>woodTex('#e3c9a4','#c9a878','#96774c',86), rep:0.62},
   sugi   :{n:'板張り（杉・目透）',c:0xd8b98d, r:0.75, tex:()=>slatTex('#dabb90','#8e7452'), rep:0.5},
   louver :{n:'木格子ルーバー',    c:0xb98a54, r:0.60, tex:()=>woodTex('#bd8f5c','#8d6539','#5a3c1d',110), rep:0.5},
-  tile   :{n:'タイル（石目）',    c:0xb9b4ad, r:0.35, tex:()=>flatTex('#bdb8b1','#8f8a83',3200), rep:1.1}
+  tile   :{n:'タイル（石目）',    c:0xb9b4ad, r:0.35, tex:()=>flatTex('#bdb8b1','#8f8a83',3200), rep:1.1},
+  // 以下はバルコニー用（室内の仕上げリストには出さない）
+  wpc    :{n:'人工木デッキ（グレー）',  c:0x7e7a74, r:0.85, tex:()=>slatTex('#807c76','#4c4945'), rep:0.55},
+  wpcbr  :{n:'人工木デッキ（ブラウン）',c:0x7a5c3e, r:0.85, tex:()=>slatTex('#7d5f41','#452f1c'), rep:0.55},
+  frp    :{n:'FRP防水（グレー）',       c:0x94938e, r:0.80, tex:()=>flatTex('#95948f','#74736e',3000), rep:1.4},
+  tiled  :{n:'デッキタイル（磁器）',    c:0x8e8882, r:0.45, tex:()=>gridTex('#918b85','#5d5853',64), rep:0.85},
+  turf   :{n:'人工芝',                  c:0x577044, r:1.00, tex:()=>flatTex('#597246','#3a5329',6000), rep:1.6}
 };
 
 const matCache={};
@@ -506,9 +564,30 @@ function triMesh(p1,p2,p3,material){
   const m=new THREE.Mesh(g,material); m.receiveShadow=true; return m;
 }
 
+// フラット天井の板を1枚張る。poly は平面mm、h は天井高
+function flatCeil(poly, h, fin){
+  if(!poly || poly.length<3 || polyArea(poly)<1000) return;   // 切った残りのひげは張らない
+  const sh=new THREE.Shape();
+  poly.forEach((p,i)=> i? sh.lineTo(p[0]*MM,p[1]*MM) : sh.moveTo(p[0]*MM,p[1]*MM));
+  const g=new THREE.ShapeGeometry(sh); g.rotateX(-Math.PI/2); g.translate(0,h*MM,0);
+  const mesh=new THREE.Mesh(g,mat(fin,D_SIDE));
+  mesh.receiveShadow=true; mesh.castShadow=true; gRoom.add(mesh);
+}
+// 下がり天井の見付け（段差の立ち上がり）。境に沿った東西の1枚と、境を 6000 より
+// 南へ出したときだけ現れる南北の1枚。面はダイニング側を向く。
+function kitchenDrop(){
+  const m=mat(S.finKit,D_SIDE);
+  const face=(A,B)=> gRoom.add(quadMesh(P(A[0],A[1],S.kitH),P(B[0],B[1],S.kitH),
+                                        P(B[0],B[1],S.ceilH),P(A[0],A[1],S.ceilH),m,1));
+  const sp=xSpanAt(S.kitY);
+  if(sp && sp[1]-Math.max(sp[0],KIT_X)>1) face([sp[1],S.kitY],[Math.max(sp[0],KIT_X),S.kitY]);
+  if(S.kitY < KITCHEN_Y-1) face([KIT_X,S.kitY],[KIT_X,KITCHEN_Y]);
+}
+
 /* ---------------------------------------------------------------- 部屋を組む */
 function buildRoom(){
   wipe(gRoom); wipe(gDim);
+  updateBalcony();          // 外は組み直さないので、床材だけ差し替える
   const v=V(), rise=RISE(), topH=S.ceilH+rise;
   // 勾配 0/10 では勾配天井を作らない。フラット天井もそのぶん抜かない
   const sloped = S.voidOn && rise>1;
@@ -535,14 +614,17 @@ function buildRoom(){
     // 勾配は南北いっぱいに抜けるので、フラット天井は吹抜の西と東に分かれる。
     // Shape の穴にすると穴が輪郭に接して三角形分割が壊れるため、多角形を切って作る。
     const parts = sloped ? [clipX(LDK,'W',v.x0), clipX(LDK,'E',v.x1)] : [LDK];
+    const kit = kitOn();
     parts.forEach(poly=>{
       if(poly.length<3) return;
-      const sh=new THREE.Shape();
-      poly.forEach((p,i)=> i? sh.lineTo(p[0]*MM,p[1]*MM) : sh.moveTo(p[0]*MM,p[1]*MM));
-      const g=new THREE.ShapeGeometry(sh); g.rotateX(-Math.PI/2); g.translate(0,S.ceilH*MM,0);
-      const mesh=new THREE.Mesh(g,mat(S.finFlat,D_SIDE));
-      mesh.receiveShadow=true; mesh.castShadow=true; gRoom.add(mesh);
+      if(!kit){ flatCeil(poly, S.ceilH, S.finFlat); return; }
+      // キッチンを抜くと残りはL字。境の西と、境の東で南、の2枚に分けて張る。
+      const east = clipX(poly,'E',KIT_X);
+      flatCeil(clipX(poly,'W',KIT_X),  S.ceilH, S.finFlat);
+      flatCeil(clipY(east,'S',S.kitY), S.ceilH, S.finFlat);
+      flatCeil(clipY(east,'N',S.kitY), S.kitH,  S.finKit);
     });
+    if(kit) kitchenDrop();
   }
 
   /* --- 勾配天井＋吹抜まわり --- */
@@ -625,18 +707,24 @@ function buildRoom(){
     // 開口の端で壁を分割する
     const cuts=[0, e.L];
     ops.forEach(o=>{cuts.push(clamp(o.a,0,e.L),clamp(o.b,0,e.L));});
-    // 吹抜の際でも割る。勾配は東西に一次なので、この2本で割れば天井とぴったり合う
-    if(sloped && Math.abs(e.dx)>1e-6){
-      [v.x0,v.x1].forEach(X=>{ const t=(X-e.a[0])/e.dx; if(t>1 && t<e.L-1) cuts.push(t); });
-    }
+    // 天井高が飛ぶ線でも割る。勾配は東西に一次なので、この線で割れば天井とぴったり合う
+    const cutAt=(ax,C)=>{
+      const d = ax? e.dy : e.dx;
+      if(Math.abs(d)<1e-6) return;
+      const t=(C-(ax? e.a[1] : e.a[0]))/d;
+      if(t>1 && t<e.L-1) cuts.push(t);
+    };
+    if(sloped){ cutAt(0,v.x0); cutAt(0,v.x1); }
+    if(kitOn()){ cutAt(0,KIT_X); cutAt(1,S.kitY); }
     cuts.sort((a,b)=>a-b);
     // 壁面は「その位置の天井高」まで立ち上げる。際で割ってあるので、区間が吹抜の
     // 内か外かは中点で決めてよい（際で天井高が飛ぶ＝下がり壁もこれで出る）
     const seg=(ta,tb,h0,h1)=>{
       const A=[e.a[0]+e.dx*ta, e.a[1]+e.dy*ta], B=[e.a[0]+e.dx*tb, e.a[1]+e.dy*tb];
       const mx=e.a[0]+e.dx*(ta+tb)/2, my=e.a[1]+e.dy*(ta+tb)/2;
-      const inV = sloped && mx>=v.x0-2 && mx<=v.x1+2 && my>=v.y0-2 && my<=v.y1+2;
-      const top=x=> inV ? hAt(clamp(x,v.x0,v.x1)) : S.ceilH;
+      const inK = inKitchen(mx,my);
+      const inV = !inK && sloped && mx>=v.x0-2 && mx<=v.x1+2 && my>=v.y0-2 && my<=v.y1+2;
+      const top=x=> inK ? S.kitH : inV ? hAt(clamp(x,v.x0,v.x1)) : S.ceilH;
       const hA1=(h1==='ceil')?top(A[0]):h1;
       const hB1=(h1==='ceil')?top(B[0]):h1;
       if(hA1-h0<2 && hB1-h0<2) return;
@@ -649,7 +737,7 @@ function buildRoom(){
     const pt=t=>[e.a[0]+e.dx*t, e.a[1]+e.dy*t];
     ops.forEach(op=>{
       op.hd = op.head;
-      for(let i=0;i<=24;i++){ const q=pt(op.a+(op.b-op.a)*i/24); op.hd=Math.min(op.hd, wallTop(q[0],q[1])); }
+      for(let i=0;i<=24;i++){ const q=pt(op.a+2+(op.b-op.a-4)*i/24); op.hd=Math.min(op.hd, wallTop(q[0],q[1])); }
       const A=pt(op.a), B=pt(op.b);
       const q=[P(A[0],A[1],op.sill),P(B[0],B[1],op.sill),P(B[0],B[1],op.hd),P(A[0],A[1],op.hd)];
       if(op.k!=='door'){ addGlass(q[0],q[1],q[2],q[3]); return; }
@@ -737,12 +825,7 @@ function rakedCeiling(material, holes){
   return m;
 }
 // その位置での天井高（壁の頭）
-function wallTop(px,py){
-  if(!S.voidOn) return S.ceilH;
-  const v=V();
-  const on = px>=v.x0-2 && px<=v.x1+2 && py>=v.y0-2 && py<=v.y1+2;
-  return on ? hAt(clamp(px,v.x0,v.x1)) : S.ceilH;
-}
+const wallTop = ceilAt;
 
 const glassMat=new THREE.MeshPhysicalMaterial({
   color:0xdfeaf5,transparent:true,opacity:0.14,roughness:0.05,metalness:0,
@@ -796,6 +879,12 @@ function buildDims(){
     const s=label(String(Math.round(S.ceilH)),'天井高');
     s.position.copy(P(4500,4000,S.ceilH-300)); gDim.add(s);
   }
+  if(kitOn()){
+    const sp=xSpanAt(S.kitY) || [KIT_X,8000];
+    const k=label(String(Math.round(S.kitH)),'キッチン');
+    k.position.copy(P((Math.max(sp[0],KIT_X)+sp[1])/2, Math.min(S.kitY+500,6900), S.kitH-260));
+    gDim.add(k);
+  }
 }
 
 /* ---------------------------------------------------------------- 照明 */
@@ -837,11 +926,12 @@ function buildLamps(){
     let lit=0;
     pts.forEach(([x,y])=>{
       if(!inFlat(x,y)) return;              // 勾配天井側はスポットで
-      const m=new THREE.Mesh(g,emis); m.position.copy(P(x,y,S.ceilH-8)); m.rotation.x=Math.PI/2;
+      const ch=ceilAt(x,y);
+      const m=new THREE.Mesh(g,emis); m.position.copy(P(x,y,ch-8)); m.rotation.x=Math.PI/2;
       gLamp.add(m);
       if(lit<4){
         const pl=new THREE.PointLight(col, 3.0*S.dim, 7, 2.0);
-        pl.position.copy(P(x,y,S.ceilH-160)); gLamp.add(pl); lit++;
+        pl.position.copy(P(x,y,ch-160)); gLamp.add(pl); lit++;
       }
     });
   }
@@ -849,7 +939,7 @@ function buildLamps(){
     const dx=5900, dy=3900;
     for(let i=-1;i<=1;i++){
       const x=dx+i*520;
-      const cordH=S.ceilH; const lampH=1650;
+      const cordH=ceilAt(dx,dy); const lampH=1650;
       const cord=new THREE.Mesh(new THREE.CylinderGeometry(0.006,0.006,(cordH-lampH)*MM,6),shade);
       cord.position.copy(P(x,dy,(cordH+lampH)/2)); gLamp.add(cord);
       const sh=new THREE.Mesh(new THREE.ConeGeometry(0.15,0.17,20,1,true),shade);
@@ -898,6 +988,10 @@ function pointInLDK(x,y){
 // 2階FL=0。設計GL は 階高2899＋床下 ≒ -3430。窓の外に地面と近景がないと
 // 開口が「空の穴」に見えてしまうため、簡単な外部だけ置く。
 const GL=-3430;
+// バルコニーの床（平面mm）。天板は仕上げを差し替えるので参照を持っておく。
+const BALC={x0:600,x1:4500,y0:200,y1:2000,h:19};
+let balcTop=null;
+function updateBalcony(){ if(balcTop) balcTop.material=mat(S.balcFloor,D_SIDE); }
 function buildExterior(){
   const ground=new THREE.Mesh(new THREE.PlaneGeometry(90,90),
     new THREE.MeshStandardMaterial({color:0x6d7263,roughness:1}));
@@ -905,9 +999,14 @@ function buildExterior(){
   ground.receiveShadow=true; gExt.add(ground);
 
   // 南バルコニー（フルフラット・床19mmUP）＋手摺
-  const deck=new THREE.Mesh(new THREE.BoxGeometry(3.9,0.06,1.8),
-    new THREE.MeshStandardMaterial({color:0x9b8f7d,roughness:.9}));
-  deck.position.copy(P(2550,1100,-10)); deck.receiveShadow=true; gExt.add(deck);
+  // 床材は選べる。テクスチャは m 単位のUVで張りたいので、天板だけ別の面にする。
+  const slab=new THREE.Mesh(new THREE.BoxGeometry(3.9,0.06,1.8),
+    new THREE.MeshStandardMaterial({color:0x6e6a64,roughness:1}));
+  slab.position.copy(P(2550,1100,-12)); slab.receiveShadow=true; gExt.add(slab);
+  const b=BALC;
+  balcTop=quadMesh(P(b.x0,b.y1,b.h),P(b.x1,b.y1,b.h),P(b.x1,b.y0,b.h),P(b.x0,b.y0,b.h),
+                   mat(S.balcFloor,D_SIDE),1);
+  balcTop.castShadow=false; gExt.add(balcTop);
   const rail=new THREE.MeshStandardMaterial({color:0x8b8f93,roughness:.6,metalness:.2});
   const rw=new THREE.Mesh(new THREE.BoxGeometry(3.9,1.1,0.06),rail);
   rw.position.copy(P(2550,220,570)); gExt.add(rw);
@@ -940,13 +1039,14 @@ const FM={
   wd2 :new THREE.MeshStandardMaterial({color:0xb98d5f,roughness:.6}),
   wht :new THREE.MeshStandardMaterial({color:0xe8e6e1,roughness:.7}),
   blk :new THREE.MeshStandardMaterial({color:0x1a1d21,roughness:.4,metalness:.3}),
+  met :new THREE.MeshStandardMaterial({color:0xb7babe,roughness:.32,metalness:.6}),
   stn :new THREE.MeshStandardMaterial({color:0xd6d2cb,roughness:.35}),
   rug :new THREE.MeshStandardMaterial({color:0x9e968a,roughness:1})
 };
 function buildFurniture(){
   wipe(gFurn);
   if(!S.furniture) return;
-  const {fab,fab2,wd,wd2,wht,blk,stn,rug}=FM;
+  const {fab,fab2,wd,wd2,wht,blk,stn,rug,met}=FM;
 
   // ラグ
   gFurn.add(box(1500,3000,4200,5400,2,16,rug));
@@ -969,11 +1069,35 @@ function buildFurniture(){
     gFurn.add(box(x,4410,x+440,4750,400,440,wht));
     gFurn.add(box(x,4700,x+440,4750,440,840,wht));
   }
-  // キッチン（フルフラット対面カウンター：立ち上がりの腰壁は無し）
-  gFurn.add(box(5300,5500,8000,6400,0,850,wht));
-  gFurn.add(box(5300,5500,8000,6400,850,900,stn));
-  // 背面カップボード・冷蔵庫
-  gFurn.add(box(5000,7050,7900,7500,0,2200,wht));
+  // キッチン（L字）。南の脚＝フルフラット対面カウンター（立ち上がりの腰壁は無し）、
+  // 東の脚＝壁側。壁側にIHとレンジフード、対面側の西寄り＝リビングに近い角に流し。
+  const KW=5300, KX=7350, KE=8000, KY0=5500, KY1=6400, KY2=7000;
+  const TOP=900, DECK=850;                       // 天板の上端／天板の下端＝箱の高さ
+  const SK={x0:5480,x1:6280,y0:5880,y1:6330};    // 流しの彫り込み
+  gFurn.add(box(KW,KY0,KX,KY1,0,DECK,wht));      // 対面の箱
+  gFurn.add(box(KX,KY0,KE,KY2,0,DECK,wht));      // 壁側の箱
+  // 天板。流しの穴のぶんだけ対面側を4枚に割って張る
+  gFurn.add(box(KW,KY0,SK.x0,KY1,DECK,TOP,stn));
+  gFurn.add(box(SK.x1,KY0,KX,KY1,DECK,TOP,stn));
+  gFurn.add(box(SK.x0,KY0,SK.x1,SK.y0,DECK,TOP,stn));
+  gFurn.add(box(SK.x0,SK.y1,SK.x1,KY1,DECK,TOP,stn));
+  gFurn.add(box(KX,KY0,KE,KY2,DECK,TOP,stn));
+  // 流し。ボウルの底は天板より少し下げて彫り込みに見せる
+  gFurn.add(box(SK.x0,SK.y0,SK.x1,SK.y1,620,TOP-22,met));
+  // 混合栓はボウルの向こう側＝ダイニング寄りの縁に立てる
+  const fx=(SK.x0+SK.x1)/2, fy=SK.y0-90;
+  gFurn.add(box(fx-24,fy-24,fx+24,fy+24,TOP,TOP+280,met));
+  gFurn.add(box(fx-18,fy,fx+18,fy+240,TOP+240,TOP+280,met));
+  // IH（壁側）。幅750を南北に取り、壁から80離す
+  const iy0=6150, iy1=6900, ix0=7400, ix1=KE-80;
+  gFurn.add(box(ix0,iy0,ix1,iy1,TOP-4,TOP+8,blk));
+  // レンジフード（壁付け）。下端は天板から 740〜860。天井を下げたぶんだけ本体も上げる
+  const ch=Math.min(ceilAt(7700,iy0-60), ceilAt(7700,iy1+60));
+  const hb=clamp(ch-420,1640,1760), ht=Math.min(hb+200,ch-40);
+  gFurn.add(box(7380,6075,KE,6975,hb,ht,met));
+  if(ch>ht) gFurn.add(box(7660,6375,KE,6675,ht,ch,met));      // ダクトカバー
+  // 背面カップボード・冷蔵庫（北の壁いっぱいは x7000 まで）
+  gFurn.add(box(5400,7050,6950,7500,0,2200,wht));
   gFurn.add(box(4650,6900,5350,7500,0,1800,blk));
 }
 
@@ -1037,6 +1161,8 @@ const VIEWS={
   whole :{n:'部屋全体', p:[7650,2350], h:1620, yaw:-56, pitch:  9}
 };
 const cam={x:3900,y:4250,h:1050,yaw:-88,pitch:26};
+// 立ち位置が変わったら平面と断面を引き直す。断面は立ち位置の南北で切っている。
+function camMoved(){ drawPlan(); drawSection(); needRender=true; }
 function applyView(k){
   const v=VIEWS[k]; if(!v) return;
   S.view=k; cam.x=v.p[0]; cam.y=v.p[1]; cam.h=v.h; cam.yaw=v.yaw; cam.pitch=v.pitch;
@@ -1067,7 +1193,7 @@ canvas.addEventListener('wheel',e=>{
   e.preventDefault();
   const y=cam.yaw*D2R, step=-Math.sign(e.deltaY)*180;
   const nx=cam.x+Math.sin(y)*step, ny=cam.y+Math.cos(y)*step;
-  if(pointInLDK(nx,ny)){ cam.x=nx; cam.y=ny; drawPlan(); needRender=true; }
+  if(pointInLDK(nx,ny)){ cam.x=nx; cam.y=ny; camMoved(); }
 },{passive:false});
 addEventListener('keydown',e=>{
   const y=cam.yaw*D2R, s=220;
@@ -1078,7 +1204,7 @@ addEventListener('keydown',e=>{
   else if(e.key==='ArrowRight'||e.key==='d'){ nx+=Math.cos(y)*s; ny-=Math.sin(y)*s; }
   else return;
   e.preventDefault();
-  if(pointInLDK(nx,ny)){ cam.x=nx; cam.y=ny; drawPlan(); needRender=true; }
+  if(pointInLDK(nx,ny)){ cam.x=nx; cam.y=ny; camMoved(); }
 });
 
 /* ---------------------------------------------------------------- UI 部品 */
@@ -1092,7 +1218,8 @@ function rowSlider(parent,label,key,min,max,step,unit,fmt){
   show();
   i.addEventListener('input',()=>{ S[key]=parseFloat(i.value); show(); onChange(key); });
   r.appendChild(l); r.appendChild(i); parent.appendChild(r);
-  return {key,set:v=>{i.value=v;show();}};
+  // range：他の値に連動して可動域が変わるスライダ用（キッチンの天井高）
+  return {key,set:v=>{i.value=v;show();}, range:(mn,mx)=>{i.min=mn;i.max=mx;}};
 }
 function rowSelect(parent,label,key,opts){
   const r=el('div','row');
@@ -1139,7 +1266,11 @@ function buildUI(){
   CTRL.pitch = rowSlider(g1,'屋根勾配','pitch',0,7,0.5,' /10',v=>v.toFixed(1));
   CTRL.voidW = rowSlider(g1,'勾配の幅（東西）','voidW',1500,LIVING.x1-LIVING.x0,50,' mm');
   CTRL.voidX = rowSlider(g1,'勾配の始まり（西端から）','voidX',LIVING.x0,LIVING.x1-1500,50,' mm');
-  g1.appendChild(el('div','note','屋根は <code>4/10</code> の西下がり。<b>高い側はいつも東</b>で、低い側＝<code>基準天井高</code>。<br><b>勾配はリビングの上だけ</b>（東西 <code>1000〜4600</code>）で、<b>南北はいっぱい</b>（<code>2000〜6000</code>）に通します。ダイニングとキッチンは基準天井高のフラットのままです。'));
+  g1.appendChild(el('div','note','屋根は <code>4/10</code> の西下がり。<b>高い側はいつも東</b>で、低い側＝<code>基準天井高</code>。<br><b>勾配はリビングの上だけ</b>（東西 <code>1000〜4600</code>）で、<b>南北はいっぱい</b>（<code>2000〜6000</code>）に通します。ダイニングは基準天井高のフラットのままです。'));
+  CTRL.kitSplit=rowTog(g1,'キッチンだけ天井を下げる','kitSplit');
+  CTRL.kitH = rowSlider(g1,'キッチンの天井高','kitH',KIT_H_MIN,S.ceilH-KIT_DROP_MIN,10,' mm');
+  CTRL.kitY = rowSlider(g1,'ダイニングとの境（南北）','kitY',KIT_Y_MIN,KIT_Y_MAX,50,' mm');
+  g1.appendChild(el('div','note','キッチンの天井は<b>ダイニングと分けて</b>下げられます。範囲は通り芯 <code>4600</code> より東で、南北の境はここで動かします（<code>6000</code> が張り出しの芯／対面カウンターは <code>5500〜6400</code> なので、手前まで出すとカウンターの上まで下がり天井になります）。境には段差の見付けが立ちます。<br>下げるとレンジフードもその天井まででおさまります。'));
 
   const g2=document.getElementById('g-finish');
   const finList=['cloth','offw','washi','sakan','greige','gray','charcoal','oak','walnut','maple','sugi','louver']
@@ -1147,6 +1278,7 @@ function buildUI(){
   const wallList=['cloth','offw','greige','sakan','gray','charcoal','oak','walnut','sugi'].map(k=>[k,MATDEF[k].n]);
   CTRL.finSlope=rowSelect(g2,'勾配天井（吹抜）','finSlope',finList);
   CTRL.finFlat =rowSelect(g2,'フラット天井','finFlat',finList);
+  CTRL.finKit  =rowSelect(g2,'キッチンの天井','finKit',finList);
   CTRL.beams   =rowTog(g2,'化粧梁を見せる','beams');
   CTRL.beamN   =rowSlider(g2,'梁の本数','beamN',1,6,1,' 本');
   CTRL.beamH   =rowSlider(g2,'梁せい','beamH',105,300,5,' mm');
@@ -1157,6 +1289,9 @@ function buildUI(){
   CTRL.wallN=rowSelect(g2,'壁：北（キッチン側）','wallN',wallList);
   CTRL.wallV=rowSelect(g2,'吹抜まわりの壁','wallV',wallList);
   CTRL.floor=rowSelect(g2,'床','floor',[['oak',MATDEF.oak.n],['walnut',MATDEF.walnut.n],['maple',MATDEF.maple.n],['tile',MATDEF.tile.n]]);
+  CTRL.balcFloor=rowSelect(g2,'ベランダの床','balcFloor',
+    ['wpc','wpcbr','tiled','tile','frp','turf'].map(k=>[k,MATDEF[k].n]));
+  g2.appendChild(el('div','note','ベランダは南の大開口ごしにいつも視界へ入ります。<b>室内の床と近い色</b>にすると外まで床が続いて見え、部屋が広く感じます。'));
 
   const g3=document.getElementById('g-light');
   CTRL.clerestory=rowTog(g3,'ハイサイドライト（高い側の下がり壁）','clerestory');
@@ -1191,7 +1326,7 @@ function buildUI(){
   const vb=document.getElementById('viewbar');
   Object.entries(VIEWS).forEach(([k,v])=>{
     const b=el('button','chip',v.n); b.dataset.view=k;
-    b.addEventListener('click',()=>{applyView(k);drawPlan();needRender=true;});
+    b.addEventListener('click',()=>{applyView(k);camMoved();});
     vb.appendChild(b);
   });
   const pit=el('input'); pit.type='range'; pit.min=-40;pit.max=89;pit.step=1;pit.value=cam.pitch;
@@ -1208,6 +1343,8 @@ function buildUI(){
     ['フラット天井だけ','sofa',{voidOn:false,ceilH:2410,finFlat:'cloth',beams:false}],
     ['勾配を強く 6/10','lie',{voidOn:true,pitch:6,voidW:3600,voidX:1000}],
     ['リビングいっぱいに','lie',{voidOn:true,voidX:1000,voidW:3600,pitch:4}],
+    ['キッチンを下げる','kitchen',{kitSplit:true,kitH:2100,kitY:6000,finKit:'offw'}],
+    ['カウンターの上まで','dining',{kitSplit:true,kitH:2100,kitY:5450,finKit:'walnut'}],
     ['木の天井＋化粧梁','stand',{voidOn:true,finSlope:'sugi',finFlat:'offw',beams:true,beamN:4,beamMat:'walnut',wallV:'offw'}],
     ['ルーバー天井','whole',{voidOn:true,finSlope:'louver',finFlat:'cloth',beams:false,lCove:true}],
     ['高窓を入れる','stand',{voidOn:true,clerestory:true,clerH:700,pitch:4.5,finSlope:'sugi'}],
@@ -1245,15 +1382,26 @@ let needRebuild=false, needRender=true, envDirty=true;
 // そのあとチェックで付け外ししても上書きしない。
 const LOW_CEIL = 2250;
 let wasLowCeil = DEF.ceilH<=LOW_CEIL;
+let lastCeilH  = DEF.ceilH;
 function applyEaveDefault(){
   const low = S.ceilH<=LOW_CEIL;
   if(low!==wasLowCeil){ S.eave = low; wasLowCeil = low; }
 }
 function onChange(key){
-  // 勾配はリビングの東西の中に収める（東はダイニング、北はキッチン。どちらもフラットのまま）
+  // 勾配はリビングの東西の中に収める（東はダイニング、北はキッチン。どちらもフラット）
   S.voidW=clamp(S.voidW,1500,LIVING.x1-LIVING.x0);
   S.voidX=clamp(S.voidX,LIVING.x0,LIVING.x1-S.voidW);
-  if(key==='ceilH'||key==='*'){ applyEaveDefault(); syncAll(); }
+  // 基準天井高を動かしたら、キッチンは下げ幅を保ったままついてくる
+  if(key==='ceilH' && S.ceilH!==lastCeilH) S.kitH += S.ceilH-lastCeilH;
+  lastCeilH=S.ceilH;
+  S.kitY=clamp(S.kitY,KIT_Y_MIN,KIT_Y_MAX);
+  // 上限は「基準天井高より KIT_DROP_MIN 低いところ」。ここを S.ceilH まで許すと、
+  // 2250 のプリセットで下げ幅が 0 に潰れ、トグルを入れても何も起きなくなる。
+  const kitMax = S.ceilH-KIT_DROP_MIN;
+  S.kitH=clamp(S.kitH,KIT_H_MIN,kitMax);
+  if(CTRL.kitH) CTRL.kitH.range(KIT_H_MIN,kitMax);
+  if(key==='ceilH'||key==='*') applyEaveDefault();
+  if(key==='ceilH'||key==='*'||key==='kitH'||key==='kitY'||key==='kitSplit') syncAll();
   needRebuild=true; envDirty=true; needRender=true;
 }
 
@@ -1262,12 +1410,17 @@ function updateReadout(){
   const area=polyArea(LDK)/1e6;
   const vArea=S.voidOn? (S.voidW*VOID_D)/1e6 : 0;
   const rise=S.voidOn?RISE():0;
-  const vol = area*S.ceilH/1000 + vArea*rise/2000;
+  // キッチンを下げたぶんは気積から引く
+  const kArea=kitOn()? polyArea(kitPoly())/1e6 : 0;
+  const vol = area*S.ceilH/1000 + vArea*rise/2000 - kArea*(S.ceilH-S.kitH)/1000;
   const avg = vol/area*1000;
   const maxH= S.ceilH+rise;
   const set=(id,v)=>document.getElementById(id).textContent=v;
   set('ro-max', Math.round(maxH)+' mm');
   set('ro-base',Math.round(S.ceilH)+' mm');
+  const kr=document.getElementById('ro-kit-row');
+  kr.style.display = kitOn()? '' : 'none';
+  if(kitOn()) set('ro-kit',Math.round(S.kitH)+' mm（−'+Math.round(S.ceilH-S.kitH)+'）');
   set('ro-avg', Math.round(avg)+' mm');
   set('ro-area',area.toFixed(2)+' ㎡');
   set('ro-void',vArea?vArea.toFixed(2)+' ㎡':'—');
@@ -1321,6 +1474,24 @@ function drawPlan(){
   pg.setLineDash([3,3]); pg.strokeStyle='#5c6a7d'; pg.lineWidth=1;
   pg.strokeRect(la[0],la[1],lb[0]-la[0],lb[1]-la[1]);
   pg.restore();
+  // キッチン（天井を分けているときだけ）
+  if(kitOn()){
+    const kp=kitPoly();
+    if(kp.length>2){
+      pg.beginPath();
+      kp.forEach((q,i)=>{const c=p2c(q[0],q[1]); i?pg.lineTo(c[0],c[1]):pg.moveTo(c[0],c[1]);});
+      pg.closePath();
+      pg.fillStyle='rgba(125,179,255,.16)'; pg.fill();
+      pg.strokeStyle='#7db3ff'; pg.lineWidth=1.4; pg.stroke();
+      if(pmode==='void'){                       // 境は南北につまんで動かす
+        const sp=xSpanAt(S.kitY);
+        if(sp){
+          const h=p2c((Math.max(sp[0],KIT_X)+sp[1])/2, S.kitY);
+          pg.fillStyle='#7db3ff'; pg.fillRect(h[0]-3.5,h[1]-3.5,7,7);
+        }
+      }
+    }
+  }
   // 吹抜
   if(S.voidOn){
     const v=V(), a=p2c(v.x0,v.y1), b=p2c(v.x1,v.y0);
@@ -1345,6 +1516,10 @@ function drawPlan(){
   pg.font='8px sans-serif'; pg.fillStyle='#8d99ab';
   pg.fillText('リビング（勾配可）', la[0]+3, la[1]+10);
   pg.fillText('ダイニング', lb[0]+4, la[1]+10);
+  if(kitOn()){
+    const kc=p2c(6300, Math.min(S.kitY+560,7000));
+    pg.fillStyle='#7db3ff'; pg.fillText('キッチン '+Math.round(S.kitH), kc[0]-24, kc[1]);
+  }
   // カメラ
   const c=p2c(cam.x,cam.y);
   const y=cam.yaw*D2R;
@@ -1366,8 +1541,10 @@ pc.addEventListener('pointerdown',e=>{
   const r=pc.getBoundingClientRect();
   const [px,py]=c2p(e.clientX-r.left, e.clientY-r.top);
   if(pmode==='cam'){
-    if(pointInLDK(px,py)){cam.x=px;cam.y=py;drawPlan();needRender=true;}
+    if(pointInLDK(px,py)){cam.x=px;cam.y=py;camMoved();}
     pdrag={mode:'cam'};
+  }else if(kitOn() && px>KIT_X && Math.abs(py-S.kitY)<14/pscale()){
+    pdrag={mode:'kitY'};
   }else if(S.voidOn){
     // つかみしろは画面上14px相当。辺だけでもリサイズできるようにする
     const v=V(), tol=14/pscale();
@@ -1382,7 +1559,8 @@ pc.addEventListener('pointermove',e=>{
   if(!pdrag) return;
   const r=pc.getBoundingClientRect();
   const [px,py]=c2p(e.clientX-r.left, e.clientY-r.top);
-  if(pdrag.mode==='cam'){ if(pointInLDK(px,py)){cam.x=px;cam.y=py;drawPlan();needRender=true;} return; }
+  if(pdrag.mode==='cam'){ if(pointInLDK(px,py)){cam.x=px;cam.y=py;camMoved();} return; }
+  if(pdrag.mode==='kitY'){ S.kitY=Math.round(py/50)*50; onChange('kitY'); syncAll(); return; }
   const v=V();
   if(pdrag.mode==='move'){
     S.voidX=Math.round((px-pdrag.ox)/50)*50;
@@ -1399,7 +1577,7 @@ document.querySelectorAll('#planbox .ptabs .chip').forEach(b=>{
     pmode=b.dataset.pmode;
     document.querySelectorAll('#planbox .ptabs .chip').forEach(c=>c.classList.toggle('on',c===b));
     document.getElementById('planhint').textContent =
-      pmode==='void'?'左右にドラッグで移動／東西の辺で幅':'クリック（ドラッグ）で立ち位置を移動';
+      pmode==='void'?'左右にドラッグで移動／東西の辺で幅／キッチンの境は上下':'クリック（ドラッグ）で立ち位置を移動';
     drawPlan();
   });
 });
@@ -1415,7 +1593,11 @@ function fitSection(){
 function drawSection(){
   const W=SW,H=SH;
   sg.clearRect(0,0,W,H); sg.fillStyle='#11151b'; sg.fillRect(0,0,W,H);
-  const span = [1000,8000];                     // 勾配は東西なので断面もいつも東西
+  // 勾配は東西なので断面もいつも東西。切る位置は立ち位置の南北に合わせる。
+  const cy = clamp(cam.y, 2050, 7450);
+  const span = xSpanAt(cy) || [1000,8000];
+  const v=V();
+  const cutsVoid = S.voidOn && RISE()>1 && cy>=v.y0 && cy<=v.y1;
   const L=span[1]-span[0], maxH=Math.max(3200,S.ceilH+(S.voidOn?RISE():0)+400);
   const padL=42,padR=28,padT=16,padB=22;
   const sx=(W-padL-padR)/L, sy=(H-padT-padB)/maxH;
@@ -1427,16 +1609,11 @@ function drawSection(){
   sg.beginPath();sg.moveTo(X(span[0]),Y(0));sg.lineTo(X(span[1]),Y(0));sg.stroke();
   // 天井ライン
   sg.strokeStyle='#f0b357';sg.lineWidth=2;sg.beginPath();
-  const v=V();
   const pts=[];
   const N=160;
   for(let i=0;i<=N;i++){
     const u=span[0]+L*i/N;
-    let h=S.ceilH;
-    if(S.voidOn){
-      if(u>=v.x0 && u<=v.x1) h = hAt(u);
-    }
-    pts.push([X(u),Y(h)]);
+    pts.push([X(u),Y(ceilAt(u,cy))]);
   }
   pts.forEach((p,i)=>i?sg.lineTo(p[0],p[1]):sg.moveTo(p[0],p[1]));
   sg.stroke();
@@ -1446,7 +1623,7 @@ function drawSection(){
 
   // 壁
   sg.strokeStyle='#4a5462';sg.lineWidth=1.5;
-  [span[0],span[1]].forEach(u=>{sg.beginPath();sg.moveTo(X(u),Y(0));sg.lineTo(X(u),Y(S.ceilH));sg.stroke();});
+  [span[0],span[1]].forEach(u=>{sg.beginPath();sg.moveTo(X(u),Y(0));sg.lineTo(X(u),Y(ceilAt(u,cy)));sg.stroke();});
 
   // 人（1500mm）
   const hx = clamp(cam.x,span[0]+300,span[1]-300);
@@ -1459,18 +1636,23 @@ function drawSection(){
   sg.fillText(Math.round(S.ceilH), padL-6, Y(S.ceilH)+4);
   sg.strokeStyle='rgba(154,164,178,.3)';sg.lineWidth=1;sg.setLineDash([3,3]);
   sg.beginPath();sg.moveTo(padL-2,Y(S.ceilH));sg.lineTo(W-padR,Y(S.ceilH));sg.stroke();
-  if(S.voidOn&&RISE()>1){
+  if(cutsVoid){
     const mh=S.ceilH+RISE();
     sg.fillStyle='#f0b357';sg.fillText(Math.round(mh),padL-6,Y(mh)+4);
     sg.strokeStyle='rgba(240,179,87,.3)';
     sg.beginPath();sg.moveTo(padL-2,Y(mh));sg.lineTo(W-padR,Y(mh));sg.stroke();
+  }
+  if(kitOn() && S.ceilH-S.kitH>120){          // 近すぎる寸法は重なるので出さない
+    sg.fillStyle='#7db3ff';sg.fillText(Math.round(S.kitH),padL-6,Y(S.kitH)+4);
+    sg.strokeStyle='rgba(125,179,255,.35)';
+    sg.beginPath();sg.moveTo(padL-2,Y(S.kitH));sg.lineTo(W-padR,Y(S.kitH));sg.stroke();
   }
   sg.setLineDash([]);
   sg.textAlign='left';sg.fillStyle='#6b7480';sg.font='10px sans-serif';
   sg.fillText('西',padL,H-6);
   sg.textAlign='right';sg.fillText('東',W-padR,H-6);
   sg.textAlign='center';
-  if(S.voidOn&&RISE()>1){
+  if(cutsVoid){
     const cU=(v.x0+v.x1)/2;
     sg.fillStyle='#f0b357';sg.font='10px sans-serif';
     sg.fillText(`勾配 ${S.pitch.toFixed(1)}/10`,X(cU),Y(S.ceilH+RISE()/2)-8);

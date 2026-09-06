@@ -1040,16 +1040,13 @@ const FM={
   wht :new THREE.MeshStandardMaterial({color:0xe8e6e1,roughness:.7}),
   blk :new THREE.MeshStandardMaterial({color:0x1a1d21,roughness:.4,metalness:.3}),
   met :new THREE.MeshStandardMaterial({color:0xb7babe,roughness:.32,metalness:.6}),
-  stn :new THREE.MeshStandardMaterial({color:0xd6d2cb,roughness:.35}),
-  rug :new THREE.MeshStandardMaterial({color:0x9e968a,roughness:1})
+  stn :new THREE.MeshStandardMaterial({color:0xd6d2cb,roughness:.35})
 };
 function buildFurniture(){
   wipe(gFurn);
   if(!S.furniture) return;
-  const {fab,fab2,wd,wd2,wht,blk,stn,rug,met}=FM;
+  const {fab,fab2,wd,wd2,wht,blk,stn,met}=FM;
 
-  // ラグ
-  gFurn.add(box(1500,3000,4200,5400,2,16,rug));
   // ソファ（西壁を向く）
   gFurn.add(box(3650,3200,4550,5300,60,420,fab));
   gFurn.add(box(4350,3200,4550,5300,420,760,fab2));
